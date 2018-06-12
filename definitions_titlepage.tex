@@ -1,0 +1,72 @@
+\newtheoremstyle{defstyle}
+{}              %Space above    
+{}              %Space below
+{}                      %Body font: original {\normalfont}    
+{}                      %Indent amount (empty = no indent,%\parindent = paraindent)    
+{\normalfont\bfseries}  %Thm head font original 
+{.}{10pt}      
+{{\normalfont\bfseries \thmname{#1}\thmnumber{ #2}\thmnote{ (#3)}}}
+\newtheoremstyle{satzstyle}
+{}              %Space above    
+{}              %Space below
+{\itshape}                      %Body font: original {\normalfont}    
+{}                      %Indent amount (empty = no indent,%\parindent = paraindent)    
+{\normalfont\bfseries}  %Thm head font original 
+{.}{10pt}      
+{{\normalfont\bfseries \thmname{#1}\thmnumber{ #2}\thmnote{ (#3)}}}
+
+\theoremstyle{satzstyle}
+\newtheorem{satz}{Satz}[chapter]
+\newtheorem{theo}[satz]{Theorem}
+\newtheorem{lem}[satz]{Lemma}
+\newtheorem{kor}[satz]{Korollar}
+\newtheorem{cor}[satz]{Corollary}
+\newtheorem{folg}[satz]{Folgerung}
+\newtheorem{prop}[satz]{Proposition}
+\theoremstyle{defstyle}
+\newtheorem{defi}[satz]{Definition}
+\newtheorem{bem}[satz]{Bemerkung}
+\newtheorem{rem}[satz]{Remark}
+\newtheorem{bsp}[satz]{Beispiel}
+\newtheorem{ex}[satz]{Example}
+
+\renewcommand*{\thesatz}{\arabic{chapter}.\arabic{satz}}
+\renewcommand*{\theequation}{\arabic{chapter}.\arabic{equation}}
+\renewcommand{\labelenumi}{\textup{(\textit{\roman{enumi}})}}
+%\newcommand{\hsp}{\hspace{20pt}}
+\titleformat{\chapter}[display]{\huge\bfseries}{Chapter \thechapter}{20pt}{\Huge\bfseries}
+\titleformat{\section}{\Large\bfseries}{\thesection}{7pt}{}
+\titleformat{\subsection}{\large\bfseries}{\thesubsection}{5pt}{}
+\renewcommand{\cfttoctitlefont}{\bfseries\Huge}
+\renewcommand\cftchapfont{\bfseries}
+\renewcommand\thechapter{\textup{\Roman{chapter}}}
+%\renewcommand\headmark{\thechapter}
+
+\deftripstyle{custom}{\textsc{\headmark}}{}{\textsc{\pagemark}}{}{}{}
+
+\pagenumbering{roman}
+
+\begin{titlepage}
+
+\begin{center}
+
+\vspace*{2cm}
+
+{\Large Dissertation in Interdisciplinary Mathematics}\\[20pt]
+
+{\Huge Learning parameters of discrete determinantal point processes}\\[1cm]
+
+{\Large Johannes MŸller}\\[20pt]
+
+{\Large \today}\\[20pt]
+
+\vfill
+\includegraphics[width=0.25\textwidth]{./crest_black}\\[1cm]
+
+\textsc{\huge University of Warwick}\\[.5cm]
+\textsc{\LARGE Department of Mathematics}\\[3.5cm]
+
+\end{center}
+\end{titlepage}
+
+\cleardoublepage

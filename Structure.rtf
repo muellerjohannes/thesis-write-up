@@ -1,0 +1,71 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf400
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww28600\viewh18000\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs40 \cf0 Table of contents\
+\
+	Abstract\
+	I. Introduction\
+		\'97 Motivation\
+		\'97 Previous work\
+		\'97 Aim and outline of the dissertation\
+	II. DPPs: Basics\
+		\'97 Historical remarks\
+		\'97 Definitions and properties\
+			+ Definition\
+			+ Repulsive property\
+			+ K <= I equivalent to being a DPP kernel: How do you reconstruct a DPP from its marginals?\
+		\'97 L-ensembles\
+			+ Introduce L-ensembles\
+			+ Discuss equivalence to normal DPPs with K < I, i.e. it is a way to parametrise DPPs where the emptyset has positive probability\
+			+ quality diversity decomposition\
+		\'97 Related structures: conditional DPPs, sDPPs , k-DPPs\
+			+ Definitions\
+		\'97 computational benefits (\'82Magic properties  of DPPs\'92)\
+			+ Closed formulae\
+			+ Sampling algorithm\
+		\'97 Problem of mode selection\
+			+ \
+	III. Learning\
+		\'97 What does it mean to \'82learning\'91 mean and why is it interesting?\
+		\'97 Direct Kernel estimation: reconstruction via moments and cycles\
+			+ One can estimate the principle minors consistently\
+			+ A symmetric matrix can be reconstructed from its principle minors\
+			+ Erwartungstreu?\
+		\'97 Maximum likelihood estimation using optimisation techniques\
+			+ Learning the Kernel\
+				# Non concavity of the log likelihood function\'85 (and thus also of the likelihood function)\
+				# Different methods? -> fixed point iteration\
+			+ Learning the quality\
+				# Parametrise the positive definite matrices L over the quality-diversity decomposition (q, S) -> L\
+				# for fixed similarity matrix S and a log linear family of qualities, the log likelihood becomes concave\
+			+ Comparison to the kernel estimation: Obviously the maximal likelihood over all kernels L is higher than the one over (q, S), however the problem here lies in the fact that it is in practice not feasible to compute the maximiser L\
+			+ Learning the mixture coefficients of k-DPPs\'85\
+		\'97 Bayessian approach to the kernel estimation			+ Explain the Bayssian approach to parameter estimation\
+	IV. Examples\
+		\'97 Points on the line, including duality to 0-1 sequences that look like pseudo random human generated; also discuss possible different \'82repulsion/distance\'91 kernels\
+		\'97 Points in the square, \'82playing Battleships\'91\
+		\'97 Toy example for learning\
+	V. Summary and Conclusion\
+	Appendix\
+		\'97 code\
+		\'97 proofs?\
+\
+\
+\
+Questions:\
+	\'97 Length of thesis? Formal requirements?\
+	\'97 Bring in some more maths?\
+	\'97 Own contributions?\
+	\'97 Consistency of estimators under loss functions?\
+	\'97 coercivity, semi continuity and convexity of the loss function? does a log linear likelihood approach lead directly to a log linear quality?\
+	\'97 How can one learn the parameter sigma?!\
+	\'97 Non symmetric kernels\
+\
+Further repulsive structures:\
+	\'97 Locations of cities/supermarkets/gas stations etc\
+	\'97 \
+}

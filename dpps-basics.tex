@@ -8,47 +8,73 @@ Let in the following \(\mathcal Y\) be a finite set, which we call the \emph{gro
 A \emph{point process} on \(\mathcal Y\) is a random subset %\(\mathbf Y\) 
 of \(\mathcal Y\), i.e. a random variable with values in the powerset \(2^{\mathcal Y}\). Usually we will identify this random variable with its law \(\mathbb P\) and thus refer to probability measures \(\mathbb P\) on \(2^{\mathcal Y}\) as a point processes and not distinguish those objects. Let in the following \(\mathbf Y\) be a random subset drawn according to \(\mathbb P\), then we call \(\mathbb P\) %or \(\mathbf Y\) itself 
 a \emph{determinantal point process}, or in short a DPP, if we have% for a random subset \(\mathbf Y\subseteq \mathcal Y\) drawn according to \(\mathbb P\) %(denote this by \(Y\sim \mathbb P\) in the future)
-\begin{equation}\label{e1}
+\begin{equation}\label{e2.1}
 \mathbb P(A\subseteq \mathbf Y) = \det(K_A) \quad \text{for all } A\subseteq \mathcal Y
 \end{equation}
 where \(K\) is a symmetric matrix indexed by the elements in \(\mathcal Y\) and \(K_A\) denotes the restriction of the matrix \(K\) to indices in \(A\). We call \(K\) the \emph{marginal kernel} of the DPP and note immediately that \(K\) is necessarily non negative definite. Further it can be shown (cf. page 3 in \cite{borodin2009determinantal}) %\todo{cite}{ }
  that also the complement of a DPP is a DPP with marginal kernel \(I-K\) where \(I\) is the identity matrix, i.e.
 \[\mathbb P(A\subseteq\mathbf Y^c) = \det(I_A-K_A)\]
-and thus \(I-K\ge0\) and therefore \(0\le K\le I\). This actually turns out to be sufficient for \(K\) to define a DPP through \eqref{e1} (cf. \cite{kulesza2012determinantal}). %\todo{why? cite!}. 
-We call the elements of \(\mathcal Y\) \emph{items } and by choosing \(A=\left\{ i\right\}\) and \(A=\left\{ i,j\right\}\) for \(i,j\in \mathcal Y\) and using \eqref{e1} we obtain the probabilities of their occurrence %\(\mathbb P(i\in \mathbf Y) = K_{ii}\) and
-\begin{equation}\label{e2}
+and thus \(I-K\ge0\) and therefore \(0\le K\le I\). This actually turns out to be sufficient for \(K\) to define a DPP through \eqref{e2.1} (cf. \cite{kulesza2012determinantal}). %\todo{why? cite!}. 
+We call the elements of \(\mathcal Y\) \emph{items } and by choosing \(A=\left\{ i\right\}\) and \(A=\left\{ i,j\right\}\) for \(i,j\in \mathcal Y\) and using \eqref{e2.1} we obtain the probabilities of their occurrence %\(\mathbb P(i\in \mathbf Y) = K_{ii}\) and
+\begin{equation}\label{e2.2}
 \begin{split}
 \mathbb P(i\in \mathbf Y) & = K_{ii} \quad \text{and} \\
 % \quad \text{and }
 \mathbb P(i,j\in\mathbf Y) & = K_{ii}K_{jj}-K_{ij}^2 = \mathbb P(i\in\mathbf Y)\cdot\mathbb P(j\in\mathbf Y)-K_{ij}^2,
 \end{split}
 \end{equation}
-Thus the appearance of the two items \(i\) and \(j\) are always negatively correlated. In this light the fact that also \(\mathbf Y^c\) exhibits negative correlations becomes less surprising, because since the set \(\mathbf Y\) tends to spread out due to the repulsion in \eqref{e2}, the complement, which is nothing but the gaps that are left after eliminating the elements in \(\mathbf Y\), tend to show a non clustering behaviour.
+Thus the appearance of the two items \(i\) and \(j\) are always negatively correlated. This negative correlation is exactly what causes the diversifying behaviour of determinantal point processes. In practice one usually models the negative correlations to be high between items that are similar in some way. For example in a spatial setting being similar could mean being close together and in this case the selected items would tend to be not very close together. This is repulsive behaviour can be seen in Figure  \todo{insert picture!}{ }
+ In this light the fact that also \(\mathbf Y^c\) exhibits negative correlations becomes less surprising, because since the set \(\mathbf Y\) tends to spread out due to the repulsion in \eqref{e2.2}, the complement, which is nothing but the gaps that are left after eliminating the elements in \(\mathbf Y\), tend to show a non clustering behaviour.
 
 \subsection*{\(L\)-ensembles}
 Let us now introduce an important subclass of DPPs, namely the ones where not only the marginal probabilities can be expressed through a suitable kernel, but also the elementary probabilities. Because this will be convenient for us later on we will restrict ourselves to this case from now on. If we have even \(K<I\), then we define the \emph{elementary kernel}
 \[L\coloneqq K(I-K)^{-1} \]
 which specifies the elementary probabilities since one can check
-\begin{equation}\label{e3}
+\begin{equation}\label{e2.3}
 \mathbb P(A=\mathbf Y) = \frac{\det(L_A)}{\det(I+L)} \quad\text{for all } A\subseteq\mathcal Y.
 \end{equation}
-Conversely for any \(L\ge0\) a DPP can be defined via \eqref{e2} and the corresponding marginal kernel is given by
+Conversely for any \(L\ge0\) a DPP can be defined via \eqref{e2.2} and the corresponding marginal kernel is given by
 \[K=L(I+L)^{-1}.\]
-We call DPPs which arise this way \(L\) \emph{ensembles}. Note that \(L\) can be written as a Gram matrix%\todo{explain this decomposition?}
+We call DPPs which arise this way \(L\) \emph{ensembles}.
+
+\subsection*{The quality diversity parametrisation}
+
+Note that any symmetric, positive semidefinite matrix \(L\) can be written as a Gram matrix%\todo{explain this decomposition?}
 \[L=B^TB\]
-where \(B\in\mathbb R^{D\times N}\) whenever \(D\ge \operatorname{Rk}(L)\). For example one could take the spectral decomposition \(L = U^TCU\) of \(L\) and set \(B\coloneqq \sqrt{C} U\) and eventually drop some zero rows from \(\sqrt{C}\). Let \(B_i\) denote the \(i\)-th column of \(B\) and write it as the product \(q_i\cdot \phi_i\) where \(q_i\ge0\) and \(\phi_i\in\mathbb R^D\) such that \(\left\lVert \phi_i \right\rVert=1\). This yields the representation
+where \(B\in\mathbb R^{D\times N}\) whenever \(D\) is larger than the rank \(\operatorname{rk}(L)\) of \(L\). For example one could take the spectral decomposition \(L = U^TCU\) of \(L\) and set \(B\coloneqq \sqrt{C} U\) and eventually drop some zero rows from \(\sqrt{C}\). Let \(B_i\) denote the \(i\)-th column of \(B\) and write it as the product \(q_i\cdot \phi_i\) where \(q_i\ge0\) and \(\phi_i\in\mathbb R^D\) such that \(\left\lVert \phi_i \right\rVert=1\). This yields the representation
 \[L_{ij} = q_i \phi_i^T\phi_j q_j \eqqcolon q_i S_{ij}q_j\]
-and we call \(q_i\) the \emph{quality} of the item \(i\in \mathcal Y\) and \(\phi_i\) the \emph{diversity feature vector} of \(i\). % and \(S_{ij}\coloneqq\phi_i^T\phi_j\in[-1,1]\) the \emph{similarity} of the two items \(i\) and \(j\). %Further we call \(\phi_i\) the \emph{diversity feature vector} of the element \(i\).\todo{comment on \(L\) ensembles} %, which will be further explained by the later examples.
-Using this quality diversity decomposition we get
-\begin{equation}\label{e4}
-\mathbb P(A=\mathbf Y) \propto \det\!\big((B^TB)_A\big) = \left(\prod_{i\in A} q_i^2\right) \cdot \det(S_A) \quad \text{for all } A\subseteq\mathcal Y
+and we call \(q_i\) the \emph{quality} of the item \(i\in \mathcal Y\) and \(\phi_i\) the \emph{diversity feature vector} of \(i\) and \(S\) the \emph{similarity matrix}. Since we will use this decomposition multiple times, we fix its properties. % and \(S_{ij}\coloneqq\phi_i^T\phi_j\in[-1,1]\) the \emph{similarity} of the two items \(i\) and \(j\). %Further we call \(\phi_i\) the \emph{diversity feature vector} of the element \(i\).\todo{comment on \(L\) ensembles} %, which will be further explained by the later examples.
+
+\begin{prop}[Quality diversity decomposition]
+Let \(D\in\mathbb N\) and let \(\mathbb S_D\) denote the sqhere in \(\mathbb R^D\). 
+Further let \(\mathbb R^{N\times N}_{\text{sym}, +}\) be the symmetric positive semidefinite \(N\times N\) matrices. 
+The quality diversity parametrisation is a continuous and surjective mapping %bijection
+\todo{its not a bijection!!!} %from the 
+\[\Psi\colon\mathbb R_+^N\times \mathbb S_D^N \to \left\{L\in \mathbb R^{N\times N}_{\text{sym}, +} \mid \operatorname{rk}(L)\le D \right\}, \quad (q, \phi) \mapsto \left( q_i\phi_i^T\phi_j q_j\right)_{1\le i, j\le N}. \]
+\end{prop}
+
+\begin{rem}
+\begin{enumerate}
+\item In the case \(D = N\) the quality diversity decomposition gives a parametrisation of the whole symmetric positive definite \(N\times N\) matrices.
+% \item One could argue that one should rather call the pseudo inverse of the described surection the quality diversity decomposition. However the 
+\item Note that this parametrisation is not unique, i.e. \(\Psi\) is not injective. For example the identity matrix \(I\) can be parametrised by any orthonormal system \(\phi\) and \(q = (1, \dots, 1)^T\).
+\item One can without any problems consider diversity features \(\phi_i\) in an abstract Hilbert space \(\mathcal H\). However we will not need this in the remainder and thus restrict ourselves to the easier Euklidean diversity features.
+\item We call every preimage of \(L\) under \(\Psi\) the \emph{quality diversity decomposition} of \(L\).
+\end{enumerate}
+\end{rem}
+
+
+The quality diversity decomposition will provide some useful expressions. For example the elementary probabilities take the form
+\begin{equation}\label{e2.4}
+\mathbb P(A=\mathbf Y) \propto \det\!\big((B^TB)_A\big) = % \det\!\big(\Psi(q, \phi)_A\big) 
+= \left(\prod_{i\in A} q_i^2\right) \cdot \det(S_A) \quad \text{for all } A\subseteq\mathcal Y.
 \end{equation}
-which turns out to be a very helpful expression of the elementary probabilities.%\todo{comment on advantages of choosing \(D\) small}
+% which turns out to be a very helpful expression of the elementary probabilities.%\todo{comment on advantages of choosing \(D\) small}
 
 An intuitive understanding of the quality diversity decomposition will play a central role later on if one wants to model real world phenomena as DPPs. To get this %, we can identify an item \(i\in\mathcal Y\) with the vector \(B_i=q_i\phi_i\in\mathbb R^D\) and
- we can think of \(q_i\ge0\) as a measure of how important or high in quality the item is and the diversity feature vector \(\phi_i\in\mathbb R^D\) can be thought of as some kind of state vector that consists of internal quantities that describe the item \(i\) in some way. Further we interpret the scalar product \(\phi_i^T\phi_j\in[0,1]\) as a measure of similarity between the items \(i\) and \(j\) and thus call \(S\) similarity matrix. Note that if \(i\) and \(j\) are perfectly similar or antisimilar, i.e. \(\phi_i^T\phi_j=\pm1\), then they can not occur at the same time, since
+ we can think of \(q_i\ge0\) as a measure of how important or high in quality the item is and the diversity feature vector \(\phi_i\in\mathbb R^D\) can be thought of as some kind of state vector that consists of internal quantities that describe the item \(i\) in some way. Further we interpret the scalar product \(\phi_i^T\phi_j\in[0,1]\) as a measure of similarity between the items \(i\) and \(j\) which justifies the name similarity matrix for \(S\). Note that if \(i\) and \(j\) are perfectly similar or antisimilar, i.e. \(\phi_i^T\phi_j=\pm1\), then they can not occur at the same time, since
 \[\mathbb P(i,j\in\mathbf Y) = \det\begin{pmatrix} 1 & \pm1 \\ \pm1 & 1 \end{pmatrix} = 0. \]
-If we identify \(i\) with the vector \(B_i=q_i\phi_i\in\mathbb R^D\), we can obtain a geometric interpretation of \eqref{e4} since \(\det((B^TB)_A)\) is the volume that is spanned by the columns \(B_i, i\in A\), which is visualised in \ref{fig:1}. This volume increases if the lengths of the edges that correspond to the quality increase and decrease when the similarity feature vectors point into more similar directions.
+If we identify \(i\) with the vector \(B_i=q_i\phi_i\in\mathbb R^D\), we can obtain a geometric interpretation of \eqref{e2.4} since \(\det\!\big((B^TB)_A\big)\) is the volume that is spanned by the columns \(B_i, i\in A\), which is visualised in \ref{fig:1}. This volume increases if the lengths of the edges that correspond to the quality increase and decrease when the similarity feature vectors point into more similar directions.
 
 \vspace{2cm}
 \begin{figure}[h!]
@@ -62,14 +88,37 @@ If we identify \(i\) with the vector \(B_i=q_i\phi_i\in\mathbb R^D\), we can obt
 One last property of DPPs that we shall mention is the fact that the negative correlations of the DPP posses a transient property in the sense, that if \(i\) and \(j\) and \(j\) and \(k\) are similar, then \(i\) and \(k\) are also similar. This is due to the fact
 \[\left\lVert \phi_i - \phi_j \right\rVert^2 = \left\lVert \phi_i \right\rVert^2 + \left\lVert \phi_j \right\rVert^2 - 2\phi_i^T\phi_j = 2(1-\phi_i^T\phi_j)\]
 and thus
-\[\sqrt{1-\phi_i^T\phi_k} = \frac12\left\lVert \phi_i - \phi_k \right\rVert\le\frac12\big(\left\lVert \phi_i - \phi_j \right\rVert + \left\lVert \phi_j - \phi_k \right\rVert\big) = \sqrt{1-\phi_i^T\phi_j} + \sqrt{1-\phi_j^T\phi_k}.\]
+\[\sqrt{1-\phi_i^T\phi_k} = \frac12\left\lVert \phi_i - \phi_k \right\rVert\le\frac12\big(\left\lVert \phi_i - \phi_j \right\rVert + \left\lVert \phi_j - \phi_k \right\rVert\big) = \sqrt{1-\phi_i^T\phi_j} + \sqrt{1-\phi_j^T\phi_k}.\]\todo{reformulate that part!}
 
 % \section{\(L\)-ensembles}
 
-\section{Related structures: conditional DPPs, structured DPPs and \(k\)-DPPs}
+\section{Variations of DPPs} %: conditional DPPs, \(k\)-DPPs and structured DPPs}
+
+\subsection*{Conditional DPPs}
+
+A \emph{conditional DPP} is a collection of DPPs indexed by \(X\in\mathcal X\), where \(X\) is called the \emph{input} of the conditional DPP. Thus for every \(X\in\mathcal X\) we get a finite set \(\mathcal Y(X)\) and a determinantal point process \(\mathbb P(\cdot\mid X)\) on \(\mathcal Y(X)\) which is given by the elementary kernel \(L(X)\), i.e.
+\[\mathbb P(A\lvert X) \propto \det\left(L_A(X)\right) \quad \text{for all } A\subseteq\mathcal Y(X). \]
+Further we denote the quality and diversity features of the conditional DPP by \(q_i(X)\) and \(\phi_i(X)\) respectively.
+
+% Conditional DPPs can probably be understood the best way by giving an easy example. For this purpose we will extend our example above of the pseudo randomly selected points in a grid, but this time we donÕt want to restrict ourselves to one specific grid size. Thus we will consider the input space \(\mathcal X = \mathbb N\) where the input \(n\in\mathbb N\) gives the fineness of the grid, i.e.
+% \[\mathcal Y(n)\coloneqq n^{-1}\cdot\big\{ 0, \dots, n\big\}^2. \]
+% So this time \(\mathcal Y(n)\) is the equally spaced grid in \([0,1]^2\) with space \(n^{-1}\) between two grid lines and we have \(N(n)=\left\lvert \mathcal Y(n) \right\rvert = (n+1)^2\).
+% We model the diversities \(\phi_i(n)\in\mathbb R^{N}\) in the exact analogue way, i.e.
+% \[\phi_i(n)_j \propto \left\lVert i-j \right\rVert\quad \text{for all } i, j\in \mathcal Y(n) \]
+% and the explicit expressions for them remain valid.
+
+It is not immediately clear why one would want to model a family of DPPs as a conditional DPP rather than as 
+% the scenario described above by a conditional DPP rather than by a 
+seperate DPPs. The reason for this is that one wants to estimate the kernels \(L(X)\) for every \(X\in \mathcal X\). However if we would do this naively we would need to observe each of the DPPs \(\mathbb P(\cdot\mid X)\) individually which is often not possible. Thus one hopes 
+%The reason for this is that we hope
+ to not only memorise the kernels \(L(X)\) for every single input \(X\in\mathcal X\) but rather to learn the mapping \(L\) that assigns every input \(X\) its elementary kernel \(L(X)\). If one achieved this task, one would be able to simulate and predict a DPP that one has not observed so far just by the knowledge about some DPPs that belong to the same conditional DPP. 
+%  based on some training set. 
+Of course this can only work if we assume some regularity or a certain structure of the function \(L\) which we will do in the third chapter where we put those consideration into a precise framework.
+
+\subsection*{Fixed size or \(k\)-DPPs}
 
 \subsection*{Structured DPPs}
-
+\todo{Say something about number of parameters}
 We call a DPP \emph{structured DPP} or short sDPP if the ground set is the cartesian product of some other set \(\mathcal M\), which we will call the \emph{set of parts}, i.e. if we have
 \[\mathcal Y = \mathcal M^R = \left\{ y_i = (y_i^r)_{r = 1, \dots, R} \mid i = 1, \dots, N\right\}\]
 where \(R\) is a natural number, \(M = \left\lvert \mathcal M \right\rvert\) and \(N = M^R\). The quality diversity decomposition of \(L\) take the form 

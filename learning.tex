@@ -6,11 +6,11 @@
 
 \section{Assymptotic reconstruction of the kernel}
 
-In this section we want to see how we can estimate the marginal kernel from an increasing number of observations \(\mathbf Y_1, \dots, \mathbf Y_n\) that are distributed according to \(\mathbb P\). For this we will sketch the procedure in \cite{urschel2017learning}. Let \(\hat{\mathbb P}_n\) be the empirical distribution
-\[\hat{\mathbb P}_n \coloneqq \frac1n\sum_{i=1}^n\delta_{\mathbf Y_i}.\]
+In this section we want to see how we can estimate the marginal kernel from an increasing number of observations \(Y_1, \dots, Y_n\subseteq \mathcal Y\) that are distributed according to \(\mathbb P\). For this we will sketch the procedure in \cite{urschel2017learning}. Let \(\hat{\mathbb P}_n\) be the empirical distribution
+\[\hat{\mathbb P}_n \coloneqq \frac1n\sum_{i=1}^n\delta_{Y_i}.\]
 We can identify the probability measures on a finite set, in our case \(2^{\mathcal Y}\), with the probability simplex
 \[\left\{ x\in\mathbb R^{2^{\mathcal Y}} \;\Big\lvert\; x_A \in[0, 1] \text{ for all } A\in 2^{\mathcal Y} \text{ and } \sum_{A\in 2^{\mathcal Y}} x_A = 1 \right\}.\]
-Doing this the strong law of large numbers\todo{cite}{ } yields that the empirical distributions converge to \(\mathbb P\) almost surely if the sequence \((\mathbf Y_k)_{k\in\mathbb N}\) of observations is independent. Therefore we can consistently\todo{explain consistency}{ } estimate all principle minors of \(K\), since
+Doing this the strong law of large numbers\todo{cite}{ } yields that the empirical distributions converge to \(\mathbb P\) almost surely if the sequence \((Y_k)_{k\in\mathbb N}\) of observations is independent. Therefore we can consistently\todo{explain consistency}{ } estimate all principle minors of \(K\), since
 \[\hat{\mathbb P}_n(A\subseteq \mathbf Y) \xlongrightarrow{n\to\infty} \mathbb P(A\subseteq\mathbf Y) = \det(K_A) \quad \text{almost surely}.\]
 
 Thus the question naturally arrises whether we can reconstruct the kernel \(K\) from the knowledge of all of its principle minors. This is known as the \emph{principle minor assignment problem} and has been studied extensively (cf. \cite{griffin2006principal} and \cite{urschel2017learning}) and an computationally efficient algorithm has been proposed for the problem in \cite{rising2015efficient}. It is in fact possible to retain the matrix from its principle minors up to an equivalence relation which identifies matrices with each other, that have the same principle minors. Obviously this is sufficent for the task of learning a DPP, because those matrices are exactly those who give rise to the same point process. To see roughly how this reconstruction works we note that the diagonal is given by
@@ -18,20 +18,41 @@ Thus the question naturally arrises whether we can reconstruct the kernel \(K\) 
 and the absolute value of the off diagonal can be obtained through
 \[K_{ij}^2 = K_{ii} K_{ii} - \det\big(K_{\left\{ i,j\right\}}\big). \]
 The reconstruction of the signs of the entries \(K_{ij}\) turns out to be the main difficulty, but this can be done analysing the cycles of the adjacency graph \(G_K\) corresponding to \(K\).\todo{see whether this proof can be done in a simplified way without considering the sparsity \(l\)}{ } The adjacency graph has \(\mathcal Y\) as its vertex set and the set of edges consists of the pairs \(\left\{ i,j\right\}\) such that \(K_{ij}\ne0\). The reconstruction now relies on the analysis of the cycles of this graph and it has been shown, that one only needs to know all the principle minors up to the order of the cycle sparsity of \(G_K\) (cf. \cite{urschel2017learning}). Following this method it is possible to compute estimators \(\hat K_n\) of \(K\) in polynomial time and give a bound on the speed of convergence in some suitable metric.\todo{state and explain the result}
+\todo{is this estimator unbiased?}
 
-In completely analogue fashion one can learn the elementary kernel \(L\) and those estimations can be used to sample from a DPP that was observed. This procedure might be sufficient in some scenarios, but this approach lacks the ability to extrapolate the knowledge one has of specific DPPs onto some new, unobserved DPPs which is exactly the point that would distinguish the procedure from classical statistics and would allow for far more interesting applications. To achieve this, we introduce the notion of conditional DPPs in the following section which are customised to describe families of DPPs with kernels that are in some way similar.
+% In completely analogue fashion one can learn the elementary kernel \(L\).
+% and those estimations can be used to sample from a DPP that was observed. This procedure might be sufficient in some scenarios, but this approach lacks the ability to extrapolate the knowledge one has of specific DPPs onto some new, unobserved DPPs which is exactly the point that would distinguish the procedure from classical statistics and would allow for far more interesting applications. To achieve this, we introduce the notion of conditional DPPs in the following section which are customised to describe families of DPPs with kernels that are in some way similar.
 
 \section{Maximum likelihood estimation using optimisation techniques}
 
-\todo{general blabla about MLE}
+The method of maximum likelihood estimation or short MLE is a very well established procedure to estimate parameters. The philosophy of MLE is that one selects the parameter under which the given data would be the most likely to be observed and to motivate this in more detail we roughly follow the corresponding section in \cite{rice2006mathematical}.
+%Assume again that we have \(n\) samples \(\mathbf Y_1, \dots, \mathbf Y_n\) and then the maximum likelihood estimator would be the kernel 
+
+For example if we consider random variables \(X_1, \dots, X_n\) with a joint density \(f(x_1, \dots, x_n, \theta)\) and we want to estimate the parameter \(\theta\) based on a sample \(x_1, \dots, x_n\) of our random variables. Then we would want to select the parameter \(\theta\) that maximises the density \(f(x_1, \dots, x_n, \theta)\). If additionally the random variables are indepent and identically distributed, their joint density factorises and thus we obtain
+\[f(x_1, \dots, x_n, \theta) = \prod_{i=1}^n f(x_i, \theta) \]
+where \(f(x, \theta)\) is the density of the \(X_i\). In practice it is often easier to maximise the logarithm of the density
+\[\mathcal L(\theta) = \log\!\big(f(x_1, \dots, x_n, \theta)\big) = \sum_{i=1}^n \log\!\big(f(x_i, \theta)\big) \]
+ since this transforms the product over functions into a sum. However this is clearly equivalent to maximising the density since the logarithm is strictly monotone. We call the function \(\mathcal L\) the \emph{log likelihood function} and we denote its domain which is just the set of all parameters we wish to consider by \(\Theta\).
+
+% \todo{general blabla about MLE}
 
 \subsection*{Kernel estimation}
 \todo{rewrite it in a MLE rather than ML fashion}
-The approach described above is clearly of traditional statistical type and we want to touch on how the kernel estimation can be put into a machine learning task (cf. \cite{affandi2014learning}). For this we assume that we have a training set, i.e. a number of subsets \(Y_1, \dots, Y_T\subseteq\mathcal Y\) drawn independently and according to the DPP \(\mathbb P\). We aim to establish a quantity that gives an intuitive measure of how well a different DPP describes the training set and then we want to find the elementary kernel \(L\) for which the associated DPP \(\mathbb P_L\) optimises this quantity. A widely used choice in the machine learning community for this is the so called \emph{log likelihood function}
-\[\log\left(\prod_{t = 1}^T \mathbb P_L(Y_t)\right)\]
-and we will work with its negative
-\[\mathcal L(L) \coloneqq -\log\left(\prod_{t = 1}^T \mathbb P_L(Y_t)\right) = -\sum\limits_{t=1}^T\log\left( \det(L_{Y_t})\right) + T \log\left( \det(L+I)\right)\]
-where high values of \(\mathcal L\) correspond to kernels \(L\) where at least one element \(Y_t\) of our training set is very unlikely. Thus it is natural to minimise the loss function \(\mathcal L\) over all positive semidefinit \(L\in\mathbb R^{N\times N}\). Note that we have \(\mathcal L(L) = \infty\) if and only if an observation \(Y_t\) of our training set is impossible under the DPP \(\mathbb P_L\), i.e. we do not consider those kernels in our estimation. We note that the loss function is smooth and the gradient of this can be explicitly expressed, at least on the domain \(\left\{ \mathcal L<\infty\right\}\). This is due to the fact that the determinants of the submatrices are polynomials in the entries of \(L\) and the composition of those with the smooth function \(\log\colon(0,\infty)\to\mathbb R\) stays smooth. This property allows the use of gradient methods but they face the problem that the loss function is non convex and thus those algorithms will generally not converge to a global minimiser (cf. \cite{affandi2014learning}).\todo{Explain why it is non convex}{ } Nevertheless it is worth investigating whether those local minima turn out to produce good results in real world scenarios.
+% The approach described above is clearly of traditional statistical type and we want to touch on how the kernel estimation can be put into a machine learning task (cf. \cite{affandi2014learning}).
+Assume again that we have a set of observations \(Y_1, \dots, Y_n\subseteq\mathcal Y\) drawn independently and according to the DPP \(\mathbb P\). Now we want to find the maximum likelihood estimator in the set \(\mathbb R^{N\times N}_{\text{sym}, +}\) of all symmetric and positive semidefinite \(N\times N\) matrices. The log likelihood function is now given by
+%We aim to establish a quantity that gives an intuitive measure of how well a different DPP describes the training set and then we want to find the elementary kernel \(L\) for which the associated DPP \(\mathbb P_L\) optimises this quantity. A widely used choice in the machine learning community for this is the so called \emph{log likelihood function}
+\[\mathcal L \colon\mathbb R^{N\times N}_{\text{sym}, +} \to [-\infty, 0] \qquad L \mapsto \log\left(\prod_{i = 1}^n \mathbb P_L(Y_i)\right).\]
+Using \eqref{e2.3} we get the expression
+\[\mathcal L(L) = \sum\limits_{i=1}^n\log\left( \det(L_{Y_i})\right) - n \log\left( \det(L+I)\right)\]
+
+% and we will work with its negative
+% \[\mathcal L(L) \coloneqq -\log\left(\prod_{i = 1}^n \mathbb P_L(Y_i)\right) = -\sum\limits_{i=1}^n\log\left( \det(L_{Y_i})\right) + n \log\left( \det(L+I)\right)\]
+% where high values of \(\mathcal L\) correspond to kernels \(L\) where at least one element \(Y_t\) of our training set is very unlikely. Thus it is natural to minimise the loss function \(\mathcal L\) over all positive semidefinit \(L\in\mathbb R^{N\times N}\). Note that we have \(\mathcal L(L) = \infty\) if and only if an observation \(Y_t\) of our training set is impossible under the DPP \(\mathbb P_L\), i.e. we do not consider those kernels in our estimation.
+We note that \(\mathcal L\) is smooth and the gradient of this can be explicitly expressed, at least on the domain \(\left\{ \mathcal L>-\infty\right\}\). This is due to the fact that the determinants of the submatrices are polynomials in the entries of \(L\) and the composition of those with the smooth function \(\log\colon(0,\infty)\to\mathbb R\) stays smooth. This property allows the use of gradient methods but they face the problem that the loss function is non concave and thus those algorithms will generally not converge to a global maximiser. % (cf. \cite{affandi2014learning}).
+% \todo{Explain why it is non convex}{ } 
+To see that the lof li
+
+% Nevertheless it is worth investigating whether those local minima turn out to produce good results in real world scenarios.
 
 % \subsubsection*{A fixed point approach}
 

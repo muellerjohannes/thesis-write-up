@@ -4,21 +4,37 @@
 
 % \section{Motivation for learning DPPs}
 
-\section{Assymptotic reconstruction of the kernel}
+\section{Kernel reconstruction using principle minors} %  via the Assymptotic reconstruction of the kernel}
 
-In this section we want to see how we can estimate the marginal kernel from an increasing number of observations \(Y_1, \dots, Y_n\subseteq \mathcal Y\) that are distributed according to \(\mathbb P\). For this we will sketch the procedure in \cite{urschel2017learning}. Let \(\hat{\mathbb P}_n\) be the empirical distribution
-\[\hat{\mathbb P}_n \coloneqq \frac1n\sum_{i=1}^n\delta_{Y_i}.\]
-We can identify the probability measures on a finite set, in our case \(2^{\mathcal Y}\), with the probability simplex
-\[\left\{ x\in\mathbb R^{2^{\mathcal Y}} \;\Big\lvert\; x_A \in[0, 1] \text{ for all } A\in 2^{\mathcal Y} \text{ and } \sum_{A\in 2^{\mathcal Y}} x_A = 1 \right\}.\]
-Doing this the strong law of large numbers\todo{cite}{ } yields that the empirical distributions converge to \(\mathbb P\) almost surely if the sequence \((Y_k)_{k\in\mathbb N}\) of observations is independent. Therefore we can consistently\todo{explain consistency}{ } estimate all principle minors of \(K\), since
+In this section we want to see how we can estimate the marginal kernel from an increasing number of observations \(\mathbf Y_1, \dots, \mathbf Y_n\subseteq \mathcal Y\) that are distributed according to \(\mathbb P\). For this we will sketch the procedure in \cite{urschel2017learning}. Let \(\hat{\mathbb P}_n\) be the \emph{empirical measure}
+\[\hat{\mathbb P}_n \coloneqq \frac1n\sum_{i=1}^n\delta_{\mathbf Y_i}.\]
+% We can identify the probability measures on a finite set, in our case \(2^{\mathcal Y}\), with the probability simplex
+% \[\left\{ x\in\mathbb R^{2^{\mathcal Y}} \;\Big\lvert\; x_A \in[0, 1] \text{ for all } A\in 2^{\mathcal Y} \text{ and } \sum_{A\in 2^{\mathcal Y}} x_A = 1 \right\}.\]
+The interest in those lies in the fact that they quite natural estimates for the actual underlying distribution. 
+% It is well known that \(\hat{\mathbb P}_n\) 
+More precisely they are \emph{unbiased estimators} for \(\mathbb P\), i.e. they agree in expectation with \(\mathbb P\). This can be seen by evaluating it at \(A\subseteq \mathcal Y\)
+\[\mathbb E_{\mathbb P}\big[\hat{\mathbb P}_n(A)\big] =\frac1n \sum_{i = 1}^n \mathbb E_{\mathbb P}\big[\delta_{\mathbf Y_i}(A)\big] =  \mathbb P(A).\]
+And even stronger by the strong law of large numbers\todo{cite, explain in more detail}{ } they converge to \(\mathbb P\) almost surely if the sequence \((Y_k)_{k\in\mathbb N}\) of observations is independent. Therefore we can consistently\todo{explain consistency}{ } estimate all principle minors of \(K\), since
 \[\hat{\mathbb P}_n(A\subseteq \mathbf Y) \xlongrightarrow{n\to\infty} \mathbb P(A\subseteq\mathbf Y) = \det(K_A) \quad \text{almost surely}.\]
 
-Thus the question naturally arrises whether we can reconstruct the kernel \(K\) from the knowledge of all of its principle minors. This is known as the \emph{principle minor assignment problem} and has been studied extensively (cf. \cite{griffin2006principal} and \cite{urschel2017learning}) and an computationally efficient algorithm has been proposed for the problem in \cite{rising2015efficient}. It is in fact possible to retain the matrix from its principle minors up to an equivalence relation which identifies matrices with each other, that have the same principle minors. Obviously this is sufficent for the task of learning a DPP, because those matrices are exactly those who give rise to the same point process. To see roughly how this reconstruction works we note that the diagonal is given by
+
+%Assume that \(\hat{\mathbb P}_n\) is a DPP with marginal kernel \(\hat K_n\), then \(\hat K_n\) would be a quite natural estimate for the actual marginal kernel \(K\).
+%To make this approach rigorous we have to convince ourselves that the empirical measure are in fact DPPs and that a marginal kernel can be reconstructed from the DPP.
+
+%it is natural to ask whether we can reconstruct the kernel 
+
+
+
+Thus the question naturally arrises whether we can reconstruct the kernel \(K\) from the knowledge of all of its principle minors, which we will address in the next section.
+
+\subsection*{Principle minor assignment problem}
+
+This is known as the \emph{principle minor assignment problem} and has been studied extensively (cf. \cite{griffin2006principal} and \cite{urschel2017learning}) and an computationally efficient algorithm has been proposed for the problem in \cite{rising2015efficient}. It is in fact possible to retain the matrix from its principle minors up to an equivalence relation which identifies matrices with each other, that have the same principle minors. Obviously this is sufficent for the task of learning a DPP, because those matrices are exactly those who give rise to the same point process. To see roughly how this reconstruction works we note that the diagonal is given by
 \[K_{ii} = \det(K_{\left\{ i\right\}})\]
 and the absolute value of the off diagonal can be obtained through
 \[K_{ij}^2 = K_{ii} K_{ii} - \det\big(K_{\left\{ i,j\right\}}\big). \]
 The reconstruction of the signs of the entries \(K_{ij}\) turns out to be the main difficulty, but this can be done analysing the cycles of the adjacency graph \(G_K\) corresponding to \(K\).\todo{see whether this proof can be done in a simplified way without considering the sparsity \(l\)}{ } The adjacency graph has \(\mathcal Y\) as its vertex set and the set of edges consists of the pairs \(\left\{ i,j\right\}\) such that \(K_{ij}\ne0\). The reconstruction now relies on the analysis of the cycles of this graph and it has been shown, that one only needs to know all the principle minors up to the order of the cycle sparsity of \(G_K\) (cf. \cite{urschel2017learning}). Following this method it is possible to compute estimators \(\hat K_n\) of \(K\) in polynomial time and give a bound on the speed of convergence in some suitable metric.\todo{state and explain the result}
-\todo{is this estimator unbiased?}
+\todo{is this estimator unbiased? well \(\hat{\mathbb P}_n\) is unbiased}
 
 % In completely analogue fashion one can learn the elementary kernel \(L\).
 % and those estimations can be used to sample from a DPP that was observed. This procedure might be sufficient in some scenarios, but this approach lacks the ability to extrapolate the knowledge one has of specific DPPs onto some new, unobserved DPPs which is exactly the point that would distinguish the procedure from classical statistics and would allow for far more interesting applications. To achieve this, we introduce the notion of conditional DPPs in the following section which are customised to describe families of DPPs with kernels that are in some way similar.

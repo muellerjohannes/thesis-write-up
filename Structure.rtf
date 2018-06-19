@@ -5,7 +5,7 @@
 \paperw11900\paperh16840\margl1440\margr1440\vieww28600\viewh18000\viewkind0
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
-\f0\fs40 \cf0 Table of contents\
+\f0\fs36 \cf0 Proposed Structure:\
 \
 	Abstract\
 	I. Introduction\
@@ -14,47 +14,45 @@
 		\'97 Aim and outline of the dissertation\
 	II. DPPs: Basics\
 		\'97 Historical remarks\
-		\'97 Definitions and properties\
-			+ Definition\
-			+ Repulsive property\
-			+ K <= I equivalent to being a DPP kernel: How do you reconstruct a DPP from its marginals?\
-		\'97 L-ensembles\
-			+ Introduce L-ensembles\
-			+ Discuss equivalence to normal DPPs with K < I, i.e. it is a way to parametrise DPPs where the emptyset has positive probability\
+		\'97 Definitions and properties:\
+			+ Definition of DPPs\
+			+ L-ensembles\
 			+ quality diversity decomposition\
-		\'97 Related structures: conditional DPPs, sDPPs , k-DPPs\
-			+ Definitions\
+		\'97 Related structures\
+			+ conditional DPPs: explain how they can be used to extrapolate knowledge of some DPPs to other\
+			+ structured DPPs: explain how they can drastically reduce the amount of parameters of the model\
+			+ DPPs of fixed size or k-DPPs\
 		\'97 computational benefits (\'82Magic properties  of DPPs\'92)\
-			+ Closed formulae\
+			+ Closed formulae for a lot of expressions\
 			+ Sampling algorithm\
 		\'97 Problem of mode selection\
-			+ \
+			+ give motivation for the mode search\
+			+ explain difficulties in the DPP case\
+			+ present different approaches\
 	III. Learning\
-		\'97 What does it mean to \'82learning\'91 mean and why is it interesting?\
-		\'97 Direct Kernel estimation: reconstruction via moments and cycles\
-			+ One can estimate the principle minors consistently\
-			+ A symmetric matrix can be reconstructed from its principle minors\
-			+ Erwartungstreu?\
+		\'97 What does \'82learning\'91 mean and why is it interesting?\
+		\'97 Estimation of the marginal kernel using principle minors\
+			+ Main Idea: estimate principle minors over the marginal density and reconstruct the matrix from its principle minors\
+			+ Question: Is this estimator unbiased? Is it consistent? (It should be consistent in some way by the result from the paper)\
 		\'97 Maximum likelihood estimation using optimisation techniques\
-			+ Learning the Kernel\
-				# Non concavity of the log likelihood function\'85 (and thus also of the likelihood function)\
-				# Different methods? -> fixed point iteration\
+			+ Learning the kernel L\
+				Problem: Non concavity of the log likelihood function\'85\
+				http://proceedings.mlr.press/v37/mariet15.pdf uses a fixed point iteration to approximate stationary points\
 			+ Learning the quality\
-				# Parametrise the positive definite matrices L over the quality-diversity decomposition (q, S) -> L\
-				# for fixed similarity matrix S and a log linear family of qualities, the log likelihood becomes concave\
-			+ Comparison to the kernel estimation: Obviously the maximal likelihood over all kernels L is higher than the one over (q, S), however the problem here lies in the fact that it is in practice not feasible to compute the maximiser L\
+				Log likelihood becomes concave\
+				Questions: In general the maximiser does not have to exist, so how can one deal with this? Is the estimator consistent?\
 			+ Learning the mixture coefficients of k-DPPs\'85\
-		\'97 Bayessian approach to the kernel estimation			+ Explain the Bayssian approach to parameter estimation\
+		\'97 Bayessian approach to the kernel estimation: It looks like that has been done in www.jmlr.org/proceedings/papers/v32/affandi14.pdf			+ Explain the Bayssian approach to parameter estimation\
 	IV. Examples\
-		\'97 Points on the line, including duality to 0-1 sequences that look like pseudo random human generated; also discuss possible different \'82repulsion/distance\'91 kernels\
-		\'97 Points in the square, \'82playing Battleships\'91\
+		\'97 Points on the line, including duality to 0-1 sequences that look like human generated pseudo random ones		\'97 Points in the square, that\'92s more or less \'82playing Battleships\'91\
 		\'97 Toy example for learning\
 	V. Summary and Conclusion\
 	Appendix\
 		\'97 code\
-		\'97 proofs?\
 \
 \
+\
+IGNORE FROM HERE ON PLEASE! :)\
 \
 Questions:\
 	\'97 Length of thesis? Formal requirements?\

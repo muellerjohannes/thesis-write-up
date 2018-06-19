@@ -4,7 +4,7 @@
 
 % \section{Motivation for learning DPPs}
 
-\section{Kernel reconstruction using principle minors} %  via the Assymptotic reconstruction of the kernel}
+\section{Reconstruction of the marginal kernel using principle minors} %  via the Assymptotic reconstruction of the kernel}
 
 In this section we want to see how we can estimate the marginal kernel from an increasing number of observations \(\mathbf Y_1, \dots, \mathbf Y_n\subseteq \mathcal Y\) that are distributed according to \(\mathbb P\). For this we will sketch the procedure in \cite{urschel2017learning}. Let \(\hat{\mathbb P}_n\) be the \emph{empirical measure}
 \[\hat{\mathbb P}_n \coloneqq \frac1n\sum_{i=1}^n\delta_{\mathbf Y_i}.\]
@@ -27,7 +27,7 @@ And even stronger by the strong law of large numbers\todo{cite, explain in more 
 
 Thus the question naturally arrises whether we can reconstruct the kernel \(K\) from the knowledge of all of its principle minors, which we will address in the next section.
 
-\subsection*{Principle minor assignment problem}
+\subsubsection*{Principle minor assignment problem}
 
 This is known as the \emph{principle minor assignment problem} and has been studied extensively (cf. \cite{griffin2006principal} and \cite{urschel2017learning}) and an computationally efficient algorithm has been proposed for the problem in \cite{rising2015efficient}. It is in fact possible to retain the matrix from its principle minors up to an equivalence relation which identifies matrices with each other, that have the same principle minors. Obviously this is sufficent for the task of learning a DPP, because those matrices are exactly those who give rise to the same point process. To see roughly how this reconstruction works we note that the diagonal is given by
 \[K_{ii} = \det(K_{\left\{ i\right\}})\]
@@ -41,124 +41,119 @@ The reconstruction of the signs of the entries \(K_{ij}\) turns out to be the ma
 
 \section{Maximum likelihood estimation using optimisation techniques}
 
-The method of maximum likelihood estimation or short MLE is a very well established procedure to estimate parameters. The philosophy of MLE is that one selects the parameter under which the given data would be the most likely to be observed and to motivate this in more detail we roughly follow the corresponding section in \cite{rice2006mathematical}.
+The method of maximum likelihood estimation is a very well established procedure to estimate parameters. The philosophy of MLE is that one selects the parameter under which the given data would be the most likely to be observed and to motivate this in more detail we roughly follow the corresponding section in \cite{rice2006mathematical}.
 %Assume again that we have \(n\) samples \(\mathbf Y_1, \dots, \mathbf Y_n\) and then the maximum likelihood estimator would be the kernel 
 
-For example if we consider random variables \(X_1, \dots, X_n\) with a joint density \(f(x_1, \dots, x_n, \theta)\) and we want to estimate the parameter \(\theta\) based on a sample \(x_1, \dots, x_n\) of our random variables. Then we would want to select the parameter \(\theta\) that maximises the density \(f(x_1, \dots, x_n, \theta)\). If additionally the random variables are indepent and identically distributed, their joint density factorises and thus we obtain
+For example we might consider a sequence random variables \(X_1, \dots, X_n\) with a joint density \(f(x_1, \dots, x_n, \theta)\) with respect to some reference measure \(\prod_{i=1}^n\mu(\mathrm d x_i)\). Now we want to estimate the parameter \(\theta\) based on a sample \(x_1, \dots, x_n\) of our random variables. Then one reasonable guess for \(\theta\) would be the one under which the observation of those observations \(x_1, \dots, x_n\) is the most likely. In other words we want to find the parameter \(\theta\) that maximises the density \(f(x_1, \dots, x_n, \theta)\). If additionally the random variables are indepent and identically distributed, their joint density factorises and thus we obtain
 \[f(x_1, \dots, x_n, \theta) = \prod_{i=1}^n f(x_i, \theta) \]
-where \(f(x, \theta)\) is the density of the \(X_i\). In practice it is often easier to maximise the logarithm of the density
+where \(f(x, \theta)\) is the density with respect to \(\mu\) of the \(X_i\). In practice it is often easier to maximise the logarithm of the density
 \[\mathcal L(\theta) = \log\!\big(f(x_1, \dots, x_n, \theta)\big) = \sum_{i=1}^n \log\!\big(f(x_i, \theta)\big) \]
- since this transforms the product over functions into a sum. However this is clearly equivalent to maximising the density since the logarithm is strictly monotone. We call the function \(\mathcal L\) the \emph{log likelihood function} and we denote its domain which is just the set of all parameters we wish to consider by \(\Theta\).
+ since this transforms the product over functions into a sum. However this is clearly equivalent to maximising the density since the logarithm is strictly monotone. We call the function \(\mathcal L\) the \emph{log likelihood function} and we denote its domain which is just the set of all parameters we wish to consider by \(\Theta\). Further we call its maximiser
+ \[\hat \theta_n\coloneqq \underset{\theta\in\Theta}{\arg\max} \mathcal L(\theta) \]
+the \emph{maximum likelihood estimater} or short MLE.
 
 % \todo{general blabla about MLE}
 
-\subsection*{Kernel estimation}
-\todo{rewrite it in a MLE rather than ML fashion}
+\subsection{Kernel estimation}
+\todo{Clearly formulate the task}
 % The approach described above is clearly of traditional statistical type and we want to touch on how the kernel estimation can be put into a machine learning task (cf. \cite{affandi2014learning}).
-Assume again that we have a set of observations \(Y_1, \dots, Y_n\subseteq\mathcal Y\) drawn independently and according to the DPP \(\mathbb P\). Now we want to find the maximum likelihood estimator in the set \(\mathbb R^{N\times N}_{\text{sym}, +}\) of all symmetric and positive semidefinite \(N\times N\) matrices. The log likelihood function is now given by
+Assume again that we have a set of observations \(Y_1, \dots, Y_n\subseteq\mathcal Y\) drawn independently and according to the DPP \(\mathbb P\). This time we want to find the maximum likelihood estimator for the kernel and in order to do this we need to be able to express the density of the observation which is nothing but the value of the elementary probabilities. Thus we will assume that we are dealing with \(L\)-ensembles in this section.
+Therefore we look for a MLE for the elementary kernel \(L\) in the set \(\mathbb R^{N\times N}_{\text{sym}, +}\) of all symmetric and positive semidefinite \(N\times N\) matrices. The log likelihood function is now given by
 %We aim to establish a quantity that gives an intuitive measure of how well a different DPP describes the training set and then we want to find the elementary kernel \(L\) for which the associated DPP \(\mathbb P_L\) optimises this quantity. A widely used choice in the machine learning community for this is the so called \emph{log likelihood function}
 \[\mathcal L \colon\mathbb R^{N\times N}_{\text{sym}, +} \to [-\infty, 0] \qquad L \mapsto \log\left(\prod_{i = 1}^n \mathbb P_L(Y_i)\right).\]
 Using \eqref{e2.3} we get the expression
-\[\mathcal L(L) = \sum\limits_{i=1}^n\log\left( \det(L_{Y_i})\right) - n \log\left( \det(L+I)\right)\]
+\begin{equation}\label{e3.1}
+\mathcal L(L) = \sum\limits_{i=1}^n\log\left( \det(L_{Y_i})\right) - n \log\left( \det(L+I)\right)
+\end{equation}
+
+
 
 % and we will work with its negative
 % \[\mathcal L(L) \coloneqq -\log\left(\prod_{i = 1}^n \mathbb P_L(Y_i)\right) = -\sum\limits_{i=1}^n\log\left( \det(L_{Y_i})\right) + n \log\left( \det(L+I)\right)\]
 % where high values of \(\mathcal L\) correspond to kernels \(L\) where at least one element \(Y_t\) of our training set is very unlikely. Thus it is natural to minimise the loss function \(\mathcal L\) over all positive semidefinit \(L\in\mathbb R^{N\times N}\). Note that we have \(\mathcal L(L) = \infty\) if and only if an observation \(Y_t\) of our training set is impossible under the DPP \(\mathbb P_L\), i.e. we do not consider those kernels in our estimation.
-We note that \(\mathcal L\) is smooth and the gradient of this can be explicitly expressed, at least on the domain \(\left\{ \mathcal L>-\infty\right\}\). This is due to the fact that the determinants of the submatrices are polynomials in the entries of \(L\) and the composition of those with the smooth function \(\log\colon(0,\infty)\to\mathbb R\) stays smooth. This property allows the use of gradient methods but they face the problem that the loss function is non concave and thus those algorithms will generally not converge to a global maximiser. % (cf. \cite{affandi2014learning}).
+We note that \(\mathcal L\) is smooth and that its gradient can be expressed explicitly, at least on the domain \(\left\{ \mathcal L>-\infty\right\}\). This is due to the fact that the determinants of the submatrices are polynomials in the entries of \(L\) and the composition of those with the smooth function \(\log\colon(0,\infty)\to\mathbb R\) stays smooth. This property allows the use of gradient methods but they face the problem that the loss function is non concave and thus those algorithms will generally not converge to a global maximiser. % (cf. \cite{affandi2014learning}).
 % \todo{Explain why it is non convex}{ } 
-To see that the lof li
+To see that the log linear likelihood function is not concave, we may consider the span \(\left\{ q I\mid q\in\mathbb R\right\}\) of the identity matrix. On this subspace \(\mathcal L\) takes the form
+\[\mathcal L(q I) = \sum\limits_{i = 1}^n \log(q^{\left\lvert Y_i \right\rvert}) - n \log((1 + q)^N) = \sum\limits_{i = 1}^n \left\lvert Y_i \right\rvert \log(q) - n N \log(1 + q) \] %= \log(q) \cdot \left( \sum\limits_{i = 1}^n \left\lvert Y_i \right\rvert - n\cdot N\right)\]
+which is not concave in general.
 
-% Nevertheless it is worth investigating whether those local minima turn out to produce good results in real world scenarios.
+This obviously causes substantial computational problems in the calculation of the MLE let alone it exists. In fact it is NP hard\todo{explain this term}{ } to maximise a general non concave function and it is also conjectured to be NP hard to maximise the log likelihood function \(\mathcal L\) in the case of \(L\)-ensembles. However there are still efficient maximising techniques for such functions that will eventually converge to local maximiser and that also work in very high dimensional spaces\todo{cite}{ } and thus this approach was taken by \todo{cite}. Nevertheless we will not present this approach here, but rather favour a maximisation technique that is based on a fixed point iteration and was proposed in \todo{cite}.
 
-% \subsubsection*{A fixed point approach}
+\subsubsection{Fixed point iteration based maximisation}
+\todo{read, understand and summarise the paper}
 
-\subsection*{Learning the quality}
+\subsection{Learning the quality}
 
-Let now \(\left\{ Y_t\right\}_{t=1,\dots, T}\) be a training set where \(Y_t\subseteq\mathcal Y\) for every \(t=1, \dots, T\).
-% In order to extrapolate those observations onto further unobserved inputs \(X\) we will assume that the quality and diversity mappings \(q_i\) and \(\phi_i\) can be factorised in the following way% have the structure%\(q_i(X)\) has the structure 
-%In perceiving a collection of DPPs as a conditional DPP one hopes %is that one can hope 
-%to estimate the quality and the diversity functions \(q_i\) and \(\phi_i\) based upon observations or training data \((X_t,Y_t)\) for \(t=1, \dots, T\) in such a way that one knows \(q_i(X)\) and \(\phi_i(X)\) for all possible inputs \(X\in\mathcal X\). To do this one could assume that they have the structure
-Unlike earlier we will not try to estimate the whole kernel \(L\) but only the qualities \(q_i\) of the items \(i\in\mathcal Y\). More precisely we can parametrise the positive definite symmetric matrices \(L\) using the quality diversity decomposition, i.e. we consider the bijection\todo{whats the domain?}
-\[ (q, S) \mapsto L \quad \text{where } L_{ij} = q_iS_{ij}q_j.\]
-%  we identify a pair of qualities and similarities \((q, S)\) with the associated kernel \(L\) given by \(L_{ij} = q_iS_{ij}q_j\).
-Now we fix a similarity kernel \(S_0\), that usually comes from modelling, and only try to estimate the quality \(q\in\mathbb R_+^N\). This means that we optimise the likelihood function over a smaller set of kernels, namely the ones that arrise from \((q, S_0)\) for \(q\in\mathbb R_+^N\) and thus the maximal likelihood that can be achieved will be lower compared to the general kernel estimation. 
+Let again \(\left\{ Y_t\right\}_{t=1,\dots, T}\) be a training set where \(Y_t\subseteq\mathcal Y\) for every \(t=1, \dots, T\). Unlike earlier we will not try to estimate the whole kernel \(L\) but only the qualities \(q_i\) of the items \(i\in\mathcal Y\). More precisely we recall that we can parametrise the positive definite symmetric matrices \(L\) using the quality diversity parametrisation %decomposition %, i.e. we consider the bijection\todo{whats the domain?}
+\[ (q, S) \mapsto \Psi(q, S) = L \quad \text{where } L_{ij} = q_iS_{ij}q_j.\]
+Now we fix a similarity kernel \(\hat S\), that we will usually model according to some perceptions we might have, and will only try to estimate the quality \(q\in\mathbb R_+^N\). This means that we optimise the likelihood function over a smaller set of kernels, namely the ones of the form \(\Psi(q, \hat S)\) for \(q\in\mathbb R_+^N\). Obviously the maximal likelihood that can be achieved using this more restrictive model decreases since we consider less positive definite matrices and we have %will be lower compared to the one obtained by a full kernel estimation, since we have
+\[\max_{q\in \mathbb R_+^N} \mathcal L(\Psi(q, \hat S)) \le %\max_{(q, S)\in \mathbb R_+^N\times \mathbb S_N^N} \mathcal L(\Psi(q, S)) =
+ \max_{L\in \mathbb R_{\text{sym}, +}^{N\times N}} \mathcal L(L). \]
+ 
+Although we can only expect a worse descriptive power of the observation, the hope is that the task of estimating only the qualities \(q\in\mathbb R_+^N\) is more feasible which actually turn out to be true in certain cases. But before we investigate this, we clearly state our goal.
+
+\begin{emp}[Maximum likelihood estimator for the quality]
+% {\scshape\bfseries .}
+ We aim to find the MLE of the quality vector \(q\in\mathbb R_+^N\), in other words we are interested in the existence and the computability of the quantity
+\[\hat q_n \coloneqq \underset{q\in\mathbb R_+^N}{\arg\max}\, \mathcal L(\Psi(q, \hat S)) \]
+where the likelihood is still given by \eqref{e3.1}.
+\end{emp}
+
+\subsubsection{Properties of the loss function \(\mathcal L\) and derivation of the log linear model}
+
+The motivation for restriction our ambitions of estimations to the qualitis \(q_i\) rather than the whole elementary kernel \(L\in\mathbb R_{\text{sym}, +}^{N\times N}\) was to obtain a more tractable optimisation problem. In order to see whether we succeeded in that regard, we note that each summand in the log likelihood function takes the following form under the quality diversity parametrisation
+%perceive -- without change of notation -- the log likelihood function now as a function of the quality vector, i.e. \(\mathcal L\colon \mathbb R_+^N\to [-\infty, 0]\) where
+\begin{equation}
+% \mathcal L(\Psi(q, \hat S)) & = \sum\limits_{i = 1}^n 
+\log\left( \prod_{j\in Y_i} q_j^2\right) + \log(\det(\hat S_{Y_i})) - \log\left(\sum_{A\subseteq \mathcal Y} \prod_{j\in A}q_j^2\det(\hat S_A) \right).
+% \\ & = \sum\limits_{i = 1}^n \log\left( \prod_{j\in Y_i} q_j^2\right) \cdot \det(\hat S_{Y_i}) - n
+\end{equation}
+Unfortunately this still isnÕt concave in \(q\) and in order to achieve this, we will have to make following assumption.
+
+%{\scshape\bfseries .}
+\begin{emp}[Log linear model for the qualities]
+From now on we will fix vectors \(f_i\in\mathbb R^M\) for \(i\in\mathcal Y\) and call them \emph{feature vectors}. Further we set
+\[q_i = \exp\left(\frac12 \theta^T f_i\right)\quad \text{for } \theta\in\mathbb R^M\]
+and will only consider quality vectors \(q\in\mathbb R_+^N\) that have this form.
+\end{emp}
+
+we fix some vectors \(f_i\in\mathbb R^M\) and assume \(q_i = \exp\left(\frac12 \theta^T f_i\right)\) for \(\theta\in\mathbb R^M\).
+
 
 \[q_i(X) = g(f_i(X)), \quad \phi_i(X) = G(f_i(X)) \]
-where \(f_i(X)\in\mathcal Z\) is %and \(F_i(X)\in \mathcal Z_2\) are
- being modelled and \(g\colon\mathcal Z\to[0,\infty)\) and \(G\colon\mathcal Z\to\mathbb R^D\) will be learned based on the observations. We will assume that \(\mathcal Z\) is a subset of a vector space and therefore we call \(f_i(X)\) the \emph{feature vector}. %and it usually exists of some descriptive quantities of the item\todo{introduce notion}{ } \(i\in X\).
-If it is possible to estimate the quality and diversity as above, we would be able to sample from every DPP \(\mathbb P(\cdot\mid X)\) and even from those that we havenÕt observed so far -- just by the knowledge about DPPs with a similar structure. 
+where \(f_i(X)\in\mathcal Z\) is being modelled and \(g\colon\mathcal Z\to[0,\infty)\) and \(G\colon\mathcal Z\to\mathbb R^D\) will be learned based on the observations. We will assume that \(\mathcal Z\) is a subset of a vector space and therefore we call \(f_i(X)\) the \emph{feature vector}. If it is possible to estimate the quality and diversity as above, we would be able to sample from every DPP \(\mathbb P(\cdot\mid X)\) and even from those that we havenÕt observed so far -- just by the knowledge about DPPs with a similar structure.
 
-%\begin{ex}
 Let us again illustrate this procedure in the example of the human point selection and we will restrict ourselves to learn the function \(g\) that determines the quality function, we might have a reason to be absolutely sure that we have modelled the diversity features \(\phi_i(X)\) perfectly, so there is no need to learn, i.e. optimise them any further. However we are not convinced any more that humans really do not prefer some points over others -- maybe we have the feeling that they lean more towards the points located in the center of the square. Therefore it is natural to assume that the quality, which is nothing but the popularity of a point, depends on the distance to the centre point of the square \(m=(1/2,1/2)\), i.e.
-\[q_i(n) =% g(i) = f(\left\lVert i - m\right\rVert)\]%
-g(\left\lVert i - m\right\rVert) = g(f_i(n))\]% \coloneqq \hat g(i)\]
+\[q_i(n) = g(\left\lVert i - m\right\rVert) = g(f_i(n))\]
 where we want to learn \(g\) with respect to some loss function over a given family \(\mathcal F\) of functions.
-%\end{ex}
 
-To put this back into the general setting we note that \(g\in\mathcal F\) gives rise to a different conditional DPP which we will denote by \(\mathbb P_g(\cdot\mid X)\). % and we introduce a function \(\mathcal L\colon\mathcal F\to\mathbb R\) which gives a measure of how well the conditional DPP \(\mathbb P_g(\cdot\mid X)\) describes the training set. A very intuitive choice for \(\mathcal L\) is the so called \emph{log likelihood function} 
-%An intuitive measure of how well the conditional DPP \(\mathbb P_g(\cdot\mid X)\) describes the training set is the so called \emph{log likelihood function}
-%\[%\mathcal L(g) \coloneqq 
-%\log\left(\prod_{t = 1}^T \mathbb P_g(Y_t = \mathbf Y\mid X_t)\right). \]
-%and we will work with its negative
-Just like in the case of simple DPPs we will work with the negative of the log likelihood function 
+To put this back into the general setting we note that \(g\in\mathcal F\) gives rise to a different conditional DPP which we will denote by \(\mathbb P_g(\cdot\mid X)\). Just like in the case of simple DPPs we will work with the negative of the log likelihood function 
 \[\mathcal L(g) \coloneqq -\log\left(\prod_{t = 1}^T \mathbb P_g(Y_t\mid X_t)\right) \]
-%where high values of \(\mathcal L\) correspond to functions \(g\) where at least one pair \((X_t,Y_t)\) of our training set is very unlikely and thus it is natural that we aim to
-%which is rather a measure of how poorly the guess \(g\) is and thus we will aim 
-and seek a minimiser of the loss function \(\mathcal L\). %Note that we have \(\mathcal L(g) = \infty\) if and only if an observation \((X_t,Y_t)\) of our training set is impossible under the conditional DPP \(\mathbb P_g(\cdot\mid X)\), i.e. we do not consider those functions. 
-%\todo{comment on \(-\infty\) if observation is impossible}
-Thus we obtain an optimisation problem over a family of functions and in practice it is convenient to restrict ourselves to a 
-%For the sake of simplicity we will assume that we only want to optimize \(g\) over some
- parametric family
+and seek a minimiser of the loss function \(\mathcal L\). Thus we obtain an optimisation problem over a family of functions and in practice it is convenient to restrict ourselves to a parametric family
 \[\mathcal F = \left\{ g_\theta\mid \theta\in U\subseteq\mathbb R^M\right\}.\]
 In this case we write \(\mathbb P_\theta(\cdot\mid X)\) for the conditional DPP that is induced by \(g_\theta\) and the kernels become functions of \(\theta\) and thus we write \(L(\theta;X)\) and \(K(\theta;X)\) for the kernel associated with the parameter \(\theta\). In analogue fashion we denote the loss function by
 \[\mathcal L(g_\theta)=\mathcal L(\theta) = -\sum\limits_{t=1}^T \log\left(\mathbb P_\theta(Y_t\mid X_t)\right).\]
-% and we obtain a minimisation task over a subset of a euclidean space. %\todo{talk about optimisation problems}.
- 
- % \todo{comment on coercivity}
- 
-%and there exists a rich theory for convex optimisation problems and their numerical approximations\todo{comment on descent methods and gradient flow?} (cf. \todo{cite}). Further it is easy to see that a minimiser of \(\mathcal L\) exists if \(\mathcal L\) is lower semicontinuous and \emph{coercive}, i.e. \(\mathcal L(\theta)\to \infty\) for \(\left\lvert \theta \right\rvert\to\infty\).
 
-\subsubsection*{Properties of the loss function \(\mathcal L\)}
-
-We want to see how the log likelihood approach naturally leads to a log linear model in \(\theta\) for the quality features if one wants to obtain a convex loss function. Of course the motivation for a convex loss function is given by the nice properties of convex optimisation tasks described earlier.  %Due to the nice properties of convex optimisation problems we are interested in the question whether \(\mathcal L\) is convex.
- %has those respective properties and some criteria for that can be deduced straight forward from the definition of \(\mathcal L\) and \eqref{e5}. 
- In order to see in which cases the loss function is convex, we use \eqref{e4} to obtain
- %we call a function \(f\) \emph{log concave}, \emph{log convex} or \emph{log linear} if \(\log(f)\) has the respective property and obtain the following result.
- %Using \eqref{e4} we get
- \begin{equation}\label{e5}
- \begin{split}
-- \log\left(\mathbb P_\theta(Y_t\mid X_t)\right) = & -\log(\det(L_Y(\theta;X))) + \log\!\big(\det(L(\theta; X_t) + I)\big) \\ %\log\left(\sum_{A\subseteq \mathcal Y(X_t)} \det(L_A(\theta;X))\right) \\
+We want to see how the log likelihood approach naturally leads to a log linear model in \(\theta\) for the quality features if one wants to obtain a convex loss function. Of course the motivation for a convex loss function is given by the nice properties of convex optimisation tasks described earlier. In order to see in which cases the loss function is convex, we use \eqref{e4} to obtain
+\begin{equation}\label{e5}
+\begin{split}
+- \log\left(\mathbb P_\theta(Y_t\mid X_t)\right) = & -\log(\det(L_Y(\theta;X))) + \log\!\big(\det(L(\theta; X_t) + I)\big) \\
 = & -2\cdot\sum_{i\in Y_t}\log\left(g_\theta(f_i(X_t))\right) - \log\left(\det\left(S_{Y_t}(X_t)\right)\right) \\
- & + \log\left(\sum_{A\subseteq \mathcal Y(X_t)} \left(\prod_{i\in A}g_\theta(f_i(X_t))^2\right)\det(S_A(X_t))\right).
- \end{split}
+& + \log\left(\sum_{A\subseteq \mathcal Y(X_t)} \left(\prod_{i\in A}g_\theta(f_i(X_t))^2\right)\det(S_A(X_t))\right).
+\end{split}
 \end{equation}
-%Note that t
-This expression is well defined in \([0,\infty]\) if we adapt the common convention \(\det(S_\emptyset(X)) = 1\).
-%Let us from now on assume
-%\[g_\theta(f_i(X))>0 %\quad \text{and } \det(S_{\left\{ i\right\}}(X))>0 
-%\quad \text{for all } i\in\mathcal Y(X)\quad\text{ and } X\in\mathcal X.\]
- %if we have \(g_\theta^2(f_i(X_t))\cdot\det(S_{\left\{ i\right\}}(X_t))>0\) for at least one \(i\in \mathcal Y(X_t)\) and we set it to infinity everywhere else, since those are exactly the DPPs that would almost surely only select the empty set and thus not worth considering.
-%This is not a major limitation since if we had \(g_\theta(f_i(X))=0\), then we would impose a model that would never select a subset that contains \(i\) and thus we could reduce our problem to a smaller DPP.
- % Those are fixed in the following result.\todo{define log convexity}%is convex and whether it is coercive. 
-  %, for which a rich machinery -- both of theoretical and numerical 
-% which should generally measure how likely the observations \((X_t,Y_t)\) are assuming that we use \(g_\theta\) for our qualities \(q_i\). Thus we end up with the optimisation problem of maximising \(\mathcal L\) over \(\mathbb R^M\)
-% which is a very achievable task if \(\mathcal L\) is concave and smooth. 
-In order to give some criteria for the convexity and coercivity of the loss function, we say that a function \(f\) \emph{log concave}, \emph{log convex} or \emph{logarithmically (affine) linear} if \(\log(f)\) has the respective property.
+This expression is well defined in \([0,\infty]\) if we adapt the common convention \(\det(S_\emptyset(X)) = 1\). In order to give some criteria for the convexity and coercivity of the loss function, we say that a function \(f\) \emph{log concave}, \emph{log convex} or \emph{logarithmically (affine) linear} if \(\log(f)\) has the respective property.
 
 \begin{prop}[Coercivity and convexity of the loss function]
 \begin{enumerate}
-\item The rate function is coercive for all possible training sets if and only if%\todo{\(\mathbb P(A) = \mathbb P(A= \mathbf Y)\)}
+\item The rate function is coercive for all possible training sets if and only if
 \begin{equation}\label{e6}
 \mathbb P_\theta(Y \mid X)\xlongrightarrow{\left\lvert \theta \right\rvert\to\infty} 0 \quad \text{for all } Y\subseteq \mathcal Y(X) \text{ and } X\in\mathcal X.
 \end{equation}
-%\item Let \(M
 \item The rate function is convex for all possible training sets if \(g_\theta(f_i(X_t))\) is log concave in \(\theta\) for all \(i\in\mathcal Y(X), X\in\mathcal X\) and if 
 \[\prod_{i\in B}g_\theta^2(f_i(X_t))\]
 is log convex in \(\theta\) for all \(B\subseteq\mathcal Y(X))\) and \(X\in\mathcal X\).
 \item The conditions in \textup{(}ii\textup{)} are satisfied if and only if \(g_\theta(f_i(X))\) is logarithmically affine linear in \(\theta\) for every \(i\in\mathcal Y(X)\) and \(X\in\mathcal X\).
-%The rate function is convex for all possible training sets if \(g_\theta(f_i(X))\) is upper semicontinuous in \(\theta\) for all \(i\in\mathcal Y(X), X\in\mathcal X\) and if 
-%\[\prod_{i\in B}g_\theta^2(f_i(X))\]
-%is lower semicontinuous for all \(B\subseteq\mathcal Y(X), X\in \mathcal X\).
 \end{enumerate}
 \end{prop}
 \begin{proof}
@@ -173,10 +168,7 @@ is convex. On the other side if (\emph{ii}) holds, then all functions \(\log\lef
 \end{enumerate}
 \end{proof}
 
-% \todo{comment on affine linearity}
-
-The result above shows that logarithmically affine linear models are the natural fit for the parametric family \(\mathcal F\) that we want to optimise over. However they can be easily transformed into log linear models through a simple parameter  shift if we assume \(f_i(X)\ne0\) % if we replace \(f_i(X)\) by the vector \((f_i(X),1)\in\mathbb R^{D+1}\). 
-and thus we can assume without loss of generality that the functions \(g_\theta\) have the form 
+The result above shows that logarithmically affine linear models are the natural fit for the parametric family \(\mathcal F\) that we want to optimise over. However they can be easily transformed into log linear models through a simple parameter  shift if we assume \(f_i(X)\ne0\) and thus we can assume without loss of generality that the functions \(g_\theta\) have the form 
 \[g_\theta(f_i(X)) = \exp\left(\frac12\theta^T f_i(X)\right) \quad \text{for all } i\in \mathcal Y(X) \text{ and } X\in\mathcal X. \]
 This structure can be used to derive some explicit expression for this case. 
 Of course this log linear model is only well defined if the feature space \(\mathcal Z\) is a subset of \(\mathbb R^M\) which we will assume from now on. We note that this is no restriction if we assume a log linear model, because otherwise we could just replace the feature functions \(f_i\) by the log linearity constants \(\hat f_i(X)\in \mathbb R^M\). First we can apply the explicit structure to the elementary probabilities and get
@@ -196,14 +188,12 @@ where \(f_A(X)\coloneqq\sum_{i\in A}f_i(X)\). Using this we get that the single 
 \end{equation}
 The later expression of this gradient has the advantage that it can be efficiently computed in contrary to the evaluation of the exponentially large sum in the first line.
 
-%Despite those practical properties described above it is not straight forward if the 
 Obviously the loss function is not coercive in general, since for \(f_i(X) = 0\) the probability \(\mathbb P_\theta(\left\{ i\right\}\mid X)\) is constant in \(\theta\). However it is not straight forward whether it becomes coercive under the assumption \(f_i(X)>0\) entrywise for every \(i\in\mathcal Y(X)\) and \(X\in\mathcal X\) and this could be investigated further.
 
+\subsubsection*{Comparison to learning the kernel \(L\)}
 
-% \subsubsection*{Comparison to learning the kernel}
+\subsection{Learning kernels of conditional DPPs}
 
-\subsection*{Estimating the mixture coefficients of \(k\)-DPPs}
-
-\subsection*{Learning kernels of conditional DPPs}
+\subsection{Estimating the mixture coefficients of \(k\)-DPPs}
 
 \section{A Bayesian approach to the kernel estimation}

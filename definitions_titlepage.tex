@@ -14,6 +14,14 @@
 {\normalfont\bfseries}  %Thm head font original 
 {.}{10pt}      
 {{\normalfont\bfseries \thmname{#1}\thmnumber{ #2}\thmnote{ (#3)}}}
+\newtheoremstyle{emptystyle}
+{}              %Space above    
+{}              %Space below
+{}                      %Body font: original {\normalfont}    
+{}                      %Indent amount (empty = no indent,%\parindent = paraindent)    
+{\scshape\bfseries}  %Thm head font original 
+{.}{6pt}      
+{{\scshape\bfseries \thmnote{#3}}}
 
 \theoremstyle{satzstyle}
 \newtheorem{satz}{Satz}[chapter]
@@ -29,6 +37,8 @@
 \newtheorem{rem}[satz]{Remark}
 \newtheorem{bsp}[satz]{Beispiel}
 \newtheorem{ex}[satz]{Example}
+\theoremstyle{emptystyle}
+\newtheorem{emp}{}
 
 \renewcommand*{\thesatz}{\arabic{chapter}.\arabic{satz}}
 \renewcommand*{\theequation}{\arabic{chapter}.\arabic{equation}}
@@ -37,6 +47,7 @@
 \titleformat{\chapter}[display]{\huge\bfseries}{Chapter \thechapter}{20pt}{\Huge\bfseries}
 \titleformat{\section}{\Large\bfseries}{\thesection}{7pt}{}
 \titleformat{\subsection}{\large\bfseries}{\thesubsection}{5pt}{}
+\titleformat{\subsubsection}{\large\scshape\bfseries}{\thesubsubsection}{5pt}{}
 \renewcommand{\cfttoctitlefont}{\bfseries\Huge}
 \renewcommand\cftchapfont{\bfseries}
 \renewcommand\thechapter{\textup{\Roman{chapter}}}

@@ -99,16 +99,18 @@ Although we can only expect a worse descriptive power of the observation, the ho
 where the likelihood is still given by \eqref{e3.1}.
 \end{emp}
 
-\subsubsection{Properties of the loss function \(\mathcal L\) and derivation of the log linear model}
 
-The motivation for restriction our ambitions of estimations to the qualitis \(q_i\) rather than the whole elementary kernel \(L\in\mathbb R_{\text{sym}, +}^{N\times N}\) was to obtain a more tractable optimisation problem. In order to see whether we succeeded in that regard, we note that each summand in the log likelihood function takes the following form under the quality diversity parametrisation
+
+%\subsubsection{Properties of the loss function \(\mathcal L\) and derivation of the log linear model}
+
+The motivation for restricting our ambitions of estimation to the qualities \(q_i\) rather than the whole elementary kernel \(L\in\mathbb R_{\text{sym}, +}^{N\times N}\) was to obtain a more tractable optimisation problem. In order to see whether we succeeded in that regard, we note that each summand in the log likelihood function takes the following form under the quality diversity parametrisation
 %perceive -- without change of notation -- the log likelihood function now as a function of the quality vector, i.e. \(\mathcal L\colon \mathbb R_+^N\to [-\infty, 0]\) where
 \begin{equation}
 % \mathcal L(\Psi(q, \hat S)) & = \sum\limits_{i = 1}^n 
 \log\left( \prod_{j\in Y_i} q_j^2\right) + \log(\det(\hat S_{Y_i})) - \log\left(\sum_{A\subseteq \mathcal Y} \prod_{j\in A}q_j^2\det(\hat S_A) \right).
 % \\ & = \sum\limits_{i = 1}^n \log\left( \prod_{j\in Y_i} q_j^2\right) \cdot \det(\hat S_{Y_i}) - n
 \end{equation}
-Unfortunately this still isn’t concave in \(q\) and in order to achieve this, we will have to make following assumption.
+Unfortunately this still isn’t concave in \(q\) and in order to achieve this, we will have to make following assumption and keep them in throughout this section.\todo{does it makes sense?}
 
 %{\scshape\bfseries .}
 \begin{emp}[Log linear model for the qualities]
@@ -117,7 +119,16 @@ From now on we will fix vectors \(f_i\in\mathbb R^M\) for \(i\in\mathcal Y\) and
 and will only consider quality vectors \(q\in\mathbb R_+^N\) that have this form.
 \end{emp}
 
-we fix some vectors \(f_i\in\mathbb R^M\) and assume \(q_i = \exp\left(\frac12 \theta^T f_i\right)\) for \(\theta\in\mathbb R^M\).
+\begin{rem}
+It shall be noted that although this log linear model seems to be a harsh restriction, it isn’t a restriction at all, at least theoretically. If we take \(M=N\) and choose \(f_i\) to be the unit vectors in \(\mathbb R^N\), then this just a logarithmic transformation of the parameters and thus the maximal likelihood that can be achieved with this model does not change. In practice however it will be of interest to work with rather low dimensional parameters \(\theta\), because if the ground set \(\mathcal Y\) gets large, optimisation in \(\mathcal R^N\) can be inefficient. In this case of course the maximal likelihood under the optimal parameter may decrease. However the approximation of the optimal parameter might become possible again which justifies this sacrifice.
+\end{rem}
+
+Under the assumption of a log linear model for the qualities the log likelihood function takes the form
+\begin{equation}
+•
+\end{equation}•
+
+we fix some vectors \(f_i\in\mathbb R^M\) and assume \(q_i = \exp\left(\frac12 \theta^T f_i\right)\) for \(\theta\in\mathbb R^M\). 
 
 
 \[q_i(X) = g(f_i(X)), \quad \phi_i(X) = G(f_i(X)) \]

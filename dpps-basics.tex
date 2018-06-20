@@ -4,17 +4,28 @@
 
 \section{Definitions and properties}
 
-Let in the following \(\mathcal Y\) be a finite set, which we call the \emph{ground set} and \(N\coloneqq \left\lvert \mathcal Y \right\rvert\). %\coloneqq\left\{ 1,\dots, N\right\}\). 
+We begin by presenting general frame we will work in. This means that we will keep the notation introduced now and will use those objects throughout the thesis without further explanation. Further we will present all the important properties of determinantal point processes that we will need and postpone some calculations to the last section of this chapter. A much more ... survey of properties of determinantal point processes including extensive comparisons to several other point processes can be found in the monograph?? \cite{kulesza2012determinantal}.\todo{comment on continuous DPPs at one point!}
+
+\begin{emp}[Setting]
+Let in the following \(\mathcal Y\) be a finite set, which we call the \emph{ground set} and \(N\coloneqq \left\lvert \mathcal Y \right\rvert\) its cardinality. %\coloneqq\left\{ 1,\dots, N\right\}\). 
 A \emph{point process} on \(\mathcal Y\) is a random subset %\(\mathbf Y\) 
-of \(\mathcal Y\), i.e. a random variable with values in the powerset \(2^{\mathcal Y}\). Usually we will identify this random variable with its law \(\mathbb P\) and thus refer to probability measures \(\mathbb P\) on \(2^{\mathcal Y}\) as point processes and will not distinguish those objects. Let in the following \(\mathbf Y\) denote a random subset drawn according to \(\mathbb P\). We call \(\mathbb P\) %or \(\mathbf Y\) itself 
-a \emph{determinantal point process}, or in short a DPP, if we have% for a random subset \(\mathbf Y\subseteq \mathcal Y\) drawn according to \(\mathbb P\) %(denote this by \(Y\sim \mathbb P\) in the future)
+of \(\mathcal Y\), i.e. a random variable with values in the powerset \(2^{\mathcal Y}\). We will identify this random variable with its law \(\mathbb P\) and thus refer to probability measures \(\mathbb P\) on \(2^{\mathcal Y}\) as point processes and will not distinguish between those objects. Let further \(\mathbf Y\) denote a random subset drawn according to \(\mathbb P\).
+\end{emp}
+
+\begin{defi}[Determinantal point process]
+We call \(\mathbb P\) a \emph{determinantal point process}, or in short a DPP, if we have
 \begin{equation}\label{e2.1}
 \mathbb P(A\subseteq \mathbf Y) = \det(K_A) \quad \text{for all } A\subseteq \mathcal Y
 \end{equation}
-where \(K\) is a symmetric matrix indexed by the elements in \(\mathcal Y\) and \(K_A\) denotes the restriction of the matrix \(K\) to indices in \(A\). We call \(K\) the \emph{marginal kernel} of the DPP and note immediately that \(K\) is necessarily non negative definite\todo{cite or explain?}. Further it can be shown (cf. page 3 in \cite{borodin2009determinantal})\todo{have a look at this and maybe explain it!}{ }
+where \(K\) is a symmetric matrix indexed by the elements in \(\mathcal Y\) and \(K_A\) denotes the submatrix of \(K\) to indexed by the elements of \(A\). We call \(K\) the \emph{marginal kernel} of the DPP. If the marginal kernel \(K\) is diagonal, then we call \(\mathbb P\) a \emph{Poisson point process}.
+\end{defi}
+
+We note that all principle minors of \(K\) are non negative and thus \(K\) is surely non negative definite\todo{cite or explain?}. Further it can be shown (cf. page 3 in \cite{borodin2009determinantal})\todo{have a look at this and maybe explain it!}{ }
  that also the complement of a DPP is a DPP with marginal kernel \(I-K\) where \(I\) is the identity matrix, i.e.
 \[\mathbb P(A\subseteq\mathbf Y^c) = \det(I_A-K_A).\]
 Thus we conclude \(I-K\ge0\) and obtain \(0\le K\le I\). This actually turns out to be sufficient for \(K\) to define a DPP through \eqref{e2.1} (cf. \cite{kulesza2012determinantal}).\todo{why? explain!}{ }
+
+\begin{emp}[Repulsive behaviour of DPPs]
 We call the elements of \(\mathcal Y\) \emph{items } and by choosing \(A=\left\{ i\right\}\) and \(A=\left\{ i,j\right\}\) for \(i,j\in \mathcal Y\) and using \eqref{e2.1} we obtain the probabilities of their occurrence %\(\mathbb P(i\in \mathbf Y) = K_{ii}\) and
 \begin{equation}\label{e2.2}
 \begin{split}
@@ -23,11 +34,13 @@ We call the elements of \(\mathcal Y\) \emph{items } and by choosing \(A=\left\{
 \mathbb P(i,j\in\mathbf Y) & = K_{ii}K_{jj}-K_{ij}^2 = \mathbb P(i\in\mathbf Y)\cdot\mathbb P(j\in\mathbf Y)-K_{ij}^2,
 \end{split}
 \end{equation}
-Thus the appearances of the two items \(i\) and \(j\) are always negatively correlated. This negative correlation is exactly what causes the diversifying behaviour of determinantal point processes. In practice one usually models the negative correlations to be high between items that are similar in some notion. For example in a spatial setting being similar could mean being close together and in this case the selected items would tend to be not very close together. This is repulsive behaviour can be seen in Figure. \todo{insert picture!}{ }
+Thus the appearances of the two items \(i\) and \(j\) are always negatively correlated. This negative correlation is exactly what causes the diversifying behaviour of determinantal point processes. In practice one usually models the negative correlations to be high between items that are similar in some notion. For example in a spatial setting being similar could mean being close together and in this case the selected items would tend to be not very close together. This is repulsive behaviour can be seen in Figure.\todo{insert picture!}{ } Note that Poisson point processes are exactly the DPPs without correlations of the points.
 
 In this light the fact that also \(\mathbf Y^c\) exhibits negative correlations becomes less surprising. Since the set \(\mathbf Y\) tends to spread out due to the repulsion in \eqref{e2.2}, the complement, which is nothing but the gaps that are left after eliminating the elements in \(\mathbf Y\), tend to show a non clustering behaviour as well.
+\end{emp}
 
-\subsection*{\(L\)-ensembles}
+% \subsection*{\(L\)-ensembles}
+\begin{emp}[\(L\)-ensembles]
 Let us now introduce an important subclass of DPPs, namely the ones where not only the marginal probabilities can be expressed through a suitable kernel, but also the elementary probabilities. Because this will be convenient for us in the sequel, we will restrict ourselves to this case from now on\todo{really? what about sampling?}. If we have even \(K<I\), then we define the \emph{elementary kernel}
 \begin{equation}\label{e2.2.1}
 L\coloneqq K(I-K)^{-1}
@@ -39,6 +52,7 @@ which specifies the elementary probabilities since one can check
 Conversely for any \(L\ge0\) a DPP can be defined via \eqref{e2.2} and the corresponding marginal kernel is given by the inversion of \eqref{e2.2.1}
 \[K=L(I+L)^{-1}.\]
 We call DPPs which arise this way \(L\) \emph{ensembles}.\todo{discuss equivalence to DPPs with \(\mathbb P(\emptyset)>0\)}
+\end{emp}
 
 \subsection*{The quality diversity decomposition}
 
@@ -90,27 +104,37 @@ If we identify \(i\) with the vector \(B_i=q_i\phi_i\in\mathbb R^D\), we can obt
 	\label{fig:1}
 \end{figure}
 
+\begin{emp}[Modelling diversity over distance]\label{moddiv}
 Since we will use one form of diversity features multiple times, we will now give a short general formulation of it. Let \(\mathcal R = \left\{ r_1, \dots, r_D\right\}\) be a finite set which we will call the \emph{reference set} and its elements the \emph{reference points}. Further let
 \[d\colon \mathcal Y\times \mathcal R\to\mathbb R_+, \quad f\colon\mathbb R_+\to \mathbb R\]
-mappings. Usually \(d(i, r)\) will be interpreted as a measure of similarity between an item \(i\in\mathcal Y\) and a reference point \(r\in\mathcal R\) and will typically be given by a metric on a larger space that contains both \(\mathcal Y\) and \(\mathcal R\). % The function \(f\) will be decreasing and thus .....
+mappings. Usually \(d(i, r)\) will be interpreted as a measure of distance between an item \(i\in\mathcal Y\) and a reference point \(r\in\mathcal R\) and will typically be given by a metric on a larger space that contains both \(\mathcal Y\) and \(\mathcal R\).
 One can now model \(\phi_i\in\mathbb R^{\mathcal R}\) via
 \[(\phi_i)_r \propto f\!\big(d(i, r)\big) \quad \text{for } r\in\mathcal R\] % j = 1, \dots, D. \]
-Thus the diversity feature vector \(\phi_i\) stores how similar the item \(i\) is to all reference points and the scalar product \(\phi_i^T\phi_j\) will be close to one, if the items \(i\) and \(j\) have approximately the same degrees of similarity to the reference points. It shall be noted that the choice of the \(D\), the number of reference points bounds the rank of the kernel \(L\) and therefore of the largest subset that occurs with positive probability. Indeed we have \(\operatorname{rk}(L)\le D\) and for \(A\subseteq\mathcal Y\) with more than \(D\) elements \(\det(L_A) = 0\) and therefore \(\mathbb P(A) = 0\).
-
+The function \(f\) will typically be decreasing and thus \((\phi_i)_r\) can be seen as a measure of how similar item \(i\) is to the reference point \(r\in\mathcal R\). Thus the diversity feature vector \(\phi_i\) stores how similar the item \(i\) is to all reference points and the scalar product \(\phi_i^T\phi_j\) will be close to one, if the items \(i\) and \(j\) have approximately the same degrees of similarity to the reference points. It shall be noted that the choice of the \(D\), the number of reference points bounds the rank of the kernel \(L\) and therefore of the largest subset that occurs with positive probability. Indeed we have \(\operatorname{rk}(L)\le D\) and for \(A\subseteq\mathcal Y\) with more than \(D\) elements \(\det(L_A) = 0\) and therefore \(\mathbb P(A) = 0\).
 In the fourth chapter we will see that there is a natural choice for the mapping \(d\) in most cases, at least in the ones where \(\mathcal Y\) consists of %spatial positions or 
 points in a metric space. On the other hand the choice of \(f\) is crucial since it determines the structure and strength of the repulsion.
+\end{emp}
 
+\begin{emp}[Transitivity of repulsion]
 One last property of DPPs that we shall mention is the fact that the negative correlations of the DPP posses a transient property in the sense, that if \(i\) and \(j\) and \(j\) and \(k\) are similar, then \(i\) and \(k\) are also similar. This is due to the fact
 \[\left\lVert \phi_i - \phi_j \right\rVert^2 = \left\lVert \phi_i \right\rVert^2 + \left\lVert \phi_j \right\rVert^2 - 2\phi_i^T\phi_j = 2(1-\phi_i^T\phi_j)\]
 and thus
 \[\sqrt{1-\phi_i^T\phi_k} = \frac12\left\lVert \phi_i - \phi_k \right\rVert\le\frac12\big(\left\lVert \phi_i - \phi_j \right\rVert + \left\lVert \phi_j - \phi_k \right\rVert\big) = \sqrt{1-\phi_i^T\phi_j} + \sqrt{1-\phi_j^T\phi_k}.\]\todo{reformulate that part!}
+\end{emp}
+
+\begin{emp}[Comparison to other point processes]
+
+\end{emp}
 
 % \section{\(L\)-ensembles}
 
 \section{Variations of DPPs} %: conditional DPPs, \(k\)-DPPs and structured DPPs}
 
-\subsection*{Conditional DPPs}
+In this section we will present some useful variations of determinantal point processes. They serve different purposes and we will shortly explain their individual benefits.
 
+%\subsection*{Conditional DPPs}
+
+\begin{emp}[Conditional DPPs]
 A \emph{conditional DPP} is a collection of DPPs indexed by \(X\in\mathcal X\), where \(X\) is called the \emph{input} of the conditional DPP. Thus for every \(X\in\mathcal X\) we get a finite set \(\mathcal Y(X)\) and a determinantal point process \(\mathbb P(\cdot\mid X)\) on \(\mathcal Y(X)\) which is given by the elementary kernel \(L(X)\), i.e.
 \[\mathbb P(A\lvert X) \propto \det\left(L_A(X)\right) \quad \text{for all } A\subseteq\mathcal Y(X). \]
 Further we denote the quality and diversity features of the conditional DPP by \(q_i(X)\) and \(\phi_i(X)\) respectively.
@@ -129,10 +153,15 @@ seperate DPPs. The reason for this is that one wants to estimate the kernels \(L
  to not only memorise the kernels \(L(X)\) for every single input \(X\in\mathcal X\) but rather to learn the mapping \(L\) that assigns every input \(X\) its elementary kernel \(L(X)\). If one achieved this task, one would be able to simulate and predict a DPP that one has not observed so far just by the knowledge about some DPPs that belong to the same conditional DPP. 
 %  based on some training set. 
 Of course this can only work if we assume some regularity or a certain structure of the function \(L\) which we will do in the third chapter where we put those consideration into a precise framework.
+\end{emp}
 
-\subsection*{Fixed size or \(k\)-DPPs}
+%\subsection*{Fixed size or \(k\)-DPPs}
+\begin{emp}[Fixed size or \(k\)-DPPs]
 
-\subsection*{Structured DPPs}
+\end{emp}
+
+%\subsection*{Structured DPPs}
+\begin{emp}[Structured DPPs]
 \todo{Say something about number of parameters}
 We call a DPP \emph{structured DPP} or short sDPP if the ground set is the cartesian product of some other set \(\mathcal M\), which we will call the \emph{set of parts}, i.e. if we have
 \[\mathcal Y = \mathcal M^R = \left\{ y_i = (y_i^r)_{r = 1, \dots, R} \mid i = 1, \dots, N\right\}\]
@@ -152,10 +181,96 @@ for a suitable set of factorisations \(F\) and qualities and diversities \(q_\al
 quality and diversity features instead of
 \[M^R = O(M^R).\]
 This reduction of variables will make modelling, storing and estimating them feasible again in a lot of cases where naive approaches are foredoomed because of their shear size.
+\end{emp}
+
+\begin{emp}[Sequential DPPs]
+
+\end{emp}
+
+\begin{emp}[Kronecker DPPs]
+
+\end{emp}
 
 \section{The magic properties of DPPs}
 
+One of the main difficulties that arrises in the theory of discrete point processes is that they are probability measures on an exponentially large set, namely the powerset \(2^{\mathcal Y}\) which has cardinality \(2^N\). Determinantal point processes have the benefit that they describe this distribution over the matrix \(K\) which consists of only \(N^2\) parameters. This reduction of the number of parameters plays a central role in making a lot of operations possible in an efficient way. However it is not only the relatively small amount of parameters that lead to this, but also the structure of the determinant itself that leads to closed expressions for a lot of quantities like the normalisation constant in \eqref{e2.3}.
+In this section we will focus on the efficient simulation of DPPs and give a short overview of further techniques that can improve the performance of this algorithm.
+
+We roughly follow the approach taken in \todo{cite paper} and will start by showing that every determinantal point process can be seen as a mixture of a smaller class of determinantal point processes.%\todo{reference to the paper}
+
+\begin{theo}[Mixture representation of DPPs]\label{mixDPPs}
+Let \(\mathbb P\) be a DPP and \(K = \sum_{i\in\mathcal Y} \lambda_iv_iv_i^T\) be the spectral decomposition of its marginal kernel. Let now \(\left\{ B_i\right\}_{i \in\mathcal Y}\) be a collection of independent Bernoulli random variables with mean \(\lambda_i\). Define now the random kernel
+\begin{equation}\label{BerKer}
+K_B = \sum_{i\in\mathcal Y} B_i v_iv_i^T.
+\end{equation}
+Finally define a second point process \(\tilde{\mathbb P}\) on \(\mathcal Y\) that is obtain by first drawing the Bernoulli variables \(B_i\) and then the DPP according to \(K_B\). Then we have \(\tilde{\mathbb P} = \mathbb P\) and thus \(\tilde{\mathbb P}\) is also a DPP with marginal kernel \(K\).
+\end{theo}
+
+Before we proof this result we discuss a few consequences that show how crucial it is.
+
+\begin{rem}
+Since it is fairly easy to simulate Bernoulli experiments, it remains to know how we can sample from DPPs with marginal kernels of the form \(K=\sum_{i\in I} v_iv_i^T\) for some index set \(I\subseteq\mathcal Y\). We call DPPs of this type \emph{elementary} and note that this corresponds to the class of DPPs were the eigenvalues of the marginal kernel are contained in \(\left\{ 0, 1\right\}\).
+\end{rem}
+
+\begin{cor}[Existence of DPPs]
+Let \(K\) be a symmetric \(N\times N\) matrix. Then \(K\) is the marginal kernel of a DPP if and only if \(0\le K\le I\).
+\end{cor}
+\begin{proof}
+We have already seen in the beginning that this condition is necessary. To see that it is sufficient, let \(0\le K\le I\) hold. Then the point process \(\tilde{\mathbb P}\) from the provious theorem clearly exists and is a DPP with marginal kernel \(K\).
+\end{proof}
+
+\begin{cor}[Cardinality of DPPs]
+Let \(\mathbb P\) be a DPP with kernel \(K = \sum_{i\in\mathcal Y} \lambda_iv_iv_i^T\). Then the cardinality of the DPP is distributed like the sum of the Bernoulli variables \(\left\{ B_i\right\}_{i \in\mathcal Y}\) from theorem \ref{mixDPPs}.
+\end{cor}
+\begin{proof}%[Proof of Theorem]
+To proof this, we only have to convince ourselves that after the Bernoulli experiments the cardinality of a DPP with kernel \eqref{BerKer} has size \(n\coloneqq\sum_{i\in\mathcal Y}B_i\) almost surely. Since \(K_B\) has rank at most \(n\), the cardinality is almost surely smaller than \(n\). On the other hand we have
+\begin{equation}
+\begin{split}
+\mathbb E\big[\!\left\lvert \mathbf Y \right\rvert\!\big] = \sum\limits_{i\in\mathcal Y} \mathbb P(i\in\mathbf Y) = \sum\limits_{i\in\mathcal Y} (K_B)_{ii} = \operatorname{Tr}(K_B) = n.
+\end{split}
+\end{equation}
+In the last step we used that the trace of a symmetric matrix is the sum over its eigenvalues, which are \(B_i\) in our case. This computation lets us conclude \(\left\lvert \mathbf Y \right\rvert = n\) almost surely.
+\end{proof}
+
+\begin{proof}[Proof of Theorem \ref{mixDPPs}]
+¥
+\end{proof}¥
+
+\begin{emp}[Sampling from elementary DPPs]
+
+\end{emp}
+
+\begin{emp}[Sampling from DPPs]
+
+\end{emp}
+
+\subsection*{Possible improvements}
+
+\begin{emp}[Dual sampling]
+
+\end{emp}
+
+\begin{emp}[Dimension reduction]
+
+\end{emp}
+
 \section{The mode problem}
+
+One general motivation for modelling is the hope that predictions can be made from the selected model. If the model is of stochastic nature, like in our case, and if one wants to predict its outcome, there are a few possible approaches. The first one would be to sample from this model. This relies on the intuition that a realisation of our random variable will be a rather typical example for the random event. Going one step further one could try to find the most likely outcome of the random variable, which is known as the mode problem.
+
+\begin{emp}[The mode problem]
+Let \(X\) be a random variable with values in some space \(\mathcal X\) and let \(f\) be the density of the distribution of \(X\) with respect to some reference measure. Then the \emph{mode} is the maximiser
+\[\hat x = \underset{x\in\mathcal X}{\arg\max}f(x)\]
+of the density if it exists. The search for the mode is called the \emph{mode problem}.
+\end{emp}
+
+Our motivation for finding the mode of a random variable was to make better predictions for it. This is justified\todo{look for better word}{ } by the assumption that the mode should be a typical realisation of the random variable. However this is not generally the case and therefore one should be cautious with this intuition. Consider for example the mixture of two independent Gaussian random variables
+\[0.1\cdot X + 0.9\cdot Y\] % \quad \text{where } X\sim N(0, 10), Y\sim N()\]
+where \(X\) is centered with variance \(10\) and \(Y\) has mean \(5\) with variance \(1\), the densities are shown in Figure ....\todo{check whether this gives the desired effect and plot the density!}{ } It is clear that mode is \(0\) in this example, but it is not a very typical outcome of the random variable, since the majority of events is centered around \(10\).
+
+The mode problem is rather well behaved if the density \(f\) is a smooth function defined on a subset of \(\mathbb R^d\), but in the case of DPPs we have to deal with the probability measure on a finite set. Thus this turns into a discrete optimisation problem over the exponentially large powerset \(2^{\mathcal Y}\). This is in general very hard to solve and it has been shown in \todo{cite} that it is NP hard to do so or even approximate it upto a factor of \(\frac89\). However there were still different strategies proposed and we will present some of them including their main ideas. \todo{do this!}
+
+
 
 \section{Calculations}
 

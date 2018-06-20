@@ -5,7 +5,7 @@
 {}                      %Indent amount (empty = no indent,%\parindent = paraindent)    
 {\normalfont\bfseries}  %Thm head font original 
 {.}{10pt}      
-{{\normalfont\bfseries \thmname{#1}\thmnumber{ #2}\thmnote{ (#3)}}}
+{{\scshape\bfseries \thmnumber{#2}\thmname{ #1}\thmnote{ (#3)}}}
 \newtheoremstyle{satzstyle}
 {}              %Space above    
 {}              %Space below
@@ -13,7 +13,7 @@
 {}                      %Indent amount (empty = no indent,%\parindent = paraindent)    
 {\normalfont\bfseries}  %Thm head font original 
 {.}{10pt}      
-{{\normalfont\bfseries \thmname{#1}\thmnumber{ #2}\thmnote{ (#3)}}}
+{{\scshape\bfseries \thmnumber{#2} \thmname{ #1}\thmnote{ (#3)}}}
 \newtheoremstyle{emptystyle}
 {}              %Space above    
 {}              %Space below
@@ -21,7 +21,7 @@
 {}                      %Indent amount (empty = no indent,%\parindent = paraindent)    
 {\scshape\bfseries}  %Thm head font original 
 {.}{6pt}      
-{{\scshape\bfseries \thmnote{#3}}}
+{{\scshape\bfseries \thmnumber{#2}\thmnote{ #3}}}
 
 \theoremstyle{satzstyle}
 \newtheorem{satz}{Satz}[chapter]
@@ -38,7 +38,7 @@
 \newtheorem{bsp}[satz]{Beispiel}
 \newtheorem{ex}[satz]{Example}
 \theoremstyle{emptystyle}
-\newtheorem{emp}{}
+\newtheorem{emp}[satz]{}
 
 \renewcommand*{\thesatz}{\arabic{chapter}.\arabic{satz}}
 \renewcommand*{\theequation}{\arabic{chapter}.\arabic{equation}}

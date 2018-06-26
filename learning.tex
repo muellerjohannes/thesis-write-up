@@ -57,17 +57,17 @@ the \emph{maximum likelihood estimater} or short MLE.
 \subsection{Kernel estimation}
 \todo{Clearly formulate the task}
 % The approach described above is clearly of traditional statistical type and we want to touch on how the kernel estimation can be put into a machine learning task (cf. \cite{affandi2014learning}).
-Assume again that we have a set of observations \(Y_1, \dots, Y_n\subseteq\mathcal Y\) drawn independently and according to the DPP \(\mathbb P\). This time we want to find the maximum likelihood estimator for the kernel and in order to do this we need to be able to express the density of the observation which is nothing but the value of the elementary probabilities. Thus we will assume that we are dealing with \(L\)-ensembles in this section.
-Therefore we look for a MLE for the elementary kernel \(L\) in the set \(\mathbb R^{N\times N}_{\text{sym}, +}\) of all symmetric and positive semidefinite \(N\times N\) matrices. The log likelihood function is now given by
+Assume again that we have a set of observations \(Y_1, \dots, Y_n\subseteq\mathcal Y\) drawn independently and according to the DPP \(\mathbb P\). This time we want to find the maximum likelihood estimator for the elementary kernel and in order to do this we need to be able to express the density of the DPP which is nothing but the values of the elementary probabilities. Thus we will assume that we are dealing with \(L\)-ensembles in this section. We start by formulating the goal of this section.
+
+\begin{emp}[Maximum likelihood estimator for \(L\)]
+We seek to find the MLE for the elementary kernel \(L\) in the set \(\mathbb R^{N\times N}_{\text{sym}, +}\) of all symmetric and positive semidefinite \(N\times N\) matrices. The log likelihood function is now given by
 %We aim to establish a quantity that gives an intuitive measure of how well a different DPP describes the training set and then we want to find the elementary kernel \(L\) for which the associated DPP \(\mathbb P_L\) optimises this quantity. A widely used choice in the machine learning community for this is the so called \emph{log likelihood function}
-\[\mathcal L \colon\mathbb R^{N\times N}_{\text{sym}, +} \to [-\infty, 0] \qquad L \mapsto \log\left(\prod_{i = 1}^n \mathbb P_L(Y_i)\right).\]
+\[\mathcal L \colon\mathbb R^{N\times N}_{\text{sym}, +} \to [-\infty, 0], \qquad L \mapsto \log\left(\prod_{i = 1}^n \mathbb P_L(Y_i)\right).\]
+\end{emp}
 Using \eqref{e2.3} we get the expression
 \begin{equation}\label{e3.1}
 \mathcal L(L) = \sum\limits_{i=1}^n\log\left( \det(L_{Y_i})\right) - n \log\left( \det(L+I)\right)
 \end{equation}
-
-
-
 % and we will work with its negative
 % \[\mathcal L(L) \coloneqq -\log\left(\prod_{i = 1}^n \mathbb P_L(Y_i)\right) = -\sum\limits_{i=1}^n\log\left( \det(L_{Y_i})\right) + n \log\left( \det(L+I)\right)\]
 % where high values of \(\mathcal L\) correspond to kernels \(L\) where at least one element \(Y_t\) of our training set is very unlikely. Thus it is natural to minimise the loss function \(\mathcal L\) over all positive semidefinit \(L\in\mathbb R^{N\times N}\). Note that we have \(\mathcal L(L) = \infty\) if and only if an observation \(Y_t\) of our training set is impossible under the DPP \(\mathbb P_L\), i.e. we do not consider those kernels in our estimation.
@@ -84,7 +84,8 @@ This obviously causes substantial computational problems in the calculation of t
 
 \subsection{Learning the quality}
 
-Let again \(\left\{ Y_t\right\}_{t=1,\dots, T}\) be a training set where \(Y_t\subseteq\mathcal Y\) for every \(t=1, \dots, T\). Unlike earlier we will not try to estimate the whole kernel \(L\) but only the qualities \(q_i\) of the items \(i\in\mathcal Y\). More precisely we recall that we can parametrise the positive definite symmetric matrices \(L\) using the quality diversity parametrisation %decomposition %, i.e. we consider the bijection\todo{whats the domain?}
+Let again \(\left\{ Y_t\right\}_{t=1,\dots, n}\) be a set of independent observations drawn according to a \(L\)-ensemble \(\mathbb P\). % where \(Y_t\subseteq\mathcal Y\) for every \(t=1, \dots, T\).
+Unlike earlier we will not try to estimate the whole kernel \(L\) but only the qualities \(q_i\) of the items \(i\in\mathcal Y\). More precisely we recall that we can parametrise the positive definite symmetric matrices \(L\) using the quality diversity parametrisation %decomposition %, i.e. we consider the bijection\todo{whats the domain?}
 \[ (q, S) \mapsto \Psi(q, S) = L \quad \text{where } L_{ij} = q_iS_{ij}q_j.\]
 Now we fix a similarity kernel \(\hat S\), that we will usually model according to some perceptions we might have, and will only try to estimate the quality \(q\in\mathbb R_+^N\). This means that we optimise the likelihood function over a smaller set of kernels, namely the ones of the form \(\Psi(q, \hat S)\) for \(q\in\mathbb R_+^N\). Obviously the maximal likelihood that can be achieved using this more restrictive model decreases since we consider less positive definite matrices and we have %will be lower compared to the one obtained by a full kernel estimation, since we have
 \[\max_{q\in \mathbb R_+^N} \mathcal L(\Psi(q, \hat S)) \le %\max_{(q, S)\in \mathbb R_+^N\times \mathbb S_N^N} \mathcal L(\Psi(q, S)) =
@@ -123,12 +124,39 @@ and will only consider quality vectors \(q\in\mathbb R_+^N\) that have this form
 It shall be noted that although this log linear model seems to be a harsh restriction, it isnÕt a restriction at all, at least theoretically. If we take \(M=N\) and choose \(f_i\) to be the unit vectors in \(\mathbb R^N\), then this just a logarithmic transformation of the parameters and thus the maximal likelihood that can be achieved with this model does not change. In practice however it will be of interest to work with rather low dimensional parameters \(\theta\), because if the ground set \(\mathcal Y\) gets large, optimisation in \(\mathcal R^N\) can be inefficient. In this case of course the maximal likelihood under the optimal parameter may decrease. However the approximation of the optimal parameter might become possible again which justifies this sacrifice.
 \end{rem}
 
-Under the assumption of a log linear model for the qualities the log likelihood function takes the form
-\begin{equation}
-¥
-\end{equation}¥
+Under the assumption of a log linear model for the qualities the individual terms of the log likelihood function take the form
+\begin{equation}\label{e3.3}
+\theta^Tf_{Y}(X) + \det(S_{Y}(X)) - \log\left( \sum_{A\subseteq\mathcal Y(X)} \exp\left( \theta^Tf_{A}(X)\right)\det(S_A(X)) \right).
+\end{equation}
 
-we fix some vectors \(f_i\in\mathbb R^M\) and assume \(q_i = \exp\left(\frac12 \theta^T f_i\right)\) for \(\theta\in\mathbb R^M\). 
+The first two terms are affine linear in \(\theta\) and thus concave. To see that the last expression is also concave, it is convenient to to introduce the notion of log concavity and give a fundamental result.%\todo{reformulate this!}
+
+\begin{defi}[Log concavity]
+We call a function \(f\) \emph{log concave}, \emph{log convex} or \emph{log (affine) linear} if \(\log(f)\) has the respective property.
+\end{defi}
+
+\begin{prop}[Additivity of log concavity]
+The sum of log concave functions is again log concave.
+\end{prop}
+\begin{proof}
+\todo{Give of cite proof.}
+\end{proof}
+
+As an immediate consequence we obtain that the expression in \eqref{e3.3} is log concave which we will fix in a separate statement.
+
+\begin{cor}[Concavity of the likelihood function]
+Under the log linear model for the qualities, the log likelihood function is concave in the log linearity parameter \(\theta\in\mathbb R^M\). % In particular critical points are global maximisers and the 
+\end{cor}
+
+Before we discuss the actual process of maximisation of the log likelihood function we will be concered with the existence of maximisers and the consistency\todo{explain the term}{ } of the resulting estimators.
+
+\begin{emp}[Existence of maximisers]
+It is in general not true that the maximum likelihood estimator \(\hat\theta_n\) exists for arbitrary observations \(\left\{ Y_i\right\}_{i=1, \dots, n}\). In fact, suppose we have fixed our similarity matrix \(\hat S\) to be the identity, maybe we expect the items to be uncorrelated and only want to estimate their qualities. Further we believe that all items are equally likely and thus we set \(f_i = 1\) for all \(i\in\mathcal Y\). Assume now that we have only one observation \(Y_1\) which is the whole set \(\mathcal Y\) itself. The higher the quality of the items, the more likely this observation would be and thus the likelihood function does not posses a maximiser since it assymptotically approaches \(1\) if \(\theta\) goes to infinity.
+\end{emp}
+
+\subsubsection*{Comparison to learning the kernel \(L\)}
+
+\subsection{Learning kernels of conditional DPPs}
 
 
 \[q_i(X) = g(f_i(X)), \quad \phi_i(X) = G(f_i(X)) \]
@@ -201,9 +229,6 @@ The later expression of this gradient has the advantage that it can be efficient
 
 Obviously the loss function is not coercive in general, since for \(f_i(X) = 0\) the probability \(\mathbb P_\theta(\left\{ i\right\}\mid X)\) is constant in \(\theta\). However it is not straight forward whether it becomes coercive under the assumption \(f_i(X)>0\) entrywise for every \(i\in\mathcal Y(X)\) and \(X\in\mathcal X\) and this could be investigated further.
 
-\subsubsection*{Comparison to learning the kernel \(L\)}
-
-\subsection{Learning kernels of conditional DPPs}
 
 \subsection{Estimating the mixture coefficients of \(k\)-DPPs}
 

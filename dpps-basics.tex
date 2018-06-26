@@ -212,14 +212,7 @@ Before we proof this result we discuss a few consequences that show how crucial 
 Since it is fairly easy to simulate Bernoulli experiments, it remains to know how we can sample from DPPs with marginal kernels of the form \(K=\sum_{i\in I} v_iv_i^T\) for some index set \(I\subseteq\mathcal Y\). We call DPPs of this type \emph{elementary} and note that this corresponds to the class of DPPs were the eigenvalues of the marginal kernel are contained in \(\left\{ 0, 1\right\}\).
 \end{rem}
 
-\begin{cor}[Existence of DPPs]
-Let \(K\) be a symmetric \(N\times N\) matrix. Then \(K\) is the marginal kernel of a DPP if and only if \(0\le K\le I\).
-\end{cor}
-\begin{proof}
-We have already seen in the beginning that this condition is necessary. To see that it is sufficient, let \(0\le K\le I\) hold. Then the point process \(\tilde{\mathbb P}\) from the provious theorem clearly exists and is a DPP with marginal kernel \(K\).
-\end{proof}
-
-\begin{cor}[Cardinality of DPPs]
+\begin{cor}[Cardinality of DPPs]\label{carDPP}
 Let \(\mathbb P\) be a DPP with kernel \(K = \sum_{i\in\mathcal Y} \lambda_iv_iv_i^T\). Then the cardinality of the DPP is distributed like the sum of the Bernoulli variables \(\left\{ B_i\right\}_{i \in\mathcal Y}\) from theorem \ref{mixDPPs}.
 \end{cor}
 \begin{proof}%[Proof of Theorem]
@@ -231,6 +224,59 @@ To proof this, we only have to convince ourselves that after the Bernoulli exper
 \end{equation}
 In the last step we used that the trace of a symmetric matrix is the sum over its eigenvalues, which are \(B_i\) in our case. This computation lets us conclude \(\left\lvert \mathbf Y \right\rvert = n\) almost surely.
 \end{proof}
+
+We will use Theorem \ref{mixDPPs} to prove that the following algorithm samples from a DPP. This will also show the existence of DPPs to a given marginal kernel since it gives an explicit construction.
+
+\begin{algorithm}
+\caption{Sampling from a DPP \label{alg:DPP-sampling}}
+\begin{algorithmic}[1]
+\Require{Eigendecomposition \(\left\{ v_n, \lambda_n\right\}\) of \(K\)}
+%\Statex
+\State \(J \gets \varnothing\) 
+\For{\(i = 1, \dots, N\)}
+  \State\(J\gets J\cup \left\{ i\right\}\) with probability \(\lambda_i\)
+\EndFor
+\State \(V\gets\left\{ v_k\right\}_{k\in J}\)
+\State \(Y\gets\varnothing\)
+\While{\(\left\lvert V \right\rvert>0\)}
+  \State Select \(i\in\mathcal Y\) with probability \(\frac1{\left\lvert V \right\rvert} \sum\limits_{v\in V} (v^Te_i)^2 \)
+  \State \(Y\gets Y\cup\left\{ i\right\}\)
+  \State \(V\gets V_\perp\) an orthonormal basis of the subspace of \(V\) perpendicular to \(e_i\)
+\EndWhile
+  \State \Return{\(Y\)}
+\end{algorithmic}
+\end{algorithm}
+
+\begin{theo}[Sampling algorithm]
+Let \(K\in\mathbb R^{N\times N}\) be any symmetric and positive definite matrix such that \(K\le I\). Then the distribution of the output \(Y\) of the above algorithm is a DPP with marginal kernel \(K\). %In particular 
+\end{theo}
+\begin{proof}
+Theorem \ref{mixDPPs} states that an arbitrary DPP is the mixture of elementary DPPs and the for loop in the algorithm represents exactly this mixing with the respective weights. Thus we only have to show that the output of the second part of the algorithm, namely the while loop, is distributed according to a DPP with marginal kernel \(K^V\coloneqq\sum_{v\in V} vv^T \). 
+
+To see this let \(\mathbf Y\) denote the output and assume that \(k\) eigenvectors where selected in the first part of the algorithm and fix now \(A\).
+%with \(k\) elements, where we assume for the sake of easy notation \(A = \left\{ 1, \dots, k\right\}\). 
+We seek to prove
+\[\mathbb P(A\subseteq\mathbf Y) = \det(K^V_A).\]
+However we have seen in Proposition \ref{carDPP}, that the DPP with marginal kernel \(K^V\) is almost surely of size \(k\) and obviously the same applies for our output \(\mathbf Y\). This is due to the fact that now element can be selected twice in the while loop and the size of \(V\) deacreases by exactly one in each iteration. Thus we only have to consider the case that \(A\) has \(k\) elements\todo{is it that simple?}{ } and only need to show
+\[\mathbb P(A=\mathbf Y) = \det(K^V_A).\]
+Let for the sake of easy notation \(A = \left\{ 1, \dots, k\right\}\) and \(\mathcal Y = \left\{ 1, \dots, N\right\}\). 
+%Since we have
+We decompose the kernel \(K^V\) as a Gram matrix \(B^TB\) and we have seen in the quality diversity decomposition that this is always possible. Note that it suffices to show that the while loop selects \(1, \dots, k\) in this exact order with probability \(\frac1{k!}\det(K^V_A)\). To show this, let \(V_i\) denote the orthonormal set \(V\) in the \(i\)-th step of the while loop and let \(P_i\colon \operatorname{span}(V_i)\to\operatorname{span}(V_i)\) be the projection to the subspace orthogonal to \(B_1, \dots, B_{i}\). 
+The determinant \(\det(K^V_A)\) corresponds to the squared \(k\)-dimensional volume of the parallel epiped that is spanned by the columns \(B_1, \dots, B_k\). This can also be expressed as
+\[\det(K^V_A) = \left\lVert B_1 \right\rVert\cdot \left\lVert P_1B_2 \right\rVert \cdot\ldots\cdot\left\lVert P_{k-1}B_k \right\rVert.\]
+Note that since \(V_0\) is orthonormal, \(B_i\) is the projection of \(e_i\) onto \(\operatorname{span}(V_0)\) and thus we have
+\[\left\lVert P_iB_{i+1} \right\rVert = \left\lVert P_ie_{i+1} \right\rVert.\]
+The second part selects \(1, \dots, k\) in this order with probability
+\[\frac1{k!}\left\lVert B_1 \right\rVert\cdot \left\lVert P_1B_2 \right\rVert \cdot\ldots\cdot\left\lVert P_{k-1}B_k \right\rVert = \frac1{k!}\det(K^V_A)\]
+what we had to show.
+\end{proof}
+
+\begin{cor}[Existence of DPPs]
+Let \(K\) be a symmetric \(N\times N\) matrix. Then \(K\) is the marginal kernel of a DPP if and only if \(0\le K\le I\).
+\end{cor}
+%\begin{proof}
+%We have already seen in the beginning that this condition is necessary. To see that it is sufficient, let \(0\le K\le I\) hold. Then the point process \(\tilde{\mathbb P}\) from Theorem \ref{mixDPPs} clearly exists, for example it is given by the explicit construction in Algorithm \ref{alg:DPP-sampling} and is a DPP with marginal kernel \(K\).
+%\end{proof}
 
 \begin{proof}[Proof of Theorem \ref{mixDPPs}]
 ¥

@@ -1,10 +1,12 @@
 \chapter{Learning setups}
 
-\section{What does learning mean and why is it interesting?}
-
+%\section{What does learning mean and why is it interesting?}
+\todo{what is learning?}
+\todo{general overview over this chapter}
+\todo{explain bias and consistency}
 % \section{Motivation for learning DPPs}
 
-\section{Reconstruction of the marginal kernel using principle minors} %  via the Assymptotic reconstruction of the kernel}
+\section{Reconstruction of the marginal kernel using principal minors} %  via the Assymptotic reconstruction of the kernel}
 
 In this section we want to see how we can estimate the marginal kernel from an increasing number of observations \(\mathbf Y_1, \dots, \mathbf Y_n\subseteq \mathcal Y\) that are distributed according to \(\mathbb P\). For this we will sketch the procedure in \cite{urschel2017learning}. Let \(\hat{\mathbb P}_n\) be the \emph{empirical measure}
 \[\hat{\mathbb P}_n \coloneqq \frac1n\sum_{i=1}^n\delta_{\mathbf Y_i}.\]
@@ -14,7 +16,8 @@ The interest in those lies in the fact that they quite natural estimates for the
 % It is well known that \(\hat{\mathbb P}_n\) 
 More precisely they are \emph{unbiased estimators} for \(\mathbb P\), i.e. they agree in expectation with \(\mathbb P\). This can be seen by evaluating it at \(A\subseteq \mathcal Y\)
 \[\mathbb E_{\mathbb P}\big[\hat{\mathbb P}_n(A)\big] =\frac1n \sum_{i = 1}^n \mathbb E_{\mathbb P}\big[\delta_{\mathbf Y_i}(A)\big] =  \mathbb P(A).\]
-And even stronger by the strong law of large numbers\todo{cite, explain in more detail}{ } they converge to \(\mathbb P\) almost surely if the sequence \((Y_k)_{k\in\mathbb N}\) of observations is independent. Therefore we can consistently\todo{explain consistency}{ } estimate all principle minors of \(K\), since
+And even stronger by the strong law of large numbers\todo{cite, explain in more detail}{ } they converge to \(\mathbb P\) almost surely if the sequence \((Y_k)_{k\in\mathbb N}\) of observations is independent. Therefore we can consistently %\todo{explain consistency}{ } 
+estimate all principal minors of \(K\), since
 \[\hat{\mathbb P}_n(A\subseteq \mathbf Y) \xlongrightarrow{n\to\infty} \mathbb P(A\subseteq\mathbf Y) = \det(K_A) \quad \text{almost surely}.\]
 
 
@@ -25,19 +28,175 @@ And even stronger by the strong law of large numbers\todo{cite, explain in more 
 
 
 
-Thus the question naturally arrises whether we can reconstruct the kernel \(K\) from the knowledge of all of its principle minors, which we will address in the next section.
+Thus the question naturally arrises whether we can reconstruct the kernel \(K\) from the knowledge of all of its principal minors, which we will address in the following.
 
-\subsubsection*{Principle minor assignment problem}
+%\subsubsection*{The principal minor assignment problem}\todo{phrase it very clearly}
 
-This is known as the \emph{principle minor assignment problem} and has been studied extensively (cf. \cite{griffin2006principal} and \cite{urschel2017learning}) and an computationally efficient algorithm has been proposed for the problem in \cite{rising2015efficient}. It is in fact possible to retain the matrix from its principle minors up to an equivalence relation which identifies matrices with each other, that have the same principle minors. Obviously this is sufficent for the task of learning a DPP, because those matrices are exactly those who give rise to the same point process. To see roughly how this reconstruction works we note that the diagonal is given by
-\[K_{ii} = \det(K_{\left\{ i\right\}})\]
-and the absolute value of the off diagonal can be obtained through
-\[K_{ij}^2 = K_{ii} K_{ii} - \det\big(K_{\left\{ i,j\right\}}\big). \]
-The reconstruction of the signs of the entries \(K_{ij}\) turns out to be the main difficulty, but this can be done analysing the cycles of the adjacency graph \(G_K\) corresponding to \(K\).\todo{see whether this proof can be done in a simplified way without considering the sparsity \(l\)}{ } The adjacency graph has \(\mathcal Y\) as its vertex set and the set of edges consists of the pairs \(\left\{ i,j\right\}\) such that \(K_{ij}\ne0\). The reconstruction now relies on the analysis of the cycles of this graph and it has been shown, that one only needs to know all the principle minors up to the order of the cycle sparsity of \(G_K\) (cf. \cite{urschel2017learning}). Following this method it is possible to compute estimators \(\hat K_n\) of \(K\) in polynomial time and give a bound on the speed of convergence in some suitable metric.\todo{state and explain the result}
-\todo{is this estimator unbiased? well \(\hat{\mathbb P}_n\) is unbiased}
+\begin{emp}[The principal minor assignment problem]
+Let \(K\in\mathbb R^{N\times N}\) be a symmetric matrix. We want to investigate whether \(K\) uniquely specified by its principle minors
+\[\Delta_S \coloneqq \det(K_S) \quad \text{where } S\subseteq\left\{ 1, \dots, N\right\}.\]
+We call this the \emph{symmetric principal minor assignment problem} and it will turn out that the matrix \(K\) can be reconstructed up to an equivalence relation.
+\end{emp}
+
+%The reconstruction of a symmetric matrix from all its principal minors is known as the \emph{principal minor assignment problem} and we aim to prove in this section that this is possible -- at least up to an equivalence relation. 
+But before we present the general procedure we want to see how this would work in the case of a symmetric \(3\times3\) matrix \(K\). \todo{explain this.}
+
+
+\begin{emp}[Notions from graph theory]
+In order to generalise the procedure above to larger matrices we will need some elementary concepts from graph theory. For this let \(G = (V, E)\) be a finite graph, i.e. \(V\) is a finite set, called the \emph{vertex set} and \(E\) consists of subsets of \(V\) with two elements, the \emph{edges}. Sometimes we will be sloppy in notation and not distinguish between the graph and the edge set. We will need the following notions:
+\begin{enumerate}
+\item \emph{Degree:} For a vertex \(v\in V\) the \emph{degree} is the number of edges that contains \(v\). 
+\item \emph{Subgraph:} A graph \(\tilde G = (\tilde V, \tilde E)\) is called a \emph{subgraph} of \(G\) if \(\tilde V\subseteq V\) and \(\tilde E\subseteq E\).
+\item \emph{Induced graph:} For a subset \(S\subseteq V\) of vertices the \emph{induced graph} \(G(S) = (S, E(S))\) is formed of all edges \(e\in E\) of \(G\) that are subsets of \(S\).
+\item \emph{Path:} A \emph{path} in \(G\) is a sequence \(v_0v_1\cdots v_k\) of vertices such that \(\left\{ v_{i-1}, v_{i}\right\}\in E\) for all \(i = 1, \dots, k\).
+\item \emph{Connected graph:} A graph is called \emph{connected} if for every pair of vertices \(v, w\in V\) there is a path from \(v\) to \(w\).
+%, i.e. there is a sequence \(\left\{ v, v_1\right\}, \left\{ v_1, v_2\right\}, \dots, \left\{ v_{k-1}, v_k\right\}, \left\{ v_k, w\right\}\) of edges.
+\item \emph{Cycle:} A \emph{cycle} \(C\) is a connected subgraph such that every vertex has even degree in \(C\). 
+\item \emph{Cycle space:} Each cycle \(C\) can be identified with a vector \(x = x(C)\in\mathbb F_2^{E}\) such that
+\[x_e\coloneqq \begin{cases} 1 \quad & \text{if } e\in C \\ 0 \quad & \text{if } e\notin C\end{cases}\]
+indicates whether the edge \(e\in E\) belongs to the cycle \(C\). The \emph{cycle space} \(\mathcal C\) is the span of \(\left\{ x(C)\mid C\text{ is a cycle}\right\}\) in \(\mathbb F_2^{E}\). Note that the sum of two cycles in the cycle space corresponds to the symmetric difference of the edges.
+%\item \emph{Simple cycle:} A cycle is called \emph{simple} if every vertex of \(C\) has even degree in \(C\).
+%\item \emph{Cycle basis:} A basis of the cycle space is called \emph{cycle basis} if it consists of simple cycles.
+\item \emph{Chordless cycle:} A cycle \(C\) is called \emph{chordless} if two verteces \(v, w\in C\) form an edge in \(G\) if and only they form an edge in \(C\). This is equivalent to the statement that \(C\) is an induced subgraph that is a cycle.
+\item \emph{Cycle sparsity:} The cycle sparsity is the minimal number \(l\) such that a basis of the cycle space consisting of chordless cycles exists. Such a basis is called \emph{shortest maximal cycle basis} or short \emph{SMCB}. If the cycle space is trivial we define the cycle sparsity to be \(2\).
+\item \emph{Pairings:} Let \(S\subseteq V\) be a set of of vertices. Then a \emph{pairing} \(P\) of is a subset of edges of \(G(S)\) such that two different edges of \(P\) are disjoint. The vertices contained in the edges of \(P\) are denoted by \(V(P)\) and the set of all pairings by \(\mathcal P(S)\).
+\end{enumerate}
+\end{emp}\todo{add pictures and explanations?}
+
+In order to see that the above definition of the cycle sparsity is well defined, we have need to show that shortest maximal cycle basis exist. This might be well known to people that are familiar with graph theory, but we will present an elementary proof here. It shall be noted, that the proof becomes quite a lot more intuitive by drawing the according cycles in order to understand how the respective decompositions of cycles work.
+
+\begin{prop}[Existence of SMCBs]
+There always exists a basis \(\left\{ x(C_1), \dots, x(C_k)\right\}\) of the cycle space where \(C_1, \dots, C_k\) are chordless cycles.
+\end{prop}
+\begin{proof}
+First we prove that the set of simple cycles generates the whole cycle space which we can then improve to show that the simple chordless cycles already generate the cycle space. A shortest maximal cycle basis is then attained by successively dropping simple chordless cycles.
+
+We show that every cycle \(x(C)\) can be written as the sum of simple cycles \(x(C_1), \dots, x(C_k)\) where \(C_i\subseteq C\). This is equivalent to the statement that the edges of every cycle are the disjoint union of the edges of simple cycles. Take now a maximal non intersecting path \(v_0v_1\cdots v_k\). Since \(v_k\) has degree at least \(2\), there is an edge \(\left\{ v_k, v_{k+1}\right\}\) such that \(v_{k+1}\ne v_{k-1}\). Since the path is maximal, \(v_{k+1}\) has to agree with one a vertex \(v_i\in\left\{ v_0, \dots, v_{k-2}\right\}\), since otherwise we could add \(v_{k+1}\) to the path which is a contradiction to the maximality. Now \(v_iv_{i+1}\cdots v_kv_i\) corresponds to a simple cycle \(C_1\) and \(C_2\coloneqq C\setminus C_1\) is again a cycle. Thus we can write \(C\) as the disjoint union \(C = C_1\cup C_2\) where \(C_1\) is a simple cycle. By repeating this procedure we get the desired expression for \(C\) in terms of simple cycles.
+
+To prove that already the simple chordless cycles generate the cycle space we have to prove that we can write every simple cycle \(x(C)\) as a sum of simple chordless cycles \(x(C_1), \dots, x(C_k)\). Let \(\left\{ \left\{ v_0, v_1\right\}, \dots, \left\{ v_k, v_1\right\}\right\}\) be the edge set of \(C\) and assume that \(C\) is not chordless, otherwise the statement would be trivial. Thus there is are indices \(1\le i<j-1\le k-1\) such that \(\left\{ v_i, v_j\right\}\in E\). Let now \(C_1\) and \(C_2\) be the two cycles associated with the paths
+\[v_0v_1 \cdots v_iv_jv_{j+1}\cdots v_kv_0\quad \text{and } v_iv_{i+1}\cdots v_{j-1}v_jv_i.\]
+Then we have \(x(C) = x(C_1) + x(C_2)\). By iterating this procedure as long as the cycles are not chordless the desired decomposition can be achieved in finitely many steps.
+
+%Since we have defined the cycle space as the span of all vectors \(x(C)\) where \(C\) is a cycle, it suffices to show that every cycle \(C\) admits a decomposition
+%\[x(C) = x(C_1)+\dots+x(C_m)\]
+%where \(C_1, \dots, C_m\) are chordless cycles. If \(C\) is already chordless, then we are done, so we can assume that the vertices of \(C\) are \(\left\{ v_1, \dots, v_M\right\}\) with\todo{finish this proof!}
+\end{proof}
+
+\begin{defi}[Determinantal equivalence]
+Two symmetric matrices \(A, B\in\mathbb R^{N\times N}\) are called \emph{determinantally equivalent} if the have the same principal minors.
+\end{defi}
+
+It is obvious that we can only hope to reconstruct a symmetric matrix up to determinantal equivalence. However this would be satisfactory, because determinantally equivalent matrices are exactly those that give rise to the same DPP. Let us in the following denote the principal minor \(\det(K_S)\) by \(\Delta_S\) for \(S\subseteq\left\{ 1, \dots, N\right\}\). To come back to our original problem, we notice that the principal minors up to size two immediately determine the diagonal and the absolute values of the off diagonal of \(K\) since we have
+\[K_{ii} = \Delta_{\left\{ i\right\}} \quad \text{and } K_{ij}^2 = K_{ii}K_{jj} - \Delta_{\left\{ i, j\right\}}.\]
+Thus it only remains to regain the signs \(\operatorname{sgn}(K_{ij})\) of the off diagonal entries. For this we use the following object.
+
+\begin{emp}[The adjacency graph]
+The adjacency graph \(G_K = (V_K, E_K)\) associated with \(K\) consists of the vertex set \(\left\{ 1, \dots, N\right\}\) and \(\left\{ i, j\right\}\) form an edge if and only if \(K_{ij}\ne0\). Further we introduce some \emph{weights} on the edges. This means we consider a mapping \(w\colon E_K\to\mathbb R\) and we set
+\[w_{ij} \coloneqq w(\left\{ i, j\right\}) \coloneqq \operatorname{sgn}(K_{ij})\]
+where we call \(w_{ij}\) the weight of the edge \(\left\{ i, j\right\}\). This graph together with the weights determines the signs of the off diagonal elements, so we are interested in reconstruction the weights from the principal minors.
+Finally we define the sign of a cycle and for a cycle \(C = (S, \tilde E)\) we set \(\operatorname{sgn}(C) \coloneqq\prod_{e\in \tilde E}w_e\). It will become important later to consider this sign function on the cycle space and thus we note that this definition corresponds to
+\[\operatorname{sgn}(x(C)) \coloneqq \prod_{e\in E} w_e^{x(C)_e}.\]
+Note that this is a group homomorphism from the cycle space \(\mathcal C\) to \(\left\{ \pm1\right\}\) and therefore it is uniquely determined by its value on a generator, for example on a shortest maximal cycle basis.
+\end{emp}
+
+\begin{prop}[Principal minors of simple chordless cycles]
+Let \(C = (S, E(S))\) be a simple and chordless cycle. Then the principal minor of \(K\) with respect to \(S\) is given by
+\begin{equation}\label{pmcl}
+\Delta_S = \sum_{P\in\mathcal P(S)} (-1)^{\left\lvert P \right\rvert}\cdot \!\!\!\prod_{\left\{ i, j\right\}\in P}\! K_{ij}^2 \cdot\!\!\prod_{i\notin V(P)}\! K_{ii} + 2\cdot (-1)^{\left\lvert S \right\rvert + 1}\cdot\!\!\!\!\!\!\prod_{\left\{ i, j\right\} \in E(S)} \!K_{ij}.
+\end{equation}
+\end{prop}
+\begin{proof}
+Let \(k\coloneqq \left\lvert S \right\rvert\). Then by Leibniz formula we have
+\[\Delta_S = \sum_{\sigma\in S_k} \operatorname{sgn}(\sigma) \prod_{i\in S} K_{i\sigma(i)} \]
+where \(S_k\) is the set of permutations of \(S\). Note that since the cycle is chordless, the product is only non trivial if \(\left\{ i, \sigma(i)\right\}\in E(S)\) for all \(i\in S\). Since \(C\) is a simple cycle, those permutations consist exactly of the pairing of \(S\) or the two shifts of the set \(S\) along the cycle in both directions. Those correspond exactly to the summands in \eqref{pmcl}.
+\end{proof}
+
+\begin{prop}[Sign determines principals minors]
+The knowledge of all principal minors up to size two and the sign function
+\[\operatorname{sgn}\colon\mathcal C\to\left\{ \pm1\right\}\]
+completely determines all principal minors of \(K\).
+\end{prop}
+\begin{proof}
+Let \(S\subseteq\left\{ 1, \dots, N\right\}\) be arbitrary. We will again work with the expression \eqref{pmcl} of the principle minor \(\Delta_S\) and fix one permutation \(\sigma\). We can assume without loss of generality that \(\left\{ i, \sigma(i)\right\}\in E_K\) because the product it trivial otherwise. Since we know the absolute values of the off diagonal elements and the diagonal elements from the principle minors up to size two, it suffices to express the sign
+\begin{equation}\label{e3.2}
+\prod_{i\in S} \operatorname{sgn}(K_{i\sigma(i)})
+\end{equation}
+of the product through the sign function. For this we %fix one permutation \(\sigma\) and 
+write \(\sigma\) as the product of disjoint cycles
+\begin{equation}\label{e3.3}
+\sigma = \sigma_1\circ \dots \circ \sigma_m
+\end{equation}
+where \(\sigma_k\colon D_k\to D_k\) for \(k = 1, \dots, m\) and the domains \(D_k\) are pairwise disjoint. The sign \eqref{e3.2} can be written as the product of
+\[\prod_{i\in D_k} \operatorname{sgn}(K_{i\sigma_k(i)})\]
+so it suffices to give expressions for those. Note that we could assume \(\left\{ i, \sigma_k(i)\right\}\in E_K\) and therefore \(C_k = (D_k, E_k)\) with
+\[E_k = \left\{ \left\{ i, \sigma_k(i)\right\} \mid i\in D_k\right\}\]
+is a cycle and therefore \eqref{e3.3} is equal to \(\operatorname{sgn}(C_k)\).
+\end{proof}
+
+\begin{theo}%[¥]
+Let \(K\in\mathbb R^{N\times N}\) be a symmetric matrix and \(l\) be the sparsity of its adjacency graph. Then the principal minors up to size \(l\) uniquely determine all principal minors of \(K\) and therefore the matrix \(K\) up to determinantal equivalence.
+\end{theo}
+\begin{proof}
+In the light of the previous proposition it suffices to show that the sign function is uniquely specified by the principle minors up to size \(l\). Recall that the sign function is determined by its values on a shortest maximal cycle basis, which consists by definition of simple chordless cycles of length at most \(l\). However under the knowledge of the diagonal elements and the absolute values of the off diagonal ones, the sign of those simple chordless cycle is uniquely determined by the principle minors up to size \(l\) using the euqality \eqref{pmcl} .
+\end{proof}
+%\begin{rem}
+%One can even show that this result is optimal in the sense that if one only has access to the principle minors up to size \(l-1\), then the equivalence class is not uniquely determined. See \cite{urschel2017learning} for details on this.\todo{can one also see this optimality from my proof?} \todo{comment on algorithms}
+%\end{rem}
+\begin{rem}
+One can even show that this result is optimal in the sense that if one only has access to the principle minors up to size \(l-1\), then the equivalence class is not uniquely determined. To see this, we note that the sign function is not uniquely specified through the principle minors up to size \(l-1\) and thus there is more than one extension of the sign function onto the shortest maximal cycle basis. The equation \eqref{pmcl} shows that those different extensions give rise to different principle minors.
+%See \cite{urschel2017learning} for details on this.\todo{can one also see this optimality from my proof?} \todo{comment on algorithms}
+\end{rem}
+
+\begin{emp}[Calculation of the equivalence class]
+We have shown that the determinantal equivalence class of a symmetric matrix is uniquely specified by its principle minors up to size \(l\). Now we want to investigate how this equivalence class can be computed and we will see that we can reduce this task to the solution of a system of linear equations over the finite field \(\mathbb F_2\).
+
+Let us assume that we have knowledge of the principle minors \(\Delta_S\) for every \(S\subseteq\left\{ 1, \dots, N\right\}\) with size at most \(l\). We have seen that we only need to reconstruct the signs of the off diagonal entries of \(K\) which is equivalent to reconstructing the edge weight \(w_{ij}\). To do this fix a shortest maximal cycle basis \(\left\{ C_1, \dots, C_m\right\}\) with vertex sets \(S_1, \dots, S_m\). Let us now rewrite \eqref{pmcl} in the form
+\[H_k\coloneqq \Delta_{C_k} - \!\! \sum_{P\in\mathcal P(C_k)} (-1)^{\left\lvert P \right\rvert}\cdot \!\!\!\prod_{\left\{ i, j\right\}\in P}\! K_{ij}^2 \cdot\!\!\prod_{i\notin V(P)}\! K_{ii} = 2 \cdot (-1)^{\left\lvert C_k \right\rvert + 1} \operatorname{sgn}(C_k)\cdot\!\!\!\! \prod_{\left\{ i, j\right\}\in C_k}\left\lvert K_{ij} \right\rvert. \]
+Given the principle minors, we can determine the value on the right side and taking the sign on both sides yields
+\[ (-1)^{\left\lvert C_k \right\rvert + 1} \cdot \operatorname{sgn}(H_k) = \operatorname{sgn}(C_k) = \!\!\prod_{\left\{ i, j\right\}\in E(S_k)} w_{ij}. \]
+However this multiplicative equation is hard to solve and therefore we use the canonical group isomorphism \(\phi\) between \(\left\{ \pm 1\right\}\) and \(\left\{ 0, 1\right\}\) to turn it into a linear equation. Setting \(x_{ij}\coloneqq \phi(w_{ij})\) we get that the condition above is equivalent to
+\[b_k\coloneqq \phi( \operatorname{sgn}(H_k)) + \lvert \hat S_k \rvert + 1 = \sum_{\left\{ i, j\right\}\in E(S_k)} x_{ij} = (Ax)_k\]
+where \(A\) is the matrix with the rows \(x(\hat C_k)^T\).
+
+
+%More precisely we seek to find weight \(w_{ij}\) such that \eqref{pmcl} holds. This is the case if and only if
+\end{emp}
+
+%This is known as the \emph{principal minor assignment problem} and has been studied extensively (cf. \cite{griffin2006principal} and \cite{urschel2017learning}) and an computationally efficient algorithm has been proposed for the problem in \cite{rising2015efficient}. It is in fact possible to retain the matrix from its principal minors up to an equivalence relation which identifies matrices with each other, that have the same principal minors. Obviously this is sufficent for the task of learning a DPP, because those matrices are exactly those who give rise to the same point process. To see roughly how this reconstruction works we note that the diagonal is given by
+%\[K_{ii} = \det(K_{\left\{ i\right\}})\]
+%and the absolute value of the off diagonal can be obtained through
+%\[K_{ij}^2 = K_{ii} K_{ii} - \det\big(K_{\left\{ i,j\right\}}\big). \]
+%The reconstruction of the signs of the entries \(K_{ij}\) turns out to be the main difficulty, but this can be done analysing the cycles of the adjacency graph \(G_K\) corresponding to \(K\).%\todo{see whether this proof can be done in a simplified way without considering the sparsity \(l\)}
+% The adjacency graph has \(\mathcal Y\) as its vertex set and the set of edges consists of the pairs \(\left\{ i,j\right\}\) such that \(K_{ij}\ne0\). The reconstruction now relies on the analysis of the cycles of this graph and it has been shown, that one only needs to know all the principal minors up to the order of the cycle sparsity of \(G_K\) (cf. \cite{urschel2017learning}). Following this method it is possible to compute estimators \(\hat K_n\) of \(K\) in polynomial time and give a bound on the speed of convergence in some suitable metric.\todo{state and explain the result}
 
 % In completely analogue fashion one can learn the elementary kernel \(L\).
-% and those estimations can be used to sample from a DPP that was observed. This procedure might be sufficient in some scenarios, but this approach lacks the ability to extrapolate the knowledge one has of specific DPPs onto some new, unobserved DPPs which is exactly the point that would distinguish the procedure from classical statistics and would allow for far more interesting applications. To achieve this, we introduce the notion of conditional DPPs in the following section which are customised to describe families of DPPs with kernels that are in some way similar.
+% and those estimations can be used to sample from a DPP that was observed. This procedure might be sufficient in some scenarios, but this approach lacks the ability to extrapolate the knowledge one has of specific DPPs onto some new, unobserved DPPs which is exactly the point that would distinguish the procedure from classical statistics and would allow for far more interesting applications. To achieve this, we introduce the notion of conditional DPPs in the following section which are customised to describe families of DPPs with kernels that are in some way similar.#
+
+\subsubsection*{Construction of the estimator}
+
+So far we have seen that the principle minors determine a symmetric matrix up to determinantal equivalence. However the empirical marginal densities do not in general need to be the principle minors of any symmetric matrix, in other words the empirical measures are not necessarily determinantal. Therefore the definition of the estimator is till not quite straight forward and we will follow \cite{urschel2017learning} for this. An important quantity in the estimation of the kernel \(K\) is
+\[\alpha\coloneqq\min\left\{ \left\lvert K_{ij} \right\rvert\mid K_{ij}\ne0\right\}>0. \]
+Note that this quantity is not a priori known.
+
+The straight forward estimators of the principal minors are
+\[\hat\Delta_S \coloneqq \hat{\mathbb P}_n(S\subseteq\mathbf Y) \quad \text{for }S\subseteq\left\{ 1, \dots, N\right\}. \]
+The resulting estimates for the diagnoal elements and the squares of the off diagonals are
+\[\hat K_{ii} \coloneqq \hat\Delta_{\left\{ i\right\}} \quad \text{and } \hat B_{ij}\coloneqq \hat K_{ii}\hat K_{jj} - \hat\Delta_{\left\{ i, j\right\}}.\]
+
+Next we will introduce an estimate \(\hat G\) for the adjacency graph and will then try to choose the signs of the estimated matrix \(\hat K\) such that the its principal minors are the estimates for the principal minors. For this define the edge set \(\hat E\) of \(\hat G\) to consist of all sets \(\left\{ i, j\right\}\) such that \(\hat B_{ij}\ge\frac12\alpha^2\). This truncation yields the desired effect that by the strong law of large numbers the estimator for the graph will converge to the actual adjacency graph almost surely. %This means that every edge \(\left\{ i, j\right\}\in E\) will be contained in each estimator for large sample size and 
+Let further \(\left\{ \hat C_1, \dots, \hat C_k\right\}\) be a shortest maximal cycle basis where \(\hat S_l\) is the set of vertices of \(\hat C_l\). Define now
+\[\hat H_k\coloneqq \hat \Delta_{\hat S_l} - \sum_{P\in\mathcal P(\hat S_l)} (-1)^{\left\lvert P \right\rvert} \prod_{\left\{ i,j\right\}\in P}\hat B_{ij} \prod_{i\notin V(P)} \hat K_{ii}. \]
+In the light of \eqref{pmcl} we wish to choose the signs \(\hat w_{ij}\) of \(\hat K_{ij}\) in such a way that the resulting signs of the cycles \(\hat C_l\) satisfy
+\[\operatorname{sgn}(\hat H_l) \cdot(-1)^{\lvert \hat S_l \rvert + 1} = \operatorname{sgn}(\hat C_l) = \prod_{\left\{ i, j\right\}\in E(\hat S_l)}\hat w_{ij}.\]
+To turn this product equation in \(\hat w\) into a linear equation we use the canonical group isomorphism \(\phi\) between \(\left\{ \pm 1\right\}\) and \(\left\{ 0, 1\right\}\). Setting \(\hat x_{ij}\coloneqq \phi(\hat w_{ij})\) we get that the condition above is equivalent to
+\[b_l\coloneqq \phi( \operatorname{sgn}(\hat H_l)) + \lvert \hat S_l \rvert + 1 = \sum_{\left\{ i, j\right\}\in E(\hat S_l)} \hat x_{ij} = (A\hat x)_l\]
+where \(A%\in\mathbb F_2^{k\times E}
+\) is the matrix with the rows \(x(\hat C_l)^T\). Either such a solution \(\hat x = \phi(\hat w)\in\mathbb F_2^{E}\) exists or we set \(\hat w\coloneqq (1, \dots, 1)^T\). Finally we define the estimator via
+\[\hat K_{ij}\coloneqq \begin{cases}  \hat w_{ij}\cdot \sqrt{(\hat B_{ij})} \quad & \text{if } \left\{ i, j\right\}\in \hat E \\ 0 & \text{if } \left\{ i, j\right\}\notin \hat E \end{cases}. \]
+ %and otherwise
+% \[\hat K_{ij}\coloneqq \sqrt{(\hat B_{ij})}.\]
+
+\todo{is this estimator unbiased? well \(\hat{\mathbb P}_n\) is unbiased}
 
 \section{Maximum likelihood estimation using optimisation techniques}
 
@@ -125,7 +284,7 @@ It shall be noted that although this log linear model seems to be a harsh restri
 \end{rem}
 
 Under the assumption of a log linear model for the qualities the individual terms of the log likelihood function take the form
-\begin{equation}\label{e3.3}
+\begin{equation}\label{e3.31}
 \theta^Tf_{Y}(X) + \det(S_{Y}(X)) - \log\left( \sum_{A\subseteq\mathcal Y(X)} \exp\left( \theta^Tf_{A}(X)\right)\det(S_A(X)) \right).
 \end{equation}
 
@@ -156,79 +315,80 @@ It is in general not true that the maximum likelihood estimator \(\hat\theta_n\)
 
 \subsubsection*{Comparison to learning the kernel \(L\)}
 
-\subsection{Learning kernels of conditional DPPs}
+% \subsection{Learning kernels of conditional DPPs}
 
 
-\[q_i(X) = g(f_i(X)), \quad \phi_i(X) = G(f_i(X)) \]
-where \(f_i(X)\in\mathcal Z\) is being modelled and \(g\colon\mathcal Z\to[0,\infty)\) and \(G\colon\mathcal Z\to\mathbb R^D\) will be learned based on the observations. We will assume that \(\mathcal Z\) is a subset of a vector space and therefore we call \(f_i(X)\) the \emph{feature vector}. If it is possible to estimate the quality and diversity as above, we would be able to sample from every DPP \(\mathbb P(\cdot\mid X)\) and even from those that we havenÕt observed so far -- just by the knowledge about DPPs with a similar structure.
+% \[q_i(X) = g(f_i(X)), \quad \phi_i(X) = G(f_i(X)) \]
+% where \(f_i(X)\in\mathcal Z\) is being modelled and \(g\colon\mathcal Z\to[0,\infty)\) and \(G\colon\mathcal Z\to\mathbb R^D\) will be learned based on the observations. We will assume that \(\mathcal Z\) is a subset of a vector space and therefore we call \(f_i(X)\) the \emph{feature vector}. If it is possible to estimate the quality and diversity as above, we would be able to sample from every DPP \(\mathbb P(\cdot\mid X)\) and even from those that we havenÕt observed so far -- just by the knowledge about DPPs with a similar structure.
 
-Let us again illustrate this procedure in the example of the human point selection and we will restrict ourselves to learn the function \(g\) that determines the quality function, we might have a reason to be absolutely sure that we have modelled the diversity features \(\phi_i(X)\) perfectly, so there is no need to learn, i.e. optimise them any further. However we are not convinced any more that humans really do not prefer some points over others -- maybe we have the feeling that they lean more towards the points located in the center of the square. Therefore it is natural to assume that the quality, which is nothing but the popularity of a point, depends on the distance to the centre point of the square \(m=(1/2,1/2)\), i.e.
-\[q_i(n) = g(\left\lVert i - m\right\rVert) = g(f_i(n))\]
-where we want to learn \(g\) with respect to some loss function over a given family \(\mathcal F\) of functions.
+% Let us again illustrate this procedure in the example of the human point selection and we will restrict ourselves to learn the function \(g\) that determines the quality function, we might have a reason to be absolutely sure that we have modelled the diversity features \(\phi_i(X)\) perfectly, so there is no need to learn, i.e. optimise them any further. However we are not convinced any more that humans really do not prefer some points over others -- maybe we have the feeling that they lean more towards the points located in the center of the square. Therefore it is natural to assume that the quality, which is nothing but the popularity of a point, depends on the distance to the centre point of the square \(m=(1/2,1/2)\), i.e.
+% \[q_i(n) = g(\left\lVert i - m\right\rVert) = g(f_i(n))\]
+% where we want to learn \(g\) with respect to some loss function over a given family \(\mathcal F\) of functions.
 
-To put this back into the general setting we note that \(g\in\mathcal F\) gives rise to a different conditional DPP which we will denote by \(\mathbb P_g(\cdot\mid X)\). Just like in the case of simple DPPs we will work with the negative of the log likelihood function 
-\[\mathcal L(g) \coloneqq -\log\left(\prod_{t = 1}^T \mathbb P_g(Y_t\mid X_t)\right) \]
-and seek a minimiser of the loss function \(\mathcal L\). Thus we obtain an optimisation problem over a family of functions and in practice it is convenient to restrict ourselves to a parametric family
-\[\mathcal F = \left\{ g_\theta\mid \theta\in U\subseteq\mathbb R^M\right\}.\]
-In this case we write \(\mathbb P_\theta(\cdot\mid X)\) for the conditional DPP that is induced by \(g_\theta\) and the kernels become functions of \(\theta\) and thus we write \(L(\theta;X)\) and \(K(\theta;X)\) for the kernel associated with the parameter \(\theta\). In analogue fashion we denote the loss function by
-\[\mathcal L(g_\theta)=\mathcal L(\theta) = -\sum\limits_{t=1}^T \log\left(\mathbb P_\theta(Y_t\mid X_t)\right).\]
+% To put this back into the general setting we note that \(g\in\mathcal F\) gives rise to a different conditional DPP which we will denote by \(\mathbb P_g(\cdot\mid X)\). Just like in the case of simple DPPs we will work with the negative of the log likelihood function 
+% \[\mathcal L(g) \coloneqq -\log\left(\prod_{t = 1}^T \mathbb P_g(Y_t\mid X_t)\right) \]
+% and seek a minimiser of the loss function \(\mathcal L\). Thus we obtain an optimisation problem over a family of functions and in practice it is convenient to restrict ourselves to a parametric family
+% \[\mathcal F = \left\{ g_\theta\mid \theta\in U\subseteq\mathbb R^M\right\}.\]
+% In this case we write \(\mathbb P_\theta(\cdot\mid X)\) for the conditional DPP that is induced by \(g_\theta\) and the kernels become functions of \(\theta\) and thus we write \(L(\theta;X)\) and \(K(\theta;X)\) for the kernel associated with the parameter \(\theta\). In analogue fashion we denote the loss function by
+% \[\mathcal L(g_\theta)=\mathcal L(\theta) = -\sum\limits_{t=1}^T \log\left(\mathbb P_\theta(Y_t\mid X_t)\right).\]
 
-We want to see how the log likelihood approach naturally leads to a log linear model in \(\theta\) for the quality features if one wants to obtain a convex loss function. Of course the motivation for a convex loss function is given by the nice properties of convex optimisation tasks described earlier. In order to see in which cases the loss function is convex, we use \eqref{e4} to obtain
-\begin{equation}\label{e5}
-\begin{split}
-- \log\left(\mathbb P_\theta(Y_t\mid X_t)\right) = & -\log(\det(L_Y(\theta;X))) + \log\!\big(\det(L(\theta; X_t) + I)\big) \\
-= & -2\cdot\sum_{i\in Y_t}\log\left(g_\theta(f_i(X_t))\right) - \log\left(\det\left(S_{Y_t}(X_t)\right)\right) \\
-& + \log\left(\sum_{A\subseteq \mathcal Y(X_t)} \left(\prod_{i\in A}g_\theta(f_i(X_t))^2\right)\det(S_A(X_t))\right).
-\end{split}
-\end{equation}
-This expression is well defined in \([0,\infty]\) if we adapt the common convention \(\det(S_\emptyset(X)) = 1\). In order to give some criteria for the convexity and coercivity of the loss function, we say that a function \(f\) \emph{log concave}, \emph{log convex} or \emph{logarithmically (affine) linear} if \(\log(f)\) has the respective property.
+% We want to see how the log likelihood approach naturally leads to a log linear model in \(\theta\) for the quality features if one wants to obtain a convex loss function. Of course the motivation for a convex loss function is given by the nice properties of convex optimisation tasks described earlier. In order to see in which cases the loss function is convex, we use \eqref{e4} to obtain
+% \begin{equation}\label{e5}
+% \begin{split}
+% - \log\left(\mathbb P_\theta(Y_t\mid X_t)\right) = & -\log(\det(L_Y(\theta;X))) + \log\!\big(\det(L(\theta; X_t) + I)\big) \\
+% = & -2\cdot\sum_{i\in Y_t}\log\left(g_\theta(f_i(X_t))\right) - \log\left(\det\left(S_{Y_t}(X_t)\right)\right) \\
+% & + \log\left(\sum_{A\subseteq \mathcal Y(X_t)} \left(\prod_{i\in A}g_\theta(f_i(X_t))^2\right)\det(S_A(X_t))\right).
+% \end{split}
+% \end{equation}
+% This expression is well defined in \([0,\infty]\) if we adapt the common convention \(\det(S_\emptyset(X)) = 1\). In order to give some criteria for the convexity and coercivity of the loss function, we say that a function \(f\) \emph{log concave}, \emph{log convex} or \emph{logarithmically (affine) linear} if \(\log(f)\) has the respective property.
 
-\begin{prop}[Coercivity and convexity of the loss function]
-\begin{enumerate}
-\item The rate function is coercive for all possible training sets if and only if
-\begin{equation}\label{e6}
-\mathbb P_\theta(Y \mid X)\xlongrightarrow{\left\lvert \theta \right\rvert\to\infty} 0 \quad \text{for all } Y\subseteq \mathcal Y(X) \text{ and } X\in\mathcal X.
-\end{equation}
-\item The rate function is convex for all possible training sets if \(g_\theta(f_i(X_t))\) is log concave in \(\theta\) for all \(i\in\mathcal Y(X), X\in\mathcal X\) and if 
-\[\prod_{i\in B}g_\theta^2(f_i(X_t))\]
-is log convex in \(\theta\) for all \(B\subseteq\mathcal Y(X))\) and \(X\in\mathcal X\).
-\item The conditions in \textup{(}ii\textup{)} are satisfied if and only if \(g_\theta(f_i(X))\) is logarithmically affine linear in \(\theta\) for every \(i\in\mathcal Y(X)\) and \(X\in\mathcal X\).
-\end{enumerate}
-\end{prop}
-\begin{proof}
-\begin{enumerate}
-\item It is clear that under \eqref{e6} we have
-\[\exp\left(-\mathcal L(\theta)\right) = \prod\limits_{t=1}^T \mathbb P_\theta(Y_t\mid X_t) \xlongrightarrow{\left\lvert \theta \right\rvert\to\infty} 0 \]
-for every possible training set and thus \(\mathcal L\) is coercive. If on the other hand \(\mathcal L\) is coercive for every training set we could also choose \((Y, X)\) arbitrary as our training set and immediately obtain \eqref{e6}.
-\item This condition for the convexity of the loss function can be directly derived from the fact that linear combination of log convex functions are log convex and formula \eqref{e5}.
-\item If \(g_\theta(f_i(X))\) is logarithmically affine linear, then it is also log convex and
-\[\log\left(\prod_{i\in B}g_\theta^2\left(f_i(X)\right)\right) = 2\sum\limits_{i\in B}\log\left(g_\theta(f_i(X))\right)\]
-is convex. On the other side if (\emph{ii}) holds, then all functions \(\log\left(g_\theta(f_i(X))\right)\) are concave and \(\sum\limits_{i\in B}\log\left(g_\theta(f_i(X))\right)\) is convex and thus \(\log\left(g_\theta(f_i(X))\right)\) has to be affine linear.
-\end{enumerate}
-\end{proof}
+% \begin{prop}[Coercivity and convexity of the loss function]
+% \begin{enumerate}
+% \item The rate function is coercive for all possible training sets if and only if
+% \begin{equation}\label{e6}
+% \mathbb P_\theta(Y \mid X)\xlongrightarrow{\left\lvert \theta \right\rvert\to\infty} 0 \quad \text{for all } Y\subseteq \mathcal Y(X) \text{ and } X\in\mathcal X.
+%\end{equation}
+%\item The rate function is convex for all possible training sets if \(g_\theta(f_i(X_t))\) is log concave in \(\theta\) for all \(i\in\mathcal Y(X), X\in\mathcal X\) and if 
+%\[\prod_{i\in B}g_\theta^2(f_i(X_t))\]
+%is log convex in \(\theta\) for all \(B\subseteq\mathcal Y(X))\) and \(X\in\mathcal X\).
+%\item The conditions in \textup{(}ii\textup{)} are satisfied if and only if \(g_\theta(f_i(X))\) is logarithmically affine linear in \(\theta\) for every \(i\in\mathcal Y(X)\) and \(X\in\mathcal X\).
+%\end{enumerate}
+%\end{prop}
+%\begin{proof}
+%\begin{enumerate}
+%\item It is clear that under \eqref{e6} we have
+%\[\exp\left(-\mathcal L(\theta)\right) = \prod\limits_{t=1}^T \mathbb P_\theta(Y_t\mid X_t) \xlongrightarrow{\left\lvert \theta \right\rvert\to\infty} 0 \]
+%for every possible training set and thus \(\mathcal L\) is coercive. If on the other hand \(\mathcal L\) is coercive for every training set we could also choose \((Y, X)\) arbitrary as our training set and immediately obtain \eqref{e6}.
+%\item This condition for the convexity of the loss function can be directly derived from the fact that linear combination of log convex functions are log convex and formula \eqref{e5}.
+%\item If \(g_\theta(f_i(X))\) is logarithmically affine linear, then it is also log convex and
+%\[\log\left(\prod_{i\in B}g_\theta^2\left(f_i(X)\right)\right) = 2\sum\limits_{i\in B}\log\left(g_\theta(f_i(X))\right)\]
+%is convex. On the other side if (\emph{ii}) holds, then all functions \(\log\left(g_\theta(f_i(X))\right)\) are concave and \(\sum\limits_{i\in B}\log\left(g_\theta(f_i(X))\right)\) is convex and thus \(\log\left(g_\theta(f_i(X))\right)\) has to be affine linear.
+%\end{enumerate}
+%\end{proof}
 
-The result above shows that logarithmically affine linear models are the natural fit for the parametric family \(\mathcal F\) that we want to optimise over. However they can be easily transformed into log linear models through a simple parameter  shift if we assume \(f_i(X)\ne0\) and thus we can assume without loss of generality that the functions \(g_\theta\) have the form 
-\[g_\theta(f_i(X)) = \exp\left(\frac12\theta^T f_i(X)\right) \quad \text{for all } i\in \mathcal Y(X) \text{ and } X\in\mathcal X. \]
-This structure can be used to derive some explicit expression for this case. 
-Of course this log linear model is only well defined if the feature space \(\mathcal Z\) is a subset of \(\mathbb R^M\) which we will assume from now on. We note that this is no restriction if we assume a log linear model, because otherwise we could just replace the feature functions \(f_i\) by the log linearity constants \(\hat f_i(X)\in \mathbb R^M\). First we can apply the explicit structure to the elementary probabilities and get
-\[\mathbb P_\theta(A\mid X) \propto \exp\left(\theta^Tf_A(X) \right)\det(S_A(X))\]
-where \(f_A(X)\coloneqq\sum_{i\in A}f_i(X)\). Using this we get that the single summands of the loss function are equal to%take the form
-\begin{equation}\label{e7}
--\theta^Tf_{Y}(X) - \det(S_{Y}(X)) + \log\left( \sum_{A\subseteq\mathcal Y(X)} \exp\left( \theta^Tf_{A}(X)\right)\det(S_A(X)) \right)
-\end{equation}
- Since a lot of numerical optimisation algorithms depend on the gradient of the function, it is worth noting that an explicit expression for the gradient of the loss function \(\mathcal L\) can be derived from this formula, since differentiating \eqref{e7} with respect to \(\theta\) gives
-\begin{equation}
-\begin{split}
--f_Y(X) + \frac{\sum_{A\subseteq\mathcal Y(X)} f_A(X) L_A(\theta;X)  }{\sum_{A\subseteq\mathcal Y(X)} L_A(\theta;X)} & = -f_Y(X) + \sum_{A\subseteq\mathcal Y(X)} f_A(X) \mathbb P_\theta(A\mid X) \\
-& =  -f_Y(X) + \sum_{i\in\mathcal Y(X)}f_i(X) \sum_{i\in A\subseteq \mathcal Y(X)} \mathbb P_\theta(A\mid X) \\
-& =  -f_Y(X) + \sum_{i\in\mathcal Y(X)}f_i(X)  \mathbb P_\theta(i\in\mathbf Y\mid X) \\
-& = -f_Y(X) + \sum_{i\in\mathcal Y(X)}f_i(X) K_{ii}(\theta; X).
-\end{split}
-\end{equation}
-The later expression of this gradient has the advantage that it can be efficiently computed in contrary to the evaluation of the exponentially large sum in the first line.
+%The result above shows that logarithmically affine linear models are the natural fit for the parametric family \(\mathcal F\) that we want to optimise over. However they can be easily transformed into log linear models through a simple parameter  shift if we assume \(f_i(X)\ne0\) and thus we can assume without loss of generality that the functions \(g_\theta\) have the form 
+%\[g_\theta(f_i(X)) = \exp\left(\frac12\theta^T f_i(X)\right) \quad \text{for all } i\in \mathcal Y(X) \text{ and } X\in\mathcal X. \]
+%This structure can be used to derive some explicit expression for this case. 
+%Of course this log linear model is only well defined if the feature space \(\mathcal Z\) is a subset of \(\mathbb R^M\) which we will assume from now on. We note that this is no restriction if we assume a log linear model, because otherwise we could just replace the feature functions \(f_i\) by the log linearity constants \(\hat f_i(X)\in \mathbb R^M\). First we can apply the explicit structure to the elementary probabilities and get
+%\[\mathbb P_\theta(A\mid X) \propto \exp\left(\theta^Tf_A(X) \right)\det(S_A(X))\]
+%where \(f_A(X)\coloneqq\sum_{i\in A}f_i(X)\). Using this we get that the single summands of the loss function are equal to%take the form
+%\begin{equation}\label{e7}
+%-\theta^Tf_{Y}(X) - \det(S_{Y}(X)) + \log\left( \sum_{A\subseteq\mathcal Y(X)} \exp\left( \theta^Tf_{A}(X)\right)\det(S_A(X)) \right)
+%\end{equation}
+% Since a lot of numerical optimisation algorithms depend on the gradient of the function, it is worth noting that an explicit expression for the gradient of the loss function \(\mathcal L\) can be derived from this formula, since differentiating \eqref{e7} with respect to \(\theta\) gives
+%\begin{equation}
+%\begin{split}
+%-f_Y(X) + \frac{\sum_{A\subseteq\mathcal Y(X)} f_A(X) L_A(\theta;X)  }{\sum_{A\subseteq\mathcal Y(X)} L_A(\theta;X)} & = -f_Y(X) + \sum_{A\subseteq\mathcal Y(X)} f_A(X) \mathbb P_\theta(A\mid X) \\
+%& =  -f_Y(X) + \sum_{i\in\mathcal Y(X)}f_i(X) \sum_{i\in A\subseteq \mathcal Y(X)} \mathbb P_\theta(A\mid X) \\
+%& =  -f_Y(X) + \sum_{i\in\mathcal Y(X)}f_i(X)  \mathbb P_\theta(i\in\mathbf Y\mid X) \\
+%& = -f_Y(X) + \sum_{i\in\mathcal Y(X)}f_i(X) K_{ii}(\theta; X).
+%\end{split}
+%\end{equation}
+%The later expression of this gradient has the advantage that it can be efficiently computed in contrary to the evaluation of the exponentially large sum in the first line.
 
-Obviously the loss function is not coercive in general, since for \(f_i(X) = 0\) the probability \(\mathbb P_\theta(\left\{ i\right\}\mid X)\) is constant in \(\theta\). However it is not straight forward whether it becomes coercive under the assumption \(f_i(X)>0\) entrywise for every \(i\in\mathcal Y(X)\) and \(X\in\mathcal X\) and this could be investigated further.
+%Obviously the loss function is not coercive in general, since for \(f_i(X) = 0\) the probability \(\mathbb P_\theta(\left\{ i\right\}\mid X)\) is constant in \(\theta\). However it is not straight forward whether it becomes coercive under the assumption \(f_i(X)>0\) entrywise for every \(i\in\mathcal Y(X)\) and \(X\in\mathcal X\) and this could be investigated further.
 
+\subsection{Learning the repulsiveness}
 
 \subsection{Estimating the mixture coefficients of \(k\)-DPPs}
 

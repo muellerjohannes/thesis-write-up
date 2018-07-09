@@ -6,7 +6,7 @@
 %\todo{explain bias and consistency}
 % \section{Motivation for learning DPPs}
 
-Parameter estimation is one of the central components of every theory of real world phenomena. In a nutshell one could split the process of the construction into two parts. The first one being the selection of the model which is done by a scientist and the second being the determination of the constants that belong to the model.
+Parameter estimation is one of the central components of every theory of real world phenomena. In a nutshell one could split the process of the construction of a descriptive model into two parts. The first one being the selection of the model which is done by a scientist and the second being the determination of the constants that belong to the model.
 
 To make this more clear we will consider one of the most famous advances in the natural sciences namely the law of universal gravitation that was discovered by Sir Isaac Newton\todo{cite}. More precisely Newton discovered that the gravitational force acting between two massive objects is given by
 \[F = G\cdot \frac{m_1m_2}{r^2}\]
@@ -101,7 +101,7 @@ indicates whether the edge \(e\in E\) belongs to the cycle \(C\). The \emph{cycl
 \end{enumerate}
 \end{emp}\todo{add pictures and explanations?}
 
-In order to see that the above definition of the cycle sparsity is well defined, we have need to show that shortest maximal cycle basis exist. This might be well known to people that are familiar with graph theory, but we will present an elementary proof here. It shall be noted, that the proof becomes quite a lot more intuitive by drawing the according cycles in order to understand how the respective decompositions of cycles work.
+In order to see that the above definition of the cycle sparsity is well defined, we have need to show that shortest maximal cycle basis exist. This might be well known to people that are familiar with graph theory, but we will present an elementary proof here. It shall be noted, that the proof -- and also the definitions above -- becomes quite a lot more intuitive by drawing the according cycles in order to understand how the respective decompositions of cycles work.
 
 \begin{prop}[Existence of SMCBs]
 There always exists a basis \(\left\{ x(C_1), \dots, x(C_k)\right\}\) of the cycle space where \(C_1, \dots, C_k\) are chordless cycles.
@@ -130,7 +130,7 @@ K_{ii} = \Delta_{\left\{ i\right\}} \quad \text{and } K_{ij}^2 = K_{ii}K_{jj} - 
 \end{equation*}
 Thus it only remains to regain the signs \(\operatorname{sgn}(K_{ij})\) of the off diagonal entries. For this we use the following object.
 
-\begin{emp}[The adjacency graph]
+\begin{emp}[The adjacency graph and sign function]
 The adjacency graph \(G_K = (V_K, E_K)\) associated with \(K\) consists of the vertex set \(\left\{ 1, \dots, N\right\}\) and \(\left\{ i, j\right\}\) form an edge if and only if \(K_{ij}\ne0\). Further we introduce some \emph{weights} on the edges. This means we consider a mapping \(w\colon E_K\to\mathbb R\) and we set
 \[w_{ij} \coloneqq w(\left\{ i, j\right\}) \coloneqq \operatorname{sgn}(K_{ij})\]
 where we call \(w_{ij}\) the weight of the edge \(\left\{ i, j\right\}\). This graph together with the weights determines the signs of the off diagonal elements, so we are interested in reconstruction the weights from the principal minors.
@@ -274,13 +274,18 @@ the \emph{maximum likelihood estimater} or short MLE.
 
 % \todo{general blabla about MLE}
 
-\subsection{Kernel estimation}
-\todo{Clearly formulate the task}
-% The approach described above is clearly of traditional statistical type and we want to touch on how the kernel estimation can be put into a machine learning task (cf. \cite{affandi2014learning}).
-Assume again that we have a set of observations \(Y_1, \dots, Y_n\subseteq\mathcal Y\) drawn independently and according to the DPP \(\mathbb P\). This time we want to find the maximum likelihood estimator for the elementary kernel and in order to do this we need to be able to express the density of the DPP which is nothing but the values of the elementary probabilities. Thus we will assume that we are dealing with \(L\)-ensembles in this section. We start by formulating the goal of this section.
+\subsection{Presentation of different models}
+
+Assume again that we have a set of observations \(Y_1, \dots, Y_n\subseteq\mathcal Y\) drawn independently and according to the DPP \(\mathbb P\). This time we want to find the maximum likelihood estimator for the elementary kernel and in order to do this we need to be able to express the density of the DPP which is nothing but the values of the elementary probabilities. Thus we will assume that we are dealing with \(L\)-ensembles in this section. We will present the maximum likelihood estimators for different parametric classes of DPPs.
+
+\subsubsection*{MLE of the elementary kernel \(L\)}
+
+The most intuitive parameter that one can estimate is the elementary kernel \(L\) itself since it parametrises the entire class of \(L\)-ensembles.
 
 \begin{emp}[Maximum likelihood estimator for \(L\)]
-We seek to find the MLE for the elementary kernel \(L\) in the set \(\mathbb R^{N\times N}_{\text{sym}, +}\) of all symmetric and positive semidefinite \(N\times N\) matrices. The log likelihood function is now given by
+We seek to find the MLE 
+\[\hat L_n \coloneqq \underset{L\in\mathbb R^{N\times N}_{\text{sym}, +}}{\arg\max}\, \mathcal L(L) \]
+for the elementary kernel \(L\) in the set \(\mathbb R^{N\times N}_{\text{sym}, +}\) of all symmetric and positive semidefinite \(N\times N\) matrices. The log likelihood function is now given by
 %We aim to establish a quantity that gives an intuitive measure of how well a different DPP describes the training set and then we want to find the elementary kernel \(L\) for which the associated DPP \(\mathbb P_L\) optimises this quantity. A widely used choice in the machine learning community for this is the so called \emph{log likelihood function}
 \[\mathcal L \colon\mathbb R^{N\times N}_{\text{sym}, +} \to [-\infty, 0], \qquad L \mapsto \log\left(\prod_{i = 1}^n \mathbb P_L(Y_i)\right).\]
 \end{emp}
@@ -288,28 +293,17 @@ Using \eqref{e2.3} we get the expression
 \begin{equation}\label{e3.1}
 \mathcal L(L) = \sum\limits_{i=1}^n\log\left( \det(L_{Y_i})\right) - n \log\left( \det(L+I)\right)
 \end{equation}
-% and we will work with its negative
-% \[\mathcal L(L) \coloneqq -\log\left(\prod_{i = 1}^n \mathbb P_L(Y_i)\right) = -\sum\limits_{i=1}^n\log\left( \det(L_{Y_i})\right) + n \log\left( \det(L+I)\right)\]
-% where high values of \(\mathcal L\) correspond to kernels \(L\) where at least one element \(Y_t\) of our training set is very unlikely. Thus it is natural to minimise the loss function \(\mathcal L\) over all positive semidefinit \(L\in\mathbb R^{N\times N}\). Note that we have \(\mathcal L(L) = \infty\) if and only if an observation \(Y_t\) of our training set is impossible under the DPP \(\mathbb P_L\), i.e. we do not consider those kernels in our estimation.
-We note that \(\mathcal L\) is smooth and that its gradient can be expressed explicitly, at least on the domain \(\left\{ \mathcal L>-\infty\right\}\). This is due to the fact that the determinants of the submatrices are polynomials in the entries of \(L\) and the composition of those with the smooth function \(\log\colon(0,\infty)\to\mathbb R\) stays smooth. This property allows the use of gradient methods but they face the problem that the loss function is non concave and thus those algorithms will generally not converge to a global maximiser. % (cf. \cite{affandi2014learning}).
-% \todo{Explain why it is non convex}{ } 
-To see that the log linear likelihood function is not concave, we may consider the span \(\left\{ q I\mid q\in\mathbb R\right\}\) of the identity matrix. On this subspace \(\mathcal L\) takes the form
-\[\mathcal L(q I) = \sum\limits_{i = 1}^n \log(q^{\left\lvert Y_i \right\rvert}) - n \log((1 + q)^N) = \sum\limits_{i = 1}^n \left\lvert Y_i \right\rvert \log(q) - n N \log(1 + q) \] %= \log(q) \cdot \left( \sum\limits_{i = 1}^n \left\lvert Y_i \right\rvert - n\cdot N\right)\]
-which is not concave in general.
 
-This obviously causes substantial computational problems in the calculation of the MLE let alone it exists. In fact it is NP hard\todo{explain this term}{ } to maximise a general non concave function and it is also conjectured to be NP hard to maximise the log likelihood function \(\mathcal L\) in the case of \(L\)-ensembles. However there are still efficient maximising techniques for such functions that will eventually converge to local maximiser and that also work in very high dimensional spaces\todo{cite}{ } and thus this approach was taken by \todo{cite}. Nevertheless we will not present this approach here, but rather favour a maximisation technique that is based on a fixed point iteration and was proposed in \todo{cite}.
+Although the parametric family of that arises from the elementary kernels \(L\) gives a high variety of different associated \(L\)-ensembles, it will also make the computation of the MLE more complex. Therefore we will consider some smaller classes of \(L\)-ensembles, which will decrease the flexibility of the model, but make computation more efficient.
 
-\subsubsection{Fixed point iteration based maximisation}
-\todo{read, understand and summarise the paper}
+\subsubsection*{MLE of the qualities}
 
-\subsection{Learning the quality}
-
-Let again \(\left\{ Y_t\right\}_{t=1,\dots, n}\) be a set of independent observations drawn according to a \(L\)-ensemble \(\mathbb P\). % where \(Y_t\subseteq\mathcal Y\) for every \(t=1, \dots, T\).
 Unlike earlier we will not try to estimate the whole kernel \(L\) but only the qualities \(q_i\) of the items \(i\in\mathcal Y\). More precisely we recall that we can parametrise the positive definite symmetric matrices \(L\) using the quality diversity parametrisation %decomposition %, i.e. we consider the bijection\todo{whats the domain?}
 \[ (q, S) \mapsto \Psi(q, S) = L \quad \text{where } L_{ij} = q_iS_{ij}q_j.\]
 Now we fix a similarity kernel \(\hat S\), that we will usually model according to some perceptions we might have, and will only try to estimate the quality \(q\in\mathbb R_+^N\). This means that we optimise the likelihood function over a smaller set of kernels, namely the ones of the form \(\Psi(q, \hat S)\) for \(q\in\mathbb R_+^N\). Obviously the maximal likelihood that can be achieved using this more restrictive model decreases since we consider less positive definite matrices and we have %will be lower compared to the one obtained by a full kernel estimation, since we have
 \[\max_{q\in \mathbb R_+^N} \mathcal L(\Psi(q, \hat S)) \le %\max_{(q, S)\in \mathbb R_+^N\times \mathbb S_N^N} \mathcal L(\Psi(q, S)) =
- \max_{L\in \mathbb R_{\text{sym}, +}^{N\times N}} \mathcal L(L). \]
+ \max_{L\in \mathbb R_{\text{sym}, +}^{N\times N}} \mathcal L(L). \]\todo{sort out notation problem with \(S\) and \(\phi\)}
+ \todo{sort out notation problem with \(N\) and \(\mathcal Y\)}
  
 Although we can only expect a worse descriptive power of the observation, the hope is that the task of estimating only the qualities \(q\in\mathbb R_+^N\) is more feasible which actually turn out to be true in certain cases. But before we investigate this, we clearly state our goal.
 
@@ -320,18 +314,24 @@ Although we can only expect a worse descriptive power of the observation, the ho
 where the likelihood is still given by \eqref{e3.1}.
 \end{emp}
 
-
-
-%\subsubsection{Properties of the loss function \(\mathcal L\) and derivation of the log linear model}
-
-The motivation for restricting our ambitions of estimation to the qualities \(q_i\) rather than the whole elementary kernel \(L\in\mathbb R_{\text{sym}, +}^{N\times N}\) was to obtain a more tractable optimisation problem. In order to see whether we succeeded in that regard, we note that each summand in the log likelihood function takes the following form under the quality diversity parametrisation
-%perceive -- without change of notation -- the log likelihood function now as a function of the quality vector, i.e. \(\mathcal L\colon \mathbb R_+^N\to [-\infty, 0]\) where
-\begin{equation}
+Since we are only interested in estimating the quality vector \(q\in\mathbb R_+^N\), we will perceive the log likelihood function as a function of \(q\). Further we notice that the single summands take the form following form\todo{refer to the equation!}
+\begin{equation}\label{loglikqua}
 % \mathcal L(\Psi(q, \hat S)) & = \sum\limits_{i = 1}^n 
 \log\left( \prod_{j\in Y_i} q_j^2\right) + \log(\det(\hat S_{Y_i})) - \log\left(\sum_{A\subseteq \mathcal Y} \prod_{j\in A}q_j^2\det(\hat S_A) \right).
 % \\ & = \sum\limits_{i = 1}^n \log\left( \prod_{j\in Y_i} q_j^2\right) \cdot \det(\hat S_{Y_i}) - n
 \end{equation}
-Unfortunately this still isnÕt concave in \(q\) and in order to achieve this, we will have to make following assumption and keep them in throughout this section.\todo{does it makes sense?}
+
+\subsubsection*{Log linear model for the qualities}
+
+The motivation for restricting our ambitions of estimation to the qualities \(q_i\) rather than the whole elementary kernel \(L\in\mathbb R_{\text{sym}, +}^{N\times N}\) was to obtain a more tractable optimisation problem. 
+%In order to see whether we succeeded in that regard, we note that each summand in the log likelihood function takes the following form under the quality diversity parametrisation
+%perceive -- without change of notation -- the log likelihood function now as a function of the quality vector, i.e. \(\mathcal L\colon \mathbb R_+^N\to [-\infty, 0]\) where
+%\begin{equation}
+% \mathcal L(\Psi(q, \hat S)) & = \sum\limits_{i = 1}^n 
+%\log\left( \prod_{j\in Y_i} q_j^2\right) + \log(\det(\hat S_{Y_i})) - \log\left(\sum_{A\subseteq \mathcal Y} \prod_{j\in A}q_j^2\det(\hat S_A) \right).
+% \\ & = \sum\limits_{i = 1}^n \log\left( \prod_{j\in Y_i} q_j^2\right) \cdot \det(\hat S_{Y_i}) - n
+%\end{equation}
+Unfortunately we can tell from \eqref{loglikqua} that the log likelihood still isnÕt concave in \(q\) and in order to achieve this, we will have to make following assumption and keep them in throughout this section.\todo{does it makes sense?}
 
 %{\scshape\bfseries .}
 \begin{emp}[Log linear model for the qualities]
@@ -348,6 +348,131 @@ Under the assumption of a log linear model for the qualities the individual term
 \begin{equation}\label{e3.31}
 \theta^Tf_{Y}(X) + \det(S_{Y}(X)) - \log\left( \sum_{A\subseteq\mathcal Y(X)} \exp\left( \theta^Tf_{A}(X)\right)\det(S_A(X)) \right).
 \end{equation}
+
+\subsubsection*{MLE of the repulsiveness parameter}
+
+\subsection{Existence of the maximum likelihood estimators}
+
+A priori it is not clear that the maximum likelihood estimators exist and we will actually see that they do not exist in general. However one can still save this approach because the probability that they exist tends to \(1\) if the sample size increases. We begin by showing this for the MLE of the qualities and then we will adapt this proof to the other models.
+
+\subsubsection*{MLE of the qualities}
+
+To see that the MLE \(\hat q_n\) does not exist in general, we suppose that we have only one sample \(Y_1 = \mathcal Y\) which is the whole set. The higher the qualities of the items are, the more likely this observation gets and therefore the maximum of the log likelihood function -- which is \(0\) in this case -- is not obtained. This can also be made rigorous in the following computation. Under the assumption of constant qualities the log likelihood function takes the form
+\begin{equation*}
+\begin{split}
+\log(q^{2N} \det(\hat S_{\mathcal Y})) - \log\left(\sum_{A\subseteq \mathcal Y}q^{2\left\lvert A \right\rvert}\det(\hat S_A) \right) = \log\left( \frac{q^{2N} \det(\hat S_{\mathcal Y})}{\sum_{A\subseteq \mathcal Y}q^{2\left\lvert A \right\rvert}\det(\hat S_A)}\right) \xlongrightarrow{q\to\infty} 0.
+\end{split}
+\end{equation*}
+However this maximum is never attained, since for every \(L\)-ensemble we have \(\mathbb P_L(\varnothing) > 0\) and therefore
+\[\mathcal L(q) = \log\left(\mathbb P_{\Psi(q, \hat S)}(\mathcal Y)\right) < 0 \quad \text{for every } q\in\mathbb R_+^N. \]
+
+The thing that goes wrong in this case is, that under the observation of the whole set \(\mathcal Y\) we would estimate a deterministic model that always selects the whole set, namely the DPP with marginal kernel \(I\). Since all of the eigenvalues are \(1\) in this case, this DPP is not a \(L\) ensemble and therefore we can not describe it with the quality diversity decomposition.
+However if we assume that the data is actually generated by a \(L\)-ensemble, then such a scenario becomes unlikely as the sample size increases. We will fix this in the following result.
+
+\begin{prop}[Existence of the MLE]
+Let \(\mathbf Y_1, \mathbf Y_2, \dots\) be a sequence of independent and identically distributed point processes that fall in the class of \(L\)-ensembles. Then we have
+\[\mathbb P\left(\hat q_n\in\mathbb R_+^N \text{ exists}\right) \xlongrightarrow{n\to\infty} 1.\]
+\end{prop}
+\begin{proof}
+We will show that the MLE exists if one of the observations is the emptyset. Then the claim follows from
+\begin{equation*}
+\begin{split}
+\mathbb P\left(\hat q_n\in\mathbb R_+^N \text{ exists}\right) & \ge \mathbb P\left(\bigcup_{i=1}^n \left\{ \mathbf Y_i = \varnothing\right\}\right) = 1 - \mathbb P\left(\bigcap_{i=1}^n \left\{ \mathbf Y_i \ne\varnothing\right\}\right) \\ 
+& = 1 - \mathbb P(\mathbf Y_1 \ne\varnothing)^n \xlongrightarrow{n\to\infty} 1
+\end{split}¥
+\end{equation*}
+since we have \(\mathbb P(\mathbf Y_1 \ne\varnothing) < 1\) for every \(L\)-ensemble.
+
+To prove that the log likelihood function possesses a maximum we will prove that it is coercive in some way, i.e. that we have
+\begin{equation*}\label{coe}
+\mathcal L(q)\to -\infty\quad\text{for } \left\lvert q \right\rvert\to\infty.
+\end{equation*}
+Elementary considerations then yield the existence of a maximiser. So let \(Y_1, \dots, Y_n\) be some observations with \(Y_i=\varnothing\) for at least one \(i\in\left\{ 1, \dots, n\right\}\). Let \((q^k)_{k\in\mathbb N}\subseteq\mathbb R_+^N\) be a  sequence such that \(\lvert q^k \rvert\to \infty\). Note that it suffices to show that ever subsequence of \((q^k)\) contains a subsubsequence \((q^l)\) such that 
+\[\mathcal L(q^l)\to-\infty\quad\text{for } l\to\infty.\]
+Hence we fix a subsequence of \((q^k)\) which we denote by \((q^k)\) again in slightly abusive notation. Let \((q^l)\) be a subsequence of \((q^k)\) such that one coordinate diverges to infinity, i.e.
+\[q_{j_0}^l\xlongrightarrow{l\to\infty} \infty\quad\text{for one } j_0\in\left\{ 1, \dots, N\right\}.\]
+The \(i\)-th summand of \(\mathcal L\) takes the form
+\[-\log\left( \sum_{A\subseteq\mathcal Y}\prod_{j\in A}(q^l_j)^2\det(\hat S_A)\right) \le - \log\left( (q^l_{j_0})^2\right)\xlongrightarrow{l\to\infty} -\infty\]
+where we used \(\hat S_{\left\{ j_0\right\}} = 1\). Because the other summands are non positive this implies
+\[\mathcal L(q^l)\xlongrightarrow{l\to\infty} -\infty\]
+which we had to show.
+%. Will show that if the sequence \(\big( \mathcal L(q^k)\big)_{k\in\mathbb N}\) is bounded from below, then all coordinate sequences \((q^k_j)_{k\in\mathbb N}\) are bounded for all \(j\in\left\{ 1, \dots, N\right\}\). Note that this is equivalent to \eqref{coe}.
+\end{proof}
+
+\begin{rem}
+The proof above should be read in the following way. The statement \(q^l_{j_0}\to\infty\) is equivalent to a model that would always select the item \(j_0\). However since we have observed the empty set, the observations would be impossible under this model and thus the log likelihood function takes the value \(-\infty\) for this model. An analogue argument shows that the estimated qualities are strictly positive with high probability if the actual qualities are strictly positive. This will be of interest for us if we consider the log linear model.
+\end{rem}
+
+\begin{prop}[Positivity of the MLE]
+Assume that \(\mathbf Y_1, \mathbf Y_2, \dots\) is a sequence of independent and identically distributed point processes that are distributed according to a \(L\)-ensemble with strictly positive qualities. Then we have
+\[\mathbb P\left(\hat q_n\in\mathbb R_+^N \text{ exists and } \hat q_n\in (0, \infty)^N\right) \xlongrightarrow{n\to\infty} 1.\]
+\end{prop}
+\begin{proof}
+We have already seen that the probability that the MLE exists tends to one, so we only have to show that the probability that the estimated qualities are strictly positive tends to one. The philosophy to prove this is exactly the same than in the proof of existence. Indeed we note that once \(j\) occurs in one of the observations \(Y_1, \dots, Y_n\) we have \(\mathcal L(q) = -\infty\) for every \(q\in\mathbb R_+^N\) with \(q_j = 0\). Therefore we have \((\hat q_n)_j>0\) if \(j\in Y_i\) for at least one \(j\in\left\{ 1, \dots, n\right\}\). Finally we note that the probability that \(j\) occurs in the \(i\)-th sample is strictly positive since we have
+\[\mathbb P(j\in\mathbf Y_i)\ge\mathbb P(\left\{ j\right\} = \mathbf Y_i) = q_j^2>0. \]
+\end{proof}
+
+
+
+\subsubsection*{MLE of the elementary kernel}
+
+We can quite easily adapt the proof for the existence of MLEs of the qualities to the case of MLEs for the whole elementary kernel \(L\).
+
+\begin{prop}[Existence of MLE for the kernel]
+Let \(\mathbf Y_1, \mathbf Y_2, \dots\) be an sequence of independent and identically distributed point processes that fall in the class of \(L\)-ensembles. Then we have
+\[\mathbb P\left(\hat L_n\in\mathbb R^{N\times N}_{\text{sym}, +} \text{ exists}\right) \xlongrightarrow{n\to\infty} 1.\]
+\end{prop}
+\begin{proof}
+To recycle the proof above we note that it suffices to show \(\mathcal L(L)\to -\infty\) for \(\left\lvert L \right\rvert\to\infty\) once we have observed the empty set once. To see this, we use the quality diversity parametrisation
+\[\Psi\colon\mathbb R_+^N\times\mathbb S_N^N\to\mathbb R^{N\times N}_{\text{sym}, +}, \quad (q, \phi)\mapsto \left( q_i\phi_i^T\phi_j q_j\right)_{1\le i, j\le N}.\]
+Note that since \(\Psi\) is continuous and therefore bounded on bounded sets and \(\mathbb S_N^N\) is bounded, \(\left\lvert \Psi(q, \phi) \right\rvert\to\infty\) implies \(\left\lvert q \right\rvert\to\infty\). The exact same calculations as in the previous proof show
+\[\mathcal L(L) = \mathcal L(\Psi(q, \phi))\to-\infty\quad \text{for }\left\lvert L \right\rvert\to\infty.\]
+\end{proof}
+
+\subsubsection*{The log linear model}
+
+\subsubsection*{MLE for the repulsiveness parameter}
+
+\subsection{Consistency of the MLE}
+
+\subsection{Approximation of the MLE}
+
+% \subsection{Kernel estimation}
+% \todo{Clearly formulate the task}
+% The approach described above is clearly of traditional statistical type and we want to touch on how the kernel estimation can be put into a machine learning task (cf. \cite{affandi2014learning}).
+
+% and we will work with its negative
+% \[\mathcal L(L) \coloneqq -\log\left(\prod_{i = 1}^n \mathbb P_L(Y_i)\right) = -\sum\limits_{i=1}^n\log\left( \det(L_{Y_i})\right) + n \log\left( \det(L+I)\right)\]
+% where high values of \(\mathcal L\) correspond to kernels \(L\) where at least one element \(Y_t\) of our training set is very unlikely. Thus it is natural to minimise the loss function \(\mathcal L\) over all positive semidefinit \(L\in\mathbb R^{N\times N}\). Note that we have \(\mathcal L(L) = \infty\) if and only if an observation \(Y_t\) of our training set is impossible under the DPP \(\mathbb P_L\), i.e. we do not consider those kernels in our estimation.
+We note that \(\mathcal L\) is smooth and that its gradient can be expressed explicitly, at least on the domain \(\left\{ \mathcal L>-\infty\right\}\). This is due to the fact that the determinants of the submatrices are polynomials in the entries of \(L\) and the composition of those with the smooth function \(\log\colon(0,\infty)\to\mathbb R\) stays smooth. This property allows the use of gradient methods but they face the problem that the loss function is non concave and thus those algorithms will generally not converge to a global maximiser. % (cf. \cite{affandi2014learning}).
+% \todo{Explain why it is non convex}{ } 
+To see that the log linear likelihood function is not concave, we may consider the span \(\left\{ q I\mid q\in\mathbb R\right\}\) of the identity matrix. On this subspace \(\mathcal L\) takes the form
+\[\mathcal L(q I) = \sum\limits_{i = 1}^n \log(q^{\left\lvert Y_i \right\rvert}) - n \log((1 + q)^N) = \sum\limits_{i = 1}^n \left\lvert Y_i \right\rvert \log(q) - n N \log(1 + q) \] %= \log(q) \cdot \left( \sum\limits_{i = 1}^n \left\lvert Y_i \right\rvert - n\cdot N\right)\]
+which is not concave in general.
+
+This obviously causes substantial computational problems in the calculation of the MLE let alone it exists. In fact it is NP hard\todo{explain this term}{ } to maximise a general non concave function and it is also conjectured to be NP hard to maximise the log likelihood function \(\mathcal L\) in the case of \(L\)-ensembles. However there are still efficient maximising techniques for such functions that will eventually converge to local maximiser and that also work in very high dimensional spaces\todo{cite}{ } and thus this approach was taken by \todo{cite}. Nevertheless we will not present this approach here, but rather favour a maximisation technique that is based on a fixed point iteration and was proposed in \todo{cite}.
+
+\subsubsection{Fixed point iteration based maximisation}
+\todo{read, understand and summarise the paper}
+
+%\subsection{Learning the quality}
+
+%Let again \(\left\{ Y_t\right\}_{t=1,\dots, n}\) be a set of independent observations drawn according to a \(L\)-ensemble \(\mathbb P\). % where \(Y_t\subseteq\mathcal Y\) for every \(t=1, \dots, T\).
+
+
+\subsubsection*{Existence of MLE}
+
+%\begin{emp}
+
+%\end{emp}
+
+\subsubsection*{Consistency of the MLE}
+
+\todo{say something about bias and consistency}
+
+%\subsubsection{Properties of the loss function \(\mathcal L\) and derivation of the log linear model}
+
+\subsubsection*{The log linear model for the qualities}
 
 The first two terms are affine linear in \(\theta\) and thus concave. To see that the last expression is also concave, it is convenient to to introduce the notion of log concavity and give a fundamental result.%\todo{reformulate this!}
 
@@ -371,7 +496,8 @@ Under the log linear model for the qualities, the log likelihood function is con
 Before we discuss the actual process of maximisation of the log likelihood function we will be concered with the existence of maximisers and the consistency of the resulting estimators.
 
 \begin{emp}[Existence of maximisers]
-It is in general not true that the maximum likelihood estimator \(\hat\theta_n\) exists for arbitrary observations \(\left\{ Y_i\right\}_{i=1, \dots, n}\). In fact, suppose we have fixed our similarity matrix \(\hat S\) to be the identity, maybe we expect the items to be uncorrelated and only want to estimate their qualities. Further we believe that all items are equally likely and thus we set \(f_i = 1\) for all \(i\in\mathcal Y\). Assume now that we have only one observation \(Y_1\) which is the whole set \(\mathcal Y\) itself. The higher the quality of the items, the more likely this observation would be and thus the likelihood function does not posses a maximiser since it assymptotically approaches \(1\) if \(\theta\) goes to infinity.
+
+%It is in general not true that the maximum likelihood estimator \(\hat\theta_n\) exists for arbitrary observations \(\left\{ Y_i\right\}_{i=1, \dots, n}\). In fact, suppose we have fixed our similarity matrix \(\hat S\) to be the identity, maybe we expect the items to be uncorrelated and only want to estimate their qualities. Further we believe that all items are equally likely and thus we set \(f_i = 1\) for all \(i\in\mathcal Y\). Assume now that we have only one observation \(Y_1\) which is the whole set \(\mathcal Y\) itself. The higher the quality of the items, the more likely this observation would be and thus the likelihood function does not posses a maximiser since it assymptotically approaches \(1\) if \(\theta\) goes to infinity.
 \end{emp}
 
 \subsubsection*{Comparison to learning the kernel \(L\)}

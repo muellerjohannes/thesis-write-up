@@ -51,7 +51,7 @@ And even stronger by the strong law of large numbers they converge to \(\mathbb 
 \[\left\{ \mu\in\mathbb R^{2^{\mathcal Y}} \;\Big\lvert\; \mu_A\in[0, 1] \text{ for all } A\subseteq\mathcal Y \text{ and } \sum_{A\subseteq\mathcal Y}\mu_A = 1 \right\}\]
 and using the strong law of large numbers in \(\mathbb R^{2^{\mathcal Y}}\).
 
-Therefore the empirical measures are reasonable approximations of the actual probability distribution. Assume now for one moment that the empirical measures \(\hat{\mathbb P}_n\) are also determinantal point processes with marginal kernel \(\hat K_n\), then \(\hat K_n\) would be a quite intuitive estimate for the actual marginal kernel \(K\). Thus we are interested in the question whether we can reconstruct the kernel marginal of a DPP if we know the DPP itself. Since the marginal density of a DPP corresponds to the principal minors of the marginal kernel, we first investigate whether we can reconstruct a matrix from its principle minors. \todo{say something about stability?}
+Therefore the empirical measures are reasonable approximations of the actual probability distribution. Assume now for one moment that the empirical measures \(\hat{\mathbb P}_n\) are also determinantal point processes with marginal kernel \(\hat K_n\), then \(\hat K_n\) would be a quite intuitive estimate for the actual marginal kernel \(K\). Thus we are interested in the question whether we can reconstruct the kernel marginal of a DPP if we know the DPP itself. Since the marginal density of a DPP corresponds to the principal minors of the marginal kernel, we first investigate whether we can reconstruct a matrix from its principle minors. For the answer to this problem we follow the main ideas presented in \cite{urschel2017learning} and \cite{rising2015efficient} although we modify their arguments to make them shorter and hopefully more accessible. \todo{say something about stability?}
 
 
 %Therefore we can consistently %\todo{explain consistency}{ } 
@@ -69,7 +69,7 @@ Therefore the empirical measures are reasonable approximations of the actual pro
 % Thus the question naturally arrises whether we can reconstruct the kernel \(K\) from the knowledge of all of its principal minors, which we will address in the following.
 
 %\subsubsection*{The principal minor assignment problem}\todo{phrase it very clearly}
-
+\todo{define principle minors?}
 \begin{emp}[The principal minor assignment problem]
 Let \(K\in\mathbb R^{N\times N}\) be a symmetric matrix. We want to investigate whether \(K\) uniquely specified by its principle minors
 \[\Delta_S \coloneqq \det(K_S) \quad \text{where } S\subseteq\left\{ 1, \dots, N\right\}.\]
@@ -77,7 +77,18 @@ We call this the \emph{symmetric principal minor assignment problem} and it will
 \end{emp}
 
 %The reconstruction of a symmetric matrix from all its principal minors is known as the \emph{principal minor assignment problem} and we aim to prove in this section that this is possible -- at least up to an equivalence relation. 
-But before we present the general procedure we want to see how this would work in the case of a symmetric \(3\times3\) matrix \(K\). \todo{explain this.}
+Before we present the general procedure we want to see how this would work in the case of a symmetric \(3\times3\) matrix \(K = (K_{ij})_{1\le i, j\le 3}\). First we note that we can regain the diagonal elements as the determinant of the \(1\times1\) principal minors
+\[\det(K_{\left\{ i\right\}}) = K_{ii} \quad \text{for } i = 1, 2, 3.\]
+Further the squares of the off diagonal are determined by the \(2\times2\) principal minors since
+\[\det(K_{\left\{ i, j\right\}}) = K_{ii}K_{jj} - K_{ij}^2 \quad \text{for }i, j = 1, 2, 3.\]
+Therefore we only need to reconstruct the signs off diagonal entries. To do this, we consider the determinant of the matrix itself
+\begin{equation}\label{thrtimthr}
+\det(K) = K_{11}K_{22}K_{33} + 2K_{12}K_{13}K_{23} - K_{11}K_{23}^2 - K_{22}K_{13}^2 - K_{33}K_{12}^2.
+\end{equation}
+Rearranging this yields
+\[K_{12}K_{13}K_{23} = \frac12\left( \det(K) + K_{11}K_{23}^2 + K_{22}K_{13}^2 + K_{33}K_{12}^2 - K_{11}K_{22}K_{33}\right).\]
+Since we know all of the expressions on the right side, we can determine the sign of the product on the left side. Now we assign the the signs of the off diagonal elements in such a way, that the above equation holds. More precisely if the the product is negative, we assign a minus to one or all three elements, if it is positive, then we assign a minus to none or two elements. If the product is zero, every configuration of signs satisfy the desired property. It is now straight forward to check that this assignment actually leads to the desired principle minors.
+% \todo{explain this.}
 
 
 \begin{emp}[Notions from graph theory]
@@ -121,7 +132,7 @@ Then we have \(x(C) = x(C_1) + x(C_2)\). By iterating this procedure as long as 
 \end{proof}
 
 \begin{defi}[Determinantal equivalence]
-Two symmetric matrices \(A, B\in\mathbb R^{N\times N}\) are called \emph{determinantally equivalent} if the have the same principal minors.
+Two symmetric matrices \(A, B\in\mathbb R^{N\times N}\) are called \emph{determinantally equivalent} if the have the same principal minors and we write \(A\sim B\).
 \end{defi}
 
 It is obvious that we can only hope to reconstruct a symmetric matrix up to determinantal equivalence. However this would be satisfactory, because determinantally equivalent matrices are exactly those that give rise to the same DPP. Let us in the following denote the principal minor \(\det(K_S)\) by \(\Delta_S\) for \(S\subseteq\left\{ 1, \dots, N\right\}\). To come back to our original problem, we notice that the principal minors up to size two immediately determine the diagonal and the absolute values of the off diagonal of \(K\) since we have
@@ -222,7 +233,7 @@ It shall be noted that there are algorithms with much better computational perfo
 
 So far we have seen that the principle minors determine a symmetric matrix up to determinantal equivalence. However the empirical marginal densities do not in general need to be the principle minors of any symmetric matrix, in other words the empirical measures are not necessarily determinantal. Therefore the definition of the estimator is till not quite straight forward and we will follow \cite{urschel2017learning} for this and make the following assumption.
 
-\begin{emp}[Assumption]
+\begin{emp}[Assumption]\label{ass}
 Let \(\alpha>0\) and assume that 
 \[\min\left\{ \left\lvert K_{ij} \right\rvert\mid K_{ij}\ne0\right\}\ge\alpha.\]
 \end{emp}
@@ -256,8 +267,25 @@ Next we will introduce an estimate \(\hat G\) for the adjacency graph and will t
 %\[\hat K_{ij}\coloneqq \begin{cases}  \hat w_{ij}\cdot \sqrt{(\hat B_{ij})} \quad & \text{if } \left\{ i, j\right\}\in \hat E \\ 0 & \text{if } \left\{ i, j\right\}\notin \hat E \end{cases}. \]
  %and otherwise
 % \[\hat K_{ij}\coloneqq \sqrt{(\hat B_{ij})}.\]
-\todo{state the result and see how hard it is to prove}
-\todo{is this estimator unbiased? well \(\hat{\mathbb P}_n\) is unbiased}
+
+In order to talk about consistency of the estimator that we constructed above, it is necessary to define a metric on the marginal kernels of DPPs. However the usual operator norm is clearly not right for this job, since we already know that we can only hope to reconstruct the determinantal equivalence class but not the exact marginal kernel. Thus we will work with the usual choice of pseudometric if one has to deal with equivalence classes.
+
+\begin{emp}[Pseudometric on the marginal kernels]
+We define the distance between two marginal kernels \(A, B\in\mathbb R^{N\times N}\) through
+\[d(A, B)\coloneqq \inf_{C\sim A}\left\lVert B - C \right\rVert_\infty \]
+where \(\left\lVert A \right\rVert_\infty\coloneqq \max_{1\le i, j\le N} \left\lvert A_{ij} \right\rvert\) denotes the uniform norm on the space of matrices.
+\end{emp}
+
+\begin{theo}[Consistency]
+Let \(K\) be the marginal kernel of a DPP that satisfy the assumption \ref{ass}. Let further \(l\) be the cycle sparsity of \(G_K\) and \(\varepsilon>0\). Then for any \(A>0\) there is a constant \(c>0\) such that for every
+\[n\ge c\cdot\left( \frac{\varepsilon^2}{\alpha^2} + l\cdot\left( \frac{4}{\alpha}\right)^{2l}\right) \cdot \log(N)\]
+we have \(d(\hat K, K)\le\varepsilon\) with probability at least \(1 - N^{-A}\).
+\end{theo}
+\begin{proof}
+We refer to \cite{urschel2017learning}.
+\end{proof}
+\todo{how hard it is to prove}
+\todo{is this estimator unbiased?}
 
 \section{Maximum likelihood estimation using optimisation techniques}
 
@@ -590,5 +618,7 @@ Before we discuss the actual process of maximisation of the log likelihood funct
 \subsection{Metropolis-Hastings random walk}
 
 \subsection{Slice sampling}
+
+\section{The variational approach}
 
 %\section{A Bayesian approach to the kernel estimation}

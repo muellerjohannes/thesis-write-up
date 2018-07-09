@@ -319,9 +319,8 @@ for the elementary kernel \(L\) in the set \(\mathbb R^{N\times N}_{\text{sym}, 
 \end{emp}
 Using \eqref{e2.3} we get the expression
 \begin{equation}\label{e3.1}
-\mathcal L(L) = \sum\limits_{i=1}^n\log\left( \det(L_{Y_i})\right) - n \log\left( \det(L+I)\right)
+\mathcal L(L) = \sum\limits_{i=1}^n\log\left( \det(L_{Y_i})\right) - n \log\left( \det(L+I)\right).
 \end{equation}
-
 Although the parametric family of that arises from the elementary kernels \(L\) gives a high variety of different associated \(L\)-ensembles, it will also make the computation of the MLE more complex. Therefore we will consider some smaller classes of \(L\)-ensembles, which will decrease the flexibility of the model, but make computation more efficient.
 
 \subsubsection*{MLE of the qualities}
@@ -440,8 +439,6 @@ We have already seen that the probability that the MLE exists tends to one, so w
 \[\mathbb P(j\in\mathbf Y_i)\ge\mathbb P(\left\{ j\right\} = \mathbf Y_i) = q_j^2>0. \]
 \end{proof}
 
-
-
 \subsubsection*{MLE of the elementary kernel}
 
 We can quite easily adapt the proof for the existence of MLEs of the qualities to the case of MLEs for the whole elementary kernel \(L\).
@@ -458,6 +455,25 @@ Note that since \(\Psi\) is continuous and therefore bounded on bounded sets and
 \end{proof}
 
 \subsubsection*{The log linear model}
+
+We have seen that the log linear model can provide a parametrisation of the whole space \((0, \infty)^N\) of possible qualities. However it can also be very ristrictive, for example if all feature vectors are trivial, i.e. \(f_i = 0\) for all items \(i\). Hence we need a way to determine whether the transformation
+\[\mathbb R^M \to (0, \infty)^N\quad \theta\mapsto \big(\exp(\theta^Tf_1), \dots, \exp(\theta^Tf_N)\big)^T\]
+loses enough information for the MLE to exist.
+
+\todo{show that coercivity and identifiability is the same!}
+\begin{emp}[Coercivity of the log linear model]
+We call the log linear model \emph{coercive}, if whenever we have \(\left\lvert \theta_k \right\rvert\to\infty\) there is at least one index \(i\in\left\{ 1, \dots, n\right\}\) and one subsequence \((q_l)\) of \((q_k)\) such that
+%we have
+\[\exp(\theta_l^Tf_i) \to \infty \quad \text{or } \exp(\theta_l^Tf_i) \to 0 \quad \text{for } l\to\infty. \]
+%whenever \(\left\lvert \theta_ \right\rvert\)
+\end{emp}
+
+In the proof of following result we see how the coercivity is exactly the property that allows us to adapt the prove of existence of the MLE we have used before.
+
+\begin{prop}[Existence of MLE]
+Assume that \(\mathbf Y_1, \mathbf Y_2, \dots\) is a sequence of independent and identically distributed point processes that are distributed according to a \(L\)-ensemble with strictly positive qualities. Then we have
+\[\mathbb P\left(\hat \theta_n\in\mathbb R^M \text{ exists and }\right) \xlongrightarrow{n\to\infty} 1.\]
+\end{prop}¥
 
 \subsubsection*{MLE for the repulsiveness parameter}
 

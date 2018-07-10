@@ -487,7 +487,7 @@ which we had to show.
 The proof above should be read in the following way. The statement \(q^l_{j_0}\to\infty\) is equivalent to a model that would always select the item \(j_0\). However since we have observed the empty set, the observations would be impossible under this model and thus the log likelihood function takes the value \(-\infty\) for this model. An analogue argument shows that the estimated qualities are strictly positive with high probability if the actual qualities are strictly positive. This will be of interest for us if we consider the log linear model.
 \end{rem}
 
-\begin{prop}[Positivity of the MLE]
+\begin{prop}[Positivity of the MLE]\label{PosMLE}
 Assume that \(\mathbf Y_1, \mathbf Y_2, \dots\) is a sequence of independent and identically distributed point processes that are distributed according to a \(L\)-ensemble with strictly positive qualities. Then we have
 \[\mathbb P\left(\hat q_n\in\mathbb R_+^N \text{ exists and } \hat q_n\in (0, \infty)^N\right) \xlongrightarrow{n\to\infty} 1.\]
 \end{prop}
@@ -513,24 +513,32 @@ Note that since \(\Psi\) is continuous and therefore bounded on bounded sets and
 
 \subsubsection*{The log linear model}
 
-We have seen that the log linear model can provide a parametrisation of the whole space \((0, \infty)^N\) of possible qualities. However it can also be very ristrictive, for example if all feature vectors are trivial, i.e. \(f_i = 0\) for all items \(i\). Hence we need a way to determine whether the transformation
-\[\mathbb R^M \to (0, \infty)^N\quad \theta\mapsto \big(\exp(\theta^Tf_1), \dots, \exp(\theta^Tf_N)\big)^T\]
-loses enough information for the MLE to exist.
+We have seen that the log linear model can provide a parametrisation of the whole space \((0, \infty)^N\) of possible qualities. However it can also be very ristrictive, for example if all feature vectors are trivial, i.e. \(f_i = 0\) for all items \(i\). Hence we need to convince ourselves that we do not loose too much information through the transformation %a way to determine whether the transformation
+\[F\colon\mathbb R^M \to (0, \infty)^N, \quad \theta\mapsto \big(\exp(\theta^Tf_1), \dots, \exp(\theta^Tf_N)\big)^T.\]
+%loses enough information for the MLE to exist.
+In order to do this, let \(U\subseteq\mathbb R^M\) be the span of \(f_1, \dots, f_N\) and let write \(\theta = \theta_1 + \theta_2\) such that \(\theta_1\in U\) and \(\theta_2\in U^\perp\). We note that \(F(\theta) = F(\tilde\theta)\) if and only if \(\theta_1 = \tilde\theta_1\).
 
 \todo{show that coercivity and identifiability is the same!}
-\begin{emp}[Coercivity of the log linear model]
-We call the log linear model \emph{coercive}, if whenever we have \(\left\lvert \theta_k \right\rvert\to\infty\) there is at least one index \(i\in\left\{ 1, \dots, n\right\}\) and one subsequence \((q_l)\) of \((q_k)\) such that
+%\begin{emp}[Coercivity of the log linear model]
+%We call the log linear model \emph{coercive}, if whenever we have \(\left\lvert \theta_k \right\rvert\to\infty\) there is at least one index \(i\in\left\{ 1, \dots, n\right\}\) and one subsequence \((q_l)\) of \((q_k)\) such that
 %we have
-\[\exp(\theta_l^Tf_i) \to \infty \quad \text{or } \exp(\theta_l^Tf_i) \to 0 \quad \text{for } l\to\infty. \]
+%\[\exp(\theta_l^Tf_i) \to \infty \quad \text{or } \exp(\theta_l^Tf_i) \to 0 \quad \text{for } l\to\infty. \]
 %whenever \(\left\lvert \theta_ \right\rvert\)
-\end{emp}
+%\end{emp}
 
-In the proof of following result we see how the coercivity is exactly the property that allows us to adapt the prove of existence of the MLE we have used before.
+%In the proof of following result we see how the coercivity is exactly the property that allows us to adapt the prove of existence of the MLE we have used before.
 
 \begin{prop}[Existence of MLE]
 Assume that \(\mathbf Y_1, \mathbf Y_2, \dots\) is a sequence of independent and identically distributed point processes that are distributed according to a \(L\)-ensemble with strictly positive qualities. Then we have
-\[\mathbb P\left(\hat \theta_n\in\mathbb R^M \text{ exists and }\right) \xlongrightarrow{n\to\infty} 1.\]
-\end{prop}¥
+\[\mathbb P\left(\hat \theta_n\in\mathbb R^M \text{ exists}\right) \xlongrightarrow{n\to\infty} 1.\]
+\end{prop}
+\begin{proof}
+First we note, that it suffices to show that \(\mathcal L\) has a maximiser on \(U\), since \(F(U) = F(\mathbb R^M)\). To do this we show -- just like in the previous cases -- that the \(\mathcal L\) is coercive on \(U\) whenever we have observed the emptyset as well as every item at least once. Let now \((\theta^k)_{k\in\mathbb N}\subseteq U\) be a sequence such that \(\lvert \theta^k \rvert\to\infty\). Then there is at least one index \(i\in\left\{ 1, \dots, N\right\}\) and a subsequence \((\theta^l)_{l\in\mathbb N}\) such that 
+\[f_i^T\theta^l\to\infty\quad \text{or } f_i^T\theta^l\to-\infty \quad \text{for } l\to\infty\]
+since otherwise all sequences \(\big(f_i^T\theta^l\big)\)  therefore also \((\theta^l)\) would be bounded. However this is equivalent to
+\[\exp(f_i^T\theta^l)\to\infty\quad \text{or } \exp(f_i^T\theta^l)\to0 \quad \text{for } l\to\infty\]
+and we have seen in the proof of \ref{PosMLE} that the log likelihood function tends to \(-\infty\) in this case.
+\end{proof}
 
 \subsubsection*{MLE for the repulsiveness parameter}
 
@@ -545,6 +553,9 @@ Assume that \(\mathbf Y_1, \mathbf Y_2, \dots\) is a sequence of independent and
 % and we will work with its negative
 % \[\mathcal L(L) \coloneqq -\log\left(\prod_{i = 1}^n \mathbb P_L(Y_i)\right) = -\sum\limits_{i=1}^n\log\left( \det(L_{Y_i})\right) + n \log\left( \det(L+I)\right)\]
 % where high values of \(\mathcal L\) correspond to kernels \(L\) where at least one element \(Y_t\) of our training set is very unlikely. Thus it is natural to minimise the loss function \(\mathcal L\) over all positive semidefinit \(L\in\mathbb R^{N\times N}\). Note that we have \(\mathcal L(L) = \infty\) if and only if an observation \(Y_t\) of our training set is impossible under the DPP \(\mathbb P_L\), i.e. we do not consider those kernels in our estimation.
+
+\subsubsection*{Likelihood maximisation for \(L\)}
+
 We note that \(\mathcal L\) is smooth and that its gradient can be expressed explicitly, at least on the domain \(\left\{ \mathcal L>-\infty\right\}\). This is due to the fact that the determinants of the submatrices are polynomials in the entries of \(L\) and the composition of those with the smooth function \(\log\colon(0,\infty)\to\mathbb R\) stays smooth. This property allows the use of gradient methods but they face the problem that the loss function is non concave and thus those algorithms will generally not converge to a global maximiser. % (cf. \cite{affandi2014learning}).
 % \todo{Explain why it is non convex}{ } 
 To see that the log linear likelihood function is not concave, we may consider the span \(\left\{ q I\mid q\in\mathbb R\right\}\) of the identity matrix. On this subspace \(\mathcal L\) takes the form
@@ -561,19 +572,21 @@ This obviously causes substantial computational problems in the calculation of t
 %Let again \(\left\{ Y_t\right\}_{t=1,\dots, n}\) be a set of independent observations drawn according to a \(L\)-ensemble \(\mathbb P\). % where \(Y_t\subseteq\mathcal Y\) for every \(t=1, \dots, T\).
 
 
-\subsubsection*{Existence of MLE}
+%\subsubsection*{Existence of MLE}
 
 %\begin{emp}
 
 %\end{emp}
 
-\subsubsection*{Consistency of the MLE}
+%\subsubsection*{Consistency of the MLE}
 
-\todo{say something about bias and consistency}
+%\todo{say something about bias and consistency}
+
+\subsubsection*{Approximation of the MLE of the qualities}
 
 %\subsubsection{Properties of the loss function \(\mathcal L\) and derivation of the log linear model}
 
-\subsubsection*{The log linear model for the qualities}
+\subsubsection*{Computation for the log linear model}
 
 The first two terms are affine linear in \(\theta\) and thus concave. To see that the last expression is also concave, it is convenient to to introduce the notion of log concavity and give a fundamental result.%\todo{reformulate this!}
 
@@ -594,16 +607,16 @@ As an immediate consequence we obtain that the expression in \eqref{e3.3} is log
 Under the log linear model for the qualities, the log likelihood function is concave in the log linearity parameter \(\theta\in\mathbb R^M\). % In particular critical points are global maximisers and the 
 \end{cor}
 
-Before we discuss the actual process of maximisation of the log likelihood function we will be concered with the existence of maximisers and the consistency of the resulting estimators.
+% Before we discuss the actual process of maximisation of the log likelihood function we will be concered with the existence of maximisers and the consistency of the resulting estimators.
 
-\begin{emp}[Existence of maximisers]
+% \begin{emp}[Existence of maximisers]
 
 %It is in general not true that the maximum likelihood estimator \(\hat\theta_n\) exists for arbitrary observations \(\left\{ Y_i\right\}_{i=1, \dots, n}\). In fact, suppose we have fixed our similarity matrix \(\hat S\) to be the identity, maybe we expect the items to be uncorrelated and only want to estimate their qualities. Further we believe that all items are equally likely and thus we set \(f_i = 1\) for all \(i\in\mathcal Y\). Assume now that we have only one observation \(Y_1\) which is the whole set \(\mathcal Y\) itself. The higher the quality of the items, the more likely this observation would be and thus the likelihood function does not posses a maximiser since it assymptotically approaches \(1\) if \(\theta\) goes to infinity.
-\end{emp}
+% \end{emp}
 
-\subsubsection*{Comparison to learning the kernel \(L\)}
+% \subsubsection*{Comparison to learning the kernel \(L\)}
 
-\subsubsection*{Learning the quality of conditional DPPs}
+\subsection{Learning the quality of conditional DPPs}
 
 % \subsection{Learning kernels of conditional DPPs}
 
@@ -678,7 +691,7 @@ Before we discuss the actual process of maximisation of the log likelihood funct
 
 %Obviously the loss function is not coercive in general, since for \(f_i(X) = 0\) the probability \(\mathbb P_\theta(\left\{ i\right\}\mid X)\) is constant in \(\theta\). However it is not straight forward whether it becomes coercive under the assumption \(f_i(X)>0\) entrywise for every \(i\in\mathcal Y(X)\) and \(X\in\mathcal X\) and this could be investigated further.
 
-\subsection{Learning the repulsiveness}
+%\subsection{Learning the repulsiveness}
 
 \subsection{Estimating the mixture coefficients of \(k\)-DPPs}
 

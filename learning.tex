@@ -206,11 +206,16 @@ Let us assume that we have knowledge of the principle minors \(\Delta_S\) for ev
 Given the principle minors, we can determine the value on the right side and taking the sign on both sides yields
 \[ (-1)^{\left\lvert C_k \right\rvert + 1} \cdot \operatorname{sgn}(H_k) = \operatorname{sgn}(C_k) = \prod_{\left\{ i, j\right\}\in E(S_k)} w_{ij} \]
 which we seek to solve for \(w\). However this multiplicative equation is hard to solve and therefore we use the canonical group isomorphism \(\phi\) between \(\left\{ \pm 1\right\}\) and \(\left\{ 0, 1\right\}\) to turn it into a linear equation. Setting \(x_{ij}\coloneqq \phi(w_{ij})\) we get that the condition above is equivalent to
-\begin{equation}\label{linEqu}
+\begin{equation*}
 b_k\coloneqq \phi( \operatorname{sgn}(H_k)) + \lvert \hat S_k \rvert + 1 = \sum_{\left\{ i, j\right\}\in E(S_k)} x_{ij} = (Ax)_k \quad \text{in } \mathbb F_2
+\end{equation*}
+where \(A\) is the matrix with the rows \(x(C_k)^T\). Now we can fix any such solution \(x %= \phi(w)
+\in\mathbb F_2^{E}\) of
+\begin{equation}\label{linEqu}
+Ax = b
 \end{equation}
-where \(A\) is the matrix with the rows \(x(C_k)^T\). Now we can fix any such solution \(x = \phi(w)\in\mathbb F_2^{E}\) and we know that at least one exists, namely the one given by \(x_{ij} = \phi(\operatorname{sgn}(K_{ij}))\). %In the light of \eqref{e3.0} i
-It is straight forward that \(\tilde K\) defined through
+and we know that at least one exists, namely the one given by \(x_{ij} = \phi(\operatorname{sgn}(K_{ij}))\). %In the light of \eqref{e3.0} i
+Let now \(w_{ij}\coloneqq x_{ij}\), then it is straight forward to see that \(\tilde K\) defined through
 \[\tilde K_{ii} \coloneq\Delta_{\left\{ i\right\}} \quad\text{and } \tilde K_{ij} = w_{ij} \cdot \sqrt{\tilde K_{ii}\tilde K_{jj} - \Delta_{\left\{ i, j\right\}}} \]
 is determinantally equivalent to \(K\).
 %More precisely we seek to find weight \(w_{ij}\) such that \eqref{pmcl} holds. This is the case if and only if
@@ -244,14 +249,20 @@ Note that such an \(\alpha\) can always be found, however it is not a priori kno
 %\[\alpha\coloneqq\min\left\{ \left\lvert K_{ij} \right\rvert\mid K_{ij}\ne0\right\}>0. \]
 %Note that this quantity is not a priori known.
 
-\begin{emp}[Definition of the estimator]
+\begin{emp}[Definition of the estimator]\label{DefEst}
 The straight forward estimators of the principal minors are
 \[\hat\Delta_S \coloneqq \hat{\mathbb P}_n(S\subseteq\mathbf Y) \quad \text{for }S\subseteq\left\{ 1, \dots, N\right\}. \]
 The resulting estimates for the diagnoal elements and the squares of the off diagonals are
 \[\hat K_{ii} \coloneqq \hat\Delta_{\left\{ i\right\}} \quad \text{and } \hat B_{ij}\coloneqq \hat K_{ii}\hat K_{jj} - \hat\Delta_{\left\{ i, j\right\}}.\]
 
-Next we will introduce an estimate \(\hat G\) for the adjacency graph and will then try to choose the signs of the estimated matrix \(\hat K\) such that the its principal minors are the estimates for the principal minors. For this define the edge set \(\hat E\) of \(\hat G\) to consist of all sets \(\left\{ i, j\right\}\) such that \(\hat B_{ij}\ge\frac12\alpha^2\). This truncation yields the desired effect that by the strong law of large numbers the estimator for the graph will converge to the actual adjacency graph almost surely. If the procedure described in \ref{cec} works, namely if \eqref{linEqu} posseses a solution, then we will define our estimator \(\hat K\) this way. If this is not the case we simply set the signs of the off diagonal elements to be positive, i.e. we define
-\[\hat K_{ij}\coloneqq \sqrt{\hat B_{ij}}. \]
+Next we will introduce an estimate \(\hat G\) for the adjacency graph and will then try to choose the signs of the estimated matrix \(\hat K\) such that the its principal minors are the estimates for the principal minors. For this define the edge set \(\hat E\) of \(\hat G\) to consist of all sets \(\left\{ i, j\right\}\) such that \(\hat B_{ij}\ge\frac12\alpha^2\). This truncation yields the desired effect that by the strong law of large numbers the estimator for the graph will converge to the actual adjacency graph almost surely. In analogy to the previous paragraph we define \(\{ \hat C_1, \dots, \hat C_{\hat m}\}, \hat H_1, \dots, \hat H_{\hat m}, \hat A\) and \(\hat b\) exactly the same way. If there is a solution \(\hat x\in\mathbb F_2^{E}\) to the linear equation
+\begin{equation}\label{LinEqu2}
+\hat A\hat x = \hat b,
+\end{equation}
+then we estimate the signs to be \(\hat w_{ij}\coloneqq \phi^{-1}(\hat x_{ij})\) and define \[\hat K_{ij} \coloneqq \hat w_{ij} \sqrt{\hat B_{ij}}.\]
+
+%If the procedure described in \ref{cec} works, namely if \eqref{linEqu} posseses a solution, then we will define our estimator \(\hat K\) this way.
+If there is no such solution \(\hat x\) then we simply set the signs of the off diagonal elements to be positive, i.e. we define \[\hat K_{ij}\coloneqq \sqrt{\hat B_{ij}}.\] This choice is completely arbitrary, but we will see in the consistency result \ref{MomCon} that the probability for this case tends to zero as the sample size increases. In fact we will see that the two linear equations \eqref{linEqu} and \ref{LinEqu2} agree with increasing probability.
 \end{emp}
 
 %This means that every edge \(\left\{ i, j\right\}\in E\) will be contained in each estimator for large sample size and 
@@ -276,15 +287,61 @@ We define the distance between two marginal kernels \(A, B\in\mathbb R^{N\times 
 where \(\left\lVert A \right\rVert_\infty\coloneqq \max_{1\le i, j\le N} \left\lvert A_{ij} \right\rvert\) denotes the uniform norm on the space of matrices.
 \end{emp}
 
-\begin{theo}[Consistency]
-Let \(K\) be the marginal kernel of a DPP that satisfy the assumption \ref{ass}. Let further \(l\) be the cycle sparsity of \(G_K\) and \(\varepsilon>0\). Then for any \(A>0\) there is a constant \(c>0\) such that for every
-\[n\ge c\cdot\left( \frac{\varepsilon^2}{\alpha^2} + l\cdot\left( \frac{4}{\alpha}\right)^{2l}\right) \cdot \log(N)\]
-we have \(d(\hat K, K)\le\varepsilon\) with probability at least \(1 - N^{-A}\).
+\begin{theo}[Consistency]\label{MomCon}
+Let \(K\) be the marginal kernel of a DPP that satisfy the assumption \ref{ass}. Let further \(l\) be the cycle sparsity of \(G_K\) and \(\varepsilon>0\). 
+%Then for any \(A>0\) there is a constant \(c>0\) such that for every
+%\[n\ge c\cdot\left( \frac{\varepsilon^2}{\alpha^2} + l\cdot\left( \frac{4}{\alpha}\right)^{2l}\right) \cdot \log(N)\]
+%we have \(d(\hat K, K)\le\varepsilon\) with probability at least \(1 - N^{-A}\).
+\[\mathbb P\left(d(\hat K, K)\ge\varepsilon\right) \to 0\quad\text{for } n\to\infty. \]
 \end{theo}
 \begin{proof}
-We refer to \cite{urschel2017learning}.
+We will keep the notations from the paragraphs \ref{cec} and \ref{DefEst}.
+%We will prove that the probability that \ref{linEqu} and \eqref{LinEqu2} agree tends to one. 
+%We refer to \cite{urschel2017learning}.
+We have already seen in the motivation of this section that the empirical measures converge almost surely which directly implies
+\begin{equation}\label{asc}
+%\hat\Delta_S\to\Delta_S 
+\hat K_{ii}\to K_{ii}\quad\text{and } \hat K_{ij}^2 \to K_{ij}^2 \quad \text{almost surely}.
+\end{equation}
+Note that almost surely convergence implies convergence in probability and thus we have
+\[\mathbb P(\hat G = G_K) = \mathbb P\left(\hat K_{ij}^2 \ge \alpha^2/2 \text{ for } K_{ij}\ne0\right) \to 1 \quad\text{for } n\to\infty.\]
+In this case the two shortest cycle basis can be chosen the same and so \(\hat A\) and \(A\) agree. %Hence we have
+%\begin{equation*}%\label{ConProb1}
+%\mathbb P(\hat A = A)\to 1 \quad\text{for } n\to\infty.
+%\end{equation*}
+Because of \eqref{asc} we also have \(\hat H_k\to H_k\) almost surely and thus \(\hat b_k\to b_k\) almost surely for all \(k\). This yields
+\begin{equation}\label{ConProb1}
+\mathbb P\left(\hat A = A \text{ and } \hat b = b\right)\to 1 \quad\text{for } n\to\infty.
+\end{equation}
+In this case the two linear quations \eqref{linEqu} and \eqref{LinEqu2} agree, then \(\tilde K\in\mathbb R^{N\times N}\) defined through \(\tilde K_{ij}\coloneqq \hat w_{ij}\left\lvert K_{ij} \right\rvert\) is determinantally equivalent to \(K\). Further we know that for any \(\delta>0\)
+\begin{equation}\label{ConProb2}
+\mathbb P\left(\left\lvert \hat K_{ij}^2 - K_{ij}^2 \right\rvert < \delta \text{ for all } i, j \right)\to1 \quad \text{for } n\to\infty.
+\end{equation}
+If this is true, then we have
+\[d(\hat K, K) \le \lVert \hat K - \tilde K \rVert_{\infty} = \sup_{i, j} \left\lvert \lvert \hat K_{ij} \rvert- \lvert \tilde K_{ij} \rvert \right\rvert \]
+where we used, that the entries of \(\hat K\) and \(\tilde K\) have equal signs. Further we have %\(\lvert \hat K_{ii} - \tilde K_{ii} \rvert < \delta\) as well as
+\[\left\lvert \lvert \hat K_{ij} \rvert- \lvert \tilde K_{ij} \rvert \right\rvert = \frac{\big\lvert \hat K_{ij}^2 - \tilde K_{ij}^2 \big\rvert}{\lvert \hat K_{ij} \rvert + \lvert \tilde K_{ij} \rvert} < \frac{\delta}{\alpha}\le\varepsilon \]
+if \(\delta \le \alpha\varepsilon\). In conclusion we have seen that if
+\[\hat A = A, \quad \hat b = b \quad\text{and } \left\lvert \hat K_{ij}^2 - K_{ij}^2 \right\rvert < \delta \quad \text{for all } i, j\]
+then we have
+\[d(\hat K, K) < \varepsilon.\]
+However \eqref{ConProb1} and \eqref{ConProb2} shows that the probability for this tends to one.
+%Let now \(\left\{ C_1, \dots, C_m\right\}\) be a maximal shortest cycle basis of \(G_k\) with corresponding vertex sets \(S_1, \dots, S_m\). Let further 
+%\[H_k\coloneqq2\cdot\!\!\!\!\!\!\prod_{\left\{ i, j\right\}\in E(S_k)}\!\!\!\!\!\! K_{ij} \quad \text{and } \hat H_k\coloneqq2\cdot\!\!\!\!\!\!\prod_{\left\{ i, j\right\}\in E(S_k)}\!\!\!\!\!\! \hat K_{ij}.\]
+%\(H_k\) be like in \ref{cec} and \(H_{}
+%Now \eqref{asc} implies
+%\[\hat H_k\to H_k \quad \text{almost surely}.\]
+%In particual those convergences hold in probability and therefore we have
+%\[\mathbb P\left( \left\lvert \hat H_k- H_k \right\rvert\le\delta \text{ or } \left\lvert \hat K_{ii} - K_{ii} \right\rvert \le \delta \text{ or } \left\lvert \hat K_{ij}^2 - K_{ij}^2 \right\rvert \le \delta \text{ for all } k, i, j \right)\to0 \quad \text{for } n\to\infty.\]
+%Hence it suffices to show that
+%\[\left\lvert \hat H_k - H_k \right\rvert < \delta, \left\lvert \hat K_{ii} - K_{ii} \right\rvert < \delta \quad \text{and } \left\lvert \hat K_{ij}^2 - K_{ij}^2 \right\rvert < \delta \]
+%for all according \(k, i, j\) implies \(d(\hat K, K)<\varepsilon\) where \(\delta\) is still to be determined. 
 \end{proof}
-\todo{how hard it is to prove}
+
+\begin{rem}[Speed of convergence]
+Although the result above states that the estimators \(\hat K\) converges to \(K\) in probability, it does give no information about the speed of convergence. This problem is addressed in \cite{urschel2017learning}, but it turns out that the convergence is very slow. For example for the very moderate case \(\alpha = 0.4\) and \(l=3\) one already needs more than \(10^6\) samples to get some theoretical guarantees from their result. This is not due to careless estimates since they even show that this bound is optimal\todo{is this true?}. However since this result is beyond practical relevance, we will keep away from those calculations.
+\end{rem}
+%\todo{how hard it is to prove}
 \todo{is this estimator unbiased?}
 
 \section{Maximum likelihood estimation using optimisation techniques}

@@ -108,7 +108,7 @@ indicates whether the edge \(e\in E\) belongs to the cycle \(C\). The \emph{cycl
 %\item \emph{Cycle basis:} A basis of the cycle space is called \emph{cycle basis} if it consists of simple cycles.
 \item \emph{Chordless cycle:} A cycle \(C\) is called \emph{chordless} if two verteces \(v, w\in C\) form an edge in \(G\) if and only they form an edge in \(C\). This is equivalent to the statement that \(C\) is an induced subgraph that is a cycle.
 \item \emph{Cycle sparsity:} The cycle sparsity is the minimal number \(l\) such that a basis of the cycle space consisting of chordless cycles exists. Such a basis is called \emph{shortest maximal cycle basis} or short \emph{SMCB}. If the cycle space is trivial we define the cycle sparsity to be \(2\).
-\item \emph{Pairings:} Let \(S\subseteq V\) be a set of of vertices. Then a \emph{pairing} \(P\) of is a subset of edges of \(G(S)\) such that two different edges of \(P\) are disjoint. The vertices contained in the edges of \(P\) are denoted by \(V(P)\) and the set of all pairings by \(\mathcal P(S)\).
+\item \emph{Pairings:} Let \(S\subseteq V\) be a set of of vertices. Then a \emph{pairing} \(P\) of \(S\) is a subset of edges of \(G(S)\) such that two different edges of \(P\) are disjoint. The vertices contained in the edges of \(P\) are denoted by \(V(P)\) and the set of all pairings by \(\mathcal P(S)\).
 \end{enumerate}
 \end{emp}\todo{add pictures and explanations?}
 
@@ -120,16 +120,76 @@ There always exists a basis \(\left\{ x(C_1), \dots, x(C_k)\right\}\) of the cyc
 \begin{proof}
 First we prove that the set of simple cycles generates the whole cycle space which we can then improve to show that the simple chordless cycles already generate the cycle space. A shortest maximal cycle basis is then attained by successively dropping simple chordless cycles.
 
-We show that every cycle \(x(C)\) can be written as the sum of simple cycles \(x(C_1), \dots, x(C_k)\) where \(C_i\subseteq C\). This is equivalent to the statement that the edges of every cycle are the disjoint union of the edges of simple cycles. Take now a maximal non intersecting path \(v_0v_1\cdots v_k\). Since \(v_k\) has degree at least \(2\), there is an edge \(\left\{ v_k, v_{k+1}\right\}\) such that \(v_{k+1}\ne v_{k-1}\). Since the path is maximal, \(v_{k+1}\) has to agree with one a vertex \(v_i\in\left\{ v_0, \dots, v_{k-2}\right\}\), because otherwise we could add \(v_{k+1}\) to the path which is a contradiction to the maximality. Now \(v_iv_{i+1}\cdots v_kv_i\) corresponds to a simple cycle \(C_1\) and \(C_2\coloneqq C\setminus C_1\) is again a cycle. Thus we can write \(C\) as the disjoint union \(C = C_1\cup C_2\) where \(C_1\) is a simple cycle. By repeating this procedure we get the desired expression for \(C\) in terms of simple cycles.
+We show that every cycle \(x(C)\) can be written as the sum of simple cycles \(x(C_1), \dots, x(C_k)\) where \(C_i\subseteq C\). This is equivalent to the statement that the edges of every cycle are the disjoint union of the edges of simple cycles. Take now a maximal non intersecting path \(v_0v_1\cdots v_k\).
+\begin{figure}[h!]\label{makesimple}
+	\centering
+\begin{tikzpicture}%[shorten >=1pt,->]
 
-To prove that already the simple chordless cycles generate the cycle space we have to prove that we can write every simple cycle \(x(C)\) as a sum of simple chordless cycles \(x(C_1), \dots, x(C_k)\). Let \(\left\{ \left\{ v_0, v_1\right\}, \dots, \left\{ v_k, v_0\right\}\right\}\) be the edge set of \(C\) and assume that \(C\) is not chordless, otherwise the statement would be trivial. Thus there is are indices \(1\le i<j-1\le k-1\) such that \(\left\{ v_i, v_j\right\}\in E\). Let now \(C_1\) and \(C_2\) be the two cycles associated with the paths
+  \tikzstyle{vertex}=[draw,circle,minimum size=17pt,inner sep=0pt]
+
+  \foreach \name/\angle/\text in {A-1/234/1, A-2/162/2, 
+                                  A-3/90/3, A-4/18/4, A-5/-54/5}
+    \node[vertex,xshift=5cm,yshift=.5cm] (\name) at (\angle:1.3cm) {\(\text\)};
+    
+  \foreach \name/\angle/\text in {B-1/234/1, B-2/162/2, 
+                                  B-3/90/3, B-4/18/4, B-5/-54/5}
+    \node[vertex,xshift=9cm,yshift=.5cm] (\name) at (\angle:1.3cm) {\(\text\)};
+
+  \foreach \from/\to in {1/2,2/3,3/4,4/5,5/1,1/3,5/2}
+    \draw (A-\from) -- (A-\to);
+
+\foreach \from/\to in {1/2,2/5,5/4,4/3}
+\draw (B-\from) -- (B-\to);
+\foreach \from/\to in {1/3,2/3,1/5}
+\draw[dashed] (B-\from) -- (B-\to);
+\end{tikzpicture}
+\caption{Illustration of the search for a simple cycle in a graph with degrees greater than two. Once a maximal non intersecting path like \(12543\) is selected, every continuation of the path -- in this case 2 or 1 -- is already present in the path and therefore induces a simple cycle.}
+\end{figure}
+Since \(v_k\) has degree at least \(2\), there is an edge \(\left\{ v_k, v_{k+1}\right\}\) such that \(v_{k+1}\ne v_{k-1}\). Since the path is maximal, \(v_{k+1}\) has to agree with one a vertex \(v_i\in\left\{ v_0, \dots, v_{k-2}\right\}\), because otherwise we could add \(v_{k+1}\) to the path which is a contradiction to the maximality. Now \(v_iv_{i+1}\cdots v_kv_i\) corresponds to a simple cycle \(C_1\) and \(C_2\coloneqq C\setminus C_1\) is again a cycle. Thus we can write \(C\) as the disjoint union \(C = C_1\cup C_2\) where \(C_1\) is a simple cycle. By repeating this procedure we get the desired expression for \(C\) in terms of simple cycles.
+
+To prove that already the simple chordless cycles generate the cycle space we have to prove that we can write every simple cycle \(x(C)\) as a sum of simple chordless cycles \(x(C_1), \dots, x(C_k)\). Let \(\left\{ \left\{ v_0, v_1\right\}, \dots, \left\{ v_k, v_0\right\}\right\}\) be the edge set of \(C\) and assume that \(C\) is not chordless like in Figure \ref{makechordless}, otherwise the statement would be trivial.
+\begin{figure}[h!]\label{makechordless}
+	\centering
+\begin{tikzpicture}%[shorten >=1pt,->]
+
+  \tikzstyle{vertex}=[draw,circle,minimum size=17pt,inner sep=0pt]
+
+  \foreach \name/\angle/\text in {A-1/234/1, A-2/162/2, 
+                                  A-3/90/3, A-4/18/4, A-5/-54/5}
+    \node[vertex,xshift=5cm,yshift=.5cm] (\name) at (\angle:1.3cm) {\(\text\)};
+    
+  \foreach \name/\angle/\text in {B-1/234/1, B-2/162/2, 
+                                  B-3/90/3, B-4/18/4, B-5/-54/5}
+    \node[vertex,xshift=9cm,yshift=.5cm] (\name) at (\angle:1.3cm) {\(\text\)};
+
+  \foreach \name/\angle/\text in {C-1/234/1, C-2/162/2, 
+                                  C-3/90/3, C-4/18/4, C-5/-54/5}
+    \node[vertex,xshift=13cm,yshift=.5cm] (\name) at (\angle:1.3cm) {\(\text\)};
+
+  \foreach \from/\to in {1/2,2/3,3/4,4/5,5/1}
+    \draw (A-\from) -- (A-\to);
+\draw[dashed] (A-1) -- (A-3);
+
+\foreach \from/\to in {1/2,2/3,3/1}
+\draw (B-\from) -- (B-\to);
+\foreach \from/\to in {3/4,4/5,5/1}
+\draw[dashed] (B-\from) -- (B-\to);
+
+\foreach \from/\to in {1/2,2/3}
+\draw[dashed] (C-\from) -- (C-\to);
+\foreach \from/\to in {1/3,3/4,4/5,5/1}
+\draw (C-\from) -- (C-\to);
+\end{tikzpicture}
+\caption{The simple cycle \(123451\) on the left is not chordless but the symmetric difference of the two simple chordless cycles \(1231\) and \(13451\) on the right.}
+\end{figure}
+ Thus there is are indices \(1\le i<j-1\le k-1\) such that \(\left\{ v_i, v_j\right\}\in E\). Let now \(C_1\) and \(C_2\) be the two cycles associated with the paths
 \[v_0v_1 \cdots v_iv_jv_{j+1}\cdots v_kv_0\quad \text{and } v_iv_{i+1}\cdots v_{j-1}v_jv_i.\]
 Then we have \(x(C) = x(C_1) + x(C_2)\). By iterating this procedure as long as the cycles are not chordless the desired decomposition can be achieved in finitely many steps.
 
 %Since we have defined the cycle space as the span of all vectors \(x(C)\) where \(C\) is a cycle, it suffices to show that every cycle \(C\) admits a decomposition
 %\[x(C) = x(C_1)+\dots+x(C_m)\]
 %where \(C_1, \dots, C_m\) are chordless cycles. If \(C\) is already chordless, then we are done, so we can assume that the vertices of \(C\) are \(\left\{ v_1, \dots, v_M\right\}\) with\todo{finish this proof!}
-\end{proof}
+\end{proof}\todo{cite the theorem with its actual name}
 
 \begin{defi}[Determinantal equivalence]
 Two symmetric matrices \(A, B\in\mathbb R^{N\times N}\) are called \emph{determinantally equivalent} if the have the same principal minors and we write \(A\sim B\).
@@ -160,6 +220,37 @@ Let \(C = (S, E(S))\) be a simple and chordless cycle. Then the principal minor 
 Let \(k\coloneqq \left\lvert S \right\rvert\). Then by Leibniz formula we have
 \[\Delta_S = \sum_{\sigma\in S_k} \operatorname{sgn}(\sigma) \prod_{i\in S} K_{i\sigma(i)} \]
 where \(S_k\) is the set of permutations of \(S\). Note that since the cycle is chordless, the product is only non trivial if \(\left\{ i, \sigma(i)\right\}\in E(S)\) for all \(i\in S\). Since \(C\) is a simple cycle, those permutations consist exactly of the pairing of \(S\) or the two shifts of the set \(S\) along the cycle in both directions. Those correspond exactly to the summands in \eqref{pmcl}.
+
+To see this, we fix a permutation \(\sigma\) such that \(\left\{ i, \sigma(i)\right\}\) always forms an edge in \((S, E(S))\). We note that every vertex \(i\in S\) has two possible images which are exactly the endpoint of its two edges, c.f. Figure \ref{pm}.
+\begin{figure}[h!]\label{pm}
+	\centering
+\begin{tikzpicture}
+  \tikzstyle{vertex}=[draw,circle,minimum size=17pt,inner sep=0pt]
+
+  \foreach \name/\angle/\text in {A-1/234/1, A-2/162/2, 
+                                  A-3/90/3, A-4/18/4, A-5/-54/5}
+    \node[vertex,xshift=5cm,yshift=.5cm] (\name) at (\angle:1.3cm) {\(\text\)};
+    
+ \foreach \name/\angle/\text in {B-1/234/1, B-2/162/2, 
+                                  B-3/90/3, B-4/18/4, B-5/-54/5}
+    \node[vertex,xshift=9cm,yshift=.5cm] (\name) at (\angle:1.3cm) {\(\text\)};
+
+  \foreach \from/\to in {1/2,2/3,3/4,4/5,5/1}
+    \draw (A-\from) -- (A-\to);
+\draw[->] (A-5) to [out=50,in=-86] (A-4);
+\draw[->] (A-4) to [out=-130,in=94] (A-5);
+\draw[->] (A-3) to [out=194,in=58] (A-2);
+\draw[->] (A-2) to [out=14,in=238] (A-3);
+
+  \foreach \from/\to in {1/2,2/3,3/4,4/5,5/1}
+    \draw (B-\from) -- (B-\to);
+\foreach \to/\from in {1/2,2/3,3/4,4/5,5/1}
+\draw[->] (B-\from) to [out={50 - \from * 72},in={- 86 - \from * 72}] (B-\to);
+\end{tikzpicture}
+\caption{An easy example for the two kinds of permutations of a chordless simple cycle that maps vertices to neighbors.}
+\end{figure}
+Lets assume it is mapped to \(j\in S\), then \(j\) has again two possible images under \(\sigma\) namely \(i\) and a second vertex \(k\in\mathcal Y\). If \(j\mapsto i\), no other vertex can be mapped to \(i\) or \(j\), however some other items can be swapped in the same way. The permutations of this form correspond exactly to the pairings of \(S\) and are represented in the first sum in \eqref{pmcl}. If however \(j\) is not mapped back to \(i\) but rather to its other neighbor \(k\), then \(k\) can’t get mapped back to \(j\) since \(\sigma\) is injective. Thus it has to be mapped to its other neighbor \(l\in\mathcal Y\). Through a repetition of this argument shows that this induces until \(i\) is reached again. Since the cycle is simple this path exhausts the entire cycle. The factor \(2\) is due to the fact that this shift of the indices can be done into either direction.
+%A repetition of this argument shows that this chain of mappings has to continue until \(i\) is reached again. Since the cycle is chordless 
 \end{proof}
 
 \begin{prop}[Sign determines principals minors]
@@ -341,6 +432,7 @@ However \eqref{ConProb1} and \eqref{ConProb2} shows that the probability for thi
 \begin{rem}[Speed of convergence]
 Although the result above states that the estimators \(\hat K\) converges to \(K\) in probability, it does give no information about the speed of convergence. This problem is addressed in \cite{urschel2017learning}, but it turns out that the convergence is very slow. For example for the very moderate case \(\alpha = 0.4\) and \(l=3\) one already needs more than \(10^6\) samples to get some theoretical guarantees from their result. This is not due to careless estimates since they even show that this bound is optimal\todo{is this true?}. However since this result is beyond practical relevance, we will keep away from those calculations.
 \end{rem}
+\todo{explain how the algorithm for the reconstruction works}
 %\todo{how hard it is to prove}
 \todo{is this estimator unbiased?}
 
@@ -358,6 +450,10 @@ where \(f(x, \theta)\) is the density with respect to \(\mu\) of the \(X_i\). In
 the \emph{maximum likelihood estimater} or short MLE.
 
 % \todo{general blabla about MLE}
+
+\todo{Reminder on optimisation}
+
+
 
 \subsection{Presentation of different models}
 
@@ -582,7 +678,7 @@ This obviously causes substantial computational problems in the calculation of t
 
 %\todo{say something about bias and consistency}
 
-\subsubsection*{Approximation of the MLE of the qualities}
+%\subsubsection*{Approximation of the MLE of the qualities}
 
 %\subsubsection{Properties of the loss function \(\mathcal L\) and derivation of the log linear model}
 
@@ -616,7 +712,7 @@ Under the log linear model for the qualities, the log likelihood function is con
 
 % \subsubsection*{Comparison to learning the kernel \(L\)}
 
-\subsection{Learning the quality of conditional DPPs}
+\subsection{Learning for conditional DPPs}
 
 % \subsection{Learning kernels of conditional DPPs}
 
@@ -706,5 +802,7 @@ Under the log linear model for the qualities, the log likelihood function is con
 \subsection{Slice sampling}
 
 \section{The variational approach}
+
+\section{Towards deep DPPs}
 
 %\section{A Bayesian approach to the kernel estimation}

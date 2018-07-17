@@ -51,7 +51,7 @@ And even stronger by the strong law of large numbers they converge to \(\mathbb 
 \[\left\{ \mu\in\mathbb R^{2^{\mathcal Y}} \;\Big\lvert\; \mu_A\in[0, 1] \text{ for all } A\subseteq\mathcal Y \text{ and } \sum_{A\subseteq\mathcal Y}\mu_A = 1 \right\}\]
 and using the strong law of large numbers in \(\mathbb R^{2^{\mathcal Y}}\).
 
-Therefore the empirical measures are reasonable approximations of the actual probability distribution. Assume now for one moment that the empirical measures \(\hat{\mathbb P}_n\) are also determinantal point processes with marginal kernel \(\hat K_n\), then \(\hat K_n\) would be a quite intuitive estimate for the actual marginal kernel \(K\). Thus we are interested in the question whether we can reconstruct the kernel marginal of a DPP if we know the DPP itself. Since the marginal density of a DPP corresponds to the principal minors of the marginal kernel, we first investigate whether we can reconstruct a matrix from its principle minors. For the answer to this problem we follow the main ideas presented in \cite{urschel2017learning} and \cite{rising2015efficient} although we modify their arguments to make them shorter and hopefully more accessible. \todo{say something about stability?}
+Therefore the empirical measures are reasonable approximations of the actual probability distribution. Assume now for one moment that the empirical measures \(\hat{\mathbb P}_n\) are also determinantal point processes with marginal kernel \(\hat K_n\), then \(\hat K_n\) would be a quite intuitive estimate for the actual marginal kernel \(K\). Thus we are interested in the question whether we can reconstruct the kernel marginal of a DPP if we know the DPP itself. Since the marginal density of a DPP corresponds to the principal minors of the marginal kernel, we first investigate whether we can reconstruct a matrix from its principle minors. For the answer to this problem we follow the main ideas presented in \cite{urschel2017learning} and \cite{rising2015efficient} although we modify their arguments to make them shorter and hopefully more accessible.% \todo{say something about stability?}
 
 
 %Therefore we can consistently %\todo{explain consistency}{ } 
@@ -69,7 +69,7 @@ Therefore the empirical measures are reasonable approximations of the actual pro
 % Thus the question naturally arrises whether we can reconstruct the kernel \(K\) from the knowledge of all of its principal minors, which we will address in the following.
 
 %\subsubsection*{The principal minor assignment problem}\todo{phrase it very clearly}
-\todo{define principle minors?}
+%\todo{define principle minors?}
 \begin{emp}[The principal minor assignment problem]
 Let \(K\in\mathbb R^{N\times N}\) be a symmetric matrix. We want to investigate whether \(K\) uniquely specified by its principle minors
 \[\Delta_S \coloneqq \det(K_S) \quad \text{where } S\subseteq\left\{ 1, \dots, N\right\}.\]
@@ -87,12 +87,15 @@ Therefore we only need to reconstruct the signs off diagonal entries. To do this
 \end{equation}
 Rearranging this yields
 \[K_{12}K_{13}K_{23} = \frac12\left( \det(K) + K_{11}K_{23}^2 + K_{22}K_{13}^2 + K_{33}K_{12}^2 - K_{11}K_{22}K_{33}\right).\]
-Since we know all of the expressions on the right side, we can determine the sign of the product on the left side. Now we assign the the signs of the off diagonal elements in such a way, that the above equation holds. More precisely if the the product is negative, we assign a minus to one or all three elements, if it is positive, then we assign a minus to none or two elements. If the product is zero, every configuration of signs satisfy the desired property. It is now straight forward to check that this assignment actually leads to the desired principle minors.
+Since we know all of the expressions on the right side, we can determine the sign of the product on the left side. Now we assign the signs of the off diagonal elements in such a way, that the above equation holds. More precisely if the product is negative, we assign a minus to one or all three elements, if it is positive, then we assign a minus to none or two elements. If the product is zero, every configuration of signs satisfy the desired property. It is now straight forward to check that this assignment actually leads to the desired principle minors.
 % \todo{explain this.}
+
+One main part in the general procedure will be to obtain a generalisation of the formula \eqref{thrtimthr} for larger principle minors that will allow the reconstruction of the signs. For this we will need the following graph theoretical concepts.
+%In order to generalise the procedure above to larger matrices we will need some elementary concepts from graph theory.
 
 
 \begin{emp}[Notions from graph theory]
-In order to generalise the procedure above to larger matrices we will need some elementary concepts from graph theory. For this let \(G = (V, E)\) be a finite graph, i.e. \(V\) is a finite set, called the \emph{vertex set} and \(E\) consists of subsets of \(V\) with two elements, the \emph{edges}. Sometimes we will be sloppy in notation and not distinguish between the graph and the edge set. We will need the following notions:
+Let \(G = (V, E)\) be a finite graph, i.e. \(V\) is a finite set, called the \emph{vertex set} and \(E\) consists of subsets of \(V\) with two elements, the \emph{edges}. Sometimes we will be sloppy in notation and not distinguish between the graph and the edge set. We will need the following notions:
 \begin{enumerate}
 \item \emph{Degree:} For a vertex \(v\in V\) the \emph{degree} is the number of edges that contains \(v\). 
 \item \emph{Subgraph:} A graph \(\tilde G = (\tilde V, \tilde E)\) is called a \emph{subgraph} of \(G\) if \(\tilde V\subseteq V\) and \(\tilde E\subseteq E\).
@@ -107,15 +110,16 @@ indicates whether the edge \(e\in E\) belongs to the cycle \(C\). The \emph{cycl
 %\item \emph{Simple cycle:} A cycle is called \emph{simple} if every vertex of \(C\) has even degree in \(C\).
 %\item \emph{Cycle basis:} A basis of the cycle space is called \emph{cycle basis} if it consists of simple cycles.
 \item \emph{Chordless cycle:} A cycle \(C\) is called \emph{chordless} if two verteces \(v, w\in C\) form an edge in \(G\) if and only they form an edge in \(C\). This is equivalent to the statement that \(C\) is an induced subgraph that is a cycle.
-\item \emph{Cycle sparsity:} The cycle sparsity is the minimal number \(l\) such that a basis of the cycle space consisting of chordless cycles exists. Such a basis is called \emph{shortest maximal cycle basis} or short \emph{SMCB}. If the cycle space is trivial we define the cycle sparsity to be \(2\).
+\item \emph{Cycle sparsity:} The cycle sparsity is the minimal number \(l\) such that a basis of the cycle space consisting of chordless simple cycles exists. Such a basis is called \emph{shortest maximal cycle basis} or short \emph{SMCB}. If the cycle space is trivial we define the cycle sparsity to be \(2\).
 \item \emph{Pairings:} Let \(S\subseteq V\) be a set of of vertices. Then a \emph{pairing} \(P\) of \(S\) is a subset of edges of \(G(S)\) such that two different edges of \(P\) are disjoint. The vertices contained in the edges of \(P\) are denoted by \(V(P)\) and the set of all pairings by \(\mathcal P(S)\).
 \end{enumerate}
 \end{emp}\todo{add pictures and explanations?}
 
-In order to see that the above definition of the cycle sparsity is well defined, we have need to show that shortest maximal cycle basis exist. This might be well known to people that are familiar with graph theory, but we will present an elementary proof here. It shall be noted, that the proof -- and also the definitions above -- becomes quite a lot more intuitive by drawing the according cycles in order to understand how the respective decompositions of cycles work.
+It is highly recommended to draw some examples in order to get more familiar with the definitions above. To see that the above definition of the cycle sparsity is well defined, we have need to show that shortest maximal cycle basis exist. This might be well known to people that are familiar with graph theory, but we will present an elementary proof here. The first part of the statement, namely the existence of cycle basis consisting of simple cycles is known as Veblen’s theorem and can be found in its original form in \cite{10.2307/1967604}, however we will rather follow the approach in \cite{bondy2011graph}.
+%It shall be noted, that the proof -- and also the definitions above -- becomes quite a lot more intuitive by drawing the according cycles in order to understand how the respective decompositions of cycles work.
 
 \begin{prop}[Existence of SMCBs]
-There always exists a basis \(\left\{ x(C_1), \dots, x(C_k)\right\}\) of the cycle space where \(C_1, \dots, C_k\) are chordless cycles.
+There always exists a basis \(\left\{ x(C_1), \dots, x(C_k)\right\}\) of the cycle space where \(C_1, \dots, C_k\) are chordless simple cycles.
 \end{prop}
 \begin{proof}
 First we prove that the set of simple cycles generates the whole cycle space which we can then improve to show that the simple chordless cycles already generate the cycle space. A shortest maximal cycle basis is then attained by successively dropping simple chordless cycles.
@@ -189,7 +193,7 @@ Then we have \(x(C) = x(C_1) + x(C_2)\). By iterating this procedure as long as 
 %Since we have defined the cycle space as the span of all vectors \(x(C)\) where \(C\) is a cycle, it suffices to show that every cycle \(C\) admits a decomposition
 %\[x(C) = x(C_1)+\dots+x(C_m)\]
 %where \(C_1, \dots, C_m\) are chordless cycles. If \(C\) is already chordless, then we are done, so we can assume that the vertices of \(C\) are \(\left\{ v_1, \dots, v_M\right\}\) with\todo{finish this proof!}
-\end{proof}\todo{cite the theorem with its actual name}
+\end{proof}%\todo{cite the theorem with its actual name}
 
 \begin{defi}[Determinantal equivalence]
 Two symmetric matrices \(A, B\in\mathbb R^{N\times N}\) are called \emph{determinantally equivalent} if the have the same principal minors and we write \(A\sim B\).
@@ -447,12 +451,27 @@ where \(f(x, \theta)\) is the density with respect to \(\mu\) of the \(X_i\). In
 \[\mathcal L(\theta) = \log\!\big(f(x_1, \dots, x_n, \theta)\big) = \sum_{i=1}^n \log\!\big(f(x_i, \theta)\big) \]
  since this transforms the product over functions into a sum. However this is clearly equivalent to maximising the density since the logarithm is strictly monotone. We call the function \(\mathcal L\) the \emph{log likelihood function} and we denote its domain which is just the set of all parameters we wish to consider by \(\Theta\). Further we call its maximiser
  \[\hat \theta_n\coloneqq \underset{\theta\in\Theta}{\arg\max} \mathcal L(\theta) \]
-the \emph{maximum likelihood estimater} or short MLE.
+the \emph{maximum likelihood estimator} or short MLE.
 
 % \todo{general blabla about MLE}
 
-\todo{Reminder on optimisation}
-
+\subsubsection*{Very short reminder on optimisation}
+%\todo{include possible direct solution}
+Since the calculation of the MLE is a maximisation task, it is suitable to review some general properties of optimisation problems. It shall be noted that optimisation problems are usually stated as minimisation tasks, but we will stick to the maximisation, which is clearly equivalent up to a sign. For this let \(U\subseteq\mathbb R^M\) and \(f\colon U\to \mathbb R\) be a function. In practice the maximisation
+\[\hat x\coloneqq \underset{x\in U}{\arg\max} f(x) \]
+will not be explicitly solvable and therefore one usually has to exploit numerical algorithms. 
+ %we assume that the function \(f\) we want to maximise is defined on a subset \(U\) of \(\mathbb R^M\). Usually it will not be possible to solve th.
+ 
+Those work particularly well if the function \(f\) is concave and possibly smooth and one powerful method is the given by the so called gradient descent.
+%, for example in this case critical points and minimisers agree %and the minimum is always attained if \(U\) is closed and \(\mathcal L(\theta)\to \infty\) for \(\left\lvert \theta \right\rvert\to\infty\), i.e. if \(\mathcal L\) is \emph{coercive}. In fact 
+ %In this case every critical point is a local minimum and every local minimum is a global minimum which is central to the so called gradient methods that offer rich and powerful algorithms for the minimisation of convex functions.
+To quickly explain the philosophy of those methods, we note that \(\nabla f\) points into the direction of the steepest ascent of the function \(f\) and thus an intuitive approach the maximise \(f\) would be to follow the gradient, i.e. to take a solution \(\gamma\) of the gradient flow \(\gamma^\prime = \nabla f(\gamma)\) and work out its limit. However if the function is not concave one can not even guarantee that the gradient flow reaches a local minimum, since one can construct examples where \(\gamma\) gets stuck in a critical point. However in the concave case this suffices since critical points and global minima agree for convex functions. The gradient descent is an algorithm derived from this observation and is essentially a discretisations of the gradient flow meaning that it iteratively takes small steps into the direction of the gradient and thus lowers the value of the function. Some more sophisticated versions of gradient descent methods usually even consider higher order derivatives and use the information they provide over the geometry of the graph. Generally speaking those algorithms work extremely well even in high dimensions and thus their efficiency and stability have been studied broadly and we refer to the extensive monograph \cite{boyd2004convex}. 
+%It should be mentioned that those methods are not constrained to the concave case, but they will obviously only be able to compute local minimisers.Of course this is a major disadvantage but in the rapidly evolving area of deep learning, where the problem is similar to ours in the sense, that one wants to minimise a loss function that describes the predictive power of a model, this has widely been accepted as good enough. However it remains to be investigated whether this approach could also be taken in the area of DPPs. %  \todo{comment on DPPs}
+All together we note that concavity is an extremely favourable property for a function that shall be maximised, which will be the log likelihood function later on.
+ 
+A second property which is important in the existence theory of maximisers is \emph{coercivity} in the sense that
+\[f(x)\to-\infty \quad \text{for } \left\lvert x \right\rvert\to\infty.\]
+In fact every (upper semi-) continuous and coercive function defined on a closed set \(U\subseteq\mathbb R^M\) attains its minimum. To see this one can fix \(x_0\in U\) and use the coercivity to obtain \(f<f(x_0)\) outside of a compact set \(K\) and thus the supremum of \(f\) agrees with the supremum of \(f\) over \(K\cap U\) which is compact again and thus it is attained.
 
 
 \subsection{Presentation of different models}

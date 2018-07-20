@@ -30,7 +30,7 @@ It shall be noted that although those properties are beneficial, they are not cr
 
 %In practice this will be a rather large amount of parameters and therefore it will only be possible
 
-\section{Reconstruction of the marginal kernel using principal minors} %  via the Assymptotic reconstruction of the kernel}
+\section{Kernel reconstruction of the empirical measures} %  via the Assymptotic reconstruction of the kernel}
 
 %In this section we want to see how we can estimate the marginal kernel from an increasing number of observations \(\mathbf Y_1, \dots, \mathbf Y_n\subseteq \mathcal Y\) that are distributed according to \(\mathbb P\). For this we will sketch the procedure in \cite{urschel2017learning}. 
 Now we will display the first way how one can estimate the marginal kernel \(K\) of a DPP based on some samples drawn from it.
@@ -450,7 +450,9 @@ For example we might consider a sequence random variables \(X_1, \dots, X_n\) wi
 where \(f(x, \theta)\) is the density with respect to \(\mu\) of the \(X_i\). In practice it is often easier to maximise the logarithm of the density
 \[\mathcal L(\theta) = \log\!\big(f(x_1, \dots, x_n, \theta)\big) = \sum_{i=1}^n \log\!\big(f(x_i, \theta)\big) \]
  since this transforms the product over functions into a sum. However this is clearly equivalent to maximising the density since the logarithm is strictly monotone. We call the function \(\mathcal L\) the \emph{log likelihood function} and we denote its domain which is just the set of all parameters we wish to consider by \(\Theta\). Further we call its maximiser
- \[\hat \theta_n\coloneqq \underset{\theta\in\Theta}{\arg\max} \mathcal L(\theta) \]
+ \begin{equation}\label{mledef}
+ \hat \theta_n\coloneqq \underset{\theta\in\Theta}{\arg\max} \mathcal L(\theta) 
+ \end{equation}
 the \emph{maximum likelihood estimator} or short MLE.
 
 % \todo{general blabla about MLE}
@@ -658,6 +660,54 @@ and we have seen in the proof of \ref{PosMLE} that the log likelihood function t
 \subsubsection*{MLE for the repulsiveness parameter}
 
 \subsection{Consistency of the MLE}
+
+\begin{enumerate}
+\item Heuristical argument for consistency
+\item (log) likelihood function as a random function that converges towards the entropy/Fisher information uniformly (?) in probability; probably locally uniformly in probability should be enough
+\item general consistency result for extremal estimators under coercive functions
+\item modify the result to the case that the probability for the functions to be coercive converges towards 1; this should then give the consistency of the MLE for the kernel and the quality and also the log linearity constant or more precisely its projection onto the span of the diversity feature vectors
+\end{enumerate}
+
+We will now turns towards the question of consistency of the maximum likelihood estimators introduced earlier in this section. For this we will first give a formal proof of the consistency of the MLE and present a rather general framework that will allow us to turn the formal proof into a rigorous one.
+
+\begin{emp}[Formal proof of consistency]
+We will consider a general MLE like in \eqref{mledef} and we will assume that the observations \((X_n)\) are independent and have density \(f(x, \theta_0)\) with respect to some measure \(\mu\). By the law of large number we have
+\[\frac1n \mathcal L(\theta) = \frac1n\sum_{i=1}^n\log(f(X_i, \theta)) \xlongrightarrow{n\to\infty} \mathbb E\big[\log(f(X, \theta))\big]. \]
+Hence the maximiser of the left hand side should be close to the maximiser of the right hand. % side which
+Differentiating the left hand side yields
+\begin{equation*}
+\begin{split}
+\partial_\theta \mathbb E\big[\log(f(X, \theta))\big] & = \mathbb E\left[\partial_\theta \log(f(X, \theta))\right] = \mathbb E\left[\frac{\partial_\theta f(X, \theta)}{f(X, \theta)}\right] \\
+& = \int \frac{\partial_\theta f(x, \theta)}{f(x, \theta)} f(x, \theta_0) \mu(\mathrm{d} x).
+\end{split}
+\end{equation*}
+Evaluating this at \(\theta = \theta_0\) yields
+\begin{equation*}
+\int \partial_\theta f(x, \theta) \mu(\mathrm{d}x) = \partial_\theta \int f(x, \theta) \mu(\mathrm{d}x) = \partial_\theta(1) = 0.
+\end{equation*}
+Hence \(\theta_0\) is a critical point and under mild conditions the left hand side is concave and thus \(\theta_0\) is the unique maximiser. In conclusion the estimator \(\hat \theta\) should be close to \(\theta_0\).
+\end{emp}
+
+Although rough structure of the rigorous proof is present in the argument above it is highly formal. For example we argue that if a sequence \((f_n)_{n\in\mathbb N}\) of functions converges towards \(f\) pointwise, then the maximisers \((x_n)_{n\in\mathbb N}\) should converge to the maximiser \(x\) of \(f\).
+% the formal proof above sketches the major 
+
+\subsubsection*{A general consistency result for extremal estimators}
+
+\begin{emp}[Setting]
+
+\end{emp}
+
+\begin{theo}[Consistency]
+
+\end{theo}
+
+\begin{lem}[Information inequality]
+
+\end{lem}
+
+\subsubsection*{Consistency of MLE under asymptotic coercivity}
+
+
 
 \subsection{Approximation of the MLE}
 

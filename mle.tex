@@ -48,7 +48,7 @@ A second property which is important in the existence theory of maximisers is \e
 In fact every (upper semi-) continuous and coercive function defined on a closed set \(U\subseteq\mathbb R^M\) attains its minimum. To see this one can fix \(x_0\in U\) and use the coercivity to obtain \(f<f(x_0)\) outside of a compact set \(K\) and thus the supremum of \(f\) agrees with the supremum of \(f\) over \(K\cap U\) which is compact again and thus it is attained.
 
 
-\subsection{Presentation of different models}
+\subsection{Presentation of different models}\label{models}
 
 Assume again that we have a set of observations \((\mathbf Y_n)_{n\in\mathbb N}\subseteq\mathcal Y\) drawn independently and according to the DPP. This time we want to find the maximum likelihood estimator for the elementary kernel and in order to do this we need to be able to express the density of the DPP which is nothing but the values of the elementary probabilities. Thus we will assume that we are dealing with \(L\)-ensembles in this section. Since the observations \((\mathbf Y_n)\) are defined on some common probability space which we will denote by \((\Omega, \mathbb P)\) we will change the notation in this section and write
 \[%f(A, L) \quad \text{or } 
@@ -119,7 +119,7 @@ Unfortunately we can tell from \eqref{loglikqua} that the log likelihood still i
 %{\scshape\bfseries .}
 \begin{emp}[Log linear model for the qualities and MLE]
 From now on we will fix vectors \(f_i\in\mathbb R^M\) for \(i\in\mathcal Y\) and call them \emph{feature vectors}. Further we set
-\[q_i = \exp\left(\frac12 \theta^T f_i\right)\quad \text{for } \theta\in\mathbb R^M\]
+\[q_i = \exp\left(\theta^T f_i\right)\quad \text{for } \theta\in\mathbb R^M\]
 and will only consider quality vectors \(q\in\mathbb R_+^N\) that have this form. To formulate the maximum likelihood estimator for \(\theta\) we set \(\Theta \coloneqq\mathbb R^M\) and consider the parametric family
 \[\mathcal F = \left\{ f(\cdot, \theta) \;\big\lvert\; \theta\in\mathbb R^M\right\}\]
 where \(f(\cdot, \theta)\) is the density of the DPP with similarity kernel \(\hat S\) and qualities \(q_i = \exp\left(\frac12 \theta^T f_i\right)\). Further we will consider the maximum likelihood estimator
@@ -133,7 +133,7 @@ It shall be noted that although this log linear model seems to be a harsh restri
 
 Under the assumption of a log linear model for the qualities the individual terms of the log likelihood function take the form
 \begin{equation}\label{e3.31}
-\theta^T\sum\limits_{i\in Y}f_{i} + \det(\hat{S}_{Y}) - \log\left( \sum_{A\subseteq\mathcal Y} \exp\left( \theta^T\sum_{i\in A}f_{i}\right)\det(\hat{S}_A) \right).
+2\cdot\theta^T\sum\limits_{i\in Y}f_{i} + \det(\hat{S}_{Y}) - \log\left( \sum_{A\subseteq\mathcal Y} \exp\left(2\cdot \theta^T\sum_{i\in A}f_{i}\right)\det(\hat{S}_A) \right).
 \end{equation}
 
 \subsubsection*{MLE of the repulsiveness parameter}
@@ -144,10 +144,10 @@ A priori it is not clear that the maximum likelihood estimators exist and we wil
 
 \subsubsection*{MLE of the qualities}
 
-To see that the MLE \(\hat q_n\) does not exist in general, we suppose that we have only one sample \(Y_1 = \mathcal Y\) which is the whole set. The higher the qualities of the items are, the more likely this observation gets and therefore the maximum of the log likelihood function -- which is \(0\) in this case -- is not obtained. This can also be made rigorous in the following computation. Under the assumption of constant qualities the log likelihood function takes the form
+The MLE \(\hat q_n\) does not exist for all realisations \((Y_n)_{n\in\mathbb N}\) of \((\mathbf Y_n)_{n\in\mathbb N}\). To see this we suppose that we have only one sample \(Y_1 = \mathcal Y\) which is the whole set. The higher the qualities of the items are, the more likely this observation gets and therefore the maximum of the log likelihood function -- which is \(0\) in this case -- is not obtained. This can also be made rigorous in the following computation. Under the assumption of constant qualities the log likelihood function takes the form
 \begin{equation*}
 \begin{split}
-\log(q^{2N} \det(\hat S_{\mathcal Y})) - \log\left(\sum_{A\subseteq \mathcal Y}q^{2\left\lvert A \right\rvert}\det(\hat S_A) \right) = \log\left( \frac{q^{2N} \det(\hat S_{\mathcal Y})}{\sum_{A\subseteq \mathcal Y}q^{2\left\lvert A \right\rvert}\det(\hat S_A)}\right) \xlongrightarrow{q\to\infty} 0.
+\log\left(q^{2N} \det(\hat S_{\mathcal Y})\right) - \log\left(\sum_{A\subseteq \mathcal Y}q^{2\left\lvert A \right\rvert}\det(\hat S_A) \right) = \log\left( \frac{q^{2N} \det(\hat S_{\mathcal Y})}{\sum_{A\subseteq \mathcal Y}q^{2\left\lvert A \right\rvert}\det(\hat S_A)}\right) \xlongrightarrow{q\to\infty} 0.
 \end{split}
 \end{equation*}
 However this maximum is never attained, since for every \(L\)-ensemble we have \(\mathbb P_L(\varnothing) > 0\) and therefore
@@ -156,25 +156,26 @@ However this maximum is never attained, since for every \(L\)-ensemble we have \
 The thing that goes wrong in this case is, that under the observation of the whole set \(\mathcal Y\) we would estimate a deterministic model that always selects the whole set, namely the DPP with marginal kernel \(I\). Since all of the eigenvalues are \(1\) in this case, this DPP is not a \(L\) ensemble and therefore we can not describe it with the quality diversity decomposition.
 However if we assume that the data is actually generated by a \(L\)-ensemble, then such a scenario becomes unlikely as the sample size increases. We will fix this in the following result.
 
-\begin{prop}[Existence of the MLE]
+\begin{prop}[Coercivity and existence of the MLE]
 Let \(\mathbf Y_1, \mathbf Y_2, \dots\) be a sequence of independent and identically distributed point processes that fall in the class of \(L\)-ensembles. Then we have
-\[\mathbb P\left(\hat q_n\in\mathbb R_+^N \text{ exists}\right) \xlongrightarrow{n\to\infty} 1.\]
+\[\mathbb P\left(\hat q_n\in\mathbb R_+^N \text{ exists}\right) \ge \mathbb P\big(\mathcal L \text{ is coercive}\big) \xlongrightarrow{n\to\infty} 1.\]
 \end{prop}
 \begin{proof}
-We will show that the MLE exists if one of the observations is the emptyset. Then the claim follows from
+The first inequality is obvious since the log likelihood function is continuous.\todo{add remark}{ } We will show that \(\mathcal L\) is coercive if one of the observations is the emptyset. Then the claim follows from
 \begin{equation*}
 \begin{split}
-\mathbb P\left(\hat q_n\in\mathbb R_+^N \text{ exists}\right) & \ge \mathbb P\left(\bigcup_{i=1}^n \left\{ \mathbf Y_i = \varnothing\right\}\right) = 1 - \mathbb P\left(\bigcap_{i=1}^n \left\{ \mathbf Y_i \ne\varnothing\right\}\right) \\ 
+\mathbb P\big(\mathcal L \text{ is coercive}\big) & \ge \mathbb P\left(\bigcup_{i=1}^n \left\{ \mathbf Y_i = \varnothing\right\}\right) = 1 - \mathbb P\left(\bigcap_{i=1}^n \left\{ \mathbf Y_i \ne\varnothing\right\}\right) \\ 
 & = 1 - \mathbb P(\mathbf Y_1 \ne\varnothing)^n \xlongrightarrow{n\to\infty} 1
 \end{split}•
 \end{equation*}
 since we have \(\mathbb P(\mathbf Y_1 \ne\varnothing) < 1\) for every \(L\)-ensemble.
 
-To prove that the log likelihood function possesses a maximum we will prove that it is coercive in some way, i.e. that we have
-\begin{equation*}\label{coe}
-\mathcal L(q)\to -\infty\quad\text{for } \left\lvert q \right\rvert\to\infty.
-\end{equation*}
-Elementary considerations then yield the existence of a maximiser. So let \(Y_1, \dots, Y_n\) be some observations with \(Y_i=\varnothing\) for at least one \(i\in\left\{ 1, \dots, n\right\}\). Let \((q^k)_{k\in\mathbb N}\subseteq\mathbb R_+^N\) be a  sequence such that \(\lvert q^k \rvert\to \infty\). Note that it suffices to show that ever subsequence of \((q^k)\) contains a subsubsequence \((q^l)\) such that 
+%To prove that the log likelihood function possesses a maximum we will prove that it is coercive in some way, i.e. that we have
+%\begin{equation*}\label{coe}
+%\mathcal L(q)\to -\infty\quad\text{for } \left\lvert q \right\rvert\to\infty.
+%\end{equation*}
+%Elementary considerations then yield the existence of a maximiser. 
+So let \(Y_1, \dots, Y_n\) be some observations with \(Y_i=\varnothing\) for at least one \(i\in\left\{ 1, \dots, n\right\}\) and let \((q^k)_{k\in\mathbb N}\subseteq\mathbb R_+^N\) be a  sequence such that \(\lvert q^k \rvert\to \infty\). Note that it suffices to show that every subsequence of \((q^k)\) contains a subsubsequence \((q^l)\) such that 
 \[\mathcal L(q^l)\to-\infty\quad\text{for } l\to\infty.\]
 Hence we fix a subsequence of \((q^k)\) which we denote by \((q^k)\) again in slightly abusive notation. Let \((q^l)\) be a subsequence of \((q^k)\) such that one coordinate diverges to infinity, i.e.
 \[q_{j_0}^l\xlongrightarrow{l\to\infty} \infty\quad\text{for one } j_0\in\left\{ 1, \dots, N\right\}.\]
@@ -205,10 +206,10 @@ We can quite easily adapt the proof for the existence of MLEs of the qualities t
 
 \begin{prop}[Existence of MLE for the kernel]
 Let \(\mathbf Y_1, \mathbf Y_2, \dots\) be an sequence of independent and identically distributed point processes that fall in the class of \(L\)-ensembles. Then we have
-\[\mathbb P\left(\hat L_n\in\mathbb R^{N\times N}_{\text{sym}, +} \text{ exists}\right) \xlongrightarrow{n\to\infty} 1.\]
+\[\mathbb P\left(\hat L_n\in\mathbb R^{N\times N}_{\text{sym}, +} \text{ exists}\right) \ge \mathbb P\big(\mathcal L \text{ is coercive}\big) \xlongrightarrow{n\to\infty} 1.\]
 \end{prop}
 \begin{proof}
-To recycle the proof above we note that it suffices to show \(\mathcal L(L)\to -\infty\) for \(\left\lvert L \right\rvert\to\infty\) once we have observed the empty set once. To see this, we use the quality diversity parametrisation
+Again it suffices to show \(\mathcal L(L)\to -\infty\) for \(\left\lvert L \right\rvert\to\infty\) once we have observed the empty set once. To see this, we use the quality diversity parametrisation
 \[\Psi\colon\mathbb R_+^N\times\mathbb S_N^N\to\mathbb R^{N\times N}_{\text{sym}, +}, \quad (q, \phi)\mapsto \left( q_i\phi_i^T\phi_j q_j\right)_{1\le i, j\le N}.\]
 Note that since \(\Psi\) is continuous and therefore bounded on bounded sets and \(\mathbb S_N^N\) is bounded, \(\left\lvert \Psi(q, \phi) \right\rvert\to\infty\) implies \(\left\lvert q \right\rvert\to\infty\). The exact same calculations as in the previous proof show
 \[\mathcal L(L) = \mathcal L(\Psi(q, \phi))\to-\infty\quad \text{for }\left\lvert L \right\rvert\to\infty.\]
@@ -233,7 +234,7 @@ In order to do this, let \(U\subseteq\mathbb R^M\) be the span of \(f_1, \dots, 
 
 \begin{prop}[Existence of MLE]
 Assume that \(\mathbf Y_1, \mathbf Y_2, \dots\) is a sequence of independent and identically distributed point processes that are distributed according to a \(L\)-ensemble with strictly positive qualities. Then we have
-\[\mathbb P\left(\hat \theta_n\in\mathbb R^M \text{ exists}\right) \xlongrightarrow{n\to\infty} 1.\]
+\[\mathbb P\left(\hat \theta_n\in\mathbb R^M \text{ exists}\right) \ge \mathbb P\Big(\mathcal L \text{ is coercive as a function on } U \Big) \xlongrightarrow{n\to\infty} 1.\]
 \end{prop}
 \begin{proof}
 First we note, that it suffices to show that \(\mathcal L\) has a maximiser on \(U\), since \(F(U) = F(\mathbb R^M)\). To do this we show -- just like in the previous cases -- that the \(\mathcal L\) is coercive on \(U\) whenever we have observed the emptyset as well as every item at least once. Let now \((\theta^k)_{k\in\mathbb N}\subseteq U\) be a sequence such that \(\lvert \theta^k \rvert\to\infty\). Then there is at least one index \(i\in\left\{ 1, \dots, N\right\}\) and a subsequence \((\theta^l)_{l\in\mathbb N}\) such that 
@@ -293,33 +294,33 @@ We will prove a general consistency result for extremal estimators and first pre
 
 \begin{emp}[Setting]
 Let in the following \(\Theta\) be a topological Hausdorff space and 
-\(L_n \colon \Theta\to [-\infty, \infty)\)
+\(F_n \colon \Theta\to [-\infty, \infty)\)
 be a sequence of random functions with %that attain 
 maximisers
-\[\hat{\theta}_n \coloneqq \underset{\theta\in\Theta}{\arg\max} L_n(\theta).\]
-If no maximiser exists, we choose \(\hat{\theta}_n\in\Theta\) arbitrary. Further let \(L\colon \Theta\to [-\infty, \infty)\) be a deterministic function with maximiser \(\theta_0\).
+\[\hat{\theta}_n \coloneqq \underset{\theta\in\Theta}{\arg\max} F_n(\theta).\]
+If no maximiser exists, we choose \(\hat{\theta}_n\in\Theta\) arbitrary. Further let \(F\colon \Theta\to [-\infty, \infty)\) be a deterministic function with maximiser \(\theta_0\).
 \end{emp}
 
-The maximisers \(\hat{\theta}_n\) are called \emph{extremal} estimators since they are the extremal points of the functions \(L_n\). We now turn towards the question whether the extremal estimators converge to the maximiser \(\theta_0\).
+The maximisers \(\hat{\theta}_n\) are called \emph{extremal} estimators since they are the extremal points of the functions \(F_n\). We now turn towards the question whether the extremal estimators converge to the maximiser \(\theta_0\).
 
-\begin{theo}[Consistency of extremal estimators]
+\begin{theo}[Consistency of extremal estimators]\label{conext}
 Let the setting be as above and assume that the following conditions hold.
 \begin{enumerate}
 %\item Let \(L_n(\theta_0)\to L(\theta)\) in probability, i.e.
 %\[\mathbb P\left( \left\lvert L_n(\theta_0) - L(\theta_0) \right\rvert\le\varepsilon\right) \xlongrightarrow{n\to\infty} 1 \quad\text{for all } \varepsilon>0. \]
-\item Let \(L_n\) converge to \(L\) locally uniformly in probability, i.e. for any compact set \(K\subseteq\Theta\) and any \(\varepsilon>0\) we have with probability tending to one
+\item Let \(F_n\) converge to \(F\) locally uniformly in probability, i.e. for any compact set \(K\subseteq\Theta\) and any \(\varepsilon>0\) we have with probability tending to one
 \begin{equation}\label{con1}%\mathbb P\Big( 
-\big\lvert L_n(\theta) - L(\theta) \big\rvert \le \varepsilon \quad\text{for all }\theta\in K %\Big) \xlongrightarrow{n\to\infty} 1 \quad\text{for all } \varepsilon>0
+\big\lvert F_n(\theta) - F(\theta) \big\rvert \le \varepsilon \quad\text{for all }\theta\in K %\Big) \xlongrightarrow{n\to\infty} 1 \quad\text{for all } \varepsilon>0
 .\end{equation}
 %\item Let further 
 %\[\mathbb P\Big( L_n(\theta) \le L(\theta) + \varepsilon \text{ for all }\theta\in\Theta \Big) \xlongrightarrow{n\to\infty} 1 \quad\text{for all } \varepsilon>0. \]
 \item Assume that there is \(\varepsilon_0>0\) and a compact set \(K_0\), such that with probability tending to one
 \begin{equation}\label{con2}
 %\mathbb P\Big( 
-L_n(\theta) \le L(\theta_0) - \varepsilon_0 \quad \text{for all } \theta\notin K_0 %\Big) \xlongrightarrow{n\to\infty} 1
+F_n(\theta) \le F(\theta_0) - \varepsilon_0 \quad \text{for all } \theta\notin K_0 %\Big) \xlongrightarrow{n\to\infty} 1
 .\end{equation}
-\item Let \(L\) have a unique maximum at \(\theta_0\in\Theta\).
-\item Assume that \(L\) is %coercive and
+\item Let \(F\) have a unique maximum at \(\theta_0\in\Theta\).
+\item Assume that \(F\) is %coercive and
  upper semicontinuous in the sense that
 \[\left\{ \theta\in\Theta \mid L(\theta)\ge\alpha\right\}\subseteq\Theta\]
 is closed for all \(\alpha\in\mathbb R\).
@@ -333,19 +334,19 @@ Fix an open set \(U\subseteq\Theta\) that contains \(\theta_0\). First we note t
 %\[K\cap \Big\{ \theta\in\Theta\mid L(\theta) > L(\theta_0) - \delta \Big\}%L^{-1}((L(\theta_0) - \delta, L(\theta_0)])
 % \subseteq U\]
 %for some \(\delta>0\). This is due to the fact that
- \(L\) attains its maximum\footnote{Any upper semicontinuous function on a topological Hausdorff space attains its maximum over a compact set.}\todo{cite}{ } \(\alpha\) on \(K_0\setminus U\) which is strictly smaller than \(L(\theta_0)\). Thus we have %only have to show that the probability for \(\theta\in K\) and \(L(\hat{\theta})>\alpha\) tends to one since %. % \(\theta\in U\) and we will use this criterion to show the consistency.
- \[K_0\cap \Big\{ \theta\in\Theta\mid L(\theta) > \alpha \Big\} \subseteq U. \]
+ \(F\) attains its maximum\footnote{Any upper semicontinuous function on a topological Hausdorff space attains its maximum over a compact set.}\todo{cite}{ } \(\alpha\) on \(K_0\setminus U\) which is strictly smaller than \(F(\theta_0)\). Thus we have %only have to show that the probability for \(\theta\in K\) and \(L(\hat{\theta})>\alpha\) tends to one since %. % \(\theta\in U\) and we will use this criterion to show the consistency.
+ \[K_0\cap \Big\{ \theta\in\Theta\mid F(\theta) > \alpha \Big\} \subseteq U. \]
  
-The probability for \eqref{con1} and \eqref{con2} tends to one so it suffices to show that they imply \(\hat{\theta}_n\in K_0\) as well as \(L(\hat{\theta}_n)>\alpha\). So lets assume \eqref{con1} with \(K=K_0\) and \eqref{con2} hold, then for \(\varepsilon<\varepsilon_0\) we obtain %we have %with probability tending to one
+The probability for \eqref{con1} and \eqref{con2} tends to one so it suffices to show that they imply \(\hat{\theta}_n\in K_0\) as well as \(F(\hat{\theta}_n)>\alpha\). So lets assume \eqref{con1} with \(K=K_0\) and \eqref{con2} hold, then for \(\varepsilon<\varepsilon_0\) we obtain %we have %with probability tending to one
 %\[\sup_{\theta\in K} \big\lvert L_n(\theta) - L(\theta) \big\rvert \le \varepsilon \]
 %and hence %with probability tending to one
 \[%\big\lvert L_n(\theta_0) - L(\theta_0) \big\rvert \le \varepsilon \quad \text{and hence } 
-L_n(\theta) \le L(\theta_0) - \varepsilon_0 < L_n(\theta_0) \quad \text{for } \theta\notin K_0 \]
+F_n(\theta) \le F(\theta_0) - \varepsilon_0 < F_n(\theta_0) \quad \text{for } \theta\notin K_0 \]
 %where we used (\emph{i}) and (\emph{ii}). 
-This implies that the maximum of \(L_n\) is attained in \(K_0\) and thus we have \(\hat{\theta}_n\in K_0\) and further
+This implies that the maximum of \(F_n\) is attained in \(K_0\) and thus we have \(\hat{\theta}_n\in K_0\) and further
 %\[\sup_{\theta\in K} \big\lvert L_n(\theta) - L(\theta) \big\rvert \le \varepsilon \]
 % with probability tending to one. In this case we have
-\[L(\hat{\theta}_n) \ge L_n(\hat{\theta}_n) - \varepsilon \ge L_n(\theta_0) - \varepsilon \ge L(\theta_0) - 2\varepsilon > \alpha\]
+\[F(\hat{\theta}_n) \ge F_n(\hat{\theta}_n) - \varepsilon \ge F_n(\theta_0) - \varepsilon \ge F(\theta_0) - 2\varepsilon > \alpha\]
 for \(\varepsilon\) small enough.
 \end{proof}
 
@@ -353,14 +354,14 @@ for \(\varepsilon\) small enough.
 %\[\mathbb P\Big( \left\lVert L_n - L \right\rVert_\infty\le\varepsilon\Big) \xlongrightarrow{n\to\infty} 1 \quad\text{for all } \varepsilon>0. \]
 
 If we want to apply the previous result to the case of maximum likelihood estimation we need to set
-\[L_n(\theta) \coloneqq \frac1n\sum_{i=1}^n\log(f(X_i, \theta)).\]
+\[F_n(\theta) \coloneqq \frac1n\sum_{i=1}^n\log(f(X_i, \theta)).\]
 Note that the factor \(\frac1n\) does not change the maximum. However \eqref{entropy} already gives the almost surely pointwise limit of those functions and if condition (\emph{i}) of the previous statement should hold, we have to define
 %Hence under the light of \ref{entropy} it is reasonable to consider
 \[%L_n(\theta) \coloneqq \frac1n\sum_{i=1}^n\log(f(X_i, \theta)) \quad \text{and } 
-L(\theta) \coloneqq \mathbb E\big[\log(f(X, \theta))\big]. \]
+F(\theta) \coloneqq \mathbb E\big[\log(f(X, \theta))\big]. \]
 %in the case of maximum likelihood estimation.
  % where \(()\)
-The quantity \(L\) is known as the \emph{relative entropy} or \emph{Kullback–Leibler divergence} and plays an important role in mathematical and applied statistics, information theory and many other fields. For more information on this we refer to\todo{find reference}.
+The quantity \(F\) is known as the \emph{relative entropy} or \emph{Kullback–Leibler divergence} and plays an important role in mathematical and applied statistics, information theory and many other fields. For more information on this we refer to\todo{find reference}.
 
 
 \subsubsection*{The information inequality and locally uniform convergence}
@@ -369,35 +370,87 @@ The third requirement of the previous consistency result can be proven in a gene
 
 \begin{emp}[Setting]
 Let in the following \(\Theta\) be a set and let 
-\[\Big\{ f(\cdot, \theta)\colon X\to[0, \infty) \mid\theta \in\Theta\Big\}\]
-be a family of probability densities on some measurable space \(X\) with respect to some measure \(\mu\). Further fix \(\theta_0\in\Theta\) and let \(\mathbb P\) denote the probability measure with \(\mu\) density \(f(\cdot, \theta_0)\) and denote the expectation with respect to \(\mathbb P\) by \(\mathbb E[\cdot]\).
+\[\mathcal F = \Big\{ f(\cdot, \theta)\colon X\to[0, \infty) \mid\theta \in\Theta\Big\}\]
+be a family of probability densities on some measurable space \(X\) with respect to some measure \(\mu\). Further fix \(\theta_0\in\Theta\) and %let \(\mathbb P\) denote the probability measure with \(\mu\) density \(f(\cdot, \theta_0)\) and denote the expectation with respect to \(\mathbb P\) 
+denote the expectation with respect to \(f(\cdot, \theta_0) \mathrm{d}\mu\) by \(\mathbb E[\cdot]\). Let \((X_n)\) be a sequence of independent random variables distributed according to \(f(\cdot, \theta_0) \mathrm{d}\mu\). Finally define
+\[F_n(\theta) \coloneqq \frac1n\sum_{i=1}^n\log(f(X_i, \theta)) %\xlongrightarrow{n\to\infty} 
+\quad\text{and } F(\theta)\coloneqq \mathbb E\big[\log(f(X, \theta))\big]. \]
 %\(L_n \colon \Theta\to [-\infty, \infty)\)
 %be a sequence of random functions that attain maximisers
 %\[\hat{\theta}_n = \underset{\theta\in\Theta}{\arg\max} L_n(\theta).\]
 %Further let \(L\colon \Theta\to [-\infty, \infty)\) be a deterministic function with maximiser \(\theta_0\).
 \end{emp}
 
-\begin{lem}[Information inequality]
+\begin{prop}[Information inequality]
 Let the setting be as above and assume that the parameter \(\theta_0\in\Theta\) is identifiable, i.e. we have \(f(\cdot, \theta)\ne f(\cdot, \theta_0)\) whenever \(\theta\ne\theta_0\). Let further
 \[\mathbb E\Big[ \big\lvert \log(f(X, \theta)) \big\rvert \Big]<\infty \]
-for all \(\theta\in\Theta\). Then
-\[L(\theta) = \mathbb E\big[\log(f(X, \theta))\big] \]
+for all \(\theta\in\Theta\). Then the relative entropy
+\[F(\theta) = \mathbb E\big[\log(f(X, \theta))\big] \]
 has a unique minimum in \(\theta_0\).
-\end{lem}
+\end{prop}
 \begin{proof}
 Jensen’s inequality.
 \end{proof}
 
-\begin{lem}[Locally uniform convergence]
+Next we take care of the first requirement of the consistency result. Namely we will show that the functions \(F_n\) associated with the MLE almost surely converge to \(F\) locally uniformly under fairly mild conditions. For this we modify the proof of a more general convergence result in \cite{tauchen1985diagnostic}.
 
+\begin{lem}[Locally uniform convergence]
+Assume that the following conditions hold.
+\begin{enumerate}
+\item For any compact \(K\subseteq\Theta\) we have
+\[\mathbb E\left[\sup_{\theta\in\Theta} \big\lvert \log(f(X, \theta)) \big\rvert \right]<\infty.\] 
+\item For every \(\theta\in\Theta\) we have \(\log(f(\cdot, \gamma))\to\log(f(\cdot, \theta))\) almost surely with respect to \(\mathbb P\) for \(\gamma\to\theta\).
+\end{enumerate}
+%Then we almost surely have 
+Then we almost surely have \(F_n\to F\) locally uniformly, i.e. almost surely we have for any compact \(K\subseteq\Theta\)
+\[\sup_{\theta\in K} \big\lvert F_n(\theta) - F(\theta) \big\rvert \xlongrightarrow{n\to\infty} 0. \]
+%locally uniformly.
 \end{lem}
 \begin{proof}
-•
+
 \end{proof}
 
 \subsubsection*{Consistency of the MLEs for the quality and elementary kernel}
 
+In this part we will -- for the first time -- make use of the specific structure the elementary probabilities. Since we have already taken care of condition (\emph{i}) and (\emph{iii}) and condition (\emph{iv}) is fairly straight forward, we first dedicate ourselves to proving the second requirement. For this we keep the setting of the previous section although we now consider the case that
+\[\mathcal F = \Big\{ f(\cdot, \theta)\colon X\to[0, \infty) \mid\theta \in\Theta\Big\}\]
+ is one of the parametric families introduced in \ref{models}.% Further we assume that the data \((\mathbf Y_n)\) are indepentend and distributed according to a \(L\)-ensemble with elementary probabilities \(f(\cdot)\).\todo{formulate this better!}
 
+\begin{lem}[Control outside of a compact set]
+The requirement \emph{(}ii\emph{)} from Theorem \ref{conext} is satisfied for the three kinds of parametric families for the kernel estimation.
+\end{lem}
+\begin{proof}
+Set \(\delta\coloneqq\frac{f(\varnothing, \theta_0)}{2}>0\) and let 
+\[\hat{\mathbb P}_n\coloneqq \frac1n \sum_{i=1}^n \delta_{\mathbf Y_i} \]
+ be the empirical measure. Then we have by the law of large numbers
+\[\mathbb P\left( \hat{\mathbb P}_n(\varnothing) \ge \delta\right)\xlongrightarrow{n\to\infty} 1.\]
+Note that we have
+\[F_n(\theta) = \int \log(f(x, \theta)) \hat{\mathbb P}_n(\mathrm{d} x) \le \hat{\mathbb P}_n(\varnothing)\cdot \log(f(\varnothing, \theta)) \]
+since the elementary probabilities \(f(\cdot, \theta)\) are bounded by \(1\). Let now \(c>0\) be such that
+\[-\delta c< F(\theta_0).\]
+Choose now \(K\subseteq\Theta\) compact such that\todo{say way this is possible}
+\[\log(f(\varnothing, \theta)) \le -c \quad \text{for all } \theta\notin K. \]
+Then we have with probability tending to one for all \(\theta\notin K\)
+\[F_n(\theta) \le \hat{\mathbb P}_n(\varnothing)\cdot \log(f(\varnothing, \theta)) \le \hat{\mathbb P}_n(\varnothing) \cdot(-c) \le -\delta c < F(\theta_0)% \quad \text{for all } \theta \notin K
+. \]
+\end{proof}
+
+Now we have all the auxiliary results to prove the desired consistency result.
+
+\begin{theo}[Consistency]
+%The maximum likelihood estimators for the elementary kernel \(L\) and the quality vector \(q\) are consistent. Further the projection of the log linearity constant \(\theta\) onto \(U\) is consistent.
+\begin{enumerate}
+\item The maximum likelihood estimator \(\hat{L}_n\) for the elementary kernel is consistent. Namely if the observations \((\mathbf Y_n)\) follow the law of a \(L\)-ensemble with kernel \(L_0\), then we have
+\[\mathbb P\left( \big\lVert \hat L_n - L_0 \big\rVert \le \varepsilon\right) \xlongrightarrow{n\to\infty} 1 \quad \text{for all }\varepsilon>0.\]
+\item The maximum likelihood estimator \(\hat{q}_n\) for the quality vector is consistent. Namely if the observations \((\mathbf Y_n)\) follow the law of a \(L\)-ensemble with kernel \(\Psi(p_0, \hat S)\), then we have
+\[\mathbb P\left( \left\lVert \hat q_n - q_0 \right\rVert \le \varepsilon\right) \xlongrightarrow{n\to\infty} 1\quad \text{for all }\varepsilon>0.\]
+\item Suppose that the observations \((\mathbf Y_n)\) follow the law of a \(L\)-ensemble with kernel \(\Psi(p_0, \hat S)\) where \((p_0)_i = \exp(\theta^Tf_i)\) and let \(P\) denote the projection onto the subspace \(U\). Then we have
+\[\mathbb P\left( \big\lVert P\hat \theta_n - P\theta_0 \big\rVert \le \varepsilon\right) \xlongrightarrow{n\to\infty} 1\quad \text{for all }\varepsilon>0.\]
+\end{enumerate}
+\end{theo}
+\begin{proof}
+•
+\end{proof}•
 
 \subsection{Approximation of the MLE}
 

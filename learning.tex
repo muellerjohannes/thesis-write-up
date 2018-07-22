@@ -8,12 +8,12 @@
 
 Parameter estimation is one of the central components of every theory of real world phenomena. In a nutshell one could split the process of the construction of a descriptive model into two parts. The first one being the selection of the model which is done by a scientist and the second being the determination of the constants that belong to the model.
 
-To make this more clear we will consider one of the most famous advances in the natural sciences namely the law of universal gravitation that was discovered by Sir Isaac Newton\todo{cite}. More precisely Newton discovered that the gravitational force acting between two massive objects is given by
+To make this more clear we will consider one of the most famous advances in the natural sciences namely the law of universal gravitation that was discovered by Sir Isaac Newton and published in one of the most famous books in the history of science, the \emph{Philosophi¾ Naturalis Principia Mathematica}. More precisely Newton discovered that the gravitational force acting between two massive objects is given by
 \[F = G\cdot \frac{m_1m_2}{r^2}\]
 where \(m_1, m_2\) are the masses of the two objects, \(r\) is the distance of the centers of masses and \(G\) is the gravitational constant. This constant can not be deduced from the theory itself and needs to be estimated based on some empirical data.
 
 If we want to describe, simulate and predict the occurence of diverse subsets we can take a similar approach and impose the model of a determinantal point process. % which would correspond to the first part
-This will usually be an assumption that will not strictly hold, but will often lead to reasonable, sometimes even impressive results. We will not be concerned in a measure of how justifiable this model selection is, although this is a highly interesting question and there exist ways to deal with it\todo{cite paper about KL divergence}. Leaving that aside we are left with the second step, namely the estimation of the parameters of the model, which are in the case of a DPP over a set of cardinality \(N\) exactly \(N(N-1)/2\). Because of the rather large amount of parameters and also the complicated structure of the DPPs it will in practice only be possible to perform those estimations through the use of computational tools. The task of computer based parameter or density estimation is an important field in the discipline of \emph{machine learning} and thus we will sometimes speak of the parameters being learned instead of estimated. Actually the interest of parameter estimation for DPPs arose from the machine learning community at the beginning of this decade. However we will phrase things in a way that no prior knowledge in this field is required.
+This will usually be an assumption that will not strictly hold, but will often lead to reasonable, sometimes even impressive results. We will not be concerned to measure how suitable this model selection is, although this is a highly interesting question. Leaving that aside we are left with the second step, namely the estimation of the parameters of the model, which are in the case of a DPP over a set of cardinality \(N\) exactly \(N(N-1)/2\). Because of the rather large amount of parameters and also the complicated structure of the DPPs it will in practice only be possible to perform those estimations through the use of computational tools. The task of computer based parameter or density estimation is an important field in the discipline of \emph{machine learning} and thus we will sometimes speak of the parameters being learned instead of estimated. Actually the interest of parameter estimation for DPPs arose from the machine learning community at the beginning of this decade. However we will phrase things in a way that no prior knowledge in this field is required.
 
 In this chapter we will be concerned in how we can make point estimates for either the marginal or the elementary kernels \(K\) and \(L\). Point estimators are the most basic type of estimators and consist of the suggestion of one possible parameter set, for example in the case of the gravitational constant 
 \[6.674\cdot10^{-11}\si{N.kg^{-2}.m^2}. \]
@@ -36,7 +36,7 @@ It shall be noted that although those properties are beneficial, they are not cr
 Now we will display the first way how one can estimate the marginal kernel \(K\) of a DPP based on some samples drawn from it.
 
 \begin{emp}[Setting]
-Let \(\mathcal Y\) be a finite set of cardinality \(N\) and let \(K\in\mathbb R^{\mathcal Y\times\mathcal Y}_{\text{sym}}\) satisfy \(0\le K\le I\). Let further \(\mathbf Y_1, \mathbf Y_2, \dots\) be distributed according to the DPP with marginal kernel \(K\).
+Let \(\mathcal Y\) be a finite set of cardinality \(N\) and let \(K\in\mathbb R^{N\times N}_{\text{sym}}\) satisfy \(0\le K\le I\). Let further \(\mathbf Y_1, \mathbf Y_2, \dots\) be distributed according to the DPP with marginal kernel \(K\).
 \end{emp}
 
 In order to perform an approximate reconstruction of the marginal kernel we will need to consider the \emph{empirical measure} % \(\hat{\mathbb P}_n\) be 
@@ -113,9 +113,53 @@ indicates whether the edge \(e\in E\) belongs to the cycle \(C\). The \emph{cycl
 \item \emph{Cycle sparsity:} The cycle sparsity is the minimal number \(l\) such that a basis of the cycle space consisting of chordless simple cycles exists. Such a basis is called \emph{shortest maximal cycle basis} or short \emph{SMCB}. If the cycle space is trivial we define the cycle sparsity to be \(2\).
 \item \emph{Pairings:} Let \(S\subseteq V\) be a set of of vertices. Then a \emph{pairing} \(P\) of \(S\) is a subset of edges of \(G(S)\) such that two different edges of \(P\) are disjoint. The vertices contained in the edges of \(P\) are denoted by \(V(P)\) and the set of all pairings by \(\mathcal P(S)\).
 \end{enumerate}
-\end{emp}\todo{add pictures and explanations?}
+\end{emp}%\todo{add pictures and explanations?}
 
-It is highly recommended to draw some examples in order to get more familiar with the definitions above. To see that the above definition of the cycle sparsity is well defined, we have need to show that shortest maximal cycle basis exist. This might be well known to people that are familiar with graph theory, but we will present an elementary proof here. The first part of the statement, namely the existence of cycle basis consisting of simple cycles is known as VeblenÕs theorem and can be found in its original form in \cite{10.2307/1967604}, however we will rather follow the approach in \cite{bondy2011graph}.
+It is highly recommended to study the examples in Figure \ref{examplegraphs} in order to get more familiar with the definitions above. To see that the above definition of the cycle sparsity is well defined, we have need to show that shortest maximal cycle basis exist. This might be well known to people that are familiar with graph theory, but we will present an elementary proof here. The first part of the statement, namely the existence of cycle basis consisting of simple cycles is known as VeblenÕs theorem and can be found in its original form in \cite{10.2307/1967604}, however we will rather follow the approach in \cite{bondy2011graph}.
+
+\begin{figure}[h!]\label{examplegraphs}
+	\centering
+\begin{tikzpicture}%[shorten >=1pt,->]
+
+  \tikzstyle{vertex}=[draw,circle,minimum size=17pt,inner sep=0pt]
+
+  \foreach \name/\angle/\text in {A-1/234/1, A-2/162/2, 
+                                  A-3/90/3, A-4/18/4, A-5/-54/5}
+    \node[vertex,xshift=5cm,yshift=.5cm] (\name) at (\angle:1.3cm) {\(\text\)};
+    
+  \foreach \name/\angle/\text in {B-1/234/1, B-2/162/2, 
+                                  B-3/90/3, B-4/18/4, B-5/-54/5}
+    \node[vertex,xshift=12.4cm,yshift=.5cm] (\name) at (\angle:1.3cm) {\(\text\)};
+    
+      \foreach \name/\angle/\text in {C-1/234/1, C-2/162/2, 
+                                  C-3/90/3, C-4/18/4, C-5/-54/5}
+    \node[vertex,xshift=8.7cm,yshift=.5cm] (\name) at (\angle:1.3cm) {\(\text\)};
+    
+          \foreach \name/\angle/\text in {D-1/234/1, D-2/162/2, 
+                                  D-3/90/3, D-4/18/4, D-5/-54/5}
+    \node[vertex,xshift=16.1cm,yshift=.5cm] (\name) at (\angle:1.3cm) {\(\text\)};
+
+  \foreach \from/\to in {1/2,2/3,3/5,5/1,1/4,3/4,2/5}
+    \draw (A-\from) -- (A-\to);
+
+\foreach \from/\to in {1/2,2/3,3/5,5/1}
+\draw (B-\from) -- (B-\to);
+\foreach \from/\to in {3/4,4/1,2/5}
+\draw[dashed] (B-\from) -- (B-\to);
+
+\foreach \from/\to in {1/2,2/3,3/4,4/1}
+\draw (C-\from) -- (C-\to);
+\foreach \from/\to in {1/5,3/5,2/5}
+\draw[dashed] (C-\from) -- (C-\to);
+
+\foreach \from/\to in {1/5,2/5,3/5,1/2,2/3}
+\draw (D-\from) -- (D-\to);
+\foreach \from/\to in {1/4,3/4}
+\draw[dashed] (D-\from) -- (D-\to);
+\end{tikzpicture}
+\caption{Some examples of graphs and cycles. The first sketch shows a graph and the three other ones subsgraphs of it where the edges not belonging to the subgraph are depicted dashed. The first one is a symple chordless cycle, the second one a simple but not chordless cycle and the last one is not a cycle at all.}
+\end{figure}
+
 %It shall be noted, that the proof -- and also the definitions above -- becomes quite a lot more intuitive by drawing the according cycles in order to understand how the respective decompositions of cycles work.
 
 \begin{prop}[Existence of SMCBs]

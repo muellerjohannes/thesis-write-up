@@ -45,7 +45,25 @@ All together we note that concavity is an extremely favourable property for a fu
  
 A second property which is important in the existence theory of maximisers is \emph{coercivity} in the sense that
 \[f(x)\to-\infty \quad \text{for } \left\lvert x \right\rvert\to\infty.\]
-In fact every (upper semi-) continuous and coercive function defined on a closed set \(U\subseteq\mathbb R^M\) attains its minimum. To see this one can fix \(x_0\in U\) and use the coercivity to obtain \(f<f(x_0)\) outside of a compact set \(K\) and thus the supremum of \(f\) agrees with the supremum of \(f\) over \(K\cap U\) which is compact again and thus it is attained.
+In fact every (upper semi-) continuous and coercive function defined on a closed set \(U\subseteq\mathbb R^M\) attains its minimum. To see this one can fix \(x_0\in U\) and use the coercivity to obtain \(f<f(x_0)\) outside of a compact set \(K\) and thus the supremum of \(f\) agrees with the supremum of \(f\) over \(K\cap U\) which is compact again and thus it is attained. We will later introduce some abstract theory about the consistency of estimators and for this we will need this result in a ore general setting. However the version above is enough in the case of the maximum likelihood estimators for parameters of DPPs and therefore readers that are not familiar with elementary notions of topology are advised to neglect following statement.
+
+\begin{prop}[Existence of maximisers]\label{dirmet}
+Let \(\mathcal X\) be a topological Hausdorff space and \(f\colon \mathcal X\to [-\infty, \infty)\) be an \emph{upper semicontinuous} function, i.e.
+\[L_f(\alpha)\coloneqq\left\{ x\in\mathcal X\mid f(x) \ge \alpha\right\}\]
+is closed for all \(\alpha\in\mathbb R\). Further we will assume that \(f\) is \emph{coercive}, meaning that for any \(\alpha\in\mathbb R\) the set \(L_f(\alpha)\) is compact. %there is a compact set \(K\subseteq\mathcal X\) such that
+%\[f(x) < \alpha \quad \text{for all } x\notin K. \]
+Then \(f\) attains its maximum in at least one point, i.e. there is \(\hat x\in\mathcal X\) such that
+\[f(\hat x) = \sup_{x\in\mathcal X} f(x). \]
+\end{prop}
+\begin{proof}
+Let without loss of generality \(f\) be not identical to \(-\infty\) %\(f(x_0)>-\infty\) for at least one \(x_0\in\mathcal X\) 
+because otherwise the statement is trivial. Then we have
+\[\alpha\coloneqq\sup_{x\in\mathcal X} f(x) > - \infty.\]
+If we choose \((\alpha_n)\) to be strictly increasing towards \(\alpha\), then we get \(L_f(\alpha_{n+1}) \subseteq L_f(\alpha_n)\) for all \(n\in\mathbb N\) and further none of the sets \(L_f(\alpha_n)\) is empty. By the Cantor intersection theorem\footnote{A precise formulation can be found in the appendix.} we get that also the intersection is non empty, i.e there is
+\[\hat x\in \bigcap_{n\in\mathbb N} L_f(\alpha_n).\]
+This implies
+\[f(\hat x) \ge \alpha_n\xlongrightarrow{n\to\infty} \alpha = \sup_{x\in\mathcal X} f(x).\]
+\end{proof}
 
 
 \subsection{Presentation of different models}\label{models}
@@ -78,11 +96,11 @@ Although the parametric family of that arises from the elementary kernels \(L\) 
 \subsubsection*{MLE of the qualities}
 
 Unlike earlier we will not try to estimate the whole kernel \(L\) but only the qualities \(q_i\) of the items \(i\in\mathcal Y\). More precisely we recall that we can parametrise the positive definite symmetric matrices \(L\) using the quality diversity parametrisation %decomposition %, i.e. we consider the bijection\todo{whats the domain?}
-\[ (q, S) \mapsto \Psi(q, S) = L \quad \text{where } L_{ij} = q_iS_{ij}q_j.\]
-Now we fix a similarity kernel \(\hat S\), that we will usually model according to some perceptions we might have, and will only try to estimate the quality \(q\in\mathbb R_+^N\). This means that we optimise the likelihood function over a smaller set of kernels, namely the ones of the form \(\Psi(q, \hat S)\) for \(q\in\mathbb R_+^N\). Obviously the maximal likelihood that can be achieved using this more restrictive model decreases since we consider less positive definite matrices and we have %will be lower compared to the one obtained by a full kernel estimation, since we have
-\[\max_{q\in \mathbb R_+^N} \mathcal L(\Psi(q, \hat S)) \le %\max_{(q, S)\in \mathbb R_+^N\times \mathbb S_N^N} \mathcal L(\Psi(q, S)) =
- \max_{L\in \mathbb R_{\text{sym}, +}^{N\times N}} \mathcal L(L). \]\todo{sort out notation problem with \(S\) and \(\phi\)}
- \todo{sort out notation problem with \(N\) and \(\mathcal Y\)}
+\[ (q, \phi) \mapsto \Psi(q, \phi) = L \quad \text{where } L_{ij} = q_i\phi_i^T\phi_jq_j.\]
+Now we fix a diversity feature matrix \(\hat \phi\), that we will usually model according to some perceptions we might have and set \(\hat S_{ij}\coloneqq\phi_i^T\phi_j\). We will now try to estimate the quality vector \(q\in\mathbb R_+^N\) instead of the whole kernel \(L\). This means that we optimise the likelihood function over a smaller set of kernels, namely the ones of the form \(\Psi(q, \hat \phi)\) for \(q\in\mathbb R_+^N\). Obviously the maximal likelihood that can be achieved using this more restrictive model decreases since we consider less positive definite matrices and we have %will be lower compared to the one obtained by a full kernel estimation, since we have
+\[\max_{q\in \mathbb R_+^N} \mathcal L(\Psi(q, \hat \phi)) \le %\max_{(q, S)\in \mathbb R_+^N\times \mathbb S_N^N} \mathcal L(\Psi(q, S)) =
+ \max_{L\in \mathbb R_{\text{sym}, +}^{N\times N}} \mathcal L(L). \]%\todo{sort out notation problem with \(S\) and \(\phi\)}
+% \todo{sort out notation problem with \(N\) and \(\mathcal Y\)}
  
 Although we can only expect a worse descriptive power of the observation, the hope is that the task of estimating only the qualities \(q\in\mathbb R_+^N\) is more feasible which actually turn out to be true in certain cases. But before we investigate this, we clearly state our goal.
 
@@ -90,19 +108,20 @@ Although we can only expect a worse descriptive power of the observation, the ho
 % {\scshape\bfseries .}
 This time we work with the parameter set \(\Theta = \mathbb R_+^N\) and the parametric family
 \[\mathcal F = \Big\{ f(\cdot, q) \;\big\lvert\; q\in \mathbb R_+^N\Big\}\]
-where \(f(A, q)\propto \det(\Psi(q, \hat S)_A)\) is the elementary probability of DPP with elementary kernel \(\Psi(q, \hat S)\). 
+where \(f(A, q)\propto \det(\Psi(q, \hat \phi)_A)\) is the elementary probability of DPP with elementary kernel \(\Psi(q, \hat \phi)\). 
  We aim to find the MLE of the quality vector \(q\in\mathbb R_+^N\), in other words we set %are interested in the existence and the computability of the quantity
 \[\hat q_n \coloneqq \underset{q\in\mathbb R_+^N}{\arg\max}\, \mathcal L(q) \]
 where we perceive the likelihood function as a function of \(q\).%the likelihood is still given by \eqref{e3.1}.
 \end{emp}
 
 %Since we are only interested in estimating the quality vector \(q\in\mathbb R_+^N\), we will perceive the log likelihood function as a function of \(q\). Further w
-We notice that the single summands take the form following form\todo{refer to the equation!}
+Using \eqref{e2.4} we obtain the following expression for the single summands of the log likelihood function %take the form following form\todo{refer to the equation!}
 \begin{equation}\label{loglikqua}
 % \mathcal L(\Psi(q, \hat S)) & = \sum\limits_{i = 1}^n 
-\log\left( \prod_{j\in Y_i} q_j^2\right) + \log(\det(\hat S_{Y_i})) - \log\left(\sum_{A\subseteq \mathcal Y} \prod_{j\in A}q_j^2\det(\hat S_A) \right).
+\log\left( \prod_{j\in Y_i} q_j^2\right) + \log(\det(\hat S_{Y_i})) - \log\left(\sum_{A\subseteq \mathcal Y} \prod_{j\in A}q_j^2\det(\hat S_A) \right)
 % \\ & = \sum\limits_{i = 1}^n \log\left( \prod_{j\in Y_i} q_j^2\right) \cdot \det(\hat S_{Y_i}) - n
 \end{equation}
+and note that it is upper semicontinuous.
 
 \subsubsection*{Log linear model for the qualities}
 
@@ -114,7 +133,7 @@ The motivation for restricting our ambitions of estimation to the qualities \(q_
 %\log\left( \prod_{j\in Y_i} q_j^2\right) + \log(\det(\hat S_{Y_i})) - \log\left(\sum_{A\subseteq \mathcal Y} \prod_{j\in A}q_j^2\det(\hat S_A) \right).
 % \\ & = \sum\limits_{i = 1}^n \log\left( \prod_{j\in Y_i} q_j^2\right) \cdot \det(\hat S_{Y_i}) - n
 %\end{equation}
-Unfortunately we can tell from \eqref{loglikqua} that the log likelihood still isn’t concave in \(q\) and in order to achieve this, we will have to make following assumption and keep them in throughout this section.\todo{does it makes sense?}
+Unfortunately we can tell from \eqref{loglikqua} that the log likelihood still isn’t concave in \(q\) and in order to achieve this, we will introduce the following model for the qualities. %have to make following assumption and keep them in throughout this section.\todo{does it makes sense?}
 
 %{\scshape\bfseries .}
 \begin{emp}[Log linear model for the qualities and MLE]
@@ -161,12 +180,12 @@ Let \(\mathbf Y_1, \mathbf Y_2, \dots\) be a sequence of independent and identic
 \[\mathbb P\left(\hat q_n\in\mathbb R_+^N \text{ exists}\right) \ge \mathbb P\big(\mathcal L \text{ is coercive}\big) \xlongrightarrow{n\to\infty} 1.\]
 \end{prop}
 \begin{proof}
-The first inequality is obvious since the log likelihood function is continuous.\todo{add remark}{ } We will show that \(\mathcal L\) is coercive if one of the observations is the emptyset. Then the claim follows from
+The first inequality is obvious since the log likelihood function is upper semicontinuous. We will show that \(\mathcal L\) is coercive if one of the observations is the emptyset. Then the claim follows from
 \begin{equation*}
 \begin{split}
 \mathbb P\big(\mathcal L \text{ is coercive}\big) & \ge \mathbb P\left(\bigcup_{i=1}^n \left\{ \mathbf Y_i = \varnothing\right\}\right) = 1 - \mathbb P\left(\bigcap_{i=1}^n \left\{ \mathbf Y_i \ne\varnothing\right\}\right) \\ 
 & = 1 - \mathbb P(\mathbf Y_1 \ne\varnothing)^n \xlongrightarrow{n\to\infty} 1
-\end{split}•
+\end{split}
 \end{equation*}
 since we have \(\mathbb P(\mathbf Y_1 \ne\varnothing) < 1\) for every \(L\)-ensemble.
 
@@ -222,7 +241,7 @@ We have seen that the log linear model can provide a parametrisation of the whol
 %loses enough information for the MLE to exist.
 In order to do this, let \(U\subseteq\mathbb R^M\) be the span of \(f_1, \dots, f_N\) and let write \(\theta = \theta_1 + \theta_2\) such that \(\theta_1\in U\) and \(\theta_2\in U^\perp\). We note that \(F(\theta) = F(\tilde\theta)\) if and only if \(\theta_1 = \tilde\theta_1\).
 
-\todo{show that coercivity and identifiability is the same!}
+%\todo{show that coercivity and identifiability is the same!}
 %\begin{emp}[Coercivity of the log linear model]
 %We call the log linear model \emph{coercive}, if whenever we have \(\left\lvert \theta_k \right\rvert\to\infty\) there is at least one index \(i\in\left\{ 1, \dots, n\right\}\) and one subsequence \((q_l)\) of \((q_k)\) such that
 %we have
@@ -277,7 +296,7 @@ Evaluating this at \(\theta = \theta_0\) yields
 Hence \(\theta_0\) is a critical point and under mild conditions the left hand side is concave and thus \(\theta_0\) is the unique maximiser. In conclusion the estimator \(\hat \theta\) should be close to \(\theta_0\).
 \end{emp}
 
-Although rough structure of the rigorous proof is present in the argument above it is highly formal. For example we argue that if a sequence \((f_n)_{n\in\mathbb N}\) of functions converges towards \(f\) pointwise, then the maximisers \((x_n)_{n\in\mathbb N}\) should converge to the maximiser \(x\) of \(f\). The major tool to make this rigorous will be to use some kind of uniform convergence. Namely we have the following result where we will omit the proof since it is very easy and we proof a similar but stronger version of it in the next section.
+Although rough structure of the rigorous proof is present in the argument above it is highly formal. For example we argue that if a sequence \((f_n)_{n\in\mathbb N}\) of functions converges towards \(f\) pointwise, then the maximisers \((x_n)_{n\in\mathbb N}\) should converge to the maximiser \(x\) of \(f\). The major tool to make this rigorous will be to use some kind of uniform convergence. Namely we have the following result where we will omit the proof since it is very easy and we proof a similar but stronger version of it later.
 
 \begin{lem}[Swapping limit and maximisation]
 Let \((f_n)_{n\in\mathbb N}\) be a sequence of real functions with maximisers \((x_n)_{n\in\mathbb N}\) that are bounded from above and converge uniformly towards \(f\). Further assume that \(f\) is coercive and continuous and let \(x\) be the unique maximiser of \(f\). Then we have \(x_n\to x\) for \(n\to\infty\).
@@ -285,6 +304,8 @@ Let \((f_n)_{n\in\mathbb N}\) be a sequence of real functions with maximisers \(
 %\begin{proof}
 
 %\end{proof}
+
+Unfortunately the convergence in \eqref{entropy} does only hold uniformly on a compact set \(K\). To fix this one has to ensure that the maximisers \((x_n)\) lie in this compact set \(K\) for large \(n\). We will do this in a general setup in the next paragraph.
 
 % the formal proof above sketches the major 
 
@@ -316,7 +337,7 @@ Let the setting be as above and assume that the following conditions hold.
 F_n(\theta) \le F(\theta_0) - \varepsilon_0 \quad \text{for all } \theta\notin K_0 %\Big) \xlongrightarrow{n\to\infty} 1
 .\end{equation}
 \item Let \(F_n\) converge to \(F\) uniformly on \(K_0\) in probability, i.e. %for any compact set \(K\subseteq\Theta\) and any \(\varepsilon>0\) 
-we have with probability tending to one
+for any \(\varepsilon>0\) we have with probability tending to one
 \begin{equation}\label{con1}%\mathbb P\Big( 
 \big\lvert F_n(\theta) - F(\theta) \big\rvert \le \varepsilon \quad\text{for all }\theta\in K_0 %\Big) \xlongrightarrow{n\to\infty} 1 \quad\text{for all } \varepsilon>0
 .\end{equation}
@@ -325,31 +346,49 @@ we have with probability tending to one
  upper semicontinuous in the sense that
 \[\left\{ \theta\in\Theta \mid F(\theta)\ge\alpha\right\}\subseteq\Theta\]
 is closed for all \(\alpha\in\mathbb R\).
+\item With probability tending to one \(F_n\) admits a maximiser.
 \end{enumerate}
 Then we have \(\hat{\theta}_n\to\theta_0\) in probability, i.e.
 \[\mathbb P\left( \hat{\theta}_n\in U\right) \xlongrightarrow{n\to\infty} 1 \]
 for any open subset \(U\subseteq\Theta\) containing \(\theta_0\).
 \end{theo}
 \begin{proof}
-Fix an open set \(U\subseteq\Theta\) that contains \(\theta_0\). First we note that
+Note that it suffices to show \(\hat{\theta}_n\in U\) whenever \eqref{con2} and \eqref{con1} hold and \(F_n\) admits a maximiser. %This also makes it clear that the proof is not of stochastic but of
+From here on the proof is of purely analytic content.
+
+Fix now an open set \(U\subseteq\Theta\) that contains \(\theta_0\). Choosing \(\varepsilon<\varepsilon_0\) in (\emph{ii}) and using (\emph{i}) yields
+\[F_n(\theta_0) \ge F(\theta_0) - \varepsilon > F(\theta_0) - \varepsilon_0 \ge F_n(\theta) \quad \text{for all } \theta\notin K_0. \]
+Hence the maximum of \(F_n\) is attained in \(K_0\) and we have \(\hat{\theta}_n\in K_0\). %, that \(\hat{\theta}_n\in K_0\).
+Thus if \(K_0\subseteq U\) we are done.
+If this is not the case, \ref{dirmet} together with (\emph{iv}) implies that
 %\[K\cap \Big\{ \theta\in\Theta\mid L(\theta) > L(\theta_0) - \delta \Big\}%L^{-1}((L(\theta_0) - \delta, L(\theta_0)])
 % \subseteq U\]
 %for some \(\delta>0\). This is due to the fact that
- \(F\) attains its maximum\footnote{Any upper semicontinuous function on a topological Hausdorff space attains its maximum over a compact set.}\todo{cite}{ } \(\alpha\) on \(K_0\setminus U\) which is strictly smaller than \(F(\theta_0)\). Thus we have %only have to show that the probability for \(\theta\in K\) and \(L(\hat{\theta})>\alpha\) tends to one since %. % \(\theta\in U\) and we will use this criterion to show the consistency.
+ \(F\) attains its maximum %\footnote{Any upper semicontinuous function on a topological Hausdorff space attains its maximum over a compact set.} 
+ \(\alpha\) on \(K_0\setminus U\) which is strictly smaller than \(F(\theta_0)\) because of (\emph{iii}). Thus we have %only have to show that the probability for \(\theta\in K\) and \(L(\hat{\theta})>\alpha\) tends to one since %. % \(\theta\in U\) and we will use this criterion to show the consistency.
  \[K_0\cap \Big\{ \theta\in\Theta\mid F(\theta) > \alpha \Big\} \subseteq U. \]
  
-The probability for \eqref{con1} and \eqref{con2} tends to one so it suffices to show that they imply \(\hat{\theta}_n\in K_0\) as well as \(F(\hat{\theta}_n)>\alpha\). So lets assume \eqref{con1} with \(K=K_0\) and \eqref{con2} hold, then for \(\varepsilon<\varepsilon_0\) we obtain %we have %with probability tending to one
-%\[\sup_{\theta\in K} \big\lvert L_n(\theta) - L(\theta) \big\rvert \le \varepsilon \]
-%and hence %with probability tending to one
-\[%\big\lvert L_n(\theta_0) - L(\theta_0) \big\rvert \le \varepsilon \quad \text{and hence } 
-F_n(\theta) \le F(\theta_0) - \varepsilon_0 < F_n(\theta_0) \quad \text{for } \theta\notin K_0 \]
-%where we used (\emph{i}) and (\emph{ii}). 
-This implies that the maximum of \(F_n\) is attained in \(K_0\) and thus we have \(\hat{\theta}_n\in K_0\) and further
-%\[\sup_{\theta\in K} \big\lvert L_n(\theta) - L(\theta) \big\rvert \le \varepsilon \]
-% with probability tending to one. In this case we have
+So in order to show \(\hat{\theta}_n\in U\), it suffices to show \(\hat{\theta}_n\in K_0\) and \(F(\hat{\theta}_n)>\alpha\). Since we have already seen that the first statement holds, it remains to show the second one. However (\emph{ii}) implies
 \[F(\hat{\theta}_n) \ge F_n(\hat{\theta}_n) - \varepsilon \ge F_n(\theta_0) - \varepsilon \ge F(\theta_0) - 2\varepsilon > \alpha\]
 for \(\varepsilon\) small enough.
+%The probabilities for \eqref{con1} and \eqref{con2} tend to one so it suffices to show that they imply \(\hat{\theta}_n\in K_0\) as well as \(F(\hat{\theta}_n)>\alpha\). So lets assume \eqref{con1} with \(K=K_0\) and \eqref{con2} hold, then for \(\varepsilon<\varepsilon_0\) we obtain %we have %with probability tending to one
+%\[\sup_{\theta\in K} \big\lvert L_n(\theta) - L(\theta) \big\rvert \le \varepsilon \]
+%and hence %with probability tending to one
+%\[%\big\lvert L_n(\theta_0) - L(\theta_0) \big\rvert \le \varepsilon \quad \text{and hence } 
+%F_n(\theta) \le F(\theta_0) - \varepsilon_0 < F_n(\theta_0) \quad \text{for } \theta\notin K_0 \]
+%where we used (\emph{i}) and (\emph{ii}). 
+%This implies that the maximum of \(F_n\) is attained in \(K_0\) and thus we have \(\hat{\theta}_n\in K_0\) and further
+%\[\sup_{\theta\in K} \big\lvert L_n(\theta) - L(\theta) \big\rvert \le \varepsilon \]
+% with probability tending to one. In this case we have
+%\[F(\hat{\theta}_n) \ge F_n(\hat{\theta}_n) - \varepsilon \ge F_n(\theta_0) - \varepsilon \ge F(\theta_0) - 2\varepsilon > \alpha\]
+%for \(\varepsilon\) small enough.
 \end{proof}
+
+The proof above can be read in the following way. The two conditions (\emph{i}), (\emph{ii}) and (\emph{v}) force \(\hat{\theta}_n\in K_0\) and hence we can restrict our considerations to a compact set. This is actually the setting the consistency results are usually presented in. Then we argue that if \(F(\theta)\) is close to \(F(\theta_0)\), then \(\theta\) has to be close to \(\theta_0\), where we use that we are on a compact subset as well as (\emph{iii}) and (\emph{iv}). However since \(F_n\) is close to \(F\) on \(K_0\) we obtain that \(F(\hat{\theta}_n)\) is close to \(F_n(\hat{\theta}_n)\) which is close to \(F(\theta_0)\) since the maximum values converge to each other.
+
+%\begin{rem}
+%The conditions of the 
+%\end{rem}
 
 %Frequently the first assumption of the previous theorem is replaced by the stronger postulation that \(L_n\) should converge towards \(L\) uniformly in probability, namely
 %\[\mathbb P\Big( \left\lVert L_n - L \right\rVert_\infty\le\varepsilon\Big) \xlongrightarrow{n\to\infty} 1 \quad\text{for all } \varepsilon>0. \]
@@ -362,7 +401,7 @@ Note that the factor \(\frac1n\) does not change the maximum. However \eqref{ent
 F(\theta) \coloneqq \mathbb E\big[\log(f(X, \theta))\big]. \]
 %in the case of maximum likelihood estimation.
  % where \(()\)
-The quantity \(F\) is known as the \emph{entropy} and plays an important role in mathematical and applied statistics, information theory and many other fields. For more information on this we refer to\todo{find reference}.
+The quantity \(F\) is known as the \emph{entropy} and plays an important role in statistical mechanics, applied statistics, information theory and many other fields. For more information on this we refer to \cite{martin2011mathematical}, \cite{mackay2003information}, \cite{volkenstein2009entropy} and \cite{gray1990entropy}.
 
 
 \subsubsection*{The information inequality and locally uniform convergence}
@@ -487,11 +526,11 @@ Whenever \(f(A, \theta_0)>0\) we choose \(c(A)>0\) such that
 .\]
 For exactly those \(A\) we define now
 \[K_A \coloneqq \Big\{ \theta\in\Theta \;\big\lvert\; \log(f(A, \theta)) \ge - c(A) \Big\}\]
-which is compact\todo{check this}{ } since \(f(A, \theta)\) is upper semicontinuous and coercive in \(\theta\) with the same argument as in the coercivity proofs earlier in this chapter. Further it contains \(\theta_0\) as
+which is closed since \(f(A, \theta)\) is upper semicontinuous. Further \(K_A\) is compact for \(A=\varnothing\in\mathcal A\) since \(\log(f(\varnothing, \theta))\) is coercive in \(\theta\) as been shown in the coercivity proofs earlier in this chapter. Further it contains \(\theta_0\) as
 \[\log(f(A, \theta_0)) \ge 2 \cdot \log(f(A, \theta_0)) > -c(A) \]
 because \(f(A, \theta)\le 1\). Set now
-\[K_0\coloneqq \bigcap_{A\in \mathcal A} K_A.\]
-Finally we have for \(\theta\notin K_0\)
+\[K_0\coloneqq \bigcap_{A\in \mathcal A} K_A\]
+which is compact because \(K_\varnothing\) is compact. Finally we have for \(\theta\notin K_0\)
 \begin{equation*}
 \begin{split}
 F_n(\theta) & = \int \log(f(x, \theta)) \hat{\mathbb P}_n(\mathrm{d} x) = \sum_{A\in \mathcal A} \hat{\mathbb P}_n(A)\cdot \log(f(A, \theta)) < - \sum_{A\in \mathcal A} \frac{f(A, \theta_0)}{2} c(A) \\
@@ -523,7 +562,9 @@ Now we have all the auxiliary results to prove the desired consistency result.
 \begin{proof}
 We will only sketch the main parts of the proof of the second statement, since all other arguments will be mostly analogue and therefore redundant.
 
-Obviously we want to exploit the machinery we have introduced and thus we will check the requirements of Theorem \ref{conext}. First we express the entropy function
+Obviously we want to exploit the machinery we have introduced and thus we will check the requirements of Theorem \ref{conext}. First we note that (\emph{v}) holds because of the section of the existence of the maximum likelihood estimators.
+
+We can express the entropy function
 \begin{equation}\label{ent}
 F(q) = \mathbb E\big[\log(f(\mathbf Y, q))\big] = \sum_{A\subseteq\mathcal Y} \log(f(A, q)) f(A, q_0)
 \end{equation}

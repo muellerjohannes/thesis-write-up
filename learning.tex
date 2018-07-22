@@ -30,7 +30,7 @@ It shall be noted that although those properties are beneficial, they are not cr
 
 %In practice this will be a rather large amount of parameters and therefore it will only be possible
 
-\section{Kernel reconstruction of the empirical measures} %  via the Assymptotic reconstruction of the kernel}
+\section{Kernel reconstruction from the empirical measures} %  via the Assymptotic reconstruction of the kernel}
 
 %In this section we want to see how we can estimate the marginal kernel from an increasing number of observations \(\mathbf Y_1, \dots, \mathbf Y_n\subseteq \mathcal Y\) that are distributed according to \(\mathbb P\). For this we will sketch the procedure in \cite{urschel2017learning}. 
 Now we will display the first way how one can estimate the marginal kernel \(K\) of a DPP based on some samples drawn from it.
@@ -51,7 +51,7 @@ And even stronger by the strong law of large numbers they converge to \(\mathbb 
 \[\left\{ \mu\in\mathbb R^{2^{\mathcal Y}} \;\Big\lvert\; \mu_A\in[0, 1] \text{ for all } A\subseteq\mathcal Y \text{ and } \sum_{A\subseteq\mathcal Y}\mu_A = 1 \right\}\]
 and using the strong law of large numbers in \(\mathbb R^{2^{\mathcal Y}}\).
 
-Therefore the empirical measures are reasonable approximations of the actual probability distribution. Assume now for one moment that the empirical measures \(\hat{\mathbb P}_n\) are also determinantal point processes with marginal kernel \(\hat K_n\), then \(\hat K_n\) would be a quite intuitive estimate for the actual marginal kernel \(K\). Thus we are interested in the question whether we can reconstruct the kernel marginal of a DPP if we know the DPP itself. Since the marginal density of a DPP corresponds to the principal minors of the marginal kernel, we first investigate whether we can reconstruct a matrix from its principle minors. For the answer to this problem we follow the main ideas presented in \cite{urschel2017learning} and \cite{rising2015efficient} although we modify their arguments to make them shorter and hopefully more accessible.% \todo{say something about stability?}
+Therefore the empirical measures are reasonable approximations of the actual probability distribution. Assume now for one moment that the empirical measures \(\hat{\mathbb P}_n\) are also determinantal point processes with marginal kernel \(\hat K_n\), then \(\hat K_n\) would be a quite intuitive estimate for the actual marginal kernel \(K\). Thus we are interested in the question whether we can reconstruct the kernel marginal of a DPP if we know the DPP itself. Since the marginal density of a DPP corresponds to the principal minors of the marginal kernel, we first investigate whether we can reconstruct a matrix from its principal minors. For the answer to this problem we follow the main ideas presented in \cite{urschel2017learning} and \cite{rising2015efficient} although we modify their arguments to make them shorter and hopefully more accessible.% \todo{say something about stability?}
 
 
 %Therefore we can consistently %\todo{explain consistency}{ } 
@@ -69,9 +69,9 @@ Therefore the empirical measures are reasonable approximations of the actual pro
 % Thus the question naturally arrises whether we can reconstruct the kernel \(K\) from the knowledge of all of its principal minors, which we will address in the following.
 
 %\subsubsection*{The principal minor assignment problem}\todo{phrase it very clearly}
-%\todo{define principle minors?}
+%\todo{define principal minors?}
 \begin{emp}[The principal minor assignment problem]
-Let \(K\in\mathbb R^{N\times N}\) be a symmetric matrix. We want to investigate whether \(K\) uniquely specified by its principle minors
+Let \(K\in\mathbb R^{N\times N}\) be a symmetric matrix. We want to investigate whether \(K\) uniquely specified by its principal minors
 \[\Delta_S \coloneqq \det(K_S) \quad \text{where } S\subseteq\left\{ 1, \dots, N\right\}.\]
 We call this the \emph{symmetric principal minor assignment problem} and it will turn out that the matrix \(K\) can be reconstructed up to an equivalence relation.
 \end{emp}
@@ -87,10 +87,12 @@ Therefore we only need to reconstruct the signs off diagonal entries. To do this
 \end{equation}
 Rearranging this yields
 \[K_{12}K_{13}K_{23} = \frac12\left( \det(K) + K_{11}K_{23}^2 + K_{22}K_{13}^2 + K_{33}K_{12}^2 - K_{11}K_{22}K_{33}\right).\]
-Since we know all of the expressions on the right side, we can determine the sign of the product on the left side. Now we assign the signs of the off diagonal elements in such a way, that the above equation holds. More precisely if the product is negative, we assign a minus to one or all three elements, if it is positive, then we assign a minus to none or two elements. If the product is zero, every configuration of signs satisfy the desired property. It is now straight forward to check that this assignment actually leads to the desired principle minors.
+Since we know all of the expressions on the right side, we can determine the sign of the product on the left side. Now we assign the signs of the off diagonal elements in such a way, that the above equation holds. More precisely if the product is negative, we assign a minus to one or all three elements, if it is positive, then we assign a minus to none or two elements. If the product is zero, every configuration of signs satisfy the desired property. It is now straight forward to check that this assignment actually leads to the desired principal minors.
 % \todo{explain this.}
 
-One main part in the general procedure will be to obtain a generalisation of the formula \eqref{thrtimthr} for larger principle minors that will allow the reconstruction of the signs. For this we will need the following graph theoretical concepts.
+\subsection{Graph theoretical concepts}
+
+One main part in the general procedure will be to obtain a generalisation of the formula \eqref{thrtimthr} for larger principal minors that will allow the reconstruction of the signs. For this we will need the following graph theoretical concepts.
 %In order to generalise the procedure above to larger matrices we will need some elementary concepts from graph theory.
 
 
@@ -239,6 +241,11 @@ Then we have \(x(C) = x(C_1) + x(C_2)\). By iterating this procedure as long as 
 %where \(C_1, \dots, C_m\) are chordless cycles. If \(C\) is already chordless, then we are done, so we can assume that the vertices of \(C\) are \(\left\{ v_1, \dots, v_M\right\}\) with\todo{finish this proof!}
 \end{proof}%\todo{cite the theorem with its actual name}
 
+\subsection{The solution of the principal minor assignment problem}
+
+Now we have all the graph theoretical prerequisites to show how one can reconstruct a matrix with preassigned principal minors. However the matrix that arises from this reconstruction is not unique and thus we need to identify matrices with the same principal minors with each other.
+%the principal minor assignment problem can be solved. However this is only possible 
+
 \begin{defi}[Determinantal equivalence]
 Two symmetric matrices \(A, B\in\mathbb R^{N\times N}\) are called \emph{determinantally equivalent} if the have the same principal minors and we write \(A\sim B\).
 \end{defi}
@@ -307,7 +314,7 @@ The knowledge of all principal minors up to size two and the sign function
 completely determines all principal minors of \(K\).
 \end{prop}
 \begin{proof}
-Let \(S\subseteq\left\{ 1, \dots, N\right\}\) be arbitrary. We will again work with the expression \eqref{pmcl} of the principle minor \(\Delta_S\) and fix one permutation \(\sigma\). We can assume without loss of generality that \(\left\{ i, \sigma(i)\right\}\in E_K\) because the product it trivial otherwise. Since we know the absolute values of the off diagonal elements and the diagonal elements from the principle minors up to size two, it suffices to express the sign
+Let \(S\subseteq\left\{ 1, \dots, N\right\}\) be arbitrary. We will again work with the expression \eqref{pmcl} of the principal minor \(\Delta_S\) and fix one permutation \(\sigma\). We can assume without loss of generality that \(\left\{ i, \sigma(i)\right\}\in E_K\) because the product it trivial otherwise. Since we know the absolute values of the off diagonal elements and the diagonal elements from the principal minors up to size two, it suffices to express the sign
 \begin{equation}\label{e3.2}
 \prod_{i\in S} \operatorname{sgn}(K_{i\sigma(i)})
 \end{equation}
@@ -327,22 +334,22 @@ is a cycle and therefore \eqref{e3.3} is equal to \(\operatorname{sgn}(C_k)\).
 Let \(K\in\mathbb R^{N\times N}\) be a symmetric matrix and \(l\) be the sparsity of its adjacency graph. Then the principal minors up to size \(l\) uniquely determine all principal minors of \(K\) and therefore the matrix \(K\) up to determinantal equivalence.
 \end{theo}
 \begin{proof}
-In the light of the previous proposition it suffices to show that the sign function is uniquely specified by the principle minors up to size \(l\). Recall that the sign function is determined by its values on a shortest maximal cycle basis, which consists by definition of simple chordless cycles of length at most \(l\). However under the knowledge of the diagonal elements and the absolute values of the off diagonal ones, the sign of those simple chordless cycle is uniquely determined by the principle minors up to size \(l\) using the euqality \eqref{pmcl} .
+In the light of the previous proposition it suffices to show that the sign function is uniquely specified by the principal minors up to size \(l\). Recall that the sign function is determined by its values on a shortest maximal cycle basis, which consists by definition of simple chordless cycles of length at most \(l\). However under the knowledge of the diagonal elements and the absolute values of the off diagonal ones, the sign of those simple chordless cycle is uniquely determined by the principal minors up to size \(l\) using the euqality \eqref{pmcl} .
 \end{proof}
 %\begin{rem}
-%One can even show that this result is optimal in the sense that if one only has access to the principle minors up to size \(l-1\), then the equivalence class is not uniquely determined. See \cite{urschel2017learning} for details on this.\todo{can one also see this optimality from my proof?} \todo{comment on algorithms}
+%One can even show that this result is optimal in the sense that if one only has access to the principal minors up to size \(l-1\), then the equivalence class is not uniquely determined. See \cite{urschel2017learning} for details on this.\todo{can one also see this optimality from my proof?} \todo{comment on algorithms}
 %\end{rem}
 \begin{rem}
-One can even show that this result is optimal in the sense that if one only has access to the principle minors up to size \(l-1\), then the equivalence class is not uniquely determined. To see this, we note that the sign function is not uniquely specified through the principle minors up to size \(l-1\) and thus there is more than one extension of the sign function onto the shortest maximal cycle basis. The equation \eqref{pmcl} shows that those different extensions give rise to different principle minors.
+One can even show that this result is optimal in the sense that if one only has access to the principal minors up to size \(l-1\), then the equivalence class is not uniquely determined. To see this, we note that the sign function is not uniquely specified through the principal minors up to size \(l-1\) and thus there is more than one extension of the sign function onto the shortest maximal cycle basis. The equation \eqref{pmcl} shows that those different extensions give rise to different principal minors.
 %See \cite{urschel2017learning} for details on this.\todo{can one also see this optimality from my proof?} \todo{comment on algorithms}
 \end{rem}
 
 \begin{emp}[Construction of the equivalence class]\label{cec}
-We have shown that the determinantal equivalence class of a symmetric matrix is uniquely specified by its principle minors up to size \(l\). Now we want to investigate how this equivalence class can be computed and we will see that we can reduce this task to the solution of a system of linear equations over the finite field \(\mathbb F_2\).
+We have shown that the determinantal equivalence class of a symmetric matrix is uniquely specified by its principal minors up to size \(l\). Now we want to investigate how this equivalence class can be computed and we will see that we can reduce this task to the solution of a system of linear equations over the finite field \(\mathbb F_2\).
 
-Let us assume that we have knowledge of the principle minors \(\Delta_S\) for every \(S\subseteq\left\{ 1, \dots, N\right\}\) with size at most \(l\) and we want to construct a matrix \(\tilde K\) that is determinantally equivalent to \(K\). We have seen that we only need to reconstruct the signs of the off diagonal entries of \(K\) which is equivalent to reconstructing the edge weight \(w_{ij}\). To do this fix a shortest maximal cycle basis \(\left\{ C_1, \dots, C_m\right\}\) with vertex sets \(S_1, \dots, S_m\). Let us now rewrite \eqref{pmcl} in the form
+Let us assume that we have knowledge of the principal minors \(\Delta_S\) for every \(S\subseteq\left\{ 1, \dots, N\right\}\) with size at most \(l\) and we want to construct a matrix \(\tilde K\) that is determinantally equivalent to \(K\). We have seen that we only need to reconstruct the signs of the off diagonal entries of \(K\) which is equivalent to reconstructing the edge weight \(w_{ij}\). To do this fix a shortest maximal cycle basis \(\left\{ C_1, \dots, C_m\right\}\) with vertex sets \(S_1, \dots, S_m\). Let us now rewrite \eqref{pmcl} in the form
 \[H_k\coloneqq \Delta_{C_k} - \!\! \sum_{P\in\mathcal P(C_k)} (-1)^{\left\lvert P \right\rvert}\cdot \!\!\!\prod_{\left\{ i, j\right\}\in P}\! K_{ij}^2 \cdot\!\!\prod_{i\notin V(P)}\! K_{ii} = 2 \cdot (-1)^{\left\lvert C_k \right\rvert + 1} \operatorname{sgn}(C_k)\cdot\!\!\!\! \prod_{\left\{ i, j\right\}\in C_k}\left\lvert K_{ij} \right\rvert. \]
-Given the principle minors, we can determine the value on the right side and taking the sign on both sides yields
+Given the principal minors, we can determine the value on the right side and taking the sign on both sides yields
 \[ (-1)^{\left\lvert C_k \right\rvert + 1} \cdot \operatorname{sgn}(H_k) = \operatorname{sgn}(C_k) = \prod_{\left\{ i, j\right\}\in E(S_k)} w_{ij} \]
 which we seek to solve for \(w\). However this multiplicative equation is hard to solve and therefore we use the canonical group isomorphism \(\phi\) between \(\left\{ \pm 1\right\}\) and \(\left\{ 0, 1\right\}\) to turn it into a linear equation. Setting \(x_{ij}\coloneqq \phi(w_{ij})\) we get that the condition above is equivalent to
 \begin{equation*}
@@ -374,8 +381,10 @@ It shall be noted that there are algorithms with much better computational perfo
 
 %\subsubsection*{Definition of the estimator}
 
+\subsection{Definition of the estimator and consistency}
 
-So far we have seen that the principle minors determine a symmetric matrix up to determinantal equivalence. However the empirical marginal densities do not in general need to be the principle minors of any symmetric matrix, in other words the empirical measures are not necessarily determinantal. Therefore the definition of the estimator is till not quite straight forward and we will follow \cite{urschel2017learning} for this and make the following assumption.
+
+So far we have seen that the principal minors determine a symmetric matrix up to determinantal equivalence. However the empirical marginal densities do not in general need to be the principal minors of any symmetric matrix, in other words the empirical measures are not necessarily determinantal. Therefore the definition of the estimator is till not quite straight forward and we will follow \cite{urschel2017learning} for this and make the following assumption.
 
 \begin{emp}[Assumption]\label{ass}
 Let \(\alpha>0\) and assume that 
@@ -482,4 +491,7 @@ Although the result above states that the estimators \(\hat K\) converges to \(K
 \end{rem}
 \todo{explain how the algorithm for the reconstruction works}
 %\todo{how hard it is to prove}
+
+\subsection{Computation of the estimator}
+
 \todo{is this estimator unbiased?}

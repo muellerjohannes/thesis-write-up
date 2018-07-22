@@ -157,7 +157,7 @@ Under the assumption of a log linear model for the qualities the individual term
 
 \subsubsection*{MLE of the repulsiveness parameter}
 
-\subsection{Existence of the maximum likelihood estimators}
+\subsection{Coercivity and existence of the maximum likelihood estimators}
 
 A priori it is not clear that the maximum likelihood estimators exist and we will actually see that they do not exist in general. However one can still save this approach because the probability that they exist tends to \(1\) if the sample size increases. We begin by showing this for the MLE of the qualities and then we will adapt this proof to the other models.
 
@@ -265,7 +265,7 @@ and we have seen in the proof of \ref{PosMLE} that the log likelihood function t
 
 \subsubsection*{MLE for the repulsiveness parameter}
 
-\subsection{Consistency of the MLE}
+\subsection{Consistency of the maximum likelihood estimators}
 
 %\begin{enumerate}
 %\item Heuristical argument for consistency
@@ -311,7 +311,7 @@ Unfortunately the convergence in \eqref{entropy} does only hold uniformly on a c
 
 \subsubsection*{A general consistency result for extremal estimators}
 
-We will prove a general consistency result for extremal estimators and first present the setting we will work in.
+We will prove a general consistency result for a rather broad class of estimators which is taken from \cite{newey1994large} and slightly adapted to our needs. Although it would be possible to prove the consistency of the MLEs directly we present this general procedure since this can easily be adjusted to other cases. % and first present the setting we will work in.
 
 \begin{emp}[Setting]
 Let in the following \(\Theta\) be a topological Hausdorff space and 
@@ -404,7 +404,7 @@ F(\theta) \coloneqq \mathbb E\big[\log(f(X, \theta))\big]. \]
 The quantity \(F\) is known as the \emph{entropy} and plays an important role in statistical mechanics, applied statistics, information theory and many other fields. For more information on this we refer to \cite{martin2011mathematical}, \cite{mackay2003information}, \cite{volkenstein2009entropy} and \cite{gray1990entropy}.
 
 
-\subsubsection*{The information inequality and locally uniform convergence}
+\subsubsection*{Information inequality and locally uniform convergence}
 
 The third requirement of the previous consistency result can be proven in a general setting and without quantitative assumption and we adapt an argument from \cite{newey1994large} to fit our needs. In order to do this we will work with the following assumptions.
 
@@ -495,7 +495,8 @@ almost surely for \(n\ge N(\varepsilon)\) where we used the strong law of large 
 
 \subsubsection*{Consistency of the MLEs for the quality and elementary kernel}
 
-In this part we will -- for the first time -- make use of the specific structure the elementary probabilities. Since we have already taken care of condition (\emph{ii}) and (\emph{iii}) and condition (\emph{iv}) is fairly straight forward, we first dedicate ourselves to proving the second requirement. For this we keep the setting of the previous section although we now consider the case that
+In this part we will -- for the first time -- make use of the specific structure of the model. %elementary probabilities.
+Since we have already taken care of condition (\emph{ii}) and (\emph{iii}) and condition (\emph{iv}) will be fairly straight forward, we dedicate ourselves to proving the first requirement of Theorem \ref{conext}. For this we keep the setting of the previous section although we now consider the case that
 \[\mathcal F = \Big\{ f(\cdot, \theta)\colon X\to[0, \infty) \mid\theta \in\Theta\Big\}\]
  is one of the parametric families introduced in \ref{models}.% Further we assume that the data \((\mathbf Y_n)\) are indepentend and distributed according to a \(L\)-ensemble with elementary probabilities \(f(\cdot)\).\todo{formulate this better!}
 

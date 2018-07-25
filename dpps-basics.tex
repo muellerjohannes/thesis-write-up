@@ -282,21 +282,22 @@ Then \(\mathbb P\) is a DPP on \(\mathcal Y\) with marginal kernel \(K\). In par
 First we have to show that \eqref{elemDPPs} defines a probability measure. For this let \(B\in\mathbb R^{m\times N}\) be the matrix with rows \(v_k\) for \(k=1, \dots, m\). By definition we have \(K = B^TB\) and hence
 \begin{equation*}
 \begin{split}
-\sum_{A\subseteq \mathcal Y, \left\lvert A \right\rvert = m} \det(K_A) & = \sum_{i_1, \dots, i_m\in\mathcal Y} \det\left(K_{i_ki_l}\right)_{1\le k, l \le m} \\
+\sum_{A\subseteq \mathcal Y, \left\lvert A \right\rvert = m} \det(K_A) & = \sum_{\begin{subarray}{c} I\subseteq\mathcal Y \\ \left\lvert I \right\rvert = m \end{subarray}} \det\left(K_{I}\right) %\\
 %& = \sum_{i_1, \dots, i_m\in\mathcal Y} \det(B^T_{i_kl})_{1\le k, l \le m} \det(B_{i_kl})_{1\le k, l \le m} \\
-& = \sum_{i_1, \dots, i_m\in\mathcal Y} \det\left(B_{li_k}\right)_{1\le k, l \le m}^2 \\
-& = \det\left( \sum_{i\in\mathcal Y} B_{ki}B_{li} \right)_{1\le k, l\le m} \\
-& = \det\left( v_{k}^Tv_{l} \right)_{1\le k, l\le m} = 1
+ = \sum_{\begin{subarray}{c} I\subseteq\mathcal Y \\ \left\lvert I \right\rvert = m \end{subarray}} \det\left(B_{[m]I}\right)^2 \\
+& = \det\left( B^TB \right) %\\
+ = \det\left( v_{k}^Tv_{l} \right)_{1\le k, l\le m} = 1
 \end{split}
 \end{equation*}
-where we have used the Cauchy-Binet identity. It remains to check that all marginal probabilities satisfy
+where we have used the Cauchy-Binet identity and the fact that \(V\) is orthonormal. It remains to check that all marginal probabilities satisfy
 \[\mathbb P(A\subseteq \mathbf Y) = \det(K_A).\]
 For \(\left\lvert A \right\rvert\ge m\) this follows immediately, so let \(A = \left\{ i_1, \dots, i_{r}\right\}\) for \(r< m\). Then we obtain the marginal probability of \(A\) through integration over the other \(m-r\) points. Namely we have
 \begin{equation*}
 \begin{split}
-\mathbb P(A\subseteq \mathbf Y) & = \sum_{i_r\ne \dots\ne i_m\in\mathcal Y\setminus A} \mathbb P\big(A\cup\left\{ i_r, \dots, i_m\right\}\subseteq\mathbf Y\big) = \sum_{i_r\ne \dots\ne i_m\in\mathcal Y\setminus A} \det\left((v_l)_{i_k}\right)_{1\le k, l \le m}^2 \\
-& = %\frac{(m-r)!}{m!}
-\sum_{i_r, \dots, i_m\in\mathcal Y} \det\left((v_l)_{i_k}\right)_{1\le k, l \le m}^2 = \det\left( (v_{i_k})^T (v_{i_l}) \right)_{1\le k, l\le r-1} = \det(K_A) % \\\det\left(K_{i_ki_l}\right)_{1\le k, l\le m} \\
+\mathbb P(A\subseteq \mathbf Y) & = \sum_{\begin{subarray}{c} A\subseteq J\subseteq[n] \\ \left\lvert J \right\rvert = m \end{subarray}} \mathbb P(J\subseteq\mathbf Y) = \sum_{\begin{subarray}{c} A\subseteq J\subseteq[n] \\ \left\lvert J \right\rvert = m \end{subarray}} \det\left(B_{[m]J}\right)^2 %\\
+% & = %\frac{(m-r)!}{m!}
+%\sum_{i_r, \dots, i_m\in\mathcal Y} \det\left((v_l)_{i_k}\right)_{1\le k, l \le m}^2 = 
+= \det\left( (B^TB)_A \right) = \det(K_A) % \\\det\left(K_{i_ki_l}\right)_{1\le k, l\le m} \\
 %& = \frac{(m-r)!}{m!}\sum_{i_r, \dots, i_m\in\mathcal Y} \sum_{\sigma, \tau\in S_m} \operatorname{sgn}(\sigma)\operatorname{sgn}(\tau) \prod_{k=1}^{m}(v_{\sigma(k)})_{i_k}(v_{\tau(k)})_{i_k} \\% \prod_{k=r}^{m}B_{\sigma(k)i_k}B_{\tau(k)i_k}
 %& = \frac{(m-r)!}{m!} \sum_{\sigma, \tau\in S_m} \operatorname{sgn}(\sigma)\operatorname{sgn}(\tau) \prod_{k=1}^{r-1}(v_{\sigma(k)})_{i_k}(v_{\tau(k)})_{i_k} \prod_{k=r}^{m} \sum_{i_k\in\mathcal Y} (v_{\sigma(k)})_{i_k}(v_{\tau(k)})_{i_k} \\
 %& = \frac{(m-r)!}{m!} \sum_{\sigma, \tau\in S_m} \operatorname{sgn}(\sigma)\operatorname{sgn}(\tau) \prod_{k=1}^{r-1}(v_{\sigma(k)})_{i_k}(v_{\tau(k)})_{i_k} \prod_{k=r}^{m} v_{\sigma(k)}^Tv_{\tau(k)}.

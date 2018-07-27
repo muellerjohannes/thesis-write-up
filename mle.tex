@@ -276,7 +276,7 @@ and we have seen in the proof of \ref{PosMLE} that the log likelihood function t
 %\item modify the result to the case that the probability for the functions to be coercive converges towards 1; this should then give the consistency of the MLE for the kernel and the quality and also the log linearity constant or more precisely its projection onto the span of the diversity feature vectors
 %\end{enumerate}
 
-We will now turns towards the question of consistency of the maximum likelihood estimators introduced earlier in this section. For this we will first give a formal proof of the consistency of the MLE and present a rather general framework that will allow us to turn the formal proof into a rigorous one.
+We will now turns towards the question of consistency of the maximum likelihood estimators introduced earlier in this section. For this we will first give a formal proof of the consistency of the MLE and then present a rather general framework that will allow us to turn the formal proof into a rigorous one.
 
 \begin{emp}[Formal proof of consistency]
 We will consider a general MLE like in \eqref{mledef} and we will assume that the observations \((X_n)\) are independent and have density \(f(x| \theta_0)\) with respect to some measure \(\mu\). By the law of large number we have
@@ -284,7 +284,7 @@ We will consider a general MLE like in \eqref{mledef} and we will assume that th
 \frac1n \mathcal L(\theta) = \frac1n\sum_{i=1}^n\log(f(X_i| \theta)) \xlongrightarrow{n\to\infty} \mathbb E\big[\log(f(X| \theta))\big].
 \end{equation}
 Hence the maximiser of the left hand side should be close to the maximiser of the right hand. % side which
-Differentiating the left hand side yields
+Differentiating the right hand side yields
 \begin{equation*}
 \begin{split}
 \partial_\theta \mathbb E\big[\log(f(X| \theta))\big] & = \mathbb E\left[\partial_\theta \log(f(X| \theta))\right] = \mathbb E\left[\frac{\partial_\theta f(X| \theta)}{f(X| \theta)}\right] \\
@@ -295,25 +295,25 @@ Evaluating this at \(\theta = \theta_0\) yields
 \begin{equation*}
 \int \partial_\theta f(x| \theta) \mu(\mathrm{d}x) = \partial_\theta \int f(x| \theta) \mu(\mathrm{d}x) = \partial_\theta(1) = 0.
 \end{equation*}
-Hence \(\theta_0\) is a critical point and under mild conditions the left hand side is concave and thus \(\theta_0\) is the unique maximiser. In conclusion the estimator \(\hat \theta\) should be close to \(\theta_0\).
+Hence \(\theta_0\) is a critical point and under mild conditions the right hand side is concave and thus \(\theta_0\) is the unique maximiser. In conclusion the estimator \(\hat \theta\) should be close to \(\theta_0\).
 \end{emp}
 
-Although rough structure of the rigorous proof is present in the argument above it is highly formal. For example we argue that if a sequence \((f_n)_{n\in\mathbb N}\) of functions converges towards \(f\) pointwise, then the maximisers \((x_n)_{n\in\mathbb N}\) should converge to the maximiser \(x\) of \(f\). The major tool to make this rigorous will be to use some kind of uniform convergence. Namely we have the following result where we will omit the proof since it is very easy and we proof a similar but stronger version of it later.
+Although the rough structure of the rigorous proof is present in the argument above it is highly formal. For example we argue that if a sequence \((f_n)_{n\in\mathbb N}\) of functions converges towards \(f\) pointwise, then the maximisers \((x_n)_{n\in\mathbb N}\) should converge to the maximiser \(x\) of \(f\). The major tool to make this rigorous will be to use some kind of uniform convergence. Namely we have the following result where we will omit the proof since it is very easy and we prove a similar but stronger version of it later.
 
 \begin{lem}[Swapping limit and maximisation]
-Let \((f_n)_{n\in\mathbb N}\) be a sequence of real functions with maximisers \((x_n)_{n\in\mathbb N}\) that are bounded from above and converge uniformly towards \(f\). Further assume that \(f\) is coercive and continuous and let \(x\) be the unique maximiser of \(f\). Then we have \(x_n\to x\) for \(n\to\infty\).
+Let \((f_n)_{n\in\mathbb N}\) be a sequence of real functions on a compact space with maximisers \((x_n)_{n\in\mathbb N}\) that are bounded from above and converge uniformly towards \(f\). Further assume that \(f\) is continuous and has a unique maximum in \(x_0\). Then we have \(x_n\to x_0\) for \(n\to\infty\).
 \end{lem}
 %\begin{proof}
 
 %\end{proof}
 
-Unfortunately the convergence in \eqref{entropy} does only hold uniformly on a compact set \(K\). To fix this one has to ensure that the maximisers \((x_n)\) lie in this compact set \(K\) for large \(n\). We will do this in a general setup in the next paragraph.
+Unfortunately the convergence in \eqref{entropy} does only hold uniformly on a compact set \(K\subseteq\Theta\). To fix this we will argue that the maximisers \((x_n)\) lie in this compact set \(K\) for large \(n\). We will do this in a general setup in the next paragraph.
 
 % the formal proof above sketches the major 
 
 \subsubsection*{A general consistency result for extremal estimators}
 
-We will prove a general consistency result for a rather broad class of estimators which is taken from \cite{newey1994large} and slightly adapted to our needs. Although it would be possible to prove the consistency of the MLEs directly we present this general procedure since this can easily be adjusted to other cases. % and first present the setting we will work in.
+We will provide a general consistency result for a rather broad class of estimators which is taken from \cite{newey1994large} and slightly adapted to our needs. Although it would be possible to prove the consistency of the MLEs directly we present this general procedure since this can easily be adjusted to other cases. % and first present the setting we will work in.
 
 \begin{emp}[Setting]
 Let in the following \(\Theta\) be a topological Hausdorff space and 
@@ -321,10 +321,11 @@ Let in the following \(\Theta\) be a topological Hausdorff space and
 be a sequence of random functions with %that attain 
 maximisers
 \[\hat{\theta}_n \coloneqq \underset{\theta\in\Theta}{\arg\max} F_n(\theta).\]
-If no maximiser exists, we choose \(\hat{\theta}_n\in\Theta\) arbitrary. Further let \(F\colon \Theta\to [-\infty, \infty)\) be a deterministic function with maximiser \(\theta_0\).
+If no maximiser exists, we choose \(\hat{\theta}_n\in\Theta\) arbitrary. Further let \(F\colon \Theta\to [-\infty, \infty)\) be a deterministic function with maximiser \(\theta_0\). The maximisers \(\hat{\theta}_n\) are called \emph{extremal estimators} since they are the extremal points of the functions \(F_n\).
 \end{emp}
 
-The maximisers \(\hat{\theta}_n\) are called \emph{extremal} estimators since they are the extremal points of the functions \(F_n\). We now turn towards the question whether the extremal estimators converge to the maximiser \(\theta_0\).
+%The maximisers \(\hat{\theta}_n\) are called \emph{extremal} estimators since they are the extremal points of the functions \(F_n\).
+We now investigate whether the extremal estimators converge to the maximiser \(\theta_0\).
 
 \begin{theo}[Consistency of extremal estimators]\label{conext}
 Let the setting be as above and assume that the following conditions hold.
@@ -362,12 +363,12 @@ Fix now an open set \(U\subseteq\Theta\) that contains \(\theta_0\). Choosing \(
 \[F_n(\theta_0) \ge F(\theta_0) - \varepsilon > F(\theta_0) - \varepsilon_0 \ge F_n(\theta) \quad \text{for all } \theta\notin K_0. \]
 Hence the maximum of \(F_n\) is attained in \(K_0\) and we have \(\hat{\theta}_n\in K_0\). %, that \(\hat{\theta}_n\in K_0\).
 Thus if \(K_0\subseteq U\) we are done.
-If this is not the case, \ref{dirmet} together with (\emph{iv}) implies that
+If this is not the case %, \ref{dirmet} together with (\emph{iv}) implies that
 %\[K\cap \Big\{ \theta\in\Theta\mid L(\theta) > L(\theta_0) - \delta \Big\}%L^{-1}((L(\theta_0) - \delta, L(\theta_0)])
 % \subseteq U\]
 %for some \(\delta>0\). This is due to the fact that
  \(F\) attains its maximum %\footnote{Any upper semicontinuous function on a topological Hausdorff space attains its maximum over a compact set.} 
- \(\alpha\) on \(K_0\setminus U\) which is strictly smaller than \(F(\theta_0)\) because of (\emph{iii}). Thus we have %only have to show that the probability for \(\theta\in K\) and \(L(\hat{\theta})>\alpha\) tends to one since %. % \(\theta\in U\) and we will use this criterion to show the consistency.
+ \(\alpha\) on \(K_0\setminus U\) because \(F\) is upper semicontinuous and \(K_0\setminus U\) is compact (c.f. \ref{dirmet}). Further (\emph{iii}) implies \(\alpha < F(\theta_0)\) and thus we have %only have to show that the probability for \(\theta\in K\) and \(L(\hat{\theta})>\alpha\) tends to one since %. % \(\theta\in U\) and we will use this criterion to show the consistency.
  \[K_0\cap \Big\{ \theta\in\Theta\mid F(\theta) > \alpha \Big\} \subseteq U. \]
  
 So in order to show \(\hat{\theta}_n\in U\), it suffices to show \(\hat{\theta}_n\in K_0\) and \(F(\hat{\theta}_n)>\alpha\). Since we have already seen that the first statement holds, it remains to show the second one. However (\emph{ii}) implies
@@ -385,8 +386,9 @@ for \(\varepsilon\) small enough.
 %\[F(\hat{\theta}_n) \ge F_n(\hat{\theta}_n) - \varepsilon \ge F_n(\theta_0) - \varepsilon \ge F(\theta_0) - 2\varepsilon > \alpha\]
 %for \(\varepsilon\) small enough.
 \end{proof}
+\todo{maybe add a sketch?}
 
-The proof above can be read in the following way. The two conditions (\emph{i}), (\emph{ii}) and (\emph{v}) force \(\hat{\theta}_n\in K_0\) and hence we can restrict our considerations to a compact set. This is actually the setting the consistency results are usually presented in. Then we argue that if \(F(\theta)\) is close to \(F(\theta_0)\), then \(\theta\) has to be close to \(\theta_0\), where we use that we are on a compact subset as well as (\emph{iii}) and (\emph{iv}). However since \(F_n\) is close to \(F\) on \(K_0\) we obtain that \(F(\hat{\theta}_n)\) is close to \(F_n(\hat{\theta}_n)\) which is close to \(F(\theta_0)\) since the maximum values converge to each other.
+%The proof above can be read in the following way. The two conditions (\emph{i}), (\emph{ii}) and (\emph{v}) force \(\hat{\theta}_n\in K_0\) and hence we can restrict our considerations to a compact set. This is actually the setting the consistency results are usually presented in. Then we argue that if \(F(\theta)\) is close to \(F(\theta_0)\), then \(\theta\) has to be close to \(\theta_0\), where we use that we are on a compact subset as well as (\emph{iii}) and (\emph{iv}). However since \(F_n\) is close to \(F\) on \(K_0\) we obtain that \(F(\hat{\theta}_n)\) is close to \(F_n(\hat{\theta}_n)\) which is close to \(F(\theta_0)\) since the maximum values converge to each other.
 
 %\begin{rem}
 %The conditions of the 
@@ -403,12 +405,12 @@ Note that the factor \(\frac1n\) does not change the maximum. However \eqref{ent
 F(\theta) \coloneqq \mathbb E\big[\log(f(X| \theta))\big]. \]
 %in the case of maximum likelihood estimation.
  % where \(()\)
-The quantity \(F\) is known as the \emph{entropy} and plays an important role in statistical mechanics, applied statistics, information theory and many other fields. For more information on this we refer to \cite{martin2011mathematical}, \cite{mackay2003information}, \cite{volkenstein2009entropy} and \cite{gray1990entropy}.
+The quantity \(F\) is known as the \emph{entropy} and plays an important role in many different fields, for example statistical mechanics, applied statistics and information theory. For further reading we refer to \cite{martin2011mathematical}, \cite{mackay2003information}, \cite{volkenstein2009entropy} and \cite{gray1990entropy}.
 
 
 \subsubsection*{Information inequality and locally uniform convergence}
 
-The third requirement of the previous consistency result can be proven in a general setting and without quantitative assumption and we adapt an argument from \cite{newey1994large} to fit our needs. In order to do this we will work with the following assumptions.
+The second and third requirement of the previous result can be proven in a general setting and without quantitative assumption and we adapt an argument from \cite{newey1994large} to fit our needs. In order to do this we will work with the following assumptions.
 
 \begin{emp}[Setting]
 Let in the following \(\Theta\) be a set and let 
@@ -424,9 +426,9 @@ denote the expectation with respect to \(f(\cdot| \theta_0) \mathrm{d}\mu\) by \
 \end{emp}
 
 \begin{prop}[Information inequality]\label{infine}
-Let the setting be as above and assume that the parameter \(\theta_0\in\Theta\) is identifiable, i.e. we have \(f(\cdot| \theta)\ne f(\cdot| \theta_0)\) whenever \(\theta\ne\theta_0\). Let further\todo{show \(F(\theta_0)>-\infty\)}
+Let the setting be as above and assume that the parameter \(\theta_0\in\Theta\) is identifiable, i.e. we have \(f(\cdot| \theta)\ne f(\cdot| \theta_0)\) whenever \(\theta\ne\theta_0\). Let further%\todo{show \(F(\theta_0)>-\infty\)}
 \[%\mathbb E\Big[ \big\lvert \log(f(X| \theta)) \big\rvert \Big] < \infty
-\sup_{x\in \mathcal X| \theta\in\Theta} f(x| \theta)<\infty
+\sup_{x\in \mathcal X, \theta\in\Theta} f(x| \theta)<\infty
   \quad \text{and } F(\theta_0)>-\infty .\]
 %for all \(\theta\in\Theta\). 
 Then the entropy
@@ -456,23 +458,24 @@ F(\theta) - F(\theta_0) & = \mathbb E\big[\log(f(X| \theta))\big] - \mathbb E\bi
 \end{equation*}
 \end{proof}
 
-Next we take care of the first requirement of the consistency result. Namely we will show that the functions \(F_n\) associated with the MLE almost surely converge to \(F\) locally uniformly under fairly mild conditions. For this we modify the proof of a more general convergence result in \cite{tauchen1985diagnostic}.
+Next we take care of the second requirement of the consistency result. Namely we will show that the functions \(F_n\) associated with the MLE almost surely converge to \(F\) locally uniformly under fairly mild conditions. For this we modify the proof of a more general convergence result in \cite{tauchen1985diagnostic}.
 
 \begin{lem}[Locally uniform convergence]\label{locunicon}
-Let the setting be as above, but let \(\Theta\) be a metric space and we assume that the following conditions hold.
+Let the setting be as above, but let \(\Theta\) be a metric space and let \(K\subseteq\Theta\) be compact such that the following conditions hold.
 \begin{enumerate}
-\item Let \(K\subseteq\Theta\) be such that
+\item Let
 \[\mathbb E\left[\sup_{\theta\in K} \big\lvert \log(f(X| \theta)) \big\rvert \right]<\infty.\] 
 \item For every \(\theta\in K\) we have \(\log(f(\cdot, \gamma))\to\log(f(\cdot| \theta))\) almost surely with respect to \(f(\cdot| \theta_0) \mathrm d\mu\) for \(\gamma\to\theta\).
 \end{enumerate}
 %Then we almost surely have 
-Then we almost surely have \(F_n\to F\) uniformly on \(K\), i.e. almost surely we have %for any compact \(K\subseteq\Theta\)
+Then we almost surely have \(F_n\to F\) uniformly on \(K\), i.e. almost surely %we have %for any compact \(K\subseteq\Theta\)
 \[\sup_{\theta\in K} \big\lvert F_n(\theta) - F(\theta) \big\rvert \xlongrightarrow{n\to\infty} 0. \]
 %locally uniformly.
 \end{lem}
 \begin{proof}
-Fix \(\varepsilon>0\) and a compact set \(K\subseteq\Theta\). Define for \(\rho>0\)
-\[u(x, \theta, \rho)\coloneqq \sup_{d(\gamma| \theta)\le \rho} \big\lvert \log(f(x, \gamma)) - \log(f(x| \theta)) \big\rvert  \xlongrightarrow{\rho\to\infty} 0\]
+Fix \(\varepsilon>0\) %and a compact set \(K\subseteq\Theta\). Define 
+and define for \(x\in\mathcal X\) and \(\rho>0\)
+\[u(x, \theta, \rho)\coloneqq \sup_{d(\gamma, \theta)\le \rho} \big\lvert \log(f(x| \gamma)) - \log(f(x| \theta)) \big\rvert  \xlongrightarrow{\rho\to\infty} 0\]
 almost surely for \(\theta\) fixed where we used condition (\emph{ii}).
 
 This in combination with (\emph{i}) and the dominated convergence theorem imply that the convergence also holds in expectation and therefore we have
@@ -498,13 +501,14 @@ almost surely for \(n\ge N(\varepsilon)\) where we used the strong law of large 
 \subsubsection*{Consistency of the MLEs for the quality and elementary kernel}
 
 In this part we will -- for the first time -- make use of the specific structure of the model. %elementary probabilities.
-Since we have already taken care of condition (\emph{ii}) and (\emph{iii}) and condition (\emph{iv}) will be fairly straight forward, we dedicate ourselves to proving the first requirement of Theorem \ref{conext}. For this we keep the setting of the previous section although we now consider the case that
-\[\mathcal F = \Big\{ f(\cdot| \theta)\colon X\to[0, \infty) \mid\theta \in\Theta\Big\}\]
- is one of the parametric families introduced in \ref{models}.% Further we assume that the data \((\mathbf Y_n)\) are indepentend and distributed according to a \(L\)-ensemble with elementary probabilities \(f(\cdot)\).\todo{formulate this better!}
+Since we have already taken care of conditions (\emph{ii}), (\emph{iii}) and (\emph{v}) and condition (\emph{iv}) will be fairly straight forward, we dedicate ourselves to proving the first requirement of Theorem \ref{conext}. For this we keep the setting of the previous section although we now consider the case that
+\[\mathcal F = \Big\{ f(\cdot| \theta)\colon 2^{\mathcal Y}\to[0, \infty) \mid\theta \in\Theta\Big\}\]
+ is one of the parametric families for the \(L\)-ensembles introduced in \ref{models}. Further we denote a realisation of a DPP by \(\mathbf Y\) like earlier.% Further we assume that the data \((\mathbf Y_n)\) are indepentend and distributed according to a \(L\)-ensemble with elementary probabilities \(f(\cdot)\).\todo{formulate this better!}
 
 \begin{lem}[Control outside of a compact set]\label{concom}
+%Assume that \(F(\theta_0)>-\infty\). Then t
 The requirement \emph{(}i\emph{)} from Theorem \ref{conext} is satisfied for the three kinds of parametric families for the kernel estimation. Further the compact set \(K_0\) can be chosen as follows. Let \(\mathcal A\) be the family of subsets \(A\subseteq\mathcal Y\) with positive probability \(f(A| \theta_0)>0\) and let \(c(A)>0\) such that
-\[-c(A) < 2\cdot\log(f(A| \theta_0)).\]
+\[-c(A) < \frac{2\cdot F(\theta_0)}{f(A|\theta_0)}.\]
 Then we set
 \[ K_0 \coloneqq \Big\{ \theta\in\Theta \;\big\lvert\; \log(f(A| \theta)) \ge - c(A) \text{ for all } A\in\mathcal A %\text{ with } f(A| \theta_0) > 0
 \Big\}% \quad\text{where } c(A) > 2\cdot\frac{F(\theta_0)}{f(A| \theta_0)} .
@@ -512,10 +516,13 @@ Then we set
 %where \(c(A) > 2\cdot\frac{F(\theta_0)}{f(A| \theta_0)}\).
 \end{lem}
 \begin{proof}
+At first we note that \(F(\theta_0)>-\infty\). % because % \(\log(f(\cdot|\theta_0))\) is \(f(\cdot|\theta_0)\) almost
+%\[\mathbb E\big[\log(f(\mathbf Y|\theta_0))\big] = \sum_{A\subseteq\mathcal Y} \log(f(A|\theta_0)) f(A|\theta_0) > -\infty \]
+%where we use the convention \(0\log(0)=0\).
 %For any \(A\subseteq\mathcal Y\) with \(f()\) 
 % Let \(\mathcal A\) be the family of subsets \(A\subseteq\mathcal Y\) with positive probability \(f(A| \theta_0)>0\). %Set \(\delta(A)\coloneqq\frac{f(A| \theta_0)}{2}\) for \(A\subseteq\mathcal Y\) %whenever \(f(A| \theta_0)>0\) 
 %and 
-Let 
+Let now
 \[\hat{\mathbb P}_n\coloneqq \frac1n \sum_{i=1}^n \delta_{\mathbf Y_i} \]
  be the empirical measure. %Whenever \(f(A| \theta_0)>0\), 
  We have by the law of large numbers
@@ -524,23 +531,26 @@ and we can assume \(\hat{\mathbb P}_n(A) \ge \frac{f(A| \theta_0)}{2}\), since w
 %Note that the empirical entropies take the form \todo{introduce terminology earlier}
 %\[F_n(\theta) = \int \log(f(x| \theta)) \hat{\mathbb P}_n(\mathrm{d} x) = \sum_{A\subseteq \mathcal Y} \hat{\mathbb P}_n(A)\cdot \log(f(A| \theta)) \]
 %since the elementary probabilities \(f(\cdot| \theta)\) are bounded by \(1\).
-Whenever \(f(A| \theta_0)>0\) we choose \(c(A)>0\) such that
-\[-c(A)< 2\cdot \log(f(A| \theta_0)) % f(A| \theta_0) %\frac{F(\theta_0)}{\left\lvert \mathcal A \right\rvert}
-.\]
-For exactly those \(A\) we define now
+%Whenever \(f(A| \theta_0)>0\) we choose \(c(A)>0\) such that
+%\[-c(A)< 2\cdot \log(f(A| \theta_0)) % f(A| \theta_0) %\frac{F(\theta_0)}{\left\lvert \mathcal A \right\rvert}
+%.\]
+For \(A\in\mathcal A\) we note that %For exactly those \(A\) we define now
 \[K_A \coloneqq \Big\{ \theta\in\Theta \;\big\lvert\; \log(f(A| \theta)) \ge - c(A) \Big\}\]
 which is closed since \(f(A| \theta)\) is upper semicontinuous. Further \(K_A\) is compact for \(A=\varnothing\in\mathcal A\) since \(\log(f(\varnothing| \theta))\) is coercive in \(\theta\) as been shown in the coercivity proofs earlier in this chapter. Further it contains \(\theta_0\) as
 \[\log(f(A| \theta_0)) \ge 2 \cdot \log(f(A| \theta_0)) > -c(A) \]
-because \(f(A| \theta)\le 1\). Set now
-\[K_0\coloneqq \bigcap_{A\in \mathcal A} K_A\]
-which is compact because \(K_\varnothing\) is compact. Finally we have for \(\theta\notin K_0\)
+because \(f(A| \theta)\le 1\). Now
+\[K_0= \bigcap_{A\in \mathcal A} K_A\]
+ is compact because \(K_\varnothing\) is compact. Take now \(\theta\notin K_0\), lets say \(\theta\notin K_A\), then we get% \todo{there is a mistake!!!!}
 \begin{equation*}
 \begin{split}
-F_n(\theta) & = \int \log(f(x| \theta)) \hat{\mathbb P}_n(\mathrm{d} x) = \sum_{A\in \mathcal A} \hat{\mathbb P}_n(A)\cdot \log(f(A| \theta)) < - \sum_{A\in \mathcal A} \frac{f(A| \theta_0)}{2} c(A) \\
-& % < \left\lvert \mathcal A \right\rvert \cdot F(\theta_0)
- < \sum_{A\in \mathcal A} \log(f(A| \theta_0)) f(A| \theta_0) = F(\theta_0).
+F_n(\theta) & = \int \log(f(x| \theta)) \hat{\mathbb P}_n(\mathrm{d}x) = \sum_{B\in \mathcal A} \hat{\mathbb P}_n(B)\cdot \log(f(B| \theta)) \le \hat{\mathbb P}_n(A)\cdot \log(f(A| \theta)) \\
+& < \frac{f(A| \theta_0)}{2} \cdot c(A) < F(\theta_0)
+% < - \sum_{A\in \mathcal A} \frac{f(A| \theta_0)}{2} c(A) \\
+%& % < \left\lvert \mathcal A \right\rvert \cdot F(\theta_0)
+% < \sum_{A\in \mathcal A} \log(f(A| \theta_0)) f(A| \theta_0) = F(\theta_0).
 \end{split}
 \end{equation*}
+where we used \(f(B|\theta)\le1\).
 %where we used that \(F\) is non positive.
 %Choose now \(K_0\subseteq\Theta\) compact such that\todo{say why this is possible}
 %\[\log(f(\varnothing| \theta)) \le -c \quad \text{for all } \theta\notin K. \]
@@ -586,7 +596,7 @@ since the densities are elementary probabilities. Finally \(F(q_0)>-\infty\) is 
 Since the previous lemma already takes care of condition (\emph{i}) it suffices to show the second condition for which we will use \ref{locunicon}. Hence it remains to check the two conditions of this lemma, but the second one -- the continuity condition -- obviously holds as can be seen from \eqref{elepro}. To see that the first one also holds we note that for \(A\subseteq\mathcal Y\) with \(f(A| q_0)>0\) and \(\theta\in K_0\) we have
 \[0 \ge \log(f(A| q)) \ge -c(A) > -\infty.\]
 Hence the random variable
-\[\sup_{q\in K_0} \big\lvert \log(f(X| q)) \big\rvert\]
+\[\sup_{q\in K_0} \big\lvert \log(f(\mathbf Y| q)) \big\rvert\]
 is almost surely finite and since the probability space \(2^{\mathcal Y}\) is finite, the second condition holds.
 \end{proof}
 

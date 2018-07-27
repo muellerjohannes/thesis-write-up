@@ -196,7 +196,13 @@ for all continuous and bounded functions \(f\). This means that \(\hat{\mathbb P
 
 \subsubsection*{Idea of Markov chain Monte Carlo methods}
 
-The motivation of the study of Markov chain Monte Carlo methods was to approximate the posterior distribution \eqref{post2}. The idea is now to construct and then simulate a Markov chain \((X_n)_{n\in\mathbb N}\) such that the empirical measures \(\hat{\mathbb P}_n\) converge to the posterior. In order to achieve this we only have to check the requirements of the ergodic theorem. This means we want to construct a Harris recurrent Markov chain with the posterior density as an invariant distribution without having to compute the normalisation constant \eqref{norma}. We will present the two most common ways to do this -- namely the Metropolis-Hastings random walk and the method of slice sampling.
+The motivation of the study of Markov chain Monte Carlo methods was to approximate the posterior distribution \eqref{post2}. The idea is now to construct and then simulate a Markov chain \((X_n)_{n\in\mathbb N}\) such that the empirical measures \(\hat{\mathbb P}_n\) converge to the posterior. In order to achieve this we only have to check the requirements of the ergodic theorem. This means we want to construct a Harris recurrent Markov chain with the posterior density as an invariant distribution without having to compute the normalisation constant \eqref{norma}.
+
+\begin{defi}[MCMC methods]
+A Markov chain Monte Carlo (MCMC) method for the simulation of a distribution \(\pi\) is any method that produces an ergodic Markov chain \((X_n)_{n\in\mathbb N}\) whose stationary distribution is \(\pi\).
+\end{defi}
+
+We will present the two most common MCMC methods which are the Metropolis-Hastings random walk and the method of slice sampling.
 
 \subsection{Metropolis-Hastings random walk}
 
@@ -215,15 +221,68 @@ Our goal is to find a Harris recurrent Markov chain with invariant distribution
 First let
 \[\left\{ f(\cdot|x) \mid x \in\mathcal X\right\}\]
 be a family of probability distributions, which we call the \emph{proposal distributions}. Given the first \(n\) states of the Markov \(X_1= x_1, \dots, X_n = x_n\), we define \(X_{n+1}\) as follows. Let \(Y\) be distributed according to \(f(\cdot|x_n)\mathrm d\mu\) and take one realisation \(y\) of \(Y\). Then set
-\[X_{n+1}\coloneqq\begin{cases}\; y \quad & \text{with probability } r \\\; x_n & \text{with probability } 1 - r \end{cases} \]
+\[X_{n+1}\coloneqq\begin{cases}\; y \quad & \text{with probability } \rho(x_n, y) \\\; x_n & \text{with probability } 1 - \rho(x_n, y) \end{cases} \]
 where
-\[r \coloneqq \min\left\{ \frac{f(y) f(x_n|y)}{f(x_n)f(y|x_n)}, 1\right\}.\]
+\[\rho(x, y) \coloneqq \min\left\{ \frac{f(y) f(x|y)}{f(x)f(y|x)}, 1\right\}.\]
+\todo{say something about dividing by zero}
 The first step of the random walk, namely the sampling of \(y\) is called the \emph{proposal step} and the second one the \emph{accept-reject step}.
 \end{emp}
 
-To the readers familiar with Markov chain theory, it will be immediately clear that \((X_n)_{n\in\mathbb N}\) is a Markov chain, since \(X_{n+1}\) can be written as a function of \(X_n\) and a stochastic influence.
+%To the readers familiar with Markov chain theory, it will be immediately clear that \((X_n)_{n\in\mathbb N}\) is a Markov chain, since \(X_{n+1}\) can be written as a function of \(X_n\) and a stochastic influence. 
+To see that the definition above indeed yields a Markov chain we convince ourselves that the transition kernel is given by
+\[K(x, A) = \int_A\rho(x, y)f(y|x) \mu(\mathrm dy) + (1 - m(x)) \delta_x(A) %\int_A
+\]
+where \(\delta_x\) is the Dirac measure in \(x\) and
+\[m(x) = \int \rho(x, y) f(y|x) \mu(\mathrm dy) \]
+is the acceptance rate\todo{is this true?}.
 
+\begin{prop}[Stationary distribution]
+\todo{under which support conditions?}
+%Let \((X_n)_{n\in\mathbb N}\) be the Metropolis-Hastings random walk. Then
+The probability measure \(\pi\) is a stationary distribution of MH random walk.
+\end{prop}
+\begin{proof}
+We have
+\begin{equation}\label{calc1}
+\begin{split}
+\int K(x, A) \pi(\mathrm dx) & =  \frac1Z \int\left( \int_A \rho(x, y) f(y|x) \mu(\mathrm dy) + (1 - m(x)) \delta_x(A)\right) f(x) \mu(\mathrm dx) %\\
+%& = 
+\end{split}
+\end{equation}
+We note that
+\[\rho(x, y) f(y|x) f(x) = \rho(y, x) f(x|y) f(y)\]
+and obtain
+%Using the definition of \(m(x)\) we obtain
+for the second term
+\begin{equation*}
+\begin{split}
+\frac1Z \int m(x) \delta_x(A) f(x) \mu(\mathrm dx) & = \frac1Z\int\int \rho(x, y) f(y|x) \mu(\mathrm dy) \delta_x(A) f(x) \mu(\mathrm dx) \\
+ & = \frac1Z\int_A \int \rho(x, y) f(y|x)f(x) \mu(\mathrm dy) \mu(\mathrm dx) \\
+ & = \frac1Z\int \int_A \rho(x, y) f(y|x)f(x) \mu(\mathrm dx) \mu(\mathrm dy) \\
+ & = \frac1Z\int \int_A \rho(y, x) f(x|y) \mu(\mathrm dx) f(y) \mu(\mathrm dy)
+\end{split}
+\end{equation*}
+where we used Fubini-Tonelli theorem\footnote{The Fubini-Tonelli theorem states that the order of integration with respect to two \(\sigma\)-additive measures can be swapped, if the integrated function is non negative.} in the second to last step. We note that now two of the terms in \eqref{calc1} cancel out and we obtain
+\[\int K(x, A) \pi(\mathrm dx) = \frac1Z \delta_x(A) f(x) \mu(\mathrm dx) = \pi(A). \]
+\end{proof}
 
+Now we are aiming to prove that the MH random walk is Harris recurrent because then the ergodic theorem yields that the empirical measures associated with the Markov chain will actually converge to \(\pi\). Obviously this is not for all proposal families in general the case, for example we could consider that the proposal distribution \(f(\cdot|x)\) is just the Dirac measures in \(x\)\footnote{Obviously this is slightly formal, because the Dirac measure can typically not be expressed through a density. However rigorous examples can be constructed similarly.}. Then the MH random walk would never leave its initial position which will typically be a deterministic point. Hence the empirical measures only be the Dirac measure in the starting point and hence not converge towards \(\pi\).
+
+The first step towards Harris recurrence is to show irreducibility and this will already give us some hints what families of proposal are sensible.
+% and the first step for this is the irreducibility.
+
+\begin{prop}[Irreducibility]
+Assume that the proposal family is strictly positive, i.e.
+\[f(y|x) > 0 \quad \text{for all } x, y\in\mathcal X. \]
+Then the MH random walk is \(\pi\) irreducible.
+\end{prop}
+\begin{proof}
+For any measurable set \(A\subseteq\mathcal X\) with positive measure \(\pi(A)>0\) we have
+\[K(x, A) \ge \int_A \rho(x, y)f(y|x) \mu(\mathrm d y) > %= \int_A \min\left\{ \frac{f(y) f(x|y)}{f(x)f(y|x)}, 1\right\}f(y|x) \mu(\mathrm d y) > 
+0. \]
+To see this, we can assume that this would not hold, but then the integrant has to zero \(\mu\) almost surely. Since \(f(y|x)\) is strictly positive this would imply \(\rho(x, y) = 0\) and hence \(f(y) = 0\) almost surely with respect to \(\mu\). However this is a contradiction to
+\[\pi(A) = \int_A f(y)\mu(\mathrm dy) > 0.\]
+\end{proof}
 
 
 \subsubsection*{Acceptance rate, effective sample size and tuning the proposal}

@@ -86,13 +86,15 @@ Let \(\Theta\) be a set and \(L(\theta)\in\mathbb R^{N\times N}_{\text{sym}, +}\
 Typically the parametrisations \(\theta\mapsto L(\theta)\) will be one of the three parametric models in III.2.1, i.e. \(\theta\) will either be the whole kernel itself, the quality vector, or the log linearity constant of the qualities and \(L(\theta)\) the associated elementary kernel.
 
 The independence relation leads to a factorisation of the density and we obtain the following expression for the posterior density
-\begin{equation}\label{post}
+\begin{equation}\label{post2}
 f(\theta|A_1, \dots, A_n) \propto f_\Theta(\theta) \prod_{i=1}^n f(A_i|\theta) = f_\Theta(\theta) \prod_{i=1}^n \frac{\det(L(\theta)_{A_i})}{\det(L(\theta) + I)}
 \end{equation}
 where we dropped some indices of the density functions in slight abuse of notation.
 
 Unfortunately the normalisation constant
-\[\int f(\theta|A_1, \dots, A_n)\nu(\mathrm{d}\theta) = \int f_\Theta(\theta) \prod_{i=1}^n \frac{\det(L(\theta)_{A_i})}{\det(L(\theta) + I)}\nu(\mathrm{d}\theta) \]
+\begin{equation}\label{norma}
+\int f(\theta|A_1, \dots, A_n)\nu(\mathrm{d}\theta) = \int f_\Theta(\theta) \prod_{i=1}^n \frac{\det(L(\theta)_{A_i})}{\det(L(\theta) + I)}\nu(\mathrm{d}\theta)
+\end{equation}
 can neither be computed analytically nor numerically in an efficient way. This problem can be solved through the powerful method of Markov chain Monte Carlo simulation that allow to approximate a distribution with only the knowledge of its unnormalised density.
 
 \section{Markov chain Monte Carlo methods}
@@ -189,16 +191,42 @@ be the empirical measure. Then we have almost surely for every \(\pi\) integrabl
 
 In the particular case that \(\mathcal X\) is a topological space and \(\mathcal B(\mathcal X)\) is the Borel algebra and if \(\pi\) is a finite measure, we obtain the almost surely weak convergence of \(\hat{\mathbb P}_n\) towards \(\pi\). This means that the convergence in \eqref{ergo} almost surely holds
 %\[\int f(x) \hat{\mathbb P}_n(\mathrm dx) \xlongrightarrow{n\to\infty} \int f(x)\pi(\mathrm dx)\]
-for all continuous and bounded functions \(f\).
+for all continuous and bounded functions \(f\). This means that \(\hat{\mathbb P}_n\) are approximations of the invariant distribution in the sense of weak convergence, which is metrisable\todo{cite}.
 
 
 \subsubsection*{Idea of Markov chain Monte Carlo methods}
 
+The motivation of the study of Markov chain Monte Carlo methods was to approximate the posterior distribution \eqref{post2}. The idea is now to construct and then simulate a Markov chain \((X_n)_{n\in\mathbb N}\) such that the empirical measures \(\hat{\mathbb P}_n\) converge to the posterior. In order to achieve this we only have to check the requirements of the ergodic theorem. This means we want to construct a Harris recurrent Markov chain with the posterior density as an invariant distribution without having to compute the normalisation constant \eqref{norma}. We will present the two most common ways to do this -- namely the Metropolis-Hastings random walk and the method of slice sampling.
+
 \subsection{Metropolis-Hastings random walk}
 
-\subsubsection*{Presentation of the model}
+The idea of the Metropolis-Hastings (MH) random walk was introduced as early as 1953 by Metropolis (c.f. \cite{metropolis1953equation}) and later adapted by Hastings in \cite{hastings1970monte}.
 
-\subsubsection*{Acceptance rate, effective sample size and Tuning}
+\begin{emp}[Setting]
+Let \(\Theta\) be a measurable space, \(\mu\) a measure on that space and \(f\colon\mathcal X\to[0, \infty]\) a function with finite integral
+\[Z = \int f(x) \mu(\mathrm{d}x)<\infty.\]
+Our goal is to find a Harris recurrent Markov chain with invariant distribution
+\[\pi(A)\coloneqq \frac1Z \int_A f(x)\mu(\mathrm dx). \]
+\end{emp}
+
+
+
+\begin{emp}[The MH random walk]
+First let
+\[\left\{ f(\cdot|x) \mid x \in\mathcal X\right\}\]
+be a family of probability distributions, which we call the \emph{proposal distributions}. Given the first \(n\) states of the Markov \(X_1= x_1, \dots, X_n = x_n\), we define \(X_{n+1}\) as follows. Let \(Y\) be distributed according to \(f(\cdot|x_n)\mathrm d\mu\) and take one realisation \(y\) of \(Y\). Then set
+\[X_{n+1}\coloneqq\begin{cases}\; y \quad & \text{with probability } r \\\; x_n & \text{with probability } 1 - r \end{cases} \]
+where
+\[r \coloneqq \min\left\{ \frac{f(y) f(x_n|y)}{f(x_n)f(y|x_n)}, 1\right\}.\]
+The first step of the random walk, namely the sampling of \(y\) is called the \emph{proposal step} and the second one the \emph{accept-reject step}.
+\end{emp}
+
+To the readers familiar with Markov chain theory, it will be immediately clear that \((X_n)_{n\in\mathbb N}\) is a Markov chain, since \(X_{n+1}\) can be written as a function of \(X_n\) and a stochastic influence.
+
+
+
+
+\subsubsection*{Acceptance rate, effective sample size and tuning the proposal}
 
 \subsection{Slice sampling}
 

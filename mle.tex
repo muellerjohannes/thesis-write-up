@@ -4,15 +4,17 @@
 The method of maximum likelihood estimation is a very well established procedure to estimate parameters. The philosophy of MLE is that one selects the parameter under which the given data would be the most likely to be observed and to motivate this in more detail we roughly follow the corresponding section in \cite{rice2006mathematical}.
 %Assume again that we have \(n\) samples \(\mathbf Y_1, \dots, \mathbf Y_n\) and then the maximum likelihood estimator would be the kernel 
 
-For example we might consider a sequence random variables \(X_1, \dots, X_n\) with a joint density \(f(x_1, \dots, x_n, \theta)\) with respect to some reference measure \(\prod_{i=1}^n\mu(\mathrm d x_i)\). Now we want to estimate the parameter \(\theta\) based on a sample \(x_1, \dots, x_n\) of our random variables. Then one reasonable guess for \(\theta\) would be the one under which the observation of those observations \(x_1, \dots, x_n\) is the most likely. In other words we want to find the parameter \(\theta\) that maximises the density \(f(x_1, \dots, x_n, \theta)\). If additionally the random variables are indepent and identically distributed, their joint density factorises and thus we obtain
-\[f(x_1, \dots, x_n, \theta) = \prod_{i=1}^n f(x_i, \theta) \]
-where \(f(x, \theta)\) is the density with respect to \(\mu\) of the \(X_i\). In practice it is often easier to maximise the logarithm of the density
-\[\mathcal L(\theta) = \log\!\big(f(x_1, \dots, x_n, \theta)\big) = \sum_{i=1}^n \log\!\big(f(x_i, \theta)\big) \]
+Suppose that we want to estimate a parameter \(\theta\in\Theta\) based on some realisations \(x_1, \dots, x_n\) of some random variables \(X_1, \dots, X_n\). We have given some candidates  \(f(x_1, \dots, x_n| \theta)\) for the joint density of \(X_1, \dots, X_n\) with respect to some reference measure \(\prod_{i=1}^n\mu(\mathrm d x_i)\) and we want to decide which parameter \(\theta\in\Theta\) describes the realisations, which we will also call data or observation, best. Hence it is reasonable to pick that \(\theta\)
+%For example we might consider a sequence random variables \(X_1, \dots, X_n\) with a joint density \(f(x_1, \dots, x_n| \theta)\) with respect to some reference measure \(\prod_{i=1}^n\mu(\mathrm d x_i)\). Now we want to estimate the parameter \(\theta\) based on a sample \(x_1, \dots, x_n\) of our random variables. Then one reasonable guess for \(\theta\) would be the one 
+under which the observations \(x_1, \dots, x_n\) are the most likely. In other words we want to find the parameter \(\theta\) that maximises the density \(f(x_1, \dots, x_n| \theta)\). If additionally the random variables are indepent and identically distributed, their joint density factorises and thus we obtain
+\[f(x_1, \dots, x_n| \theta) = \prod_{i=1}^n f(x_i| \theta) \]
+where \(f(x| \theta)\) is the density with respect to \(\mu\) of the \(X_i\). In practice it is often easier to maximise the logarithm of the density
+\[\mathcal L(\theta) = \log\!\big(f(x_1, \dots, x_n| \theta)\big) = \sum_{i=1}^n \log\!\big(f(x_i| \theta)\big) \]
  since this transforms the product over functions into a sum. However this is clearly equivalent to maximising the density since the logarithm is strictly monotone.
 
 \begin{emp}[Definition of the MLE]
 Let \(\Theta\) be a set, which we call the \emph{parameter set} and let
-\[\mathcal F = \Big\{ f(\cdot, \theta) \colon X\to [0, \infty) \;\big\lvert\; \theta\in\Theta \Big\}\]
+\[\mathcal F = \Big\{ f(\cdot| \theta) \colon X\to [0, \infty) \;\big\lvert\; \theta\in\Theta \Big\}\]
 be a family of probability densities with respect to some measure \(\mu\) on some measurable space \(X\). We call the function \[\mathcal L\colon\Theta\to[-\infty, 0]\] the \emph{log likelihood function} and its maximiser
  \begin{equation}\label{mledef}
  \hat \theta_n\coloneqq \underset{\theta\in\Theta}{\arg\max} \mathcal L(\theta) 
@@ -70,7 +72,7 @@ This implies
 
 Assume again that we have a set of observations \((\mathbf Y_n)_{n\in\mathbb N}\subseteq\mathcal Y\) drawn independently and according to the DPP. This time we want to find the maximum likelihood estimator for the elementary kernel and in order to do this we need to be able to express the density of the DPP which is nothing but the values of the elementary probabilities. Thus we will assume that we are dealing with \(L\)-ensembles in this section. Since the observations \((\mathbf Y_n)\) are defined on some common probability space which we will denote by \((\Omega, \mathbb P)\) we will change the notation in this section and write
 \[%f(A, L) \quad \text{or } 
-f(A, \theta) \propto \det(L(\theta)_A) \]
+f(A| \theta) \propto \det(L(\theta)_A) \]
 for the elementary probabilities of the DPP that arises from the parameter \(\theta\). Note that the elementary probabilities are nothing than the density with respect to the counting measure. We will now present the maximum likelihood estimators for different parametric classes, i.e. different families \(\mathcal F\) of DPPs.
 
 \subsubsection*{MLE of the elementary kernel \(L\)}
@@ -85,7 +87,7 @@ where \(f(A, L)\propto \det(L_A)\) is the elementary probability of DPP with ele
 %for the elementary kernel \(L\) in the set \(\mathbb R^{N\times N}_{\text{sym}, +}\) of all symmetric and positive semidefinite \(N\times N\) matrices.
 The log likelihood function is now given by
 %We aim to establish a quantity that gives an intuitive measure of how well a different DPP describes the training set and then we want to find the elementary kernel \(L\) for which the associated DPP \(\mathbb P_L\) optimises this quantity. A widely used choice in the machine learning community for this is the so called \emph{log likelihood function}
-\[\mathcal L \colon\mathbb R^{N\times N}_{\text{sym}, +} \to [-\infty, 0], \qquad L \mapsto \log\left(\prod_{i = 1}^n f(\mathbf Y_i, L)\right).\]
+\[\mathcal L \colon\mathbb R^{N\times N}_{\text{sym}, +} \to [-\infty, 0], \qquad L \mapsto \log\left(\prod_{i = 1}^n f(\mathbf Y_i| L)\right).\]
 \end{emp}
 Using \eqref{e2.3} we get the expression
 \begin{equation}\label{e3.1}
@@ -107,7 +109,7 @@ Although we can only expect a worse descriptive power of the observation, the ho
 \begin{emp}[Maximum likelihood estimator for the quality]
 % {\scshape\bfseries .}
 This time we work with the parameter set \(\Theta = \mathbb R_+^N\) and the parametric family
-\[\mathcal F = \Big\{ f(\cdot, q) \;\big\lvert\; q\in \mathbb R_+^N\Big\}\]
+\[\mathcal F = \Big\{ f(\cdot| q) \;\big\lvert\; q\in \mathbb R_+^N\Big\}\]
 where \(f(A, q)\propto \det(\Psi(q, \hat \phi)_A)\) is the elementary probability of DPP with elementary kernel \(\Psi(q, \hat \phi)\). 
  We aim to find the MLE of the quality vector \(q\in\mathbb R_+^N\), in other words we set %are interested in the existence and the computability of the quantity
 \[\hat q_n \coloneqq \underset{q\in\mathbb R_+^N}{\arg\max}\, \mathcal L(q) \]
@@ -140,8 +142,8 @@ Unfortunately we can tell from \eqref{loglikqua} that the log likelihood still i
 From now on we will fix vectors \(f_i\in\mathbb R^M\) for \(i\in\mathcal Y\) and call them \emph{feature vectors}. Further we set
 \[q_i = \exp\left(\theta^T f_i\right)\quad \text{for } \theta\in\mathbb R^M\]
 and will only consider quality vectors \(q\in\mathbb R_+^N\) that have this form. To formulate the maximum likelihood estimator for \(\theta\) we set \(\Theta \coloneqq\mathbb R^M\) and consider the parametric family
-\[\mathcal F = \left\{ f(\cdot, \theta) \;\big\lvert\; \theta\in\mathbb R^M\right\}\]
-where \(f(\cdot, \theta)\) is the density of the DPP with similarity kernel \(\hat S\) and qualities \(q_i = \exp\left(\frac12 \theta^T f_i\right)\). Further we will consider the maximum likelihood estimator
+\[\mathcal F = \left\{ f(\cdot| \theta) \;\big\lvert\; \theta\in\mathbb R^M\right\}\]
+where \(f(\cdot| \theta)\) is the density of the DPP with similarity kernel \(\hat S\) and qualities \(q_i = \exp\left(\frac12 \theta^T f_i\right)\). Further we will consider the maximum likelihood estimator
 \[\hat{\theta}_n\coloneqq \underset{\theta\in\mathbb R^M}{\arg\max}\, \mathcal L(\theta) \]
 where we regard \(\mathcal L\) again as function of \(\theta\).
 \end{emp}
@@ -277,21 +279,21 @@ and we have seen in the proof of \ref{PosMLE} that the log likelihood function t
 We will now turns towards the question of consistency of the maximum likelihood estimators introduced earlier in this section. For this we will first give a formal proof of the consistency of the MLE and present a rather general framework that will allow us to turn the formal proof into a rigorous one.
 
 \begin{emp}[Formal proof of consistency]
-We will consider a general MLE like in \eqref{mledef} and we will assume that the observations \((X_n)\) are independent and have density \(f(x, \theta_0)\) with respect to some measure \(\mu\). By the law of large number we have
+We will consider a general MLE like in \eqref{mledef} and we will assume that the observations \((X_n)\) are independent and have density \(f(x| \theta_0)\) with respect to some measure \(\mu\). By the law of large number we have
 \begin{equation}\label{entropy}
-\frac1n \mathcal L(\theta) = \frac1n\sum_{i=1}^n\log(f(X_i, \theta)) \xlongrightarrow{n\to\infty} \mathbb E\big[\log(f(X, \theta))\big].
+\frac1n \mathcal L(\theta) = \frac1n\sum_{i=1}^n\log(f(X_i| \theta)) \xlongrightarrow{n\to\infty} \mathbb E\big[\log(f(X| \theta))\big].
 \end{equation}
 Hence the maximiser of the left hand side should be close to the maximiser of the right hand. % side which
 Differentiating the left hand side yields
 \begin{equation*}
 \begin{split}
-\partial_\theta \mathbb E\big[\log(f(X, \theta))\big] & = \mathbb E\left[\partial_\theta \log(f(X, \theta))\right] = \mathbb E\left[\frac{\partial_\theta f(X, \theta)}{f(X, \theta)}\right] \\
-& = \int \frac{\partial_\theta f(x, \theta)}{f(x, \theta)} f(x, \theta_0) \mu(\mathrm{d} x).
+\partial_\theta \mathbb E\big[\log(f(X| \theta))\big] & = \mathbb E\left[\partial_\theta \log(f(X| \theta))\right] = \mathbb E\left[\frac{\partial_\theta f(X| \theta)}{f(X| \theta)}\right] \\
+& = \int \frac{\partial_\theta f(x| \theta)}{f(x| \theta)} f(x| \theta_0) \mu(\mathrm{d} x).
 \end{split}
 \end{equation*}
 Evaluating this at \(\theta = \theta_0\) yields
 \begin{equation*}
-\int \partial_\theta f(x, \theta) \mu(\mathrm{d}x) = \partial_\theta \int f(x, \theta) \mu(\mathrm{d}x) = \partial_\theta(1) = 0.
+\int \partial_\theta f(x| \theta) \mu(\mathrm{d}x) = \partial_\theta \int f(x| \theta) \mu(\mathrm{d}x) = \partial_\theta(1) = 0.
 \end{equation*}
 Hence \(\theta_0\) is a critical point and under mild conditions the left hand side is concave and thus \(\theta_0\) is the unique maximiser. In conclusion the estimator \(\hat \theta\) should be close to \(\theta_0\).
 \end{emp}
@@ -394,11 +396,11 @@ The proof above can be read in the following way. The two conditions (\emph{i}),
 %\[\mathbb P\Big( \left\lVert L_n - L \right\rVert_\infty\le\varepsilon\Big) \xlongrightarrow{n\to\infty} 1 \quad\text{for all } \varepsilon>0. \]
 
 If we want to apply the previous result to the case of maximum likelihood estimation we need to set
-\[F_n(\theta) \coloneqq \frac1n\sum_{i=1}^n\log(f(X_i, \theta)).\]
+\[F_n(\theta) \coloneqq \frac1n\sum_{i=1}^n\log(f(X_i| \theta)).\]
 Note that the factor \(\frac1n\) does not change the maximum. However \eqref{entropy} already gives the almost surely pointwise limit of those functions and if condition (\emph{ii}) of the previous statement should hold, we have to define
 %Hence under the light of \ref{entropy} it is reasonable to consider
-\[%L_n(\theta) \coloneqq \frac1n\sum_{i=1}^n\log(f(X_i, \theta)) \quad \text{and } 
-F(\theta) \coloneqq \mathbb E\big[\log(f(X, \theta))\big]. \]
+\[%L_n(\theta) \coloneqq \frac1n\sum_{i=1}^n\log(f(X_i| \theta)) \quad \text{and } 
+F(\theta) \coloneqq \mathbb E\big[\log(f(X| \theta))\big]. \]
 %in the case of maximum likelihood estimation.
  % where \(()\)
 The quantity \(F\) is known as the \emph{entropy} and plays an important role in statistical mechanics, applied statistics, information theory and many other fields. For more information on this we refer to \cite{martin2011mathematical}, \cite{mackay2003information}, \cite{volkenstein2009entropy} and \cite{gray1990entropy}.
@@ -410,11 +412,11 @@ The third requirement of the previous consistency result can be proven in a gene
 
 \begin{emp}[Setting]
 Let in the following \(\Theta\) be a set and let 
-\[\mathcal F = \Big\{ f(\cdot, \theta)\colon\mathcal  X\to[0, \infty) \mid\theta \in\Theta\Big\}\]
-be a family of probability densities on some measurable space \(\mathcal X\) with respect to some measure \(\mu\). Further fix \(\theta_0\in\Theta\) and %let \(\mathbb P\) denote the probability measure with \(\mu\) density \(f(\cdot, \theta_0)\) and denote the expectation with respect to \(\mathbb P\) 
-denote the expectation with respect to \(f(\cdot, \theta_0) \mathrm{d}\mu\) by \[\mathbb E[h(X)]\coloneqq\int h(x)f(x, \theta_0) \mu(\mathrm d x).\] Let \((X_n)\) be a sequence of independent random variables distributed according to \(f(\cdot, \theta_0) \mathrm{d}\mu\). Finally define
-\[F_n(\theta) \coloneqq \frac1n\sum_{i=1}^n\log(f(X_i, \theta)) %\xlongrightarrow{n\to\infty} 
-\quad\text{and } F(\theta)\coloneqq \mathbb E\big[\log(f(X, \theta))\big]. \]
+\[\mathcal F = \Big\{ f(\cdot| \theta)\colon\mathcal  X\to[0, \infty) \mid\theta \in\Theta\Big\}\]
+be a family of probability densities on some measurable space \(\mathcal X\) with respect to some measure \(\mu\). Further fix \(\theta_0\in\Theta\) and %let \(\mathbb P\) denote the probability measure with \(\mu\) density \(f(\cdot| \theta_0)\) and denote the expectation with respect to \(\mathbb P\) 
+denote the expectation with respect to \(f(\cdot| \theta_0) \mathrm{d}\mu\) by \[\mathbb E[h(X)]\coloneqq\int h(x)f(x| \theta_0) \mu(\mathrm d x).\] Let \((X_n)\) be a sequence of independent random variables distributed according to \(f(\cdot| \theta_0) \mathrm{d}\mu\). Finally define
+\[F_n(\theta) \coloneqq \frac1n\sum_{i=1}^n\log(f(X_i| \theta)) %\xlongrightarrow{n\to\infty} 
+\quad\text{and } F(\theta)\coloneqq \mathbb E\big[\log(f(X| \theta))\big]. \]
 %\(L_n \colon \Theta\to [-\infty, \infty)\)
 %be a sequence of random functions that attain maximisers
 %\[\hat{\theta}_n = \underset{\theta\in\Theta}{\arg\max} L_n(\theta).\]
@@ -422,34 +424,34 @@ denote the expectation with respect to \(f(\cdot, \theta_0) \mathrm{d}\mu\) by \
 \end{emp}
 
 \begin{prop}[Information inequality]\label{infine}
-Let the setting be as above and assume that the parameter \(\theta_0\in\Theta\) is identifiable, i.e. we have \(f(\cdot, \theta)\ne f(\cdot, \theta_0)\) whenever \(\theta\ne\theta_0\). Let further\todo{show \(F(\theta_0)>-\infty\)}
-\[%\mathbb E\Big[ \big\lvert \log(f(X, \theta)) \big\rvert \Big] < \infty
-\sup_{x\in \mathcal X, \theta\in\Theta} f(x, \theta)<\infty
+Let the setting be as above and assume that the parameter \(\theta_0\in\Theta\) is identifiable, i.e. we have \(f(\cdot| \theta)\ne f(\cdot| \theta_0)\) whenever \(\theta\ne\theta_0\). Let further\todo{show \(F(\theta_0)>-\infty\)}
+\[%\mathbb E\Big[ \big\lvert \log(f(X| \theta)) \big\rvert \Big] < \infty
+\sup_{x\in \mathcal X| \theta\in\Theta} f(x| \theta)<\infty
   \quad \text{and } F(\theta_0)>-\infty .\]
 %for all \(\theta\in\Theta\). 
 Then the entropy
-\[F(\theta) = \mathbb E\big[\log(f(X, \theta))\big] \]
+\[F(\theta) = \mathbb E\big[\log(f(X| \theta))\big] \]
 has a unique maximum in \(\theta_0\).
 \end{prop}
 \begin{proof}
 %An easy application of the Jensen inequality shows 
 %First we note that the entropy of the density itself is finite, i.e.
-%\[F(\theta_0) = \mathbb E\big[\log(f(X, \theta_0))\big] = \int \log(f(x, \theta_0))f(x, \theta_0)\mu(\mathrm{d}x) > -\infty \]
+%\[F(\theta_0) = \mathbb E\big[\log(f(X| \theta_0))\big] = \int \log(f(x| \theta_0))f(x| \theta_0)\mu(\mathrm{d}x) > -\infty \]
 %since \(x\log(x)\) is globally bounded from below.
 Let \(\theta\ne\theta_0\), then we either have \(F(\theta) = -\infty < F(\theta_0)\) or
 \begin{equation}\label{entropybound}
-F(\theta) = \mathbb E\big[\log(f(X, \theta))\big] > - \infty.
+F(\theta) = \mathbb E\big[\log(f(X| \theta))\big] > - \infty.
 \end{equation}
 In this case we want to exploit the strict Jensen inequality (c.f. \cite{lehmann2006theory}) that yields for any positive random variable \(Y\) with finite expectation that is not constant
 \[\mathbb E[\log(Y)] < \log(\mathbb E[Y]).\]
 %or \(F(\theta)\)
-We set \(Y\coloneqq \frac{f(X, \theta)}{f(X, \theta_0)}\). This is positive \(f(\cdot, \theta_0) \mathrm d\mu\) almost everywhere because otherwise \eqref{entropybound} could not hold. 
-%\(\log(f(x, \theta))>-\infty\) whenever \(f(x, \theta_0)>0\).
+We set \(Y\coloneqq \frac{f(X| \theta)}{f(X| \theta_0)}\). This is positive \(f(\cdot| \theta_0) \mathrm d\mu\) almost everywhere because otherwise \eqref{entropybound} could not hold. 
+%\(\log(f(x| \theta))>-\infty\) whenever \(f(x| \theta_0)>0\).
 Since \(\theta_0\) is identifiable, the random variable \(Y\) is not constant and we will see in the following computation that the expectation is finite. Now we obtain
 \begin{equation*}
 \begin{split}
-F(\theta) - F(\theta_0) & = \mathbb E\big[\log(f(X, \theta))\big] - \mathbb E\big[\log(f(X, \theta_0))\big] = \mathbb E\left[\log\left( \frac{f(X, \theta)}{f(X, \theta_0)}\right)\right] \\
-& < \log\left( \mathbb E\left[\frac{f(X, \theta)}{f(X, \theta_0)}\right]\right) = \log\left( \int f(x, \theta) \mu(\mathrm d x) \right) = 0.
+F(\theta) - F(\theta_0) & = \mathbb E\big[\log(f(X| \theta))\big] - \mathbb E\big[\log(f(X| \theta_0))\big] = \mathbb E\left[\log\left( \frac{f(X| \theta)}{f(X| \theta_0)}\right)\right] \\
+& < \log\left( \mathbb E\left[\frac{f(X| \theta)}{f(X| \theta_0)}\right]\right) = \log\left( \int f(x| \theta) \mu(\mathrm d x) \right) = 0.
 \end{split}
 \end{equation*}
 \end{proof}
@@ -460,8 +462,8 @@ Next we take care of the first requirement of the consistency result. Namely we 
 Let the setting be as above, but let \(\Theta\) be a metric space and we assume that the following conditions hold.
 \begin{enumerate}
 \item Let \(K\subseteq\Theta\) be such that
-\[\mathbb E\left[\sup_{\theta\in K} \big\lvert \log(f(X, \theta)) \big\rvert \right]<\infty.\] 
-\item For every \(\theta\in K\) we have \(\log(f(\cdot, \gamma))\to\log(f(\cdot, \theta))\) almost surely with respect to \(f(\cdot, \theta_0) \mathrm d\mu\) for \(\gamma\to\theta\).
+\[\mathbb E\left[\sup_{\theta\in K} \big\lvert \log(f(X| \theta)) \big\rvert \right]<\infty.\] 
+\item For every \(\theta\in K\) we have \(\log(f(\cdot, \gamma))\to\log(f(\cdot| \theta))\) almost surely with respect to \(f(\cdot| \theta_0) \mathrm d\mu\) for \(\gamma\to\theta\).
 \end{enumerate}
 %Then we almost surely have 
 Then we almost surely have \(F_n\to F\) uniformly on \(K\), i.e. almost surely we have %for any compact \(K\subseteq\Theta\)
@@ -470,12 +472,12 @@ Then we almost surely have \(F_n\to F\) uniformly on \(K\), i.e. almost surely w
 \end{lem}
 \begin{proof}
 Fix \(\varepsilon>0\) and a compact set \(K\subseteq\Theta\). Define for \(\rho>0\)
-\[u(x, \theta, \rho)\coloneqq \sup_{d(\gamma, \theta)\le \rho} \big\lvert \log(f(x, \gamma)) - \log(f(x, \theta)) \big\rvert  \xlongrightarrow{\rho\to\infty} 0\]
+\[u(x, \theta, \rho)\coloneqq \sup_{d(\gamma| \theta)\le \rho} \big\lvert \log(f(x, \gamma)) - \log(f(x| \theta)) \big\rvert  \xlongrightarrow{\rho\to\infty} 0\]
 almost surely for \(\theta\) fixed where we used condition (\emph{ii}).
 
 This in combination with (\emph{i}) and the dominated convergence theorem imply that the convergence also holds in expectation and therefore we have
 \[\mathbb E\big[u(X, \theta, \rho)\big] \le \varepsilon \quad \text{for } \rho\le \delta(\theta).\]
-%\[\mathbb E[u(x, \theta, d)] \xlongrightarrow{d\to\infty} 0 \]
+%\[\mathbb E[u(x| \theta, d)] \xlongrightarrow{d\to\infty} 0 \]
 The open balls \(B_{\delta(\theta)}(\theta)\) with center \(\theta\) and radius \(\delta(\theta)\) cover the compact set \(K\) and hence we can select a finite subcover
 \[K \subseteq\bigcup_{k=1}^m B_{\delta(\theta_k)}(\theta_k). \]
 Further we set
@@ -484,8 +486,8 @@ Further we set
 Let \(\theta\in K\) and choose \(k\) such that \(\theta\in B_{\delta(\theta_k)}(\theta_k)\), then we can conclude
 \begin{equation*}
 \begin{split}
-\left\lvert F_n(\theta) - F(\theta) \right\rvert \le &\; \frac{1}{n} \sum_{i=1}^n \big\lvert \log(f(X_i, \theta)) - \log(f(X_i, \theta_k)) \big\rvert \\
-& + \left\lvert \frac1n\sum_{i=1}^n \log(f(X_i, \theta_k)) - F(\theta_k) \right\rvert + \big\lvert F(\theta_k) - F(\theta) \big\rvert \\
+\left\lvert F_n(\theta) - F(\theta) \right\rvert \le &\; \frac{1}{n} \sum_{i=1}^n \big\lvert \log(f(X_i| \theta)) - \log(f(X_i| \theta_k)) \big\rvert \\
+& + \left\lvert \frac1n\sum_{i=1}^n \log(f(X_i| \theta_k)) - F(\theta_k) \right\rvert + \big\lvert F(\theta_k) - F(\theta) \big\rvert \\
 \le &\; \left( \frac1n\sum_{i=1}^n u(X_i, \theta_k, \delta(\theta_k)) - \mu_k \right) + \mu_k + 2\varepsilon \\
 \le &\; 4 \varepsilon
 \end{split}
@@ -497,53 +499,53 @@ almost surely for \(n\ge N(\varepsilon)\) where we used the strong law of large 
 
 In this part we will -- for the first time -- make use of the specific structure of the model. %elementary probabilities.
 Since we have already taken care of condition (\emph{ii}) and (\emph{iii}) and condition (\emph{iv}) will be fairly straight forward, we dedicate ourselves to proving the first requirement of Theorem \ref{conext}. For this we keep the setting of the previous section although we now consider the case that
-\[\mathcal F = \Big\{ f(\cdot, \theta)\colon X\to[0, \infty) \mid\theta \in\Theta\Big\}\]
+\[\mathcal F = \Big\{ f(\cdot| \theta)\colon X\to[0, \infty) \mid\theta \in\Theta\Big\}\]
  is one of the parametric families introduced in \ref{models}.% Further we assume that the data \((\mathbf Y_n)\) are indepentend and distributed according to a \(L\)-ensemble with elementary probabilities \(f(\cdot)\).\todo{formulate this better!}
 
 \begin{lem}[Control outside of a compact set]\label{concom}
-The requirement \emph{(}i\emph{)} from Theorem \ref{conext} is satisfied for the three kinds of parametric families for the kernel estimation. Further the compact set \(K_0\) can be chosen as follows. Let \(\mathcal A\) be the family of subsets \(A\subseteq\mathcal Y\) with positive probability \(f(A, \theta_0)>0\) and let \(c(A)>0\) such that
-\[-c(A) < 2\cdot\log(f(A, \theta_0)).\]
+The requirement \emph{(}i\emph{)} from Theorem \ref{conext} is satisfied for the three kinds of parametric families for the kernel estimation. Further the compact set \(K_0\) can be chosen as follows. Let \(\mathcal A\) be the family of subsets \(A\subseteq\mathcal Y\) with positive probability \(f(A| \theta_0)>0\) and let \(c(A)>0\) such that
+\[-c(A) < 2\cdot\log(f(A| \theta_0)).\]
 Then we set
-\[ K_0 \coloneqq \Big\{ \theta\in\Theta \;\big\lvert\; \log(f(A, \theta)) \ge - c(A) \text{ for all } A\in\mathcal A %\text{ with } f(A, \theta_0) > 0
-\Big\}% \quad\text{where } c(A) > 2\cdot\frac{F(\theta_0)}{f(A, \theta_0)} .
+\[ K_0 \coloneqq \Big\{ \theta\in\Theta \;\big\lvert\; \log(f(A| \theta)) \ge - c(A) \text{ for all } A\in\mathcal A %\text{ with } f(A| \theta_0) > 0
+\Big\}% \quad\text{where } c(A) > 2\cdot\frac{F(\theta_0)}{f(A| \theta_0)} .
 .\]
-%where \(c(A) > 2\cdot\frac{F(\theta_0)}{f(A, \theta_0)}\).
+%where \(c(A) > 2\cdot\frac{F(\theta_0)}{f(A| \theta_0)}\).
 \end{lem}
 \begin{proof}
 %For any \(A\subseteq\mathcal Y\) with \(f()\) 
-% Let \(\mathcal A\) be the family of subsets \(A\subseteq\mathcal Y\) with positive probability \(f(A, \theta_0)>0\). %Set \(\delta(A)\coloneqq\frac{f(A, \theta_0)}{2}\) for \(A\subseteq\mathcal Y\) %whenever \(f(A, \theta_0)>0\) 
+% Let \(\mathcal A\) be the family of subsets \(A\subseteq\mathcal Y\) with positive probability \(f(A| \theta_0)>0\). %Set \(\delta(A)\coloneqq\frac{f(A| \theta_0)}{2}\) for \(A\subseteq\mathcal Y\) %whenever \(f(A| \theta_0)>0\) 
 %and 
 Let 
 \[\hat{\mathbb P}_n\coloneqq \frac1n \sum_{i=1}^n \delta_{\mathbf Y_i} \]
- be the empirical measure. %Whenever \(f(A, \theta_0)>0\), 
+ be the empirical measure. %Whenever \(f(A| \theta_0)>0\), 
  We have by the law of large numbers
-\[\mathbb P\left( \hat{\mathbb P}_n(A) \ge \frac{f(A, \theta_0)}{2}\right)\xlongrightarrow{n\to\infty} 1\]
-and we can assume \(\hat{\mathbb P}_n(A) \ge \frac{f(A, \theta_0)}{2}\), since we are only interested in proving a statement with probability tending to one.
+\[\mathbb P\left( \hat{\mathbb P}_n(A) \ge \frac{f(A| \theta_0)}{2}\right)\xlongrightarrow{n\to\infty} 1\]
+and we can assume \(\hat{\mathbb P}_n(A) \ge \frac{f(A| \theta_0)}{2}\), since we are only interested in proving a statement with probability tending to one.
 %Note that the empirical entropies take the form \todo{introduce terminology earlier}
-%\[F_n(\theta) = \int \log(f(x, \theta)) \hat{\mathbb P}_n(\mathrm{d} x) = \sum_{A\subseteq \mathcal Y} \hat{\mathbb P}_n(A)\cdot \log(f(A, \theta)) \]
-%since the elementary probabilities \(f(\cdot, \theta)\) are bounded by \(1\).
-Whenever \(f(A, \theta_0)>0\) we choose \(c(A)>0\) such that
-\[-c(A)< 2\cdot \log(f(A, \theta_0)) % f(A, \theta_0) %\frac{F(\theta_0)}{\left\lvert \mathcal A \right\rvert}
+%\[F_n(\theta) = \int \log(f(x| \theta)) \hat{\mathbb P}_n(\mathrm{d} x) = \sum_{A\subseteq \mathcal Y} \hat{\mathbb P}_n(A)\cdot \log(f(A| \theta)) \]
+%since the elementary probabilities \(f(\cdot| \theta)\) are bounded by \(1\).
+Whenever \(f(A| \theta_0)>0\) we choose \(c(A)>0\) such that
+\[-c(A)< 2\cdot \log(f(A| \theta_0)) % f(A| \theta_0) %\frac{F(\theta_0)}{\left\lvert \mathcal A \right\rvert}
 .\]
 For exactly those \(A\) we define now
-\[K_A \coloneqq \Big\{ \theta\in\Theta \;\big\lvert\; \log(f(A, \theta)) \ge - c(A) \Big\}\]
-which is closed since \(f(A, \theta)\) is upper semicontinuous. Further \(K_A\) is compact for \(A=\varnothing\in\mathcal A\) since \(\log(f(\varnothing, \theta))\) is coercive in \(\theta\) as been shown in the coercivity proofs earlier in this chapter. Further it contains \(\theta_0\) as
-\[\log(f(A, \theta_0)) \ge 2 \cdot \log(f(A, \theta_0)) > -c(A) \]
-because \(f(A, \theta)\le 1\). Set now
+\[K_A \coloneqq \Big\{ \theta\in\Theta \;\big\lvert\; \log(f(A| \theta)) \ge - c(A) \Big\}\]
+which is closed since \(f(A| \theta)\) is upper semicontinuous. Further \(K_A\) is compact for \(A=\varnothing\in\mathcal A\) since \(\log(f(\varnothing| \theta))\) is coercive in \(\theta\) as been shown in the coercivity proofs earlier in this chapter. Further it contains \(\theta_0\) as
+\[\log(f(A| \theta_0)) \ge 2 \cdot \log(f(A| \theta_0)) > -c(A) \]
+because \(f(A| \theta)\le 1\). Set now
 \[K_0\coloneqq \bigcap_{A\in \mathcal A} K_A\]
 which is compact because \(K_\varnothing\) is compact. Finally we have for \(\theta\notin K_0\)
 \begin{equation*}
 \begin{split}
-F_n(\theta) & = \int \log(f(x, \theta)) \hat{\mathbb P}_n(\mathrm{d} x) = \sum_{A\in \mathcal A} \hat{\mathbb P}_n(A)\cdot \log(f(A, \theta)) < - \sum_{A\in \mathcal A} \frac{f(A, \theta_0)}{2} c(A) \\
+F_n(\theta) & = \int \log(f(x| \theta)) \hat{\mathbb P}_n(\mathrm{d} x) = \sum_{A\in \mathcal A} \hat{\mathbb P}_n(A)\cdot \log(f(A| \theta)) < - \sum_{A\in \mathcal A} \frac{f(A| \theta_0)}{2} c(A) \\
 & % < \left\lvert \mathcal A \right\rvert \cdot F(\theta_0)
- < \sum_{A\in \mathcal A} \log(f(A, \theta_0)) f(A, \theta_0) = F(\theta_0).
+ < \sum_{A\in \mathcal A} \log(f(A| \theta_0)) f(A| \theta_0) = F(\theta_0).
 \end{split}
 \end{equation*}
 %where we used that \(F\) is non positive.
 %Choose now \(K_0\subseteq\Theta\) compact such that\todo{say why this is possible}
-%\[\log(f(\varnothing, \theta)) \le -c \quad \text{for all } \theta\notin K. \]
+%\[\log(f(\varnothing| \theta)) \le -c \quad \text{for all } \theta\notin K. \]
 %Then we have with probability tending to one for all \(\theta\notin K\)
-%\[F_n(\theta) \le \hat{\mathbb P}_n(\varnothing)\cdot \log(f(\varnothing, \theta)) \le \hat{\mathbb P}_n(\varnothing) \cdot(-c) \le -\delta c < F(\theta_0)% \quad \text{for all } \theta \notin K
+%\[F_n(\theta) \le \hat{\mathbb P}_n(\varnothing)\cdot \log(f(\varnothing| \theta)) \le \hat{\mathbb P}_n(\varnothing) \cdot(-c) \le -\delta c < F(\theta_0)% \quad \text{for all } \theta \notin K
 %. \]
 \end{proof}
 
@@ -567,25 +569,25 @@ Obviously we want to exploit the machinery we have introduced and thus we will c
 
 We can express the entropy function
 \begin{equation}\label{ent}
-F(q) = \mathbb E\big[\log(f(\mathbf Y, q))\big] = \sum_{A\subseteq\mathcal Y} \log(f(A, q)) f(A, q_0)
+F(q) = \mathbb E\big[\log(f(\mathbf Y| q))\big] = \sum_{A\subseteq\mathcal Y} \log(f(A| q)) f(A| q_0)
 \end{equation}
 where the elementary probabilities are given by
 \begin{equation}\label{elepro}
-f(A, q) = \frac{\prod_{i\in A} q_i^2 \det(\hat S_A) }{\sum_{B\subseteq\mathcal Y} \prod_{i\in B} q_i^2 \det(\hat S_B) }
+f(A| q) = \frac{\prod_{i\in A} q_i^2 \det(\hat S_A) }{\sum_{B\subseteq\mathcal Y} \prod_{i\in B} q_i^2 \det(\hat S_B) }
 \end{equation}
 which is continuous in \(q\). Hence the entropy function \(F\) is upper semicontinuous and thus condition (\emph{iv}) holds.
 
 To check that (\emph{iii}) holds we will use the information inequality \ref{infine}. First we note that because of
-\[f(\left\{ i\right\}, q) \propto q_i^2 \]
+\[f(\left\{ i\right\}| q) \propto q_i^2 \]
 the parameter \(q_0\) is identifiable and further we have
-\[\sup_{A\subseteq\mathcal Y, q\in\mathbb R_+^N} f(A, q) \le 1 \]
+\[\sup_{A\subseteq\mathcal Y, q\in\mathbb R_+^N} f(A| q) \le 1 \]
 since the densities are elementary probabilities. Finally \(F(q_0)>-\infty\) is clear from \eqref{ent} and hence the third requirement is satisfied.
 
-Since the previous lemma already takes care of condition (\emph{i}) it suffices to show the second condition for which we will use \ref{locunicon}. Hence it remains to check the two conditions of this lemma, but the second one -- the continuity condition -- obviously holds as can be seen from \eqref{elepro}. To see that the first one also holds we note that for \(A\subseteq\mathcal Y\) with \(f(A, \theta_0)>0\) and \(\theta\in K_0\) we have
-\[0 \ge \log(f(A, \theta)) \ge -c(A) > -\infty.\]
+Since the previous lemma already takes care of condition (\emph{i}) it suffices to show the second condition for which we will use \ref{locunicon}. Hence it remains to check the two conditions of this lemma, but the second one -- the continuity condition -- obviously holds as can be seen from \eqref{elepro}. To see that the first one also holds we note that for \(A\subseteq\mathcal Y\) with \(f(A| q_0)>0\) and \(\theta\in K_0\) we have
+\[0 \ge \log(f(A| q)) \ge -c(A) > -\infty.\]
 Hence the random variable
-\[\sup_{\theta\in K_0} \big\lvert \log(f(X, \theta)) \big\rvert\]
-is almost surely finite and since the probability space \(2^{\mathcal Y}\) is finite, the first condition holds.
+\[\sup_{q\in K_0} \big\lvert \log(f(X| q)) \big\rvert\]
+is almost surely finite and since the probability space \(2^{\mathcal Y}\) is finite, the second condition holds.
 \end{proof}
 
 \begin{rem}

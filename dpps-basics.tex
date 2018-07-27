@@ -213,7 +213,7 @@ In this section we will focus on the efficient simulation of DPPs and give a sho
 
 But before we can do this we will present a famous identity for integrals -- or sums -- of the product of determinants.
 
-\subsubsection*{Two Cauchy-Binet type formulae}
+\subsubsection*{Two Cauchy-Binet type identities}
 
 The result we present is a little technical, but we will need it later in the proof of existence and also in the proof of the sampling algorithm, so we will give the proof of it here, although it should be mentioned that all the major ideas can be found in \cite{hough2006determinantal}. In this section write \([n]\) for the set \(\left\{ 1, \dots, n\right\}\) where \(n\) is a natural number and \(A_{IJ}\) for the submatrix of \(A\) where the first index is in \(I\) and the second one in \(J\). Further we keep the notation \(A_I = A_{II}\).
 
@@ -224,19 +224,26 @@ Let \(m, n \in\mathbb N, m\le n\) be two natural numbers and \(A\in\mathbb R^{m\
 \[\det(AB) = \sum_{\begin{subarray}{c} I\subseteq\left\{ 1, \dots, n\right\} \\ \left\lvert I \right\rvert = m \end{subarray}} \det\left(A_{[m]I}\right) \det\left(B_{I[m]}\right). \]
 \end{prop}
 \begin{proof}
+Let without loss of generality \(A\) and \(B\) have full rank, otherwise both sides are zero. First we note that both sides are multilinear in the rows of \(A\) and columns of \(B\). Hence we can assume by Gaussian row, respectively column elimination that each row of \(A\) and each column of \(B\) has exactly one non zero entry which is \(1\)\todo{really?}.
+Hence there is \(J_1 = \left\{ i_1, \dots, i_m\right\}\) and \(J_2 = \left\{ j_1, \dots, j_m\right\}\) such that \(A_{ki_k} = 1\) and \(B_{kj_k} = 1\) and all other entries are empty. 
+Note that the right hand side is only non trivial if \(I = J_1\) and \(I = J_2\). If \(J_1\ne J_2\) then this case does not occur in the sum, but then at least one row of \(AB\) consists of zeroes and hence also the left hand side is equal to \(0\). If however \(J=J_1=J_2\) we get
+\[\det\left(A_{[m]J}\right) \det\left(B_{J[m]}\right) = \det\left( A_{[m]J}B_{J[m]}\right) = \det(AB) \]
+since \(A_{ij} = B_{ji} = 0\) whenever \(j\notin J\).
+\end{proof}
 
-\end{proof}¥
-
-\begin{prop}[Generalised Cauchy-Binet]\label{CB-type}
-Let \(m \le n\) be two natural numbers and \(A\in\mathbb R^{m\times n}, B\in\mathbb R^{n\times m}\) two matrices. Further let \(I \subseteq[m]\), then we have
+\begin{prop}[Variation of Cauchy-Binet]\label{CB-type}
+Let \(m \le n\) be two natural numbers and \(B\in\mathbb R^{n\times m}\) be a matrix such that the columns \(B_i\in\mathbb R^n\) of \(B\) form an orthonormal system. Further let \(I \subseteq[m]\), then we have
 \begin{equation*}
 \begin{split}
 %i_{r+1}, \dots, i_{p}=1
-\det\left( (AB)_{I}\right) = \sum_{\begin{subarray}{c} I\subseteq J\subseteq[n] \\ \left\lvert J \right\rvert = m \end{subarray}} \!\!\! \det\left(A_{[m]J}\right) \det\left(B_{J[m]}\right).%_{1\le k, l\le r},
+\det\left( (B^TB)_{I}\right) = \sum_{\begin{subarray}{c} I\subseteq J\subseteq[n] \\ \left\lvert J \right\rvert = m \end{subarray}} \!\!\! \det\left(B_{J[m]}\right)^2.%_{1\le k, l\le r},
 \end{split}
 \end{equation*}
 %where\(p\le m\).
 \end{prop}
+\begin{proof}
+This can be proved in analogue fashion to the result above. \todo{check this, I think the statement is slightly wrong...}
+\end{proof}
 
 \subsubsection*{Sampling and Existence}
 
@@ -254,21 +261,10 @@ Finally define a second point process \(\tilde{\mathbb P}\) on \(\mathcal Y\) th
 We will postpone the proof and first discuss its consequences which will be the existence of DPPs for a given marginal kernel as well as the construction of a sampling algorithm.
 
 \begin{rem}
-Since it is fairly easy to simulate Bernoulli experiments, it remains to know how we can sample from DPPs with marginal kernels of the form \(K=\sum_{k=1}^m v_kv_k^T\) for some \(m\le N\). We call DPPs of this type \emph{elementary} and note that this corresponds to the class of DPPs where the eigenvalues of the marginal kernel are contained in \(\left\{ 0, 1\right\}\). But before we can study elementary DPPs we will fix one direct consequence of the previous theorem.
+Since it is fairly easy to simulate Bernoulli experiments, it remains to know how we can sample from DPPs with marginal kernels of the form \(K=\sum_{k=1}^m v_kv_k^T\) for some \(m\le N\). We call DPPs of this type \emph{elementary} and note that this corresponds to the class of DPPs where the eigenvalues of the marginal kernel are contained in \(\left\{ 0, 1\right\}\). %But before we can study elementary DPPs we will fix one direct consequence of the previous theorem.
 \end{rem}
 
-\begin{cor}[Cardinality of DPPs]\label{carDPP}
-Let \(\mathbb P\) be a DPP with kernel \(K = \sum_{k=1, \dots, N} \lambda_kv_kv_k^T\). Then the cardinality of the DPP is distributed like the sum of the Bernoulli variables \(\left\{ B_k\right\}_{k =1, \dots, N}\) from theorem \ref{mixDPPs}.
-\end{cor}
-\begin{proof}%[Proof of Theorem]
-To proof this, we only have to convince ourselves that after the Bernoulli experiments the cardinality of a DPP with kernel \eqref{BerKer} has size \(m\coloneqq\sum_{k=1}^NB_k\) almost surely. Since \(K_B\) has rank at most \(k\), the cardinality is almost surely smaller than \(m\). On the other hand we have
-\begin{equation}
-\begin{split}
-\mathbb E\big[\!\left\lvert \mathbf Y \right\rvert\!\big] = \sum\limits_{i\in\mathcal Y} \mathbb P(i\in\mathbf Y) = \sum\limits_{i\in\mathcal Y} (K_B)_{ii} = \operatorname{Tr}(K_B) = m.
-\end{split}
-\end{equation}
-In the last step we used that the trace of a symmetric matrix is the sum over its eigenvalues, which are \(B_k\) in our case. This computation lets us conclude \(\left\lvert \mathbf Y \right\rvert = m\) almost surely.
-\end{proof}
+Now we study the existence and simulation of elementary DPPs first and will be able to generalise those results to general DPPs without much effort.
 
 \begin{prop}[Existence of elementary DPPs]
 Let \(K=\sum_{k=1}^m v_kv_k^T\) for some orthonormal set \(V = \left\{ v_k\right\}_{k=1, \dots, m}\subseteq\mathbb R^{\mathcal Y}\). Further %set \(k\coloneqq\left\lvert I \right\rvert\) and 
@@ -303,7 +299,7 @@ For \(\left\lvert A \right\rvert\ge m\) this follows immediately, so let \(A = \
 %& = \frac{(m-r)!}{m!} \sum_{\sigma, \tau\in S_m} \operatorname{sgn}(\sigma)\operatorname{sgn}(\tau) \prod_{k=1}^{r-1}(v_{\sigma(k)})_{i_k}(v_{\tau(k)})_{i_k} \prod_{k=r}^{m} v_{\sigma(k)}^Tv_{\tau(k)}.
 \end{split}
 \end{equation*}
-where we used Lemma \ref{CB-type}.
+where we used Proposition \ref{CB-type}.
 %\todo{argue with multilinearity!}
 %This expression is only non trivial when \(\sigma(k)\ne\tau(k)\) for all \(k\ge r\) and hence we can restrict the sum to those permutations that satisfy this. % which also eliminates the factor \(\frac{(m-r)!}{m!}\). Hence we get%Further we will identify 
 %Further we will identify all pairs \((\sigma, \tau)\) permutations \(\)
@@ -382,7 +378,7 @@ We will use Theorem \ref{mixDPPs} to prove that the following algorithm samples 
 Let \(K\in\mathbb R^{N\times N}\) be any symmetric and positive definite matrix such that \(K\le I\). Then the distribution of the output \(Y\) of Algorithm \ref{alg:DPP-sampling} is a DPP with marginal kernel \(K\). %In particular 
 \end{theo}
 \begin{proof}
-Theorem \ref{mixDPPs} states that an arbitrary DPP is the mixture of elementary DPPs and the for loop in the algorithm represents exactly this mixing with the respective weights. Further the sampling result for elementary DPPs yields that the output of the second part of the algorithm, namely the while loop, is distributed according to a DPP with marginal kernel \(K^V\coloneqq\sum_{v\in V} vv^T \)
+Theorem \ref{mixDPPs} states that an arbitrary DPP is the mixture of elementary DPPs and the for loop in the algorithm represents exactly this mixing with the respective weights. Further the sampling result for elementary DPPs yields that the output of the second part of the algorithm, namely the while loop, is distributed according to a DPP with marginal kernel \(K^V\coloneqq\sum_{v\in V} vv^T \).
 %Thus we only have to show that the output of the second part of the algorithm, namely the while loop, is distributed according to a DPP with marginal kernel \(K^V\coloneqq\sum_{v\in V} vv^T \). 
 
 %To see this let \(\mathbf Y\) denote the output and assume that \(k\) eigenvectors where selected in the first part of the algorithm and fix now \(A\).
@@ -452,6 +448,20 @@ Let \(K\) be a symmetric \(N\times N\) matrix. Then \(K\) is the marginal kernel
 %\begin{proof}
 %We have already seen in the beginning that this condition is necessary. To see that it is sufficient, let \(0\le K\le I\) hold. Then the point process \(\tilde{\mathbb P}\) from Theorem \ref{mixDPPs} clearly exists, for example it is given by the explicit construction in Algorithm \ref{alg:DPP-sampling} and is a DPP with marginal kernel \(K\).
 %\end{proof}
+
+\begin{cor}[Cardinality of DPPs]\label{carDPP}
+Let \(\mathbb P\) be a DPP with kernel \[K = \sum_{k=1}^N \lambda_kv_kv_k^T.\] Then the cardinality of the DPP is distributed like the sum of the Bernoulli variables \(\left\{ B_k\right\}_{k =1, \dots, N}\) from theorem \ref{mixDPPs}.
+\end{cor}
+\begin{proof}%[Proof of Theorem]
+To proof this, we only have to convince ourselves that after the Bernoulli experiments the cardinality of a DPP with kernel \eqref{BerKer} has size \(m\coloneqq\sum_{k=1}^NB_k\) almost surely. Since \(K_B\) has rank at most \(k\), the cardinality is almost surely smaller than \(m\). On the other hand we have
+\begin{equation}
+\begin{split}
+\mathbb E\big[\!\left\lvert \mathbf Y \right\rvert\!\big] = \sum\limits_{i\in\mathcal Y} \mathbb P(i\in\mathbf Y) = \sum\limits_{i\in\mathcal Y} (K_B)_{ii} = \operatorname{Tr}(K_B) = m.
+\end{split}
+\end{equation}
+In the last step we used that the trace of a symmetric matrix is the sum over its eigenvalues, which are \(B_k\) in our case. This computation lets us conclude \(\left\lvert \mathbf Y \right\rvert = m\) almost surely.
+\end{proof}
+
 
 We close this section with the proof of \ref{mixDPPs} given in \cite{kulesza2012determinantal}.
 

@@ -130,6 +130,9 @@ We will call \(\gamma\) the \emph{initial} or \emph{starting distribution} of th
 transition kernel \(K\) and initial distribution \(\gamma\)\todo{cite}. %by taking \(X_0\) distributed according to \(\gamma\) and \(X_{n+1}\) distributed according to \(K(X_n, \cdot)\) for \(n = 0, 1, \dots\).
  If the initial distribution is deterministic, i.e. \(\gamma = \delta_x\) for one \(x\in\mathcal X\), then we also write \(\mathbb P_x\) for the distribution of the Markov chain.
 
+We close this paragraph by introducing the notation
+\[K^n(x, A) \coloneqq \mathbb P_x(X_n\in A). \]
+
 %\begin{enumerate}
 % \item Definition
 %\item irreducibility
@@ -147,7 +150,7 @@ From now on we will fix a reference measure \(\mu\) on \(\mathcal X\).
 \begin{defi}[Irreducibility and recurrence]
 \begin{enumerate}
 \item We say a Markov chain is \emph{\(\mu\) irreducible} if for every \(A\in\mathcal B(\mathcal X)\) with \(\mu(A)>0\) there is an index \(n\in\mathbb N\) such that
-\[\mathbb P_x(X_n\in A) = K(x, A) > 0 \quad \text{for all } x\in\mathcal X. \]
+\[\mathbb P_x(X_n\in A) = K^n(x, A) > 0 \quad \text{for all } x\in\mathcal X. \]
 \item A Markov chain \((X_n)_{n \in\mathbb N}\) is called \emph{recurrent} if
 \begin{enumerate}
 \item there is a measure \(\mu\) on \(\mathcal B(\mathcal X)\) such that \((X_n)\) is \(\mu\)-irreducible and
@@ -181,12 +184,13 @@ where the supremum is taken over all finite families of disjoint measurable sets
 \end{theo}
 
 \begin{theo}[Ergodic theorem]
-Let \((X_n)_{n\in\mathbb N}\) be a Harris recurrent Markov chain with \(\sigma\)-finite stationary distribution \(\pi\). Let further %\(\gamma_n\) be the distribution of \(X_n\), then we have
+Let \((X_n)_{n\in\mathbb N}\) be a Harris recurrent Markov chain with \(\sigma\)-finite stationary distribution \(\pi\), then \((X_n)_{n\in\mathbb N}\) is \emph{ergodic}. This means that if %\(\gamma_n\) be the distribution of \(X_n\), then we have
 \[\hat{\mathbb P}_n \coloneqq \frac1n \sum_{i=1}^n \delta_{X_i} \]
-be the empirical measure. Then we have almost surely for every \(\pi\) integrable function \(f\)
+is the empirical measure, we have almost surely have
 \begin{equation}\label{ergo}
-\int f(x) \hat{\mathbb P}_n(\mathrm dx) \xlongrightarrow{n\to\infty} \int f(x)\pi(\mathrm dx).
+\int f(x) \hat{\mathbb P}_n(\mathrm dx) \xlongrightarrow{n\to\infty} \int f(x)\pi(\mathrm dx)
 \end{equation}
+for every \(\pi\) integrable function \(f\).
 \end{theo}
 
 In the particular case that \(\mathcal X\) is a topological space and \(\mathcal B(\mathcal X)\) is the Borel algebra and if \(\pi\) is a finite measure, we obtain the almost surely weak convergence of \(\hat{\mathbb P}_n\) towards \(\pi\). This means that the convergence in \eqref{ergo} almost surely holds
@@ -206,26 +210,39 @@ We will present the two most common MCMC methods which are the Metropolis-Hastin
 
 \subsection{Metropolis-Hastings random walk}
 
-The idea of the Metropolis-Hastings (MH) random walk was introduced as early as 1953 by Metropolis (c.f. \cite{metropolis1953equation}) and later adapted by Hastings in \cite{hastings1970monte}.
+The Metropolis-Hastings random walk is maybe the most wide spread MCMC method and certainly one of the oldest. It was actually proposed in the early 1950s from researchers of the American nuclear programme in Los Alamos (c.f. \cite{metropolis1953equation}). First we will touch on the theoretical aspects -- mostly the ergodicity -- of the MH random walk and follow the ideas present in \cite{robert2013monte}.
+
+%The idea of the Metropolis-Hastings (MH) random walk was introduced as early as 1953 by Metropolis (c.f. \cite{metropolis1953equation}) and later adapted by Hastings in \
+{hastings1970monte}.
 
 \begin{emp}[Setting]
 Let \(\Theta\) be a measurable space, \(\mu\) a measure on that space and \(f\colon\mathcal X\to[0, \infty]\) a function with finite integral
-\[Z = \int f(x) \mu(\mathrm{d}x)<\infty.\]
+\[Z = \int f(x) \mu(\mathrm{d}x)\in(0, \infty).\]
 Our goal is to find a Harris recurrent Markov chain with invariant distribution
 \[\pi(A)\coloneqq \frac1Z \int_A f(x)\mu(\mathrm dx). \]
+Let further
+\[\left\{ f(\cdot|x) \mid x \in\mathcal X\right\}\]
+be a family of probability distributions, which we call the \emph{proposal distributions}.
 \end{emp}
 
-
-
 \begin{emp}[The MH random walk]
-First let
-\[\left\{ f(\cdot|x) \mid x \in\mathcal X\right\}\]
-be a family of probability distributions, which we call the \emph{proposal distributions}. Given the first \(n\) states of the Markov \(X_1= x_1, \dots, X_n = x_n\), we define \(X_{n+1}\) as follows. Let \(Y\) be distributed according to \(f(\cdot|x_n)\mathrm d\mu\) and take one realisation \(y\) of \(Y\). Then set
+Given the first \(n\) states of the Markov \(X_1= x_1, \dots, X_n = x_n\), we define \(X_{n+1}\) as follows. Let \(Y\) be distributed according to \(f(\cdot|x_n)\mathrm d\mu\) and take one realisation \(y\) of \(Y\). Then set
 \[X_{n+1}\coloneqq\begin{cases}\; y \quad & \text{with probability } \rho(x_n, y) \\\; x_n & \text{with probability } 1 - \rho(x_n, y) \end{cases} \]
 where
 \[\rho(x, y) \coloneqq \min\left\{ \frac{f(y) f(x|y)}{f(x)f(y|x)}, 1\right\}.\]
 \todo{say something about dividing by zero}
-The first step of the random walk, namely the sampling of \(y\) is called the \emph{proposal step} and the second one the \emph{accept-reject step}.
+The first step of the random walk, namely the sampling of \(y\) is called the \emph{proposal step} and the second one the \emph{accept-reject step}. The MH random walk can be expressed in pseudo code.
+\begin{algorithm}
+\caption{The MH random walk \label{alg:MH}}
+\begin{algorithmic}[1]
+\Require{First \(n\) samples \(x_1, \dots, x_n\)}
+\State \(y\sim f(\cdot|x_n)\mathrm d\mu\)
+\State \(a\sim \mathcal U([0, 1])\)
+\If{\(a\ge \rho(x_n, y)\)}
+  \State \(x_{n+1}\gets y\)
+\EndIf
+\end{algorithmic}
+\end{algorithm}
 \end{emp}
 
 %To the readers familiar with Markov chain theory, it will be immediately clear that \((X_n)_{n\in\mathbb N}\) is a Markov chain, since \(X_{n+1}\) can be written as a function of \(X_n\) and a stochastic influence. 
@@ -284,12 +301,106 @@ To see this, we can assume that this would not hold, but then the integrant has 
 \[\pi(A) = \int_A f(y)\mu(\mathrm dy) > 0.\]
 \end{proof}
 
+%\begin{prop}[Harris reccurence]
+%If the MH random walk is \(\pi\) irreducible, then it is also Harris recurrent.
+%\end{prop}
+%\begin{proof}
+%We refer to Lemma 7.3 in \cite{robert2013monte}.
+%\end{proof}
 
-\subsubsection*{Acceptance rate, effective sample size and tuning the proposal}
+Now we can formulate the ergodicity for \(\pi\) irreducible MH random walks.
+
+\begin{theo}[Ergodicity of the MH random walk]
+If the MH random walk is \(\pi\) irreducible, then it is also Harris recurrent and hence ergodic.
+\end{theo}
+\begin{proof}
+We refer to Lemma 7.3 in \cite{robert2013monte} for the proof of Harris recurrency, the ergodicity then follows from the ergodic theorem.
+\end{proof}
+
+\subsubsection*{Simulation of the MH random walk}
+
+So far we have presented the theoretical foundations of the MH random walk and now we want to touch on a few aspect of the simulation process. For this part we shall point the reader towards the very gentle introduction \cite{robert1999metropolis} to the implementation of the MH random walk which also provides coding examples.
 
 \subsection{Slice sampling}
 
-\subsubsection*{Presentation of the model}
+Slice sampling is a different MCMC method and quite similar to the MH random walk. Nevertheless it has the theoretical benefit that one does not have to define a family of proposal distributions and that the constructed Markov chain is always irreducible. However we will see that at least when one wants to simulate the slice sampling one runs into similar problems. We begin by fixing our frame we will work in. %  where one has to model 
+
+\begin{emp}[Setting]
+Let \(\Theta\) be a measurable space, \(\mu\) a measure on that space and \(f\colon\mathcal X\to[0, \infty]\) a function with finite integral
+\[Z = \int f(x) \mu(\mathrm{d}x)\in(0, \infty).\]
+In particular there is \(x_0\in\mathcal X\) such that \(f(x_0)>0\). Our goal is to find a Harris recurrent Markov chain with invariant distribution
+\[\pi(A)\coloneqq \frac1Z \int_A f(x)\mu(\mathrm dx). \]
+Further we will assume -- maybe after modification of \(f\) on a \(\mu\) Null set -- that 
+\[f\le \left\lVert f \right\rVert_{L^\infty(\mu)} = \inf \Big\{ \alpha\in\mathbb R \mid f \le \alpha \text{ almost surely with respect to } \mu \Big\}. \]
+\end{emp}
+
+\begin{emp}[Definition of the Markov chain]
+Assume we have already given the first \(n\) samples \(x_1, \dots, x_n\) of the Markov chain. If we have \(f(x_n)=0\), then we set \(x_{n+1}\coloneqq x_0\). Otherwise we sample \(y\) according to the uniform distribution on \([0, f(x_n)]\) and define the \emph{slice}
+\[S\coloneqq S(y)\coloneqq \left\{ x\in\mathcal X \mid f(x) \ge y \right\}. \]
+Note that because \(y \le f(x_n)\le \left\lVert f \right\rVert_{L^\infty(\mu)}\) we have \(\mu(S)>0\) as well as
+\[ \mu(S) \le y^{-1} \int_S f(x)\mu(\mathrm dx)<\infty \]
+where we used MarkovÕs inequality as well as \(y>0\) almost surely. Now draw \(x_{n+1}\) according to the uniform distribution on \(S\). Note that \(f(x_n)>0\), then \(f(x_{n+1})\ge y > 0\) almost surely.
+
+In pseudo code the algorithm can be written as
+\begin{algorithm}
+\caption{The slice sampling method \label{alg:slice-sampling}}
+\begin{algorithmic}[1]
+\Require{First \(n\) samples \(x_1, \dots, x_n\)}
+ \If \(f(x_n) = 0\)
+  \State \(x_{n+1}\gets x_0\)
+\Else
+  \State \(y\sim \mathcal U([0, f(x_n)])\)
+  \State \(S\gets \left\{ x\in\mathcal X \mid f(x) \ge y \right\}\)
+  \State \(x_{n+1} \sim \mathcal U(S)\)
+\EndIf
+\end{algorithmic}
+\end{algorithm}
+\end{emp}
+
+%\Require{First \(n\) samples \(x_1, \dots, x_n\)}
+%\If{\(f(x_n) = 0\)}
+%  \State \(x_{n+1}\gets x_0\)
+  %\Break
+%\Else
+%  \State \(y\sim \mathcal U([0, f(x_n)])\)
+%  \State \(S\gets \left\{ x\in\mathcal X \mid f(x) \ge y \right\}\)
+%  \State \(x_{n+1} \sim \mathcal U(S)\)
+
+The reason why we have to take of the case \(f(x_n)=0\) individually is, that there typically is no uniform distribution on the slice \(S(0)\).
+
+If we compare the Markov chain to the MH random walk, we noticr that in the slice sampling we first create a random threshold \(y\) and then sample uniformly from all points that satisfy this threshold. This is just the other way round than in the MH random walk where we first make a proposal for the next state of the Markov chain and then decide whether we will accept it or not.
+
+Just like in the case of the MH random walk we can explicitly give the transition kernel and use this expression then to check that \(\pi\) is a stationary distribution. The kernel of the Markov chain that arises from the slice sampling iteration is given by
+\[K(x, A) = \int_\mathbb R\frac{\mathds{1}_{[0, f(x)]}(y)}{f(x)} \cdot Z(y)^{-1} \int_A \mathds{1}_{[y, \infty)}(f(z)) \mu(\mathrm dz) \lambda(\mathrm dy) \]
+where \(\lambda\) is the Lebesgue measure on \(\mathbb R\), \(\mathds{1}\) is the indicator function and \(Z(y)\) is the normalisation constant
+\[Z(y)\coloneqq \int_{\mathcal X} \mathds{1}_{[y, \infty)}(f(z)) \mu(\mathrm dz) = \mu(S) \in(0, \infty). \]
+Obviously the expression above only holds if \(f(x)>0\) and in the case \(f(x) = 0\) we have
+\[K(x, A) = \delta_{x_n}(A).\]
+
+\begin{prop}[Invariant distribution]
+The probability distribution \(\pi\) is a stationary distribution of the Markov chain associated with the slice sampling.
+\end{prop}
+\begin{proof}
+For any \(A\subseteq\mathcal X\) we can compute
+\begin{equation*}
+\begin{split}
+\int_{\mathcal X} K(x, A) \pi(\mathrm dx) & = \int_{\mathcal X }\int_\mathbb R\frac{\mathds{1}_{[0, f(x)]}(y)}{f(x)}\cdot Z(y)^{-1} \int_A \mathds{1}_{[y, \infty)}(f(z)) \mu(\mathrm dz) \lambda(\mathrm dy) f(x) \mu(\mathrm dx) \\
+& = \int_{ A }\int_\mathbb R Z(y)^{-1} \int_{\mathcal X}\mathds{1}_{[y, \infty)}(f(x)) \mu(\mathrm dx) \mathds{1}_{[0, f(z)]}(y) \lambda(\mathrm dy) \mu(\mathrm dz) \\
+& = \int_A f(z)\mu(\mathrm dz) = \pi(A)
+\end{split}
+\end{equation*}
+where we again used FubiniÕs theorem for non negative functions.
+\end{proof}
+
+\begin{prop}[Irreducibility]
+The Markov chain that arises from the slice sampling algorithm is \(\pi\) irreducible.
+\end{prop}
+\begin{proof}
+Fix \(A\subseteq\mathcal X\) with positive probability \(\pi(A)>0\) and \(x\in\mathcal X\). If we have \(f(x)>0\), then we have \(\mu(A\cap S(y))>0\) for one \(y\in(0, f(x))\). We obtain
+\[K(x, A) \ge \frac{y}{f(x)}\cdot \frac{\mu(A\cap S(y))}{\mu(S(0))} > 0. \]
+If however \(f(x)=0\), then we get
+\[K^2(x, A) = K(x_0, A) > 0. \]
+\end{proof}
 
 \subsubsection*{Realisation of the model}
 

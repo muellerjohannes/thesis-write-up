@@ -37,6 +37,9 @@ f_{\Theta| X}(\theta|x) = \frac{f_{X, \Theta}(x, \theta)}{\int f_{X, \Theta}(x, 
 The density \(f_{\Theta|X}\) is called the \emph{posterior distribution} of the parameter \(\theta\) given the data \(x\).
 \end{defi}
 
+%From now on we will assume -- just like in the case of MLE -- that our observations are independent and identically distributed and hence their joint distribution factorises and we obtain
+%\[f_{\Theta| X}(\theta|x) \propto f_\Theta(\theta) \prod_{i=1}^n f_{X|\Theta}(x_i| \theta)\]
+
 This posterior density is already the object we are interested in which is supposed to give us the information of the distribution of the parameter given the data \(x\). It is proportional to the likelihood \(f_{X|\Theta}(x|\theta)\) of the occuring data times the prior \(f_\Theta(\theta)\) which can be understood in the way, that 
 
 \begin{emp}[Comparison to MLE]
@@ -47,7 +50,7 @@ Hence we can regain the MLE from our posterior distribution since it is just the
 	\centering
 	\includegraphics[width=0.6\textwidth]{heatmap-log-linearity-SliceSampling-new-3}
 %	\tag{1}
-	\caption{Approximated posterior density of the two dimensional log linearity constant of a two dimensional DPP. The MLE estimator is marked green.}
+	\caption{Approximated posterior density of the two dimensional log linearity constant of a two dimensional DPP with a uniform distribution as a prior. The MLE estimator is marked green and is at the mode of the distribution.}
 	\label{fig:3.1}
 \end{figure}
 
@@ -74,21 +77,94 @@ This step can actually also not be performed efficiently for the case of the est
 
 \subsubsection*{Expression of the posterior for DPPs}
 
+Now we will express the posterior in the case of DPPs under the following conditions.
+
+\begin{emp}[Setting]
+Let \(\Theta\) be a set and \(L(\theta)\in\mathbb R^{N\times N}_{\text{sym}, +}\) be an elementary kernel. Further we assume that we have independent realisations \(A_1, \dots, A_n\) of a  \(L\)-ensemble.
+\end{emp}
+
+Typically the parametrisations \(\theta\mapsto L(\theta)\) will be one of the three parametric models in III.2.1, i.e. \(\theta\) will either be the whole kernel itself, the quality vector, or the log linearity constant of the qualities and \(L(\theta)\) the associated elementary kernel.
+
+The independence relation leads to a factorisation of the density and we obtain the following expression for the posterior density
+\begin{equation}\label{post}
+f(\theta|A_1, \dots, A_n) \propto f_\Theta(\theta) \prod_{i=1}^n f(A_i|\theta) = f_\Theta(\theta) \prod_{i=1}^n \frac{\det(L(\theta)_{A_i})}{\det(L(\theta) + I)}
+\end{equation}
+where we dropped some indices of the density functions in slight abuse of notation.
+
+Unfortunately the normalisation constant
+\[\int f(\theta|A_1, \dots, A_n)\nu(\mathrm{d}\theta) = \int f_\Theta(\theta) \prod_{i=1}^n \frac{\det(L(\theta)_{A_i})}{\det(L(\theta) + I)}\nu(\mathrm{d}\theta) \]
+can neither be computed analytically nor numerically in an efficient way. This problem can be solved through the powerful method of Markov chain Monte Carlo simulation that allow to approximate a distribution with only the knowledge of its unnormalised density.
+
 \section{Markov chain Monte Carlo methods}
+
+The method of of Markov chain Monte Carlo (MCMC) simulation arose almost as early as the one Monte Carlo\footnote{A legend has it that the name Monte Carlo was given to the work of von Neumann and Ulam %in Los Alamos 
+by a colleage referring to UlamÕs uncle who lost a significant amount of money gambling in the Monte Carlo casino in Monaco.} simulation itself and since then a rich theory and a broad range of applications have been found. However we can only give a short overview over the basic principles and refer to \cite{meyn2012markov} for an introduction of Markov chain theory and to \cite{robert2013monte} for a survey on (Markov chain) Monte Carlo methods.
+
+We motivated MCMC methods for the approximation of the distribution \(\pi\) under the knowledge of its unnormalised density. In the nutshell the idea is to construct an ergodic Markov chain \((X_n)_{n\in\mathbb N}\) with stationary distribution \(\pi\), i.e. such that one has
+\[ \hat{\mathbb P}_n =\frac1n \sum_{i=1}^n \delta_{X_n} \xlongrightarrow{n\to\infty} \pi. \]
+This Markov chain can then be simulated using Monte Carlo methods. However to explain this in more detail we need to recapture some notions of Markov chains.
+
+% The reason nables amongst other things to sample from or to approximate a distribution without knowing the normalisation constant.
 
 \subsection{Reminder on Markov chains}
 
+We will provide an extremely short presentation of the most important notions and results in order to explain MCMC methods. However this will not allow for any proofs and hence it can not replace the study of the already mentioned text books. However let in the following \((\mathcal X, \mathcal B(\mathcal X))\) be a measurable space.
+
+
+\begin{defi}[Markov chain]
 \begin{enumerate}
-\item Definition
-\item irreducibility
-\item existence of stationary distributions
+\item A \emph{transition kernel} is a function \[K\colon\mathcal X\times\mathcal B(\mathcal X)\to[0, 1]\] such that
+\begin{enumerate}
+\item \(K(x, \cdot)\) is a probability measure for every \(x\in\mathcal X\) and
+\item \(K(\cdot, A)\) is measurable for every \(A\in\mathcal B(\mathcal X)\).
+\end{enumerate}
+\item A \emph{Markov chain} with values in \(\mathcal X\) is a collection \((X_n)_{n\in\mathbb N}\) of \(\mathcal X\) valued random variables such that
+\[\mathbb P\big(X_0\in A_0, \dots, X_n\in A_n\big) = \int_{A_0} \gamma(\mathrm{d}x_0) \int_{A_1} K(x_0, \mathrm{d}x_1) \cdots \int_{A_n} K(x_{n-1}, \mathrm{d}x_n) \]
+for all \(A_1, \dots, A_n\in\mathcal B(\mathcal X)\) where \(\gamma\) denotes the distribution of \(X_0\).
+\end{enumerate}
+\end{defi}
+
+We will call \(\gamma\) the \emph{initial} or \emph{starting distribution} of the Markov chain and will denote the distribution of this Markov chain by \(\mathbb P_\gamma\) and the expectation with respect to it by \(\mathbb E[\cdot]\). Further one can show that there is a Markov chain for any given %we note that we obtain a Markov chain with
+transition kernel \(K\) and initial distribution \(\gamma\)\todo{cite}. %by taking \(X_0\) distributed according to \(\gamma\) and \(X_{n+1}\) distributed according to \(K(X_n, \cdot)\) for \(n = 0, 1, \dots\).
+ If the initial distribution is deterministic, i.e. \(\gamma = \delta_x\) for one \(x\in\mathcal X\), then we also write \(\mathbb P_x\) for the distribution of the Markov chain.
+
+\begin{enumerate}
+% \item Definition
+%\item irreducibility
+% \item existence of stationary distributions
 \item reversibility
 \item detail-balance
 \item Ergodicity 
 \item idea of MCMC
 \end{enumerate}
 
-\subsubsection*{Irreducibility and existence of stationary distributions}
+\subsubsection*{Irreducibility, recurrence and existence of stationary distributions}
+
+From now on we will fix a reference measure \(\mu\) on \(\mathcal X\).
+
+\begin{defi}[Irreducibility and recurrence]
+\begin{enumerate}
+\item We say a Markov chain is \emph{\(\mu\) irreducible} if for every \(A\in\mathcal B(\mathcal X)\) with \(\mu(A)>0\) there is an index \(n\in\mathbb N\) such that
+\[\mathbb P_x(X_n\in A) = K(x, A) > 0 \quad \text{for all } x\in\mathcal X. \]
+\item A Markov chain \((X_n)_{n \in\mathbb N}\) is called \emph{recurrent} if
+\begin{enumerate}
+\item there is a measure \(\mu\) on \(\mathcal B(\mathcal X)\) such that \((X_n)\) is \(\mu\)-irreducible and
+\item if for every \(A\in\mathcal B(\mathcal X)\) with \(\mu(A)>0\) the expected number of visits of \(A\) is infinite, i.e.
+\[\mathbb E_x\left[\left\lvert \left\{ n\in\mathbb N \mid X_n\in A\right\} \right\rvert\right] = \infty \quad \text{for every } x\in A.\]
+\end{enumerate}
+\end{enumerate}
+\end{defi}
+
+
+
+\begin{defi}[Stationary distributions]
+Let \(\pi\) be a probability measure on \(\mathcal B(\mathcal X)\). We call \(\pi\) an \emph{invariant} or \emph{stationary distribution} of a Markov chain with kernel \(K\), if \(X_{n+1}\) is distributed according to \(\pi\) whenever \(X_n\) is distributed according to \(\pi\). This is equivalent to
+\[\pi(A) = \int K(x, A)\pi(\mathrm d x) \quad \text{for all } A\in\mathcal B(\mathcal X). \]
+\end{defi}
+
+\begin{theo}[Existence of stationary distributions]
+
+\end{theo}
 
 \subsubsection*{Ergodicity}
 

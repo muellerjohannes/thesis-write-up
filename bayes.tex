@@ -16,7 +16,7 @@ of densities with respect to \(\mu^n\coloneqq\prod_{i=1}^n\mu(\mathrm d x_i)\). 
 
 \begin{emp}[Setting]
 Let \(\Theta\) be a measurable space and \(\nu\) be a measure on \(\Theta\). Further let \(f_\Theta\colon \Theta\to[0, \infty]\) be a probability density with respect to \(\nu\), i.e.
-\[\int f_\Theta(\theta)\nu(\mathrm{d}\theta) = 1\]
+\[\int\limits_{\Theta} f_\Theta(\theta)\nu(\mathrm{d}\theta) = 1\]
 which we will call the \emph{prior} distribution of the parameter \(\theta\).
 \end{emp}
 
@@ -29,7 +29,7 @@ In order to obtain this, we will work with the joint density
 and condition this onto \(x\). This yields
 \begin{equation}\label{post}
 \begin{split}
-f_{\Theta| X}(\theta|x) = \frac{f_{X, \Theta}(x, \theta)}{\int f_{X, \Theta}(x, \theta)\nu(\mathrm{d}\theta)} = \frac{f_{X|\Theta}(x| \theta) f_\Theta(\theta)}{\int f_{X, \Theta}(x, \theta)\nu(\mathrm{d}\theta)}
+f_{\Theta| X}(\theta|x) = \frac{f_{X, \Theta}(x, \theta)}{\int_{\Theta} f_{X, \Theta}(x, \theta)\nu(\mathrm{d}\theta)} = \frac{f_{X|\Theta}(x| \theta) f_\Theta(\theta)}{\int_{\Theta} f_{X, \Theta}(x, \theta)\nu(\mathrm{d}\theta)}
 \end{split}
 \end{equation}
 
@@ -55,7 +55,7 @@ Hence we can regain the MLE from our posterior distribution since it is just the
 \end{figure}
 
 A second advantage over the MLE presented in the third chapter is, that it might be possible to computationally approximate the posterior density but not the MLE. This is typically the case if the log likelihood function is not concave, like in the setting of the MLE of the whole elementary kernel \(L\). In fact only hard step in the calculation of the posterior \eqref{post} is the computation of the normalisation constant
-\[\int f_{X,\Theta}(x, \theta) \nu(\mathrm{d}\theta). \]
+\[\int\limits_{\Theta} f_{X,\Theta}(x, \theta) \nu(\mathrm{d}\theta). \]
 This step can actually also not be performed efficiently for the case of the estimation of \(L\), however we will introduce the methods of Markov chain Monte Carlo simulation that allow an approximation of the posterior without the need to compute the normalisation contant.
 \end{emp}
 
@@ -93,7 +93,7 @@ where we dropped some indices of the density functions in slight abuse of notati
 
 Unfortunately the normalisation constant
 \begin{equation}\label{norma}
-\int f(\theta|A_1, \dots, A_n)\nu(\mathrm{d}\theta) = \int f_\Theta(\theta) \prod_{i=1}^n \frac{\det(L(\theta)_{A_i})}{\det(L(\theta) + I)}\nu(\mathrm{d}\theta)
+\int\limits_{\Theta} f(\theta|A_1, \dots, A_n)\nu(\mathrm{d}\theta) = \int\limits_{\Theta} f_\Theta(\theta) \prod_{i=1}^n \frac{\det(L(\theta)_{A_i})}{\det(L(\theta) + I)}\nu(\mathrm{d}\theta)
 \end{equation}
 can neither be computed analytically nor numerically in an efficient way. This problem can be solved through the powerful method of Markov chain Monte Carlo simulation that allow to approximate a distribution with only the knowledge of its unnormalised density.
 
@@ -121,7 +121,7 @@ We will provide an extremely short presentation of onyl the results that we will
 \item \(K(\cdot, A)\) is measurable for every \(A\in\mathcal B(\mathcal X)\).
 \end{enumerate}
 \item A \emph{Markov chain} with values in \(\mathcal X\) is a collection \((X_n)_{n\in\mathbb N}\) of \(\mathcal X\) valued random variables such that
-\[\mathbb P\big(X_0\in A_0, \dots, X_n\in A_n\big) = \int_{A_0} \gamma(\mathrm{d}x_0) \int_{A_1} K(x_0, \mathrm{d}x_1) \cdots \int_{A_n} K(x_{n-1}, \mathrm{d}x_n) \]
+\[\mathbb P\big(X_0\in A_0, \dots, X_n\in A_n\big) = \int\limits_{A_0} \gamma(\mathrm{d}x_0) \int\limits_{A_1} K(x_0, \mathrm{d}x_1) \cdots \int\limits_{A_n} K(x_{n-1}, \mathrm{d}x_n) \]
 for all \(A_1, \dots, A_n\in\mathcal B(\mathcal X)\) where \(\gamma\) denotes the distribution of \(X_0\).
 \end{enumerate}
 \end{defi}
@@ -164,7 +164,7 @@ From now on we will fix a reference measure \(\mu\) on \(\mathcal X\).
 
 \begin{defi}[Stationary distributions]
 Let \(\pi\) be a measure on \(\mathcal B(\mathcal X)\). We call \(\pi\) an \emph{invariant} or \emph{stationary distribution} of a Markov chain with kernel \(K\), if \(X_{n+1}\) is distributed according to \(\pi\) whenever \(X_n\) is distributed according to \(\pi\). This is equivalent to
-\[\pi(A) = \int K(x, A)\pi(\mathrm d x) \quad \text{for all } A\in\mathcal B(\mathcal X). \]
+\[\pi(A) = \int\limits_{\mathcal X} K(x, A)\pi(\mathrm d x) \quad \text{for all } A\in\mathcal B(\mathcal X). \]
 \end{defi}
 
 \begin{theo}[Existence of stationary distributions]
@@ -188,7 +188,7 @@ Let \((X_n)_{n\in\mathbb N}\) be a Harris recurrent Markov chain with \(\sigma\)
 \[\hat{\mathbb P}_n \coloneqq \frac1n \sum_{i=1}^n \delta_{X_i} \]
 is the empirical measure, we have almost surely have
 \begin{equation}\label{ergo}
-\int f(x) \hat{\mathbb P}_n(\mathrm dx) \xlongrightarrow{n\to\infty} \int f(x)\pi(\mathrm dx)
+\int\limits_{\mathcal X} f(x) \hat{\mathbb P}_n(\mathrm dx) \xlongrightarrow{n\to\infty} \int\limits_{\mathcal X} f(x)\pi(\mathrm dx)
 \end{equation}
 for every \(\pi\) integrable function \(f\).
 \end{theo}
@@ -217,9 +217,9 @@ The Metropolis-Hastings random walk is maybe the most wide spread MCMC method an
 
 \begin{emp}[Setting]
 Let \(\Theta\) be a measurable space, \(\mu\) a measure on that space and \(f\colon\mathcal X\to[0, \infty]\) a function with finite integral
-\[Z = \int f(x) \mu(\mathrm{d}x)\in(0, \infty).\]
+\[Z = \int\limits_{\mathcal X} f(x) \mu(\mathrm{d}x)\in(0, \infty).\]
 Our goal is to find a Harris recurrent Markov chain with invariant distribution
-\[\pi(A)\coloneqq \frac1Z \int_A f(x)\mu(\mathrm dx). \]
+\[\pi(A)\coloneqq \frac1Z \int\limits_A f(x)\mu(\mathrm dx). \]
 Let further
 \[\left\{ f(\cdot|x) \mid x \in\mathcal X\right\}\]
 be a family of probability distributions, which we call the \emph{proposal distributions}.
@@ -248,10 +248,10 @@ The first step of the random walk, namely the sampling of \(y\) is called the \e
 
 %To the readers familiar with Markov chain theory, it will be immediately clear that \((X_n)_{n\in\mathbb N}\) is a Markov chain, since \(X_{n+1}\) can be written as a function of \(X_n\) and a stochastic influence. 
 To see that the definition above indeed yields a Markov chain we convince ourselves that the transition kernel is given by
-\[K(x, A) = \int_A\rho(x, y)f(y|x) \mu(\mathrm dy) + (1 - m(x)) \delta_x(A) %\int_A
+\[K(x, A) = \int\limits_A\rho(x, y)f(y|x) \mu(\mathrm dy) + (1 - m(x)) \delta_x(A) %\int\limits_A
 \]
 where \(\delta_x\) is the Dirac measure in \(x\) and
-\[m(x) = \int \rho(x, y) f(y|x) \mu(\mathrm dy) \]
+\[m(x) = \int\limits_{\mathcal X} \rho(x, y) f(y|x) \mu(\mathrm dy) \]
 is the acceptance rate\todo{is this true?}.
 
 \begin{prop}[Stationary distribution]
@@ -263,7 +263,7 @@ The probability measure \(\pi\) is a stationary distribution of MH random walk.
 We have
 \begin{equation}\label{calc1}
 \begin{split}
-\int K(x, A) \pi(\mathrm dx) & =  \frac1Z \int\left( \int_A \rho(x, y) f(y|x) \mu(\mathrm dy) + (1 - m(x)) \delta_x(A)\right) f(x) \mu(\mathrm dx) %\\
+\int\limits_{\mathcal X} K(x, A) \pi(\mathrm dx) & =  \frac1Z \int\limits_{\mathcal X}\left( \int\limits_A \rho(x, y) f(y|x) \mu(\mathrm dy) + (1 - m(x)) \delta_x(A)\right) f(x) \mu(\mathrm dx) %\\
 %& = 
 \end{split}
 \end{equation}
@@ -271,17 +271,17 @@ We note that
 \[\rho(x, y) f(y|x) f(x) = \rho(y, x) f(x|y) f(y)\]
 and obtain
 %Using the definition of \(m(x)\) we obtain
-for the second term
+%for the second term
 \begin{equation*}
 \begin{split}
-\frac1Z \int m(x) \delta_x(A) f(x) \mu(\mathrm dx) & = \frac1Z\int\int \rho(x, y) f(y|x) \mu(\mathrm dy) \delta_x(A) f(x) \mu(\mathrm dx) \\
- & = \frac1Z\int_A \int \rho(x, y) f(y|x)f(x) \mu(\mathrm dy) \mu(\mathrm dx) \\
- & = \frac1Z\int \int_A \rho(x, y) f(y|x)f(x) \mu(\mathrm dx) \mu(\mathrm dy) \\
- & = \frac1Z\int \int_A \rho(y, x) f(x|y) \mu(\mathrm dx) f(y) \mu(\mathrm dy)
+\frac1Z \int\limits_{\mathcal X} m(x) \delta_x(A) f(x) \mu(\mathrm dx) & = \frac1Z\int\limits_{\mathcal X}\int\limits_{\mathcal X} \rho(x, y) f(y|x) \mu(\mathrm dy) \delta_x(A) f(x) \mu(\mathrm dx) \\
+ & = \frac1Z\int\limits_A \int\limits_{\mathcal X} \rho(x, y) f(y|x)f(x) \mu(\mathrm dy) \mu(\mathrm dx) \\
+ & = \frac1Z\int\limits_{\mathcal X} \int\limits_A \rho(x, y) f(y|x)f(x) \mu(\mathrm dx) \mu(\mathrm dy) \\
+ & = \frac1Z\int\limits_{\mathcal X} \int\limits_A \rho(y, x) f(x|y) \mu(\mathrm dx) f(y) \mu(\mathrm dy)
 \end{split}
 \end{equation*}
 where we used Fubini-Tonelli theorem\footnote{The Fubini-Tonelli theorem states that the order of integration with respect to two \(\sigma\)-additive measures can be swapped, if the integrated function is non negative.} in the second to last step. We note that now two of the terms in \eqref{calc1} cancel out and we obtain
-\[\int K(x, A) \pi(\mathrm dx) = \frac1Z \delta_x(A) f(x) \mu(\mathrm dx) = \pi(A). \]
+\[\int\limits_{\mathcal X} K(x, A) \pi(\mathrm dx) = \frac1Z \delta_x(A) f(x) \mu(\mathrm dx) = \pi(A). \]
 \end{proof}
 
 Now we are aiming to prove that the MH random walk is Harris recurrent because then the ergodic theorem yields that the empirical measures associated with the Markov chain will actually converge to \(\pi\). Obviously this is not for all proposal families in general the case, for example we could consider that the proposal distribution \(f(\cdot|x)\) is just the Dirac measures in \(x\)\footnote{Obviously this is slightly formal, because the Dirac measure can typically not be expressed through a density. However rigorous examples can be constructed similarly.}. Then the MH random walk would never leave its initial position which will typically be a deterministic point. Hence the empirical measures only be the Dirac measure in the starting point and hence not converge towards \(\pi\).
@@ -296,10 +296,10 @@ Then the MH random walk is \(\pi\) irreducible.
 \end{prop}
 \begin{proof}
 For any measurable set \(A\subseteq\mathcal X\) with positive measure \(\pi(A)>0\) we have
-\[K(x, A) \ge \int_A \rho(x, y)f(y|x) \mu(\mathrm d y) > %= \int_A \min\left\{ \frac{f(y) f(x|y)}{f(x)f(y|x)}, 1\right\}f(y|x) \mu(\mathrm d y) > 
+\[K(x, A) \ge \int\limits_A \rho(x, y)f(y|x) \mu(\mathrm d y) > %= \int\limits_A \min\left\{ \frac{f(y) f(x|y)}{f(x)f(y|x)}, 1\right\}f(y|x) \mu(\mathrm d y) > 
 0. \]
 To see this, we can assume that this would not hold, but then the integrant has to zero \(\mu\) almost surely. Since \(f(y|x)\) is strictly positive this would imply \(\rho(x, y) = 0\) and hence \(f(y) = 0\) almost surely with respect to \(\mu\). However this is a contradiction to
-\[\pi(A) = \int_A f(y)\mu(\mathrm dy) > 0.\]
+\[\pi(A) = \int\limits_A f(y)\mu(\mathrm dy) > 0.\]
 \end{proof}
 
 %\begin{prop}[Harris reccurence]
@@ -320,14 +320,24 @@ We refer to Lemma 7.3 in \cite{robert2013monte} for the proof of Harris recurren
 
 \subsubsection*{Implementation of the MH random walk}
 
-So far we have presented the theoretical foundations of the MH random walk and now we want to touch on a few aspect of the simulation process. For this part we shall point the reader towards the very gentle introduction \cite{robert1999metropolis} to the implementation of the MH random walk which also provides coding examples.
+So far we have presented the theoretical foundations of the MH random walk and now we want to touch on a few aspect of the simulation process. For this part we shall point the reader towards the very gentle introduction \cite{robert1999metropolis} to the implementation of the MH random walk which also provides coding examples. Further it shall be noted that we will not provide any rigorous results in this section but will give general statements about considerations one should make when implementing the MH random walk. In fact -- although we have seen that the empirical measures associated with the MH random walk converge to \(\pi\) under fairly mild assumptions -- it is mostly the choice of the proposal that determines the speed of this convergence.
+
+Let us assume \(\mathcal X = \mathbb R^d\) and that the reference measure \(\mu\) is the Lebesgue measure.
 
 \begin{emp}[Choosing a proposal family]
+Usually one would want to choose the proposal such that the expecation of \(f(\cdot|x)\) is \(x\). The most common choice of a proposals is a family of normal distributions \(f(\cdot|x)\) with expectation \(x\) and covariance \(\Sigma\in\mathbb R^{d\times d}\). This also has the welcome effect that the acceptance ratio takes the easier form
+\[\rho(x, y) = \min\left\{ \frac{f(y)}{f(x)}, 1\right\}.\]
+Also since the densities are strictly positive we ensure that the resulting Markov chain is \(\pi\) irreducible.
+\end{emp}
 
+\begin{emp}[Acceptance rate, autocorrelation and effective sample size]
+Once we have agreed to stick to normal densities for the proposal distributions, we still have the freedom to choose the covariance \(\Sigma\in\mathbb R^{d\times d}\). This determines how far the proposed new values will be away from the current state of the Markov chain. The motivation for an aggressive proposal distribution, i.e. for a high variance would be that this would enable the Markov chain to make bigger steps and hence explore the space \(\mathcal X\) faster. Also the chain would be more likely to jump between possibly isolated areas of high density. However this could also lead to a very high rejection rate\footnote{The term should be rather intuitive; the rejection rate is the relative amount of rejections that occurred in the MH random walk and analogously for the acceptance rate.} if the proposed values are often so far away from the current state of the Markov chain that they are in an area of low density. In this case the Markov chain will only ‚visit‘ very few distinct points in the space \(\mathcal X\) which is also very unfavourable. In fact \todo{cite} suggests that an acceptance rate around \(25\%\) is desirable. Figure\todo{make this figure}{ } shows the connection between the proposal distribution and the acceptance rate.
+
+The \emph{autocorrelation function} (\(\operatorname{acf}\)) of a sequence of data points \(x_1, \dots, x_n\) captures the estimated correlation between the observations. %This means that \(\operatoname{acf}(k, l)\) is the 
 \end{emp}
 
 \begin{emp}[Tuning the proposal]
-
+In order to obtain a higher acceptance rate without the loss of generally choosing the variance of the proposal distribution small one can do tune the proposal distribution. This means one adjusts the proposal distribution after a while, lets say after the first \(10^3\) samples in such a way that one replaces the original covariance matrix \(\Sigma\) by the empirical covariance of the first \(10^3\) samples. Then one forgets about all the samples so far -- they are called usually the \emph{burn in period} -- and starts a new MH random walk usually at one of the data points of the burn in period, since they should already indicate where an area of high density is. The reason why this increases the acceptance rate is, that the proposal now only is aggressive in those directions where the density is broadly spread. This effect can be seen in Figure \todo{make this figure}.
 \end{emp}
 
 \subsection{Slice sampling}
@@ -336,9 +346,9 @@ Slice sampling is a different MCMC method and quite similar to the MH random wal
 
 \begin{emp}[Setting]
 Let \(\Theta\) be a measurable space, \(\mu\) a measure on that space and \(f\colon\mathcal X\to[0, \infty]\) a function with finite integral
-\[Z = \int f(x) \mu(\mathrm{d}x)\in(0, \infty).\]
+\[Z = \int\limits_{\mathcal X} f(x) \mu(\mathrm{d}x)\in(0, \infty).\]
 In particular there is \(\hat x\in\mathcal X\) such that \(f(\hat x)>0\). Our goal is to find a Harris recurrent Markov chain with invariant distribution
-\[\pi(A)\coloneqq \frac1Z \int_A f(x)\mu(\mathrm dx). \]
+\[\pi(A)\coloneqq \frac1Z \int\limits_A f(x)\mu(\mathrm dx). \]
 Further we will assume -- maybe after modification of \(f\) on a \(\mu\) Null set -- that 
 \[f\le \left\lVert f \right\rVert_{L^\infty(\mu)} = \inf \Big\{ \alpha\in\mathbb R \mid f \le \alpha \text{ almost surely with respect to } \mu \Big\}. \]
 \end{emp}
@@ -347,10 +357,8 @@ Further we will assume -- maybe after modification of \(f\) on a \(\mu\) Null se
 Assume we have already given the first \(n\) samples \(x_1, \dots, x_n\) of the Markov chain. If we have \(f(x_n)=0\), then we set \(x_{n+1}\coloneqq \hat x\). Otherwise we sample \(y\) according to the uniform distribution on \([0, f(x_n)]\) and define the \emph{slice}
 \[S\coloneqq S(y)\coloneqq \left\{ x\in\mathcal X \mid f(x) \ge y \right\}. \]
 Note that because \(y \le f(x_n)\le \left\lVert f \right\rVert_{L^\infty(\mu)}\) we have \(\mu(S)>0\) as well as
-\[ \mu(S) \le y^{-1} \int_S f(x)\mu(\mathrm dx)<\infty \]
-where we used Markov’s inequality as well as \(y>0\) almost surely. Now draw \(x_{n+1}\) according to the uniform distribution on \(S\). Note that \(f(x_n)>0\), then \(f(x_{n+1})\ge y > 0\) almost surely.
-
-In pseudo code the algorithm takes the following form.
+\[ \mu(S) \le y^{-1} \int\limits_S f(x)\mu(\mathrm dx)<\infty \]
+where we used Markov’s inequality as well as \(y>0\) almost surely. Now draw \(x_{n+1}\) according to the uniform distribution on \(S\). Note that \(f(x_n)>0\), then \(f(x_{n+1})\ge y > 0\) almost surely.  In pseudo code for the algorithm can is presented in Algorithm \ref{alg:slice-sampling}.
 \begin{algorithm}
 \caption{A single slice sampling step \label{alg:slice-sampling}}
 \begin{algorithmic}[1]
@@ -376,17 +384,16 @@ In pseudo code the algorithm takes the following form.
 %  \State \(y\sim \mathcal U([0, f(x_n)])\)
 %  \State \(S\gets \left\{ x\in\mathcal X \mid f(x) \ge y \right\}\)
 %  \State \(x_{n+1} \sim \mathcal U(S)\)
-
 The reason why we have to take of the case \(f(x_n)=0\) individually is, that there typically is no uniform distribution on the slice \(S(0)\).
 
 If we compare the Markov chain to the MH random walk, we noticr that in the slice sampling we first create a random threshold \(y\) and then sample uniformly from all points that satisfy this threshold. This is just the other way round than in the MH random walk where we first make a proposal for the next state of the Markov chain and then decide whether we will accept it or not.
 
 Just like in the case of the MH random walk we can explicitly give the transition kernel and use this expression then to check that \(\pi\) is a stationary distribution. The kernel of the Markov chain that arises from the slice sampling iteration is given by
-\[K(x, A) = \int_\mathbb R\frac{\mathds{1}_{[0, f(x)]}(y)}{f(x)} \cdot Z(y)^{-1} \int_A \mathds{1}_{[y, \infty)}(f(z)) \mu(\mathrm dz) \lambda(\mathrm dy) \]
+\[K(x, A) = \int\limits_\mathbb R\frac{\mathds{1}_{[0, f(x)]}(y)}{f(x)} \cdot Z(y)^{-1} \int\limits_A \mathds{1}_{[y, \infty)}(f(z)) \mu(\mathrm dz) \lambda(\mathrm dy) \]
 where \(\lambda\) is the Lebesgue measure on \(\mathbb R\), \(\mathds{1}\) is the indicator function and \(Z(y)\) is the normalisation constant
-\[Z(y)\coloneqq \int_{\mathcal X} \mathds{1}_{[y, \infty)}(f(z)) \mu(\mathrm dz) = \mu(S) \in(0, \infty). \]
+\[Z(y)\coloneqq \int\limits_{\mathcal X} \mathds{1}_{[y, \infty)}(f(z)) \mu(\mathrm dz) = \mu(S) \in(0, \infty). \]
 Obviously the expression above only holds if \(f(x)>0\) and in the case \(f(x) = 0\) we have
-\[K(x, A) = \delta_{x_n}(A).\]
+\[K(x, A) = \delta_{\hat x}(A).\]
 
 \begin{prop}[Invariant distribution]
 The probability distribution \(\pi\) is a stationary distribution of the Markov chain associated with the slice sampling.
@@ -395,9 +402,9 @@ The probability distribution \(\pi\) is a stationary distribution of the Markov 
 For any \(A\subseteq\mathcal X\) we can compute
 \begin{equation*}
 \begin{split}
-\int_{\mathcal X} K(x, A) \pi(\mathrm dx) & = \int_{\mathcal X }\int_\mathbb R\frac{\mathds{1}_{[0, f(x)]}(y)}{f(x)}\cdot Z(y)^{-1} \int_A \mathds{1}_{[y, \infty)}(f(z)) \mu(\mathrm dz) \lambda(\mathrm dy) f(x) \mu(\mathrm dx) \\
-& = \int_{ A }\int_\mathbb R Z(y)^{-1} \int_{\mathcal X}\mathds{1}_{[y, \infty)}(f(x)) \mu(\mathrm dx) \mathds{1}_{[0, f(z)]}(y) \lambda(\mathrm dy) \mu(\mathrm dz) \\
-& = \int_A f(z)\mu(\mathrm dz) = \pi(A)
+\int\limits_{\mathcal X} K(x, A) \pi(\mathrm dx) & = \int\limits_{\mathcal X }\int\limits_\mathbb R\frac{\mathds{1}_{[0, f(x)]}(y)}{f(x)}\cdot Z(y)^{-1} \int\limits_A \mathds{1}_{[y, \infty)}(f(z)) \mu(\mathrm dz) \lambda(\mathrm dy) f(x) \mu(\mathrm dx) \\
+& = \int\limits_{ A }\int\limits_\mathbb R Z(y)^{-1} \int\limits_{\mathcal X}\mathds{1}_{[y, \infty)}(f(x)) \mu(\mathrm dx) \mathds{1}_{[0, f(z)]}(y) \lambda(\mathrm dy) \mu(\mathrm dz) \\
+& = \int\limits_A f(z)\mu(\mathrm dz) = \pi(A)
 \end{split}
 \end{equation*}
 where we again used Fubini’s theorem for non negative functions.

@@ -108,7 +108,7 @@ This Markov chain can then be simulated using Monte Carlo methods. However to ex
 
 \subsection{Reminder on Markov chains}
 
-We will provide an extremely short presentation of the most important notions and results in order to explain MCMC methods. However this will not allow for any proofs and hence it can not replace the study of the already mentioned text books. However let in the following \((\mathcal X, \mathcal B(\mathcal X))\) be a measurable space.
+We will provide an extremely short presentation of onyl the results that we will use to explain the core of MCMC methods. However this will not contain any proofs and hence it can not replace the study of the already mentioned text books. However let in the following \((\mathcal X, \mathcal B(\mathcal X))\) be a measurable space.
 
 
 \begin{defi}[Markov chain]
@@ -128,15 +128,15 @@ We will call \(\gamma\) the \emph{initial} or \emph{starting distribution} of th
 transition kernel \(K\) and initial distribution \(\gamma\)\todo{cite}. %by taking \(X_0\) distributed according to \(\gamma\) and \(X_{n+1}\) distributed according to \(K(X_n, \cdot)\) for \(n = 0, 1, \dots\).
  If the initial distribution is deterministic, i.e. \(\gamma = \delta_x\) for one \(x\in\mathcal X\), then we also write \(\mathbb P_x\) for the distribution of the Markov chain.
 
-\begin{enumerate}
+%\begin{enumerate}
 % \item Definition
 %\item irreducibility
 % \item existence of stationary distributions
-\item reversibility
-\item detail-balance
-\item Ergodicity 
-\item idea of MCMC
-\end{enumerate}
+%\item reversibility
+%\item detail-balance
+%\item Ergodicity 
+%\item idea of MCMC
+%\end{enumerate}
 
 \subsubsection*{Irreducibility, recurrence and existence of stationary distributions}
 
@@ -152,21 +152,45 @@ From now on we will fix a reference measure \(\mu\) on \(\mathcal X\).
 \item if for every \(A\in\mathcal B(\mathcal X)\) with \(\mu(A)>0\) the expected number of visits of \(A\) is infinite, i.e.
 \[\mathbb E_x\left[\left\lvert \left\{ n\in\mathbb N \mid X_n\in A\right\} \right\rvert\right] = \infty \quad \text{for every } x\in A.\]
 \end{enumerate}
+\item A Markov chain is called \emph{Harris recurrent} if it is recurrent and the number of visits is almost surely infinite, i.e. for any \(A\in\mathcal B(\mathcal X)\) with \(\mu(A)>0\) we have
+\[\mathbb P_x\left(\left\lvert \left\{ n\in\mathbb N \mid X_n\in A\right\} \right\rvert = \infty\right) = 1 \quad \text{for every } x\in A.\]
 \end{enumerate}
 \end{defi}
 
-
-
 \begin{defi}[Stationary distributions]
-Let \(\pi\) be a probability measure on \(\mathcal B(\mathcal X)\). We call \(\pi\) an \emph{invariant} or \emph{stationary distribution} of a Markov chain with kernel \(K\), if \(X_{n+1}\) is distributed according to \(\pi\) whenever \(X_n\) is distributed according to \(\pi\). This is equivalent to
+Let \(\pi\) be a measure on \(\mathcal B(\mathcal X)\). We call \(\pi\) an \emph{invariant} or \emph{stationary distribution} of a Markov chain with kernel \(K\), if \(X_{n+1}\) is distributed according to \(\pi\) whenever \(X_n\) is distributed according to \(\pi\). This is equivalent to
 \[\pi(A) = \int K(x, A)\pi(\mathrm d x) \quad \text{for all } A\in\mathcal B(\mathcal X). \]
 \end{defi}
 
 \begin{theo}[Existence of stationary distributions]
-
+If \((X_n)_{n\in\mathbb N}\) is a recurrent Markov chain, there exists an invariant \(\sigma\)-finite measure which is unique up to a multiplicative factor.
 \end{theo}
 
-\subsubsection*{Ergodicity}
+\subsubsection*{Convergence to the stationary distribution and ergodicity}
+
+We will not introduce the notion of periodic and aperiodic Markov chains here, because it would distract us from our actual goal. However we still present the following result that only holds for aperiodic Markov chains and refer to \cite{meyn2012markov} for further information. The reason why we still present the theorem is that it explains how one can approximately sample from the stationary distribution of a Markov chain, namely it says that the distribution of \(X_n\) converges to the invariant distribution.
+
+\begin{theo}[Convergence to stationary distribution]
+Let \((X_n)_{n\in\mathbb N}\) be a Harris recurrent and aperiodic Markov chain with stationary distribution \(\pi\). Let further \(\gamma_n\) be the distribution of \(X_n\), then we have
+\[\left\lVert \gamma_n - \pi \right\rVert_{TV} \xlongrightarrow{n\to\infty} 0 \]
+monotone. Here \(\left\lVert \cdot \right\rVert_{TV}\) denotes the total variation of a measure
+\[\left\lVert \mu \right\rVert_{TV}\coloneqq \sup_{\mathcal E}\sum\limits_{E\in\mathcal E} \left\lvert \mu(E) \right\rvert\]
+where the supremum is taken over all finite families of disjoint measurable sets.
+\end{theo}
+
+\begin{theo}[Ergodic theorem]
+Let \((X_n)_{n\in\mathbb N}\) be a Harris recurrent Markov chain with \(\sigma\)-finite stationary distribution \(\pi\). Let further %\(\gamma_n\) be the distribution of \(X_n\), then we have
+\[\hat{\mathbb P}_n \coloneqq \frac1n \sum_{i=1}^n \delta_{X_i} \]
+be the empirical measure. Then we have almost surely for every \(\pi\) integrable function \(f\)
+\begin{equation}\label{ergo}
+\int f(x) \hat{\mathbb P}_n(\mathrm dx) \xlongrightarrow{n\to\infty} \int f(x)\pi(\mathrm dx).
+\end{equation}
+\end{theo}
+
+In the particular case that \(\mathcal X\) is a topological space and \(\mathcal B(\mathcal X)\) is the Borel algebra and if \(\pi\) is a finite measure, we obtain the almost surely weak convergence of \(\hat{\mathbb P}_n\) towards \(\pi\). This means that the convergence in \eqref{ergo} almost surely holds
+%\[\int f(x) \hat{\mathbb P}_n(\mathrm dx) \xlongrightarrow{n\to\infty} \int f(x)\pi(\mathrm dx)\]
+for all continuous and bounded functions \(f\).
+
 
 \subsubsection*{Idea of Markov chain Monte Carlo methods}
 

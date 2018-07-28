@@ -491,9 +491,9 @@ Just like in the case of the MH random walk we will provide a few comments about
 
 From now on we will assume \(\mathcal X\subseteq\mathbb R^d\). The main difficulty in the implementation is the sampling of a uniform distribution on a slice \(S\). In practice it is even impossible to calculate the slice. Hence one has to come up with a trick. This trick is based on the following observation. Assume that we are able to sample a uniform distribution on a set \(C\) that contains the slice \(S\). Then the following algorithm -- which is nothing but the conditioning of this uniform distribution on the event that the outcome is in \(S\) -- samples uniformly from \(S\).
 \begin{algorithm}
-\caption{Sampling from a slice \label{alg:slice-sample}}
+\caption{Sampling a uniform distribution on a subset \(S\subseteq C\) \label{alg:slice-sample}}
 \begin{algorithmic}[1]
- % \Require{First \(n\) samples \(x_1, \dots, x_n\)}
+\Require{\(S\) and \(C\supseteq S\)}
 \State \(x\sim\mathcal U(C)\)
 \While {\(x\notin S\)}
   \State \(x\sim\mathcal U(C)\)
@@ -556,7 +556,74 @@ It shall be noted, that the above algorithm also uses a point \(\hat x\) of posi
 
 %\subsection{Tuning the algorithm}
 
-\section{Variational MCMC methods}
+\subsection{Variational MCMC methods}
+
+Now that we have presented a general setup for MCMC methods we can use them to approximated the posterior distribution which is given in unnormalised form %given by \eqref{post2}
+\[ f(\theta) = f_\Theta(\theta) \prod_{i=1}^n \frac{\det(L(\theta)_{A_i})}{\det(L(\theta) + I)}.\]
+In the light of the theoretical guarantees this will surely work and actually Figure \ref{fig:4.1} has been created this way. However the evaluation of this unnormalised density \(f\) is the computational bottle neck of this procedure and leads to long computation times. This is due to the calculation of the \(N\times N\) determinant \(\det(L(\theta) + I)\). However one can efficiently compute bounds of the unnormalised density (c.f. \cite{affandi2014learning} and \cite{bardenet2015inference}) and we will provide a general setup of how the MH random walk and slice sampling can be expressed using those bounds. This will in practice lead to way shorter simulation times. % such bounds can be used to obtain a
+
+\begin{emp}[Setting]
+Let \(\Theta\) be a measurable space, \(\mu\) a measure on that space and \(f\colon\mathcal X\to[0, \infty]\) a function with finite positive integral
+\[Z = \int\limits_{\mathcal X} f(x) \mu(\mathrm{d}x)\in(0, \infty).\]
+Let further \(f\le \left\lVert f \right\rVert_{L^\infty(\mu)}\) and
+\[\left\{ f(\cdot|x) \mid x \in\mathcal X\right\}\]
+be a family of proposel distributions.
+Let now \(f_n^-, f_n^+\colon\mathcal X\to [0, \infty]\) functions such that \(f_n^-(x)\le f(x)\le f_n^+(x)\) for all \(x\in\mathcal X\) as well as
+\[f_n^\pm(x) \xlongrightarrow{n\to\infty} f(x) %\quad \text{and } f_n^+(x)\to f(x) \quad \text{for } n\to\infty 
+\quad \text{for all } x\in\mathcal X. \]
+We no aim for an expression of the MH random walk and the slice sampling that purely relies on those bounds \(f_n^-\) and \(f_n^+\) of the unnormalised density.
+\end{emp}
+
+\subsubsection*{Variational MH random walk}
+
+We note that the only part in the algorithm for the MH random walk where \(f\) is needed itself is the accept-reject step. Hence we it suffices to adjust this step to purely rely on the bounds \(f_n^\pm\). In order to achieve this we bound the acceptance rate through
+\[\rho_n^\pm(x, y) \coloneqq \min\left\{ \frac{f_n^\pm(y) f(x|y)}{f_n^\mp(x)f(y|x)}, 1\right\}.\]
+In fact we obviously have \(\rho_n^-(x, y)\le\rho(x, y)\le\rho_n^+(x, y)\) as well as
+\[\rho_n^\pm(x, y)\xlongrightarrow{n\to\infty}\rho(x, y) \quad\text{for all } x, y\in\mathcal X. \]
+Hence if we want to decide whether a number \(a\) satisfies \(a\le \rho(x, y)\) we can iteratively tighten the upper and lower bounds on \(\rho\) until we either have \(a\le\rho_n^-(x, y)\) and thus \(a\le\rho(x, y)\) or \(a>\rho_n^+(x, y)\) and therefore \(a>\rho(x, y)\).
+
+Now we can adjust the algorithm of the MH random walk accordingly and obtain Algorithm \ref{alg:variational-MH}.
+
+\begin{algorithm}
+\caption{One step in the variational MH random walk \label{alg:variational-MH}}
+\begin{algorithmic}[1]
+\Require{Current state \(x_n\) of the MH random walk}
+\State \(y\sim f(\cdot|x_n)\mathrm d\mu\)
+\State \(a\sim \mathcal U([0, 1])\)
+\State \(k\gets 1\)
+\While {\(a>\rho_k^-(x_n, y)\) and \(a\le \rho_k^+(x_n, y)\)}
+  \State \(k \gets k+1\)
+\EndWhile
+\If{\(a\le \rho_k^-(x_n, y)\)}
+  \State \(x_{n+1}\gets y\)
+\Else 
+  \State \(x_{n+1}\gets x_n\)
+\EndIf
+\State\Return{\(x_{n+1}\)}
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection*{Variational slice sampling}
+
+In the slice sampling we use the unnormalised density twice. The first time by sampling \(y\sim\mathcal U([0, f(x_n)])\) and the second time when checking \(x\in S(y)\) or equivalently \(f(x)\ge y\). For the first problem we note that we surely have \([0, f(x_n)]\subseteq [0, f_1^+(x_n)]\) and hence we can use Algorithm \ref{alg:slice-sample} to sample from uniformly from \([0, f(x_n)]\). However in this algorithm we need to check \(y\in [0,f(x_n)]\) or equivalently \(f(x_n)\ge y\) which is just what we had to do determine whether \(x\in S(y)\). Therefore it suffices to see how one can check \(f(x)\ge y\) which we will do analogously to the variational MH random walk by gradually tightening the bounds. This yields the following algorithm that returns âTRUEÔ if \(f(x)\ge y\) and âFALSEÔ otherwise.
+
+\begin{algorithm}
+\caption{Deciding \(f(x)\ge y\) through the bounds \label{alg:decide}}
+\begin{algorithmic}[1]
+\Require{\(y\in\mathbb R\) and \(x\in\mathcal X\)}
+\State \(k\gets 1\)
+\While {\(y>f_k^-(x)\) and \(y\le f_k^+(x)\)}
+  \State \(k \gets k+1\)
+\EndWhile
+\If{\(y\le f_k^-(x_n, y)\)}
+  \State \Return{TRUE}
+\Else 
+  \State \Return{FALSE}
+\EndIf
+\end{algorithmic}
+\end{algorithm}
+
+In conclusion this decision algorithm in combination with Algorithm \ref{alg:sample-slice} gives an expression of the slice sampling Markov chain completely through the bounds \(f_n^\pm\).
 
 %\section{Towards deep DPPs}
 

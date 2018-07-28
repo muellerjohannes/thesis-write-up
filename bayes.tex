@@ -358,7 +358,7 @@ the MH random walk will only take very small steps and hence \(x_{l+k}\) will st
 %This means that \(\operatoname{acf}(k, l)\) is the 
 \end{emp}
 
-\begin{ex}[One dimensional MH]
+\begin{ex}[One dimensional MH]\label{example}
 We follow an examples for a one dimensional MH random walk given in \cite{robert1999metropolis}, namely we set
 \[f(x)\coloneqq \sin(x)^2\cdot\sin(2x)^2\cdot\exp\Big(-\frac{x^2}{2}\Big). \]
 The goal of this example is to see how different proposal distributions lead to different acceptance rates, a different exploration of the state space \(\mathcal X = \mathbb R\) and different effective sample sizes. In order to achieve this, we run \(2\cdot10^4\) samples of the MH random walk with starting point \(x_0=1\) and three different values \(\alpha = 0.01, 3, 100\) of the variance of the proposal distributions. Then we plot a histogram including the actual density and the autocorrelation function for all different values. The acceptance rates where approximately \(88\%\) for \(\alpha=0.01\), \(34\%\) for \(\alpha=3\) and \(9\%\) for \(\alpha=100\). The orders of the effective sample sizes for the different values for \(\alpha\) are given by
@@ -372,12 +372,12 @@ This simulation illustrates the problem of to aggressive -- \(\alpha = 100\) -- 
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.42\textwidth]{alpha-small}
-	\includegraphics[width=0.42\textwidth]{auto-alpha-small}
-	\includegraphics[width=0.42\textwidth]{alpha-optimal}
-	\includegraphics[width=0.42\textwidth]{auto-alpha-optimal}
-	\includegraphics[width=0.42\textwidth]{alpha-big}
-	\includegraphics[width=0.42\textwidth]{auto-alpha-big}
+	\includegraphics[width=0.4\textwidth]{alpha-small}
+	\includegraphics[width=0.4\textwidth]{auto-alpha-small}
+	\includegraphics[width=0.4\textwidth]{alpha-optimal}
+	\includegraphics[width=0.4\textwidth]{auto-alpha-optimal}
+	\includegraphics[width=0.4\textwidth]{alpha-big}
+	\includegraphics[width=0.4\textwidth]{auto-alpha-big}
 %	\tag{1}
 	\caption{Histograms and autocorrelation functions of for three differently aggressive proposal distributions. It is apparent that the histogram for \(\alpha=3\) fits the actual density the best and also that the autocorrelation decays the quickest for this parameter. Note that for \(\alpha=0.01\) the MH random walk only explored some area of high density. The actual density if obtained by numerical integration.}
 	\label{fig:4.1.2}
@@ -402,12 +402,12 @@ Further we will assume -- after an eventual modification of \(f\) on a \(\mu\) N
 \[f\le \left\lVert f \right\rVert_{L^\infty(\mu)} = \inf \Big\{ \alpha\in\mathbb R \mid f \le \alpha \text{ almost surely with respect to } \mu \Big\}. \]
 \end{emp}
 
-\begin{emp}[Definition of the slice campling]
+\begin{emp}[Definition of the slice sampling]
 Assume we have already given the first \(n\) samples \(x_1, \dots, x_n\) of the Markov chain. If we have \(f(x_n)=0\), then we set \(x_{n+1}\coloneqq \hat x\). Otherwise we sample \(y\) according to the uniform distribution on \([0, f(x_n)]\) and define the \emph{slice}
 \[S\coloneqq S(y)\coloneqq \left\{ x\in\mathcal X \mid f(x) \ge y \right\}. \]
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.6\textwidth]{Slice-sampling-neal}
+	\includegraphics[width=0.6\textwidth]{Slice-sampling-neal-new}
 %	\tag{1}
 	\caption{Schematic sketch of the selection of a slice. (a) first \(y\) is sampling uniformly on \([0, f(x)]\) and then (b) select the slice. Original graphic from \cite{neal2003slice}.}
 	\label{fig:4.2}
@@ -483,7 +483,18 @@ If however \(f(x)=0\), then we get
 \[K^2(x, A) = K(\hat x, A) > 0. \]
 \end{proof}
 
-\todo{find an ergodicity result}
+\begin{theo}[Ergodicity]
+%Assume that the unnormalised density admits the factorisation \(f(x) = q(x)l(x)\) where \(q\) and \(l\) are measurable and \(l\) is non negative. 
+If \(f\) is bounded, the Markov chain induced by the slice sampling method is ergodic.
+\end{theo}
+\begin{proof}
+See Theorem 6 in \cite{mira2002efficiency}.
+\end{proof}
+
+%Under the condition of the theorem above one even obtains a stronger version of ergodicity, namely uniform %in the starting point \(\)
+%\[\sup_{x\in\mathcal X} \left\lVert \hat{\mathbb P}_n - \pi \right\rVert_{TV} \xlongrightarrow{n\to\infty} 0. \]
+
+\todo{Let someone check whether this is correct...}
 
 \subsubsection*{Implementation details}
 
@@ -527,7 +538,24 @@ Here \(\mathcal E(\alpha)\) denotes the exponential distribution with parameter 
 \begin{emp}[The choice of \(\alpha\)]
 One could think that a small choice of \(\alpha\) -- which relates into large values of \(a_i\) and \(b_i\) -- would be the best since this increases the probability that the whole slice \(S\) is contained in the cuboid \(C\). There is some truth in this approach, since \(\mathcal U(S\cap C)\) is a better approximation of \(\mathcal U(S)\) if \(C\) is larger and further the two while loops in Algorithm \ref{alg:cuboid} need more repetitions if \(a_i\) and \(b_i\) initially are small. This relates into longer running time of the algorithm that samples the random cuboid. However one should not choose \(\alpha\) too small, because a large cuboid \(C\) also means that a lot of samples from \(\mathcal U(C)\) will lie outside of \(S\cap C\). Hence Algorithm \ref{alg:slice-sample} that samples from \(\mathcal U(S\cap C)\) will get slower as it will need more repetitions of the while loop.
 
-In conclusion there is a trade off -- very similar to the case of the MH random walk -- between the choice of too small and too large values for \(\alpha\).\todo{make comment on acf and effective sample size}
+In conclusion there is a trade off in terms of computation time between the choice of too small and too large values for \(\alpha\). %This choice effects the decay of the auto correlation and the effective sample size just like in the case of the MH random walk.
+However not always the parameter \(\alpha\) that minimises the simulation time is the most suitable, since the auto correlation It is true that the auto correlation decreases together with the parameter \(\alpha\). % like it can be seen in Figure \ref{fig:4.3}.
+ Hence computation time should rather be compared to the effective sample size.% For an %However since the computation time increases for small \(\alpha\)  This can be seen in Figure\todo{make figure}.
+
+Those effects of \(\alpha\) on the auto correlation and therefore effective sample can be seen in Figure \ref{fig:4.3} where the procedure of Example \ref{example} is repeated but this time with the slice sampling method. The sample size remains \(2\cdot10^4\) and the different parameter choices where \(\alpha = 0.01, 0.5, 10\). The according computation times where approximately \(26\si{s}\) for \(\alpha=0.01\), \(1.7\si{s}\) for \(\alpha=0.5\) and \(1.7\si{s}\) for \(\alpha=10\). In regard of the decay of the auto correlation functions and the resulting effective sample sizes, it is apparent that the choice \(\alpha = 0.5\) would be the most sensible one in this case.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.42\textwidth]{slice-alpha-small}
+	\includegraphics[width=0.42\textwidth]{slice-auto-alpha-small}
+	\includegraphics[width=0.42\textwidth]{slice-alpha-optimal}
+	\includegraphics[width=0.42\textwidth]{slice-auto-alpha-optimal}
+	\includegraphics[width=0.42\textwidth]{slice-alpha-big}
+	\includegraphics[width=0.42\textwidth]{slice-auto-alpha-big}
+%	\tag{1}
+	\caption{Histograms and autocorrelation functions for the choices of \(\alpha = 0.01, 0.5, 10\). The auto correlation obviously decreases the fastest for \(\alpha=0.01\), however the computation time is much higher than for the parameter the other parameters.}
+	\label{fig:4.3}
+\end{figure}
 \end{emp}
 
 Finally we can present the pseudocode of the algorithm that arises from the combination of the usual slice sampling method and the approximation of the uniform distribution on the slice.
@@ -559,8 +587,10 @@ It shall be noted, that the above algorithm also uses a point \(\hat x\) of posi
 \subsection{Variational MCMC methods}
 
 Now that we have presented a general setup for MCMC methods we can use them to approximated the posterior distribution which is given in unnormalised form %given by \eqref{post2}
-\[ f(\theta) = f_\Theta(\theta) \prod_{i=1}^n \frac{\det(L(\theta)_{A_i})}{\det(L(\theta) + I)}.\]
-In the light of the theoretical guarantees this will surely work and actually Figure \ref{fig:4.1} has been created this way. However the evaluation of this unnormalised density \(f\) is the computational bottle neck of this procedure and leads to long computation times. This is due to the calculation of the \(N\times N\) determinant \(\det(L(\theta) + I)\). However one can efficiently compute bounds of the unnormalised density (c.f. \cite{affandi2014learning} and \cite{bardenet2015inference}) and we will provide a general setup of how the MH random walk and slice sampling can be expressed using those bounds. This will in practice lead to way shorter simulation times. % such bounds can be used to obtain a
+\begin{equation}\label{post3}
+f(\theta) = f_\Theta(\theta) \prod_{i=1}^n \frac{\det(L(\theta)_{A_i})}{\det(L(\theta) + I)}.
+\end{equation}
+In the light of the theoretical guarantees this will surely work and actually Figure \ref{fig:4.1} has been created this way. However the evaluation of this unnormalised density \(f\) is the computational bottle neck of this procedure and leads to long computation times. This is due to the calculation of the \(N\times N\) determinant \(\det(L(\theta) + I)\). However one can efficiently compute bounds of the unnormalised density and we will provide a general setup of how the MH random walk and slice sampling can be expressed using those bounds. This will in practice lead to way shorter simulation times. % such bounds can be used to obtain a
 
 \begin{emp}[Setting]
 Let \(\Theta\) be a measurable space, \(\mu\) a measure on that space and \(f\colon\mathcal X\to[0, \infty]\) a function with finite positive integral
@@ -571,7 +601,7 @@ be a family of proposel distributions.
 Let now \(f_n^-, f_n^+\colon\mathcal X\to [0, \infty]\) functions such that \(f_n^-(x)\le f(x)\le f_n^+(x)\) for all \(x\in\mathcal X\) as well as
 \[f_n^\pm(x) \xlongrightarrow{n\to\infty} f(x) %\quad \text{and } f_n^+(x)\to f(x) \quad \text{for } n\to\infty 
 \quad \text{for all } x\in\mathcal X. \]
-We no aim for an expression of the MH random walk and the slice sampling that purely relies on those bounds \(f_n^-\) and \(f_n^+\) of the unnormalised density.
+We seek an expression of the MH random walk and the slice sampling that purely relies on those bounds \(f_n^-\) and \(f_n^+\) of the unnormalised density.
 \end{emp}
 
 \subsubsection*{Variational MH random walk}
@@ -581,7 +611,6 @@ We note that the only part in the algorithm for the MH random walk where \(f\) i
 In fact we obviously have \(\rho_n^-(x, y)\le\rho(x, y)\le\rho_n^+(x, y)\) as well as
 \[\rho_n^\pm(x, y)\xlongrightarrow{n\to\infty}\rho(x, y) \quad\text{for all } x, y\in\mathcal X. \]
 Hence if we want to decide whether a number \(a\) satisfies \(a\le \rho(x, y)\) we can iteratively tighten the upper and lower bounds on \(\rho\) until we either have \(a\le\rho_n^-(x, y)\) and thus \(a\le\rho(x, y)\) or \(a>\rho_n^+(x, y)\) and therefore \(a>\rho(x, y)\).
-
 Now we can adjust the algorithm of the MH random walk accordingly and obtain Algorithm \ref{alg:variational-MH}.
 
 \begin{algorithm}
@@ -623,7 +652,10 @@ In the slice sampling we use the unnormalised density twice. The first time by s
 \end{algorithmic}
 \end{algorithm}
 
-In conclusion this decision algorithm in combination with Algorithm \ref{alg:sample-slice} gives an expression of the slice sampling Markov chain completely through the bounds \(f_n^\pm\).
+In conclusion we can express both MCMC methods exactly through those bounds as long as the bounds converge. This enables a fast simulation of the Markov chains if the unnormalised density is slow the bounds \(f_n^\pm\) are easy to compute. In the case that \(f\) is the posterior \eqref{post3} of a DPP such bounds are given in \cite{affandi2014learning} and \cite{bardenet2015inference}.
+%this decision algorithm in combination with Algorithm \ref{alg:slice-sample} gives an expression of the slice sampling Markov chain completely through the bounds \(f_n^\pm\).
+
+\section{Examples}
 
 %\section{Towards deep DPPs}
 

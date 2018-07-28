@@ -45,13 +45,13 @@ This posterior density is already the object we are interested in which is suppo
 \begin{emp}[Comparison to MLE]
 Maybe one feels slightly uncomfortable with the need of a choice for the prior distribution and it turns out that this is in fact a difficult step that has to be taken with a certain amount of care. However we could pretend for one moment to be completely ignorant in the sense that we do not know anything about the parameter and hence we don’t feel in the position to propose a reasonable prior. Then we could simply choose the uniform distribution as a prior -- given it exists -- and would obtain
 \[f_{\Theta| X}(\theta|x) \propto f_{X|\Theta}(x|\theta). \]
-Hence we can regain the MLE from our posterior distribution since it is just the mode, i.e. the maximiser of the posterior density. This relation to the MLE can be seen in Figure \ref{fig:3.1}. Hence the Bayesian approach is a a more powerful tool than MLE and allows also to capture the random uncertainty of the parameter \(\theta\) and we have seen that the mode is  not always a vey typical outcome of a random variable\todo{cite}.
+Hence we can regain the MLE from our posterior distribution since it is just the mode, i.e. the maximiser of the posterior density. This relation to the MLE can be seen in Figure \ref{fig:4.1}. Hence the Bayesian approach is a a more powerful tool than MLE and allows also to capture the random uncertainty of the parameter \(\theta\) and we have seen that the mode is  not always a vey typical outcome of a random variable\todo{cite}.
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.6\textwidth]{heatmap-log-linearity-SliceSampling-new-3}
 %	\tag{1}
 	\caption{Approximated posterior density of the two dimensional log linearity constant of a two dimensional DPP with a uniform distribution as a prior. The MLE estimator is marked green and is at the mode of the distribution.}
-	\label{fig:3.1}
+	\label{fig:4.1}
 \end{figure}
 
 A second advantage over the MLE presented in the third chapter is, that it might be possible to computationally approximate the posterior density but not the MLE. This is typically the case if the log likelihood function is not concave, like in the setting of the MLE of the whole elementary kernel \(L\). In fact only hard step in the calculation of the posterior \eqref{post} is the computation of the normalisation constant
@@ -100,7 +100,7 @@ can neither be computed analytically nor numerically in an efficient way. This p
 \section{Markov chain Monte Carlo methods}
 
 The method of of Markov chain Monte Carlo (MCMC) simulation arose almost as early as the one Monte Carlo\footnote{A legend has it that the name Monte Carlo was given to the work of von Neumann and Ulam %in Los Alamos 
-by a colleage referring to Ulam’s uncle who lost a significant amount of money gambling in the Monte Carlo casino in Monaco.} simulation itself and since then a rich theory and a broad range of applications have been found. However we can only give a short overview over the basic principles and refer to \cite{meyn2012markov} for an introduction of Markov chain theory and to \cite{robert2013monte} for a survey on (Markov chain) Monte Carlo methods.
+by a colleage referring to Ulam’s uncle who lost a significant amount of money gambling in the Monte Carlo casino in Monaco.} simulation itself and since then a rich theory and a broad range of applications have been found. However we can only give a short overview over the basic principles and will rely on basic notions  and refer to \cite{meyn2012markov} for an introduction of Markov chain theory and to \cite{robert2013monte} for a survey on (Markov chain) Monte Carlo methods. 
 
 We motivated MCMC methods for the approximation of the distribution \(\pi\) under the knowledge of its unnormalised density. In the nutshell the idea is to construct an ergodic Markov chain \((X_n)_{n\in\mathbb N}\) with stationary distribution \(\pi\), i.e. such that one has
 \[ \hat{\mathbb P}_n =\frac1n \sum_{i=1}^n \delta_{X_n} \xlongrightarrow{n\to\infty} \pi. \]
@@ -110,7 +110,9 @@ This Markov chain can then be simulated using Monte Carlo methods. However to ex
 
 \subsection{Reminder on Markov chains}
 
-We will provide an extremely short presentation of onyl the results that we will use to explain the core of MCMC methods. However this will not contain any proofs and hence it can not replace the study of the already mentioned text books. However let in the following \((\mathcal X, \mathcal B(\mathcal X))\) be a measurable space.
+We will provide an extremely short presentation of only the results that we will use to explain the core of MCMC methods. However this will not contain any proofs and hence it can not replace the study of the already mentioned text books and it will be of great benefit for the reader to be familiar with the basic notions of stochastic processes and Markov chains.
+
+Let in the following \((\mathcal X, \mathcal B(\mathcal X))\) be a measurable space.
 
 
 \begin{defi}[Markov chain]
@@ -121,15 +123,17 @@ We will provide an extremely short presentation of onyl the results that we will
 \item \(K(\cdot, A)\) is measurable for every \(A\in\mathcal B(\mathcal X)\).
 \end{enumerate}
 \item A \emph{Markov chain} with values in \(\mathcal X\) is a collection \((X_n)_{n\in\mathbb N}\) of \(\mathcal X\) valued random variables such that
-\[\mathbb P\big(X_0\in A_0, \dots, X_n\in A_n\big) = \int\limits_{A_0} \gamma(\mathrm{d}x_0) \int\limits_{A_1} K(x_0, \mathrm{d}x_1) \cdots \int\limits_{A_n} K(x_{n-1}, \mathrm{d}x_n) \]
+\begin{equation}\label{MC}
+\mathbb P\big(X_0\in A_0, \dots, X_n\in A_n\big) = \int\limits_{A_0} \gamma(\mathrm{d}x_0) \int\limits_{A_1} K(x_0, \mathrm{d}x_1) \cdots \int\limits_{A_n} K(x_{n-1}, \mathrm{d}x_n)
+\end{equation}
 for all \(A_1, \dots, A_n\in\mathcal B(\mathcal X)\) where \(\gamma\) denotes the distribution of \(X_0\).
 \end{enumerate}
 \end{defi}
 
-We will call \(\gamma\) the \emph{initial} or \emph{starting distribution} of the Markov chain and will denote the distribution of this Markov chain by \(\mathbb P_\gamma\) and the expectation with respect to it by \(\mathbb E[\cdot]\). Further one can show that there is a Markov chain for any given %we note that we obtain a Markov chain with
-transition kernel \(K\) and initial distribution \(\gamma\)\todo{cite}. %by taking \(X_0\) distributed according to \(\gamma\) and \(X_{n+1}\) distributed according to \(K(X_n, \cdot)\) for \(n = 0, 1, \dots\).
+We will call \(\gamma\) the \emph{initial} or \emph{starting distribution} of the Markov chain and will denote the distribution of this Markov chain by \(\mathbb P_\gamma\) and the expectation with respect to it by \(\mathbb E[\cdot]\). Further an easy application of Kolmogorov’s consistency theorem implies that there is a measure \(\mathbb P\) on the \emph{path space} \(\mathcal X^{\mathbb N}\) that satisfies \eqref{MC} which shows the existence of a Markov chain given a
+%one can show that there is a Markov chain for any given %we note that we obtain a Markov chain with
+transition kernel \(K\) and initial distribution \(\gamma\) (c.f. \cite{le2016brownian}). %by taking \(X_0\) distributed according to \(\gamma\) and \(X_{n+1}\) distributed according to \(K(X_n, \cdot)\) for \(n = 0, 1, \dots\).
  If the initial distribution is deterministic, i.e. \(\gamma = \delta_x\) for one \(x\in\mathcal X\), then we also write \(\mathbb P_x\) for the distribution of the Markov chain.
-
 We close this paragraph by introducing the notation
 \[K^n(x, A) \coloneqq \mathbb P_x(X_n\in A). \]
 
@@ -195,7 +199,7 @@ for every \(\pi\) integrable function \(f\).
 
 In the particular case that \(\mathcal X\) is a topological space and \(\mathcal B(\mathcal X)\) is the Borel algebra and if \(\pi\) is a finite measure, we obtain the almost surely weak convergence of \(\hat{\mathbb P}_n\) towards \(\pi\). This means that the convergence in \eqref{ergo} almost surely holds
 %\[\int f(x) \hat{\mathbb P}_n(\mathrm dx) \xlongrightarrow{n\to\infty} \int f(x)\pi(\mathrm dx)\]
-for all continuous and bounded functions \(f\). This means that \(\hat{\mathbb P}_n\) are approximations of the invariant distribution in the sense of weak convergence, which is metrisable\todo{cite}.
+for all continuous and bounded functions \(f\). This means that \(\hat{\mathbb P}_n\) are approximations of the invariant distribution in the sense of weak convergence, which is metrisable for example by the Lévy-Prokhorov or the bounded dual Lipschitz metric (c.f. \cite{dudley2010distances}).
 
 
 \subsubsection*{Idea of Markov chain Monte Carlo methods}
@@ -230,12 +234,13 @@ Given the first \(n\) states of the Markov \(X_1= x_1, \dots, X_n = x_n\), we de
 \[X_{n+1}\coloneqq\begin{cases}\; y \quad & \text{with probability } \rho(x_n, y) \\\; x_n & \text{with probability } 1 - \rho(x_n, y) \end{cases} \]
 where
 \[\rho(x, y) \coloneqq \min\left\{ \frac{f(y) f(x|y)}{f(x)f(y|x)}, 1\right\}.\]
-\todo{say something about dividing by zero}
-The first step of the random walk, namely the sampling of \(y\) is called the \emph{proposal step} and the second one the \emph{accept-reject step}. The MH random walk can be expressed in pseudo code.
+%\todo{say something about dividing by zero}
+Here we use the convention \(\frac{x}{0} = \infty\). The first step of the random walk, namely the sampling of \(y\) is called the \emph{proposal step} and the second one the \emph{accept-reject step}. In conclusion a single step of the MH random walk can be expressed in the following compact way. %The MH random walk can be expressed in pseudo code.
 \begin{algorithm}
 \caption{A single step of the MH random walk \label{alg:MH}}
 \begin{algorithmic}[1]
-\Require{First \(n\) samples \(x_1, \dots, x_n\)}
+\Require{Current state \(x_n\) of the MH random walk}
+\State \(x_{n+1}\gets x_n\)
 \State \(y\sim f(\cdot|x_n)\mathrm d\mu\)
 \State \(a\sim \mathcal U([0, 1])\)
 \If{\(a\le \rho(x_n, y)\)}
@@ -245,6 +250,7 @@ The first step of the random walk, namely the sampling of \(y\) is called the \e
 \end{algorithmic}
 \end{algorithm}
 \end{emp}
+%\todo{comment on how the normalisation does not play a role.}
 
 %To the readers familiar with Markov chain theory, it will be immediately clear that \((X_n)_{n\in\mathbb N}\) is a Markov chain, since \(X_{n+1}\) can be written as a function of \(X_n\) and a stochastic influence. 
 To see that the definition above indeed yields a Markov chain we convince ourselves that the transition kernel is given by
@@ -252,10 +258,10 @@ To see that the definition above indeed yields a Markov chain we convince oursel
 \]
 where \(\delta_x\) is the Dirac measure in \(x\) and
 \[m(x) = \int\limits_{\mathcal X} \rho(x, y) f(y|x) \mu(\mathrm dy) \]
-is the acceptance rate\todo{is this true?}.
+is the \emph{acceptance probability} of the chain at state \(x\).
 
 \begin{prop}[Stationary distribution]
-\todo{under which support conditions?}
+\todo{do you need any conditions on the support of the proposals?}
 %Let \((X_n)_{n\in\mathbb N}\) be the Metropolis-Hastings random walk. Then
 The probability measure \(\pi\) is a stationary distribution of MH random walk.
 \end{prop}
@@ -268,8 +274,8 @@ We have
 \end{split}
 \end{equation}
 We note that
-\[\rho(x, y) f(y|x) f(x) = \rho(y, x) f(x|y) f(y)\]
-and obtain
+\[\rho(x, y) f(y|x) f(x) = \rho(y, x) f(x|y) f(y).\]
+Furthermore we can compute
 %Using the definition of \(m(x)\) we obtain
 %for the second term
 \begin{equation*}
@@ -280,8 +286,8 @@ and obtain
  & = \frac1Z\int\limits_{\mathcal X} \int\limits_A \rho(y, x) f(x|y) \mu(\mathrm dx) f(y) \mu(\mathrm dy)
 \end{split}
 \end{equation*}
-where we used Fubini-Tonelli theorem\footnote{The Fubini-Tonelli theorem states that the order of integration with respect to two \(\sigma\)-additive measures can be swapped, if the integrated function is non negative.} in the second to last step. We note that now two of the terms in \eqref{calc1} cancel out and we obtain
-\[\int\limits_{\mathcal X} K(x, A) \pi(\mathrm dx) = \frac1Z \delta_x(A) f(x) \mu(\mathrm dx) = \pi(A). \]
+where we used Fubini-Tonelli theorem\footnote{The Fubini-Tonelli theorem states that the order of integration with respect to two \(\sigma\)-additive measures can be swapped, if the integrated function is non negative.} in the second to last step. We note that two of the terms in \eqref{calc1} cancel out and we obtain
+\[\int\limits_{\mathcal X} K(x, A) \pi(\mathrm dx) = \frac1Z \int\limits_{\mathcal X} \delta_x(A) f(x) \mu(\mathrm dx) = \pi(A). \]
 \end{proof}
 
 Now we are aiming to prove that the MH random walk is Harris recurrent because then the ergodic theorem yields that the empirical measures associated with the Markov chain will actually converge to \(\pi\). Obviously this is not for all proposal families in general the case, for example we could consider that the proposal distribution \(f(\cdot|x)\) is just the Dirac measures in \(x\)\footnote{Obviously this is slightly formal, because the Dirac measure can typically not be expressed through a density. However rigorous examples can be constructed similarly.}. Then the MH random walk would never leave its initial position which will typically be a deterministic point. Hence the empirical measures only be the Dirac measure in the starting point and hence not converge towards \(\pi\).
@@ -320,7 +326,9 @@ We refer to Lemma 7.3 in \cite{robert2013monte} for the proof of Harris recurren
 
 \subsubsection*{Implementation of the MH random walk}
 
-So far we have presented the theoretical foundations of the MH random walk and now we want to touch on a few aspect of the simulation process. For this part we shall point the reader towards the very gentle introduction \cite{robert1999metropolis} to the implementation of the MH random walk which also provides coding examples. Further it shall be noted that we will not provide any rigorous results in this section but will give general statements about considerations one should make when implementing the MH random walk. In fact -- although we have seen that the empirical measures associated with the MH random walk converge to \(\pi\) under fairly mild assumptions -- it is mostly the choice of the proposal that determines the speed of this convergence.
+So far we have presented the theoretical foundations of the MH random walk and now we want to touch on a few aspect of the simulation process. For this part we shall point the reader towards the very gentle introduction \cite{robert1999metropolis} to the implementation of the MH random walk which also provides coding examples. Further it shall be noted that we will not provide any rigorous results in this section and sometimes use terminology -- like empirical correlation -- without defining them mathematically. However this is only done if the term is very well established an can easily be found in the literature.
+%but will give general statements about considerations one should make when implementing the MH random walk. 
+We have seen that the empirical measures associated with the MH random walk converge to \(\pi\) under fairly mild assumptions, meaning for almost all choices of proposal distributions. Nevertheless it is mostly the choice of the proposal that determines the speed of this convergence.
 
 Let us assume \(\mathcal X = \mathbb R^d\) and that the reference measure \(\mu\) is the Lebesgue measure.
 
@@ -331,16 +339,44 @@ Also since the densities are strictly positive we ensure that the resulting Mark
 \end{emp}
 
 \begin{emp}[Acceptance rate, autocorrelation and effective sample size]
-Once we have agreed to stick to normal densities for the proposal distributions, we still have the freedom to choose the covariance \(\Sigma\in\mathbb R^{d\times d}\). This determines how far the proposed new values will be away from the current state of the Markov chain. The motivation for an aggressive proposal distribution, i.e. for a high variance would be that this would enable the Markov chain to make bigger steps and hence explore the space \(\mathcal X\) faster. Also the chain would be more likely to jump between possibly isolated areas of high density. However this could also lead to a very high rejection rate\footnote{The term should be rather intuitive; the rejection rate is the relative amount of rejections that occurred in the MH random walk and analogously for the acceptance rate.} if the proposed values are often so far away from the current state of the Markov chain that they are in an area of low density. In this case the Markov chain will only ‚visit‘ very few distinct points in the space \(\mathcal X\) which is also very unfavourable. In fact \todo{cite} suggests that an acceptance rate around \(25\%\) is desirable. Figure\todo{make this figure}{ } shows the connection between the proposal distribution and the acceptance rate.
+Once we have agreed to stick to normal densities for the proposal distributions, we still have the freedom to choose the covariance \(\Sigma\in\mathbb R^{d\times d}\). This determines how far the proposed new values will be away from the current state of the Markov chain. The motivation for an aggressive proposal distribution, i.e. for a high variance would be that this would enable the Markov chain to make bigger steps and hence explore the space \(\mathcal X\) faster. Also the chain would be more likely to jump between possibly isolated areas of high density. However this could also lead to a very high rejection rate\footnote{The term should be rather intuitive; the rejection rate is the relative amount of rejections that occurred in the MH random walk and analogously for the acceptance rate.} if the proposed values are often so far away from the current state of the Markov chain that they are in an area of low density. In this case the Markov chain will only ‚visit‘ very few distinct points in the space \(\mathcal X\) which is also very unfavourable. In fact the findings in \cite{roberts1997weak} suggests that an acceptance rate around \(25\%\) is desirable in dimension \(d\ge3\) and around \(50\%\) for dimension \(d=1, 2\). The connection between the proposal distribution and the acceptance rate is also elaboret in the upcoming example.
 
-The \emph{autocorrelation function} (\(\operatorname{acf}\)) of a sequence of data points \(x_0, \dots, x_n\) captures the estimated correlation between the observations. More precisely \(\operatorname{acf}(k)\) gives the empirical correlation of \((x_0, x_1, \dots, x_{n-k})\) and \((x_k, x_{k+1}, \dots, x_n)\). Lets assume that our data points are generated by a MH random walk. The autocorrelation function determines the correlation of the Markov chain at time \(l\) with the Markov chain at time \(l+k\). Hence if \(\operatorname{acf}(k)<\varepsilon_0\) where \(\varepsilon_0>0\) is fixed in advance, one can perceive \(x_0, x_k, x_{2k}, \dots\) as an independent sequence of realisations -- or more precisely an only weakly correlated one. The \emph{effictive sample size} is the length \(m\) of this new almost uncorrelated sequence \(x_0, x_k, x_{2k}, \dots, x_{mk}\).
+The \emph{autocorrelation function} (\(\operatorname{acf}\)) of a sequence of data points \(x_0, \dots, x_n\) captures the estimated correlation between the observations. More precisely \(\operatorname{acf}(k)\) gives the empirical correlation\footnote{This is the correlation of the two empirical measures associated with \((x_0, \dots, x_{n-k})\) and \((x_k, \dots, x_n)\).} of \((x_0, x_1, \dots, x_{n-k})\) and \((x_k, x_{k+1}, \dots, x_n)\). Lets assume that our data points are generated by a MH random walk. The autocorrelation function determines the correlation of the Markov chain at time \(l\) with the Markov chain at time \(l+k\). Hence if \(\operatorname{acf}(k)<\varepsilon_0\) where \(\varepsilon_0>0\) is fixed in advance, one can perceive \(x_0, x_k, x_{2k}, \dots\) as an independent sequence of realisations -- or more precisely an only weakly correlated one. The \emph{effective sample size} is the length \(m\) of this new almost uncorrelated sequence \(x_0, x_k, x_{2k}, \dots, x_{mk}\). Obviously the effective sample size strongly depends on the choice of \(\varepsilon_0\) that incorporates how much correlation one is willing to accept.
 
-We should quickly touch on how the proposal affects the autocorrelation function and hence the effective sample size. Assume we have a very aggressive proposal distribution. Then we will typically have a high rejection rate and hence \(x_l = x_{l+k}\) a lot of times meaning that the autocorrelation function will be high. Hence the effective sample size is rather low. On the other hand if the proposal is too conservative\footnote{Meaning that the variance is low.} the MH random walk will only take very small steps and hence \(x_{l+k}\) will still be close to \(x_l\). Therefore the autocorrelation will be high and the effective sample size low. This effect of the proposal can be seen in Figure \todo{make the figure}.
+We should quickly touch on how the proposal affects the autocorrelation function and hence the effective sample size. Assume we have a very aggressive proposal distribution. Then we will typically have a high rejection rate and hence \(x_l = x_{l+k}\) a lot of times meaning that the autocorrelation function will be high. Hence the effective sample size is rather low. On the other hand if the proposal is too conservative %\footnote{Meaning that the variance is low.}
+the MH random walk will only take very small steps and hence \(x_{l+k}\) will still be close to \(x_l\). Therefore the autocorrelation will be high and the effective sample size low. This effect of the proposal can be seen in Figure \ref{fig:4.1.2}.
 %This means that \(\operatoname{acf}(k, l)\) is the 
 \end{emp}
 
+\begin{ex}[One dimensional MH]
+We follow an examples for a one dimensional MH random walk given in \cite{robert1999metropolis}, namely we set
+\[f(x)\coloneqq \sin(x)^2\cdot\sin(2x)^2\cdot\exp\Big(-\frac{x^2}{2}\Big). \]
+The goal of this example is to see how different proposal distributions lead to different acceptance rates, a different exploration of the state space \(\mathcal X = \mathbb R\) and different effective sample sizes. In order to achieve this, we run \(2\cdot10^4\) samples of the MH random walk with starting point \(x_0=1\) and three different values \(\alpha = 0.01, 3, 100\) of the variance of the proposal distributions. Then we plot a histogram including the actual density and the autocorrelation function for all different values. The acceptance rates where approximately \(88\%\) for \(\alpha=0.01\), \(34\%\) for \(\alpha=3\) and \(9\%\) for \(\alpha=100\). The orders of the effective sample sizes for the different values for \(\alpha\) are given by
+\[\frac{2\cdot10^4}{50} = 4\cdot10^2, \quad \frac{2\cdot10^4}{8} = 2.5\cdot10^3 \quad \text{and } \frac{2\cdot10^4}{30} \approx 7\cdot10^2 \]
+in the usual ordering.
+%We will very unscientifically and only to get a feeling for the order of the effective sample size
+
+This simulation illustrates the problem of to aggressive -- \(\alpha = 100\) -- and too conservative -- \(\alpha=0.01\) -- proposal distributions and shows how this effects the acceptance rate and the effective sample size.
+
+%\todo{add values for ESS}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.4\textwidth]{alpha-small}
+	\includegraphics[width=0.4\textwidth]{auto-alpha-small}
+	\includegraphics[width=0.4\textwidth]{alpha-optimal}
+	\includegraphics[width=0.4\textwidth]{auto-alpha-optimal}
+	\includegraphics[width=0.4\textwidth]{alpha-big}
+	\includegraphics[width=0.4\textwidth]{auto-alpha-big}
+%	\tag{1}
+	\caption{Histograms and autocorrelation functions of for three differently aggressive proposal distributions. It is apparent that the histogram for \(\alpha=3\) fits the actual density the best and also that the autocorrelation decays the quickest for this parameter. Note that for \(\alpha=0.01\) the MH random walk only explored some area of high density.}
+	\label{fig:4.1.2}
+\end{figure}
+
+\end{ex}
+
 \begin{emp}[Tuning the proposal]
-In order to obtain a higher acceptance rate without the loss of generally choosing the variance of the proposal distribution small one can do tune the proposal distribution. This means one adjusts the proposal distribution after a while, lets say after the first \(10^3\) samples in such a way that one replaces the original covariance matrix \(\Sigma\) by the empirical covariance of the first \(10^3\) samples. Then one forgets about all the samples so far -- they are called usually the \emph{burn in period} -- and starts a new MH random walk usually at one of the data points of the burn in period, since they should already indicate where an area of high density is. The reason why this increases the acceptance rate is, that the proposal now only is aggressive in those directions where the density is broadly spread. This effect can be seen in Figure \todo{make this figure}.
+In order to obtain a higher acceptance rate without the loss of generally choosing the variance of the proposal distribution small one can do tune the proposal distribution. This means one adjusts the proposal distribution after a while, lets say after the first \(10^3\) samples in such a way that one replaces the original covariance matrix \(\Sigma\) by the empirical covariance of the first \(10^3\) samples\todo{is this true?}. Then one forgets about all the samples so far -- they are called usually the \emph{burn in period} -- and starts a new MH random walk usually at one of the data points of the burn in period, since they should already indicate where an area of high density is. The reason why this increases the acceptance rate is, that the proposal now only is aggressive in those directions where the density is broadly spread. \todo{find a reference for this}%This effect can be seen in Figure \todo{make this figure}.
 \end{emp}
 
 \subsection{Slice sampling}
@@ -359,13 +395,21 @@ Further we will assume -- maybe after modification of \(f\) on a \(\mu\) Null se
 \begin{emp}[Definition of the Markov chain]
 Assume we have already given the first \(n\) samples \(x_1, \dots, x_n\) of the Markov chain. If we have \(f(x_n)=0\), then we set \(x_{n+1}\coloneqq \hat x\). Otherwise we sample \(y\) according to the uniform distribution on \([0, f(x_n)]\) and define the \emph{slice}
 \[S\coloneqq S(y)\coloneqq \left\{ x\in\mathcal X \mid f(x) \ge y \right\}. \]
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.6\textwidth]{Slice-sampling-neal}
+%	\tag{1}
+	\caption{Schematic sketch of the selection of a slice. (a) first \(y\) is sampling uniformly on \([0, f(x)]\) and then (b) select the slice. Original graphic from \cite{neal2003slice}.}
+	\label{fig:4.2}
+\end{figure}
 Note that because \(y \le f(x_n)\le \left\lVert f \right\rVert_{L^\infty(\mu)}\) we have \(\mu(S)>0\) as well as
 \[ \mu(S) \le y^{-1} \int\limits_S f(x)\mu(\mathrm dx)<\infty \]
-where we used Markov’s inequality as well as \(y>0\) almost surely. Now draw \(x_{n+1}\) according to the uniform distribution on \(S\). Note that \(f(x_n)>0\), then \(f(x_{n+1})\ge y > 0\) almost surely.  In pseudo code for the algorithm can is presented in Algorithm \ref{alg:slice-sampling}.
+where we used Markov’s inequality as well as \(y>0\) almost surely. Now draw \(x_{n+1}\) according to the uniform distribution on \(S\). Note that \(f(x_n)>0\), then \(f(x_{n+1})\ge y > 0\) almost surely.
+In pseudo code the steps of the resulting Markov chain can is be written in the following form.
 \begin{algorithm}
 \caption{A single slice sampling step \label{alg:slice-sampling}}
 \begin{algorithmic}[1]
-\Require{First \(n\) samples \(x_1, \dots, x_n\)}
+\Require{Current state \(x_n\) of the Markov chain}
  \If \(f(x_n) = 0\)
   \State \(x_{n+1}\gets \hat x\)
 \Else
@@ -377,7 +421,7 @@ where we used Markov’s inequality as well as \(y>0\) almost surely. Now draw \(x
 \end{algorithmic}
 \end{algorithm}
 \end{emp}
-\todo{maybe add a picture?}
+%\todo{maybe add a picture?}
 
 %\Require{First \(n\) samples \(x_1, \dots, x_n\)}
 %\If{\(f(x_n) = 0\)}
@@ -427,6 +471,8 @@ If however \(f(x)=0\), then we get
 
 \subsubsection*{Implementation details}
 
+Just like in the case of the MH random walk we will provide a few comments about the actual simulation of the slice sampling algorithm. Again those will rather be general guide lines and not be justified by rigorous arguments.
+
 From now on we will assume \(\mathcal X\subseteq\mathbb R^d\). The main difficulty in the implementation is the sampling of a uniform distribution on a slice \(S\). In practice it is even impossible to calculate the slice. Hence one has to come up with a trick. This trick is based on the following observation. Assume that we are able to sample a uniform distribution on a set \(C\) that contains the slice \(S\). Then the following algorithm -- which is nothing but the conditioning of this uniform distribution on the event that the outcome is in \(S\) -- samples uniformly from \(S\).
 \begin{algorithm}
 \caption{Sampling from a slice \label{alg:slice-sample}}
@@ -465,7 +511,7 @@ Here \(\mathcal E(\alpha)\) denotes the exponential distribution with parameter 
 \begin{emp}[The choice of \(\alpha\)]
 One could think that a small choice of \(\alpha\) -- which relates into large values of \(a_i\) and \(b_i\) -- would be the best since this increases the probability that the whole slice \(S\) is contained in the cuboid \(C\). There is some truth in this approach, since \(\mathcal U(S\cap C)\) is a better approximation of \(\mathcal U(S)\) if \(C\) is larger and further the two while loops in Algorithm \ref{alg:cuboid} need more repetitions if \(a_i\) and \(b_i\) initially are small. This relates into longer running time of the algorithm that samples the random cuboid. However one should not choose \(\alpha\) too small, because a large cuboid \(C\) also means that a lot of samples from \(\mathcal U(C)\) will lie outside of \(S\cap C\). Hence Algorithm \ref{alg:slice-sample} that samples from \(\mathcal U(S\cap C)\) will get slower as it will need more repetitions of the while loop.
 
-In conclusion there is a trade off -- very similar to the case of the MH random walk -- between the choice of too small and too large values for \(\alpha\).
+In conclusion there is a trade off -- very similar to the case of the MH random walk -- between the choice of too small and too large values for \(\alpha\).\todo{make comment on acf and effective sample size}
 \end{emp}
 
 Finally we can present the pseudocode of the algorithm that arises from the combination of the usual slice sampling method and the approximation of the uniform distribution on the slice.
@@ -474,7 +520,7 @@ Finally we can present the pseudocode of the algorithm that arises from the comb
 \caption{Algorithm for the slice sampling \label{alg:slice-sampling-implementation}}
 \begin{algorithmic}[1]
 \Require{Unnormalised density \(f\), starting value \(x_0\), desired length \(n\) of the chain, \(\alpha>0\)}
-\If {f(x_0) = 0}
+\If {\(f(x_0) = 0\)}
   \State \(x_0 \gets \hat x\)
 \EndIf
 \For {\(i = 0, \dots, n-1\)}
@@ -486,9 +532,11 @@ Finally we can present the pseudocode of the algorithm that arises from the comb
   \EndWhile
   \State \(x_{i+1} \gets x\)
 \EndFor
-\Return{\(x = (x_0, \dots, x_n)\)}
+\State\Return{\(x = (x_0, \dots, x_n)\)}
 \end{algorithmic}
 \end{algorithm}
+
+It shall be noted, that the above algorithm also uses a point \(\hat x\) of positive density, which can be determined easily for a lot of densities \(f\). If this is however not straight forward, one could also sample \(x_0\) according to a normal distribution until we select a point of positive density.
 
 %\subsection{Tuning the algorithm}
 

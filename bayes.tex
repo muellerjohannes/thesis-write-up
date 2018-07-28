@@ -2,28 +2,34 @@
 
 So far we have seen two different estimation techniques for the parameters of DPPs. Although we proved that they provide reasonable estimators in the sense that they are consistent, they have some drawbacks. For example we have seen that the MLEs for the different parameters do not exist in general, let alone that they are impossible to compute in reality. Further
 %Firstly, we saw that the maximum likelihood estimator does not exist in general and in some cases one needs a fairly high amount of samples to ensure that it does. Secondly 
-all of the estimators presented so far are point estimators, i.e. they return a single value for the desired parameter. Obviously this does not allow to capture any uncertainties and we have already seen in \todo{cite} that the selection of the most possible outcome -- in this case the MLE -- might not yield a very typical one for a given random variable.
+all of the estimators presented so far are point estimators, i.e. they return a single value for the desired parameter. Obviously this does not allow to capture any uncertainties that the estimation of the parameter has. % and we have already seen in that the selection of the most possible outcome -- in this case the MLE -- might not yield a very typical one for a given random variable.
 Those are some reasons to consider the Bayesian approach of parameter estimation where the goal is to give a distribution -- called the posterior -- of the parameter that should be estimated instead of a single value. This can also help to overcome some -- maybe even all of the problems presented above.
 
-At first we will present the general idea of Bayesian parameter estimation and then we will turn towards the question of computability. %Since the normalisation constant of the 
-For this we will follow the approach of \cite{affandi2014learning} and turn towards the popular Markov chain Monte Carlo (MCMC) methods and quickly explain their philosophy and how they can be used to approximate the posterior distribution of the parameter that is to be estimated.
+At first we will present the general concept of Bayesian parameter estimation and will then turn towards the question of computability of the posterior distribution. %Since the normalisation constant of the 
+For this we will follow the approach of \cite{affandi2014learning} and turn towards the popular Markov chain Monte Carlo (MCMC) methods and quickly explain their philosophy and how they can be used to approximate the posterior distribution of the parameter one wishes to estimate.
 
 \section{Bayesian approach to parameter estimation}
 
-For the introduction of the general Bayesian setup we pursue like in \cite{rice2006mathematical}. We are -- just like in the case of MLE -- in the setting that we want to estimate a parameter \(\theta\in\Theta\) based on some relisations \(x = (x_1, \dots, x_n)\) of some random variables \(X = (X_1, \dots, X_n)\) where we have given a family
-\[\mathcal F = \Big\{ f_{X| \Theta}(\cdot |\theta) \mid \theta\in\Theta\Big\}\]
-of densities with respect to \(\mu^n\coloneqq\prod_{i=1}^n\mu(\mathrm d x_i)\). This time however we are not interested in returning a single value \(\theta\) because this would be a vast simplification of the stochastic nature of the estimator. Thus we want to obtain a probability distribution over whole \(\Theta\) that indicates how the parameters are to have caused the observed data. In order to present the procedure we will introduce the frame we will work in.
+For the introduction of the general Bayesian setup we pursue like in \cite{rice2006mathematical}. Just like in the case of MLE we want to estimate %the underlying density of 
+a parameter \(\theta\in\Theta\) based on
+ some realisations \(x = (x_1, \dots, x_n)\) of random variables \(X = (X_1, \dots, X_n)\). 
+ %out of a parametric family
+%\[\mathcal F = \Big\{ f_{X| \Theta}(\cdot |\theta) \mid \theta\in\Theta\Big\}\]
+%of probability densities with respect to \(\mu^n\coloneqq\prod_{i=1}^n\mu(\mathrm d x_i)\).
+ This time however we are not interested in returning a single value \(\theta\) because this would be a vast simplification of the stochastic nature of the estimator. Thus we want to obtain a probability distribution over whole parameter space \(\Theta\) that indicates how likely the parameters are to have caused the observed data. In order to present the procedure we will introduce the frame we will work in.
 
 \begin{emp}[Setting]
-Let \(\Theta\) be a measurable space and \(\nu\) be a measure on \(\Theta\). Further let \(f_\Theta\colon \Theta\to[0, \infty]\) be a probability density with respect to \(\nu\), i.e.
+Let \(\Theta\) be a measurable space and \(\nu\) be a measure on \(\Theta\). Let \(f_\Theta\colon \Theta\to[0, \infty]\) be a probability density with respect to \(\nu\), i.e.
 \[\int\limits_{\Theta} f_\Theta(\theta)\nu(\mathrm{d}\theta) = 1\]
-which we will call the \emph{prior} distribution of the parameter \(\theta\).
+which we will call the \emph{prior} distribution of the parameter \(\theta\). Further let
+\[\mathcal F = \Big\{ f_{X| \Theta}(\cdot |\theta) \mid \theta\in\Theta\Big\}\]
+by a family of probability densities with respect to \(\mu^n\coloneqq\prod_{i=1}^n\mu(\mathrm d x_i)\).
 \end{emp}
 
-Usually the prior distribution will encode some perceptions we have of the parameter. For example if we are trying to estimate a physical constant that we know has to be positive, then it is reasonable to select a prior that has its whole mass on the positive real line. However there is no clear set of rules how one can select a suitable prior to a given problem. %Further we will see how the prior gives a way of regularisation in the sense that 
+Usually the prior distribution will encode some perceptions or prior knowledge we might have of the parameter. For example if we are trying to estimate a physical constant that we know has to be positive, then it is reasonable to select a prior that has its whole mass on the positive real line. However there is no clear set of rules how one can select a suitable prior to a given problem. %Further we will see how the prior gives a way of regularisation in the sense that 
 
 %To obtain the distribution of \(\theta\) given the observations \(x\) we will first construct the joint density of both parameters and then take the marginal distribution of \(\theta\).
-The density \(f(x|\theta)\) describes how likely the observations are under the parameter theta and we want to find an expression of how likely the parameter theta is under the observations \(x\). %and \(f(\theta)\) 
+The density \(f_{X|\Theta}(x|\theta)\) describes how likely the observations are under the parameter \(\theta\) and we want to find an expression of how likely the parameter \(\theta\) is under the observations \(x\). %and \(f(\theta)\) 
 In order to obtain this, we will work with the joint density
 \[f_{X, \Theta}(x, \theta) = f_{X|\Theta}(x|\theta) f_\Theta(\theta) \quad \text{with respect to } \mu^n \times \nu \]
 and condition this onto \(x\). This yields
@@ -39,13 +45,15 @@ The density \(f_{\Theta|X}\) is called the \emph{posterior distribution} of the 
 
 %From now on we will assume -- just like in the case of MLE -- that our observations are independent and identically distributed and hence their joint distribution factorises and we obtain
 %\[f_{\Theta| X}(\theta|x) \propto f_\Theta(\theta) \prod_{i=1}^n f_{X|\Theta}(x_i| \theta)\]
+\todo{add remark on intuition?}
+%This posterior density is already the object which is supposed to give us the information of the distribution of the parameter given the data \(x\). It is proportional to the likelihood \(f_{X|\Theta}(x|\theta)\) of the occuring data times the prior \(f_\Theta(\theta)\) which can be understood in the way, that 
 
-This posterior density is already the object we are interested in which is supposed to give us the information of the distribution of the parameter given the data \(x\). It is proportional to the likelihood \(f_{X|\Theta}(x|\theta)\) of the occuring data times the prior \(f_\Theta(\theta)\) which can be understood in the way, that 
+First we will convince ourselves that the approach of calculating a posterior distribution is a generalisation of the MLE in a lot of cases.
 
 \begin{emp}[Comparison to MLE]
-Maybe one feels slightly uncomfortable with the need of a choice for the prior distribution and it turns out that this is in fact a difficult step that has to be taken with a certain amount of care. However we could pretend for one moment to be completely ignorant in the sense that we do not know anything about the parameter and hence we donÕt feel in the position to propose a reasonable prior. Then we could simply choose the uniform distribution as a prior -- given it exists -- and would obtain
+Maybe one feels slightly uncomfortable with the need to choose a prior distribution and it turns out that this is in fact a difficult step that has to be taken with a certain amount of care. However we could pretend for one moment to be completely ignorant in the sense that we do not know anything about the parameter and hence we donÕt feel in the position to propose a reasonable prior. Then we could simply choose the uniform distribution as a prior -- given it exists -- and would obtain
 \[f_{\Theta| X}(\theta|x) \propto f_{X|\Theta}(x|\theta). \]
-Hence we can regain the MLE from our posterior distribution since it is just the mode, i.e. the maximiser of the posterior density. This relation to the MLE can be seen in Figure \ref{fig:4.1}. Hence the Bayesian approach is a a more powerful tool than MLE and allows also to capture the random uncertainty of the parameter \(\theta\) and we have seen that the mode is  not always a vey typical outcome of a random variable\todo{cite}.
+Hence we can regain the MLE from our posterior distribution since it is just the mode, i.e. the maximiser of the posterior density. This relation to the MLE can be seen in Figure \ref{fig:4.1}. Hence the Bayesian approach is a more general tool than MLE and allows also to capture the random uncertainty of the parameter \(\theta\). This is desirable since  we have seen that the mode is not always a vey typical outcome of a random variable\todo{cite}.
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.6\textwidth]{heatmap-log-linearity-SliceSampling-new-3}
@@ -54,9 +62,9 @@ Hence we can regain the MLE from our posterior distribution since it is just the
 	\label{fig:4.1}
 \end{figure}
 
-A second advantage over the MLE presented in the third chapter is, that it might be possible to computationally approximate the posterior density but not the MLE. This is typically the case if the log likelihood function is not concave, like in the setting of the MLE of the whole elementary kernel \(L\). In fact only hard step in the calculation of the posterior \eqref{post} is the computation of the normalisation constant
+A further advantage over the MLE is that it might be possible to computationally approximate the posterior density but not the MLE. This is typically the case if the log likelihood function is not concave, like in the setting of the MLE of the whole elementary kernel \(L\). In fact the only hard step in the calculation of the posterior \eqref{post} is the computation of the normalisation constant
 \[\int\limits_{\Theta} f_{X,\Theta}(x, \theta) \nu(\mathrm{d}\theta). \]
-This step can actually also not be performed efficiently for the case of the estimation of \(L\), however we will introduce the methods of Markov chain Monte Carlo simulation that allow an approximation of the posterior without the need to compute the normalisation contant.
+This step can often not be performed efficiently but the Markov chain Monte Carlo methods introduced later will yield an approximation of the posterior without the need to compute the normalisation constant.
 \end{emp}
 
 \begin{emp}[Regularisation through the prior]
@@ -80,7 +88,7 @@ This step can actually also not be performed efficiently for the case of the est
 Now we will express the posterior in the case of DPPs under the following conditions.
 
 \begin{emp}[Setting]
-Let \(\Theta\) be a set and \(L(\theta)\in\mathbb R^{N\times N}_{\text{sym}, +}\) be an elementary kernel. Further we assume that we have independent realisations \(A_1, \dots, A_n\) of a  \(L\)-ensemble.
+Let \((\Theta, \nu)\) be a measure space and \(L(\theta)\in\mathbb R^{N\times N}_{\text{sym}, +}\) be an elementary kernel for every \(\theta\in\Theta\). Further we assume that we have independent realisations \(A_1, \dots, A_n\) of a  \(L\)-ensemble.
 \end{emp}
 
 Typically the parametrisations \(\theta\mapsto L(\theta)\) will be one of the three parametric models in III.2.1, i.e. \(\theta\) will either be the whole kernel itself, the quality vector, or the log linearity constant of the qualities and \(L(\theta)\) the associated elementary kernel.
@@ -99,18 +107,19 @@ can neither be computed analytically nor numerically in an efficient way. This p
 
 \section{Markov chain Monte Carlo methods}
 
-The method of of Markov chain Monte Carlo (MCMC) simulation arose almost as early as the one Monte Carlo\footnote{A legend has it that the name Monte Carlo was given to the work of von Neumann and Ulam %in Los Alamos 
-by a colleage referring to UlamÕs uncle who lost a significant amount of money gambling in the Monte Carlo casino in Monaco.} simulation itself and since then a rich theory and a broad range of applications have been found. However we can only give a short overview over the basic principles and will rely on basic notions  and refer to \cite{meyn2012markov} for an introduction of Markov chain theory and to \cite{robert2013monte} for a survey on (Markov chain) Monte Carlo methods. 
+The method of of Markov chain Monte Carlo (MCMC) simulation arose almost as early as the Monte Carlo\footnote{A legend has it that the name Monte Carlo was given to the work of von Neumann and Ulam %in Los Alamos 
+by a colleage referring to UlamÕs uncle who lost a significant amount of money gambling in the Monte Carlo casino in Monaco.} simulations itself and since then a rich theory has been established and a broad range of applications have been found. However we can only give a short overview over the basic principles and refer to \cite{meyn2012markov} for an introduction of Markov chain theory and to \cite{robert2013monte} for a survey on (Markov chain) Monte Carlo methods. 
 
-We motivated MCMC methods for the approximation of the distribution \(\pi\) under the knowledge of its unnormalised density. In the nutshell the idea is to construct an ergodic Markov chain \((X_n)_{n\in\mathbb N}\) with stationary distribution \(\pi\), i.e. such that one has
-\[ \hat{\mathbb P}_n =\frac1n \sum_{i=1}^n \delta_{X_n} \xlongrightarrow{n\to\infty} \pi. \]
-This Markov chain can then be simulated using Monte Carlo methods. However to explain this in more detail we need to recapture some notions of Markov chains.
+We motivated MCMC methods for the approximation of a distribution \(\pi\) under the knowledge of its unnormalised density. In the nutshell the idea is to construct an ergodic Markov chain \((X_n)_{n\in\mathbb N}\) with stationary distribution \(\pi\), i.e. such that one has
+\[ \hat{\mathbb P}_n =\frac1n \sum_{i=1}^n \delta_{X_n} \xlongrightarrow{n\to\infty} \pi \]
+almost surely in the weak sense. 
+This Markov chain can then be simulated using Monte Carlo methods and the associated empirical measure \(\hat{\mathbb P}_n\) will be approximations of \(\pi\). However to explain this in more detail we need to recapture some notions of Markov chains.
 
 % The reason nables amongst other things to sample from or to approximate a distribution without knowing the normalisation constant.
 
 \subsection{Reminder on Markov chains}
 
-We will provide an extremely short presentation of only the results that we will use to explain the core of MCMC methods. However this will not contain any proofs and hence it can not replace the study of the already mentioned text books and it will be of great benefit for the reader to be familiar with the basic notions of stochastic processes and Markov chains.
+We will provide an extremely short presentation of only those results that we will use to explain the core of MCMC methods. However this will not contain any proofs and hence it can not replace the study of the already mentioned text books. %Further it will be of great benefit for the reader to be familiar with the basic notions and  of stochastic processes and Markov chains.
 
 Let in the following \((\mathcal X, \mathcal B(\mathcal X))\) be a measurable space.
 
@@ -122,7 +131,7 @@ Let in the following \((\mathcal X, \mathcal B(\mathcal X))\) be a measurable sp
 \item \(K(x, \cdot)\) is a probability measure for every \(x\in\mathcal X\) and
 \item \(K(\cdot, A)\) is measurable for every \(A\in\mathcal B(\mathcal X)\).
 \end{enumerate}
-\item A \emph{Markov chain} with values in \(\mathcal X\) is a collection \((X_n)_{n\in\mathbb N}\) of \(\mathcal X\) valued random variables such that
+\item A \emph{Markov chain} with values in \(\mathcal X\) and transition kernel \(K(\cdot, \cdot)\) is a collection \((X_n)_{n\in\mathbb N}\) of \(\mathcal X\) valued random variables such that
 \begin{equation}\label{MC}
 \mathbb P\big(X_0\in A_0, \dots, X_n\in A_n\big) = \int\limits_{A_0} \gamma(\mathrm{d}x_0) \int\limits_{A_1} K(x_0, \mathrm{d}x_1) \cdots \int\limits_{A_n} K(x_{n-1}, \mathrm{d}x_n)
 \end{equation}
@@ -130,12 +139,13 @@ for all \(A_1, \dots, A_n\in\mathcal B(\mathcal X)\) where \(\gamma\) denotes th
 \end{enumerate}
 \end{defi}
 
-We will call \(\gamma\) the \emph{initial} or \emph{starting distribution} of the Markov chain and will denote the distribution of this Markov chain by \(\mathbb P_\gamma\) and the expectation with respect to it by \(\mathbb E[\cdot]\). Further an easy application of KolmogorovÕs consistency theorem implies that there is a measure \(\mathbb P\) on the \emph{path space} \(\mathcal X^{\mathbb N}\) that satisfies \eqref{MC} which shows the existence of a Markov chain given a
+We will call \(\gamma\) the \emph{initial} or \emph{starting distribution} of the Markov chain and will denote the distribution of this Markov chain by \(\mathbb P_\gamma\) and the expectation with respect to it by \(\mathbb E_\gamma[\cdot]\). Further an easy application of KolmogorovÕs consistency theorem implies that there is a measure \(\mathbb P_\gamma\) on the \emph{path space} \(\mathcal X^{\mathbb N}\) that satisfies \eqref{MC} which shows the existence of a Markov chain given a
 %one can show that there is a Markov chain for any given %we note that we obtain a Markov chain with
 transition kernel \(K\) and initial distribution \(\gamma\) (c.f. \cite{le2016brownian}). %by taking \(X_0\) distributed according to \(\gamma\) and \(X_{n+1}\) distributed according to \(K(X_n, \cdot)\) for \(n = 0, 1, \dots\).
  If the initial distribution is deterministic, i.e. \(\gamma = \delta_x\) for one \(x\in\mathcal X\), then we also write \(\mathbb P_x\) for the distribution of the Markov chain.
 We close this paragraph by introducing the notation
-\[K^n(x, A) \coloneqq \mathbb P_x(X_n\in A). \]
+\[K^n(x, A) \coloneqq \mathbb P_x(X_n\in A) \]
+which is consistent with \eqref{MC} for \(n=1\).
 
 %\begin{enumerate}
 % \item Definition
@@ -158,7 +168,7 @@ From now on we will fix a reference measure \(\mu\) on \(\mathcal X\).
 \item A Markov chain \((X_n)_{n \in\mathbb N}\) is called \emph{recurrent} if
 \begin{enumerate}
 \item there is a measure \(\mu\) on \(\mathcal B(\mathcal X)\) such that \((X_n)\) is \(\mu\)-irreducible and
-\item if for every \(A\in\mathcal B(\mathcal X)\) with \(\mu(A)>0\) the expected number of visits of \(A\) is infinite, i.e.
+\item for every \(A\in\mathcal B(\mathcal X)\) with \(\mu(A)>0\) the expected number of visits of \(A\) is infinite, i.e.
 \[\mathbb E_x\left[\left\lvert \left\{ n\in\mathbb N \mid X_n\in A\right\} \right\rvert\right] = \infty \quad \text{for every } x\in A.\]
 \end{enumerate}
 \item A Markov chain is called \emph{Harris recurrent} if it is recurrent and the number of visits is almost surely infinite, i.e. for any \(A\in\mathcal B(\mathcal X)\) with \(\mu(A)>0\) we have
@@ -182,7 +192,7 @@ We will not introduce the notion of periodic and aperiodic Markov chains here, b
 \begin{theo}[Convergence to stationary distribution]
 Let \((X_n)_{n\in\mathbb N}\) be a Harris recurrent and aperiodic Markov chain with stationary distribution \(\pi\). Let further \(\gamma_n\) be the distribution of \(X_n\), then we have
 \[\left\lVert \gamma_n - \pi \right\rVert_{TV} \xlongrightarrow{n\to\infty} 0 \]
-monotone. Here \(\left\lVert \cdot \right\rVert_{TV}\) denotes the total variation of a measure
+non increasing. Here \(\left\lVert \cdot \right\rVert_{TV}\) denotes the total variation of a measure
 \[\left\lVert \mu \right\rVert_{TV}\coloneqq \sup_{\mathcal E}\sum\limits_{E\in\mathcal E} \left\lvert \mu(E) \right\rvert\]
 where the supremum is taken over all finite families of disjoint measurable sets.
 \end{theo}
@@ -204,23 +214,21 @@ for all continuous and bounded functions \(f\). This means that \(\hat{\mathbb P
 
 \subsubsection*{Idea of Markov chain Monte Carlo methods}
 
-The motivation of the study of Markov chain Monte Carlo methods was to approximate the posterior distribution \eqref{post2}. The idea is now to construct and then simulate a Markov chain \((X_n)_{n\in\mathbb N}\) such that the empirical measures \(\hat{\mathbb P}_n\) converge to the posterior. In order to achieve this we only have to check the requirements of the ergodic theorem. This means we want to construct a Harris recurrent Markov chain with the posterior density as an invariant distribution without having to compute the normalisation constant \eqref{norma}.
-
+The motivation of the study of Markov chain Monte Carlo methods was to approximate the posterior distribution \eqref{post2}. The idea is now to construct and then simulate a Markov chain \((X_n)_{n\in\mathbb N}\) such that the empirical measures \(\hat{\mathbb P}_n\) converge to the posterior.
 \begin{defi}[MCMC methods]
-A Markov chain Monte Carlo (MCMC) method for the simulation of a distribution \(\pi\) is any method that produces an ergodic Markov chain \((X_n)_{n\in\mathbb N}\) whose stationary distribution is \(\pi\).
+A \emph{Markov chain Monte Carlo} (MCMC) method for the simulation of a distribution \(\pi\) is any method that produces an ergodic Markov chain \((X_n)_{n\in\mathbb N}\) with stationary distribution \(\pi\).
 \end{defi}
 
-We will present the two most common MCMC methods which are the Metropolis-Hastings random walk and the method of slice sampling.
+In order to achieve this we only have to check the requirements of the ergodic theorem. This means we want to construct a Harris recurrent Markov chain with invariant distribution \(\pi\) and we want to do this without having to compute the normalisation constant \eqref{norma}. We will now present the two most common methods to do this which are the Metropolis-Hastings random walk and the method of slice sampling.
 
 \subsection{Metropolis-Hastings random walk}
 
-The Metropolis-Hastings random walk is maybe the most wide spread MCMC method and certainly one of the oldest. It was actually proposed in the early 1950s from researchers of the American nuclear programme in Los Alamos (c.f. \cite{metropolis1953equation}). First we will touch on the theoretical aspects -- mostly the ergodicity -- of the MH random walk and follow the ideas present in \cite{robert2013monte}.
+The Metropolis-Hastings random walk is maybe the most wide spread MCMC method and certainly one of the oldest. It was actually proposed in the early 1950s from researchers of the American nuclear programme in Los Alamos (c.f. \cite{metropolis1953equation}). First we will touch on the theoretical aspects of this method and follow the presentation in \cite{robert2013monte}.
 
-%The idea of the Metropolis-Hastings (MH) random walk was introduced as early as 1953 by Metropolis (c.f. \cite{metropolis1953equation}) and later adapted by Hastings in \
-{hastings1970monte}.
+%The idea of the Metropolis-Hastings (MH) random walk was introduced as early as 1953 by Metropolis (c.f. \cite{metropolis1953equation}) and later adapted by Hastings in \{hastings1970monte}.
 
 \begin{emp}[Setting]
-Let \(\Theta\) be a measurable space, \(\mu\) a measure on that space and \(f\colon\mathcal X\to[0, \infty]\) a function with finite integral
+Let \(\Theta\) be a measurable space, \(\mu\) a measure on that space and \(f\colon\mathcal X\to[0, \infty]\) a function with finite positive integral
 \[Z = \int\limits_{\mathcal X} f(x) \mu(\mathrm{d}x)\in(0, \infty).\]
 Our goal is to find a Harris recurrent Markov chain with invariant distribution
 \[\pi(A)\coloneqq \frac1Z \int\limits_A f(x)\mu(\mathrm dx). \]
@@ -230,21 +238,23 @@ be a family of probability distributions, which we call the \emph{proposal distr
 \end{emp}
 
 \begin{emp}[The MH random walk]
-Given the first \(n\) states of the Markov \(X_1= x_1, \dots, X_n = x_n\), we define \(X_{n+1}\) as follows. Let \(Y\) be distributed according to \(f(\cdot|x_n)\mathrm d\mu\) and take one realisation \(y\) of \(Y\). Then set
+Given the first states \(X_0 = x_0, \dots, X_n = x_n\) of the Markov, we define \(X_{n+1}\) as follows. Let \(Y\) be distributed according to \(f(\cdot|x_n)\mathrm d\mu\) and take one realisation \(y\) of \(Y\). Then set
 \[X_{n+1}\coloneqq\begin{cases}\; y \quad & \text{with probability } \rho(x_n, y) \\\; x_n & \text{with probability } 1 - \rho(x_n, y) \end{cases} \]
 where
 \[\rho(x, y) \coloneqq \min\left\{ \frac{f(y) f(x|y)}{f(x)f(y|x)}, 1\right\}.\]
 %\todo{say something about dividing by zero}
-Here we use the convention \(\frac{x}{0} = \infty\). The first step of the random walk, namely the sampling of \(y\) is called the \emph{proposal step} and the second one the \emph{accept-reject step}. In conclusion a single step of the MH random walk can be expressed in the following compact way. %The MH random walk can be expressed in pseudo code.
+and \(\frac{a}{0} \coloneqq \infty\). The first step of the random walk, namely the sampling of \(y\) is called the \emph{proposal step} and the second one the \emph{accept-reject step}. In conclusion a single step of the MH random walk can be expressed in the following compact way. %The MH random walk can be expressed in pseudo code.
 \begin{algorithm}
 \caption{A single step of the MH random walk \label{alg:MH}}
 \begin{algorithmic}[1]
 \Require{Current state \(x_n\) of the MH random walk}
-\State \(x_{n+1}\gets x_n\)
+%\State \(x_{n+1}\gets x_n\)
 \State \(y\sim f(\cdot|x_n)\mathrm d\mu\)
 \State \(a\sim \mathcal U([0, 1])\)
 \If{\(a\le \rho(x_n, y)\)}
   \State \(x_{n+1}\gets y\)
+\Else 
+  \State \(x_{n+1}\gets x_n\)
 \EndIf
 \State\Return{\(x_{n+1}\)}
 \end{algorithmic}
@@ -362,14 +372,14 @@ This simulation illustrates the problem of to aggressive -- \(\alpha = 100\) -- 
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.4\textwidth]{alpha-small}
-	\includegraphics[width=0.4\textwidth]{auto-alpha-small}
-	\includegraphics[width=0.4\textwidth]{alpha-optimal}
-	\includegraphics[width=0.4\textwidth]{auto-alpha-optimal}
-	\includegraphics[width=0.4\textwidth]{alpha-big}
-	\includegraphics[width=0.4\textwidth]{auto-alpha-big}
+	\includegraphics[width=0.42\textwidth]{alpha-small}
+	\includegraphics[width=0.42\textwidth]{auto-alpha-small}
+	\includegraphics[width=0.42\textwidth]{alpha-optimal}
+	\includegraphics[width=0.42\textwidth]{auto-alpha-optimal}
+	\includegraphics[width=0.42\textwidth]{alpha-big}
+	\includegraphics[width=0.42\textwidth]{auto-alpha-big}
 %	\tag{1}
-	\caption{Histograms and autocorrelation functions of for three differently aggressive proposal distributions. It is apparent that the histogram for \(\alpha=3\) fits the actual density the best and also that the autocorrelation decays the quickest for this parameter. Note that for \(\alpha=0.01\) the MH random walk only explored some area of high density.}
+	\caption{Histograms and autocorrelation functions of for three differently aggressive proposal distributions. It is apparent that the histogram for \(\alpha=3\) fits the actual density the best and also that the autocorrelation decays the quickest for this parameter. Note that for \(\alpha=0.01\) the MH random walk only explored some area of high density. The actual density if obtained by numerical integration.}
 	\label{fig:4.1.2}
 \end{figure}
 
@@ -388,11 +398,11 @@ Let \(\Theta\) be a measurable space, \(\mu\) a measure on that space and \(f\co
 \[Z = \int\limits_{\mathcal X} f(x) \mu(\mathrm{d}x)\in(0, \infty).\]
 In particular there is \(\hat x\in\mathcal X\) such that \(f(\hat x)>0\). Our goal is to find a Harris recurrent Markov chain with invariant distribution
 \[\pi(A)\coloneqq \frac1Z \int\limits_A f(x)\mu(\mathrm dx). \]
-Further we will assume -- maybe after modification of \(f\) on a \(\mu\) Null set -- that 
+Further we will assume -- after an eventual modification of \(f\) on a \(\mu\) Null set -- that 
 \[f\le \left\lVert f \right\rVert_{L^\infty(\mu)} = \inf \Big\{ \alpha\in\mathbb R \mid f \le \alpha \text{ almost surely with respect to } \mu \Big\}. \]
 \end{emp}
 
-\begin{emp}[Definition of the Markov chain]
+\begin{emp}[Definition of the slice campling]
 Assume we have already given the first \(n\) samples \(x_1, \dots, x_n\) of the Markov chain. If we have \(f(x_n)=0\), then we set \(x_{n+1}\coloneqq \hat x\). Otherwise we sample \(y\) according to the uniform distribution on \([0, f(x_n)]\) and define the \emph{slice}
 \[S\coloneqq S(y)\coloneqq \left\{ x\in\mathcal X \mid f(x) \ge y \right\}. \]
 \begin{figure}[h!]
@@ -402,10 +412,11 @@ Assume we have already given the first \(n\) samples \(x_1, \dots, x_n\) of the 
 	\caption{Schematic sketch of the selection of a slice. (a) first \(y\) is sampling uniformly on \([0, f(x)]\) and then (b) select the slice. Original graphic from \cite{neal2003slice}.}
 	\label{fig:4.2}
 \end{figure}
+
 Note that because \(y \le f(x_n)\le \left\lVert f \right\rVert_{L^\infty(\mu)}\) we have \(\mu(S)>0\) as well as
 \[ \mu(S) \le y^{-1} \int\limits_S f(x)\mu(\mathrm dx)<\infty \]
-where we used MarkovÕs inequality as well as \(y>0\) almost surely. Now draw \(x_{n+1}\) according to the uniform distribution on \(S\). Note that \(f(x_n)>0\), then \(f(x_{n+1})\ge y > 0\) almost surely.
-In pseudo code the steps of the resulting Markov chain can is be written in the following form.
+where we used MarkovÕs inequality as well as \(y>0\) almost surely. Now draw \(x_{n+1}\) according to the uniform distribution\footnote{Of course we mean the uniform distribution with respect to \(\mu\) that gives weight \(\mu(S)^{-1} \cdot \mu(A)\) to a set \(A\subseteq S\).} on \(S\). Note that \(f(x_n)>0\), then \(f(x_{n+1})\ge y > 0\) almost surely, hence \(f(x_n) = 0\) can only hold for \(n=0\). Further the reason why we have to treat the case \(f(x_n)=0\) individually is, that there typically is no uniform distribution on the slice \(S(0)\).
+In pseudo code the steps of the resulting Markov chain can be written in the following form.
 \begin{algorithm}
 \caption{A single slice sampling step \label{alg:slice-sampling}}
 \begin{algorithmic}[1]
@@ -431,19 +442,23 @@ In pseudo code the steps of the resulting Markov chain can is be written in the 
 %  \State \(y\sim \mathcal U([0, f(x_n)])\)
 %  \State \(S\gets \left\{ x\in\mathcal X \mid f(x) \ge y \right\}\)
 %  \State \(x_{n+1} \sim \mathcal U(S)\)
-The reason why we have to take of the case \(f(x_n)=0\) individually is, that there typically is no uniform distribution on the slice \(S(0)\).
 
-If we compare the Markov chain to the MH random walk, we noticr that in the slice sampling we first create a random threshold \(y\) and then sample uniformly from all points that satisfy this threshold. This is just the other way round than in the MH random walk where we first make a proposal for the next state of the Markov chain and then decide whether we will accept it or not.
+If we compare the Markov chain to the MH random walk, we notice that in the slice sampling we first create a random threshold \(y\) and then sample uniformly from all points that satisfy this threshold. This is just the other way round than in the MH random walk where we first make a proposal for the next state of the Markov chain and then decide whether we will accept it or not.
 
 Just like in the case of the MH random walk we can explicitly give the transition kernel and use this expression then to check that \(\pi\) is a stationary distribution. The kernel of the Markov chain that arises from the slice sampling iteration is given by
-\[K(x, A) = \int\limits_\mathbb R\frac{\mathds{1}_{[0, f(x)]}(y)}{f(x)} \cdot Z(y)^{-1} \int\limits_A \mathds{1}_{[y, \infty)}(f(z)) \mu(\mathrm dz) \lambda(\mathrm dy) \]
+\begin{equation*}
+\begin{split}
+K(x, A) & = \int\limits_\mathbb R\frac{\mathds{1}_{[0, f(x)]}(y)}{f(x)} \cdot \frac{\mu(A\cap S(y))}{\mu(S(y))} \lambda(\mathrm dy) \\
+& = \int\limits_\mathbb R\frac{\mathds{1}_{[0, f(x)]}(y)}{f(x)} \cdot Z(y)^{-1} \int\limits_A \mathds{1}_{[y, \infty)}(f(z)) \mu(\mathrm dz) \lambda(\mathrm dy)
+\end{split}
+\end{equation*}
 where \(\lambda\) is the Lebesgue measure on \(\mathbb R\), \(\mathds{1}\) is the indicator function and \(Z(y)\) is the normalisation constant
-\[Z(y)\coloneqq \int\limits_{\mathcal X} \mathds{1}_{[y, \infty)}(f(z)) \mu(\mathrm dz) = \mu(S) \in(0, \infty). \]
+\[Z(y)\coloneqq \int\limits_{\mathcal X} \mathds{1}_{[y, \infty)}(f(z)) \mu(\mathrm dz) = \mu(S(y)) \in(0, \infty). \]
 Obviously the expression above only holds if \(f(x)>0\) and in the case \(f(x) = 0\) we have
 \[K(x, A) = \delta_{\hat x}(A).\]
 
 \begin{prop}[Invariant distribution]
-The probability distribution \(\pi\) is a stationary distribution of the Markov chain associated with the slice sampling.
+The probability distribution \(\pi\) is a stationary distribution of the Markov chain associated with the slice sampling method.
 \end{prop}
 \begin{proof}
 For any \(A\subseteq\mathcal X\) we can compute
@@ -462,7 +477,8 @@ The Markov chain that arises from the slice sampling algorithm is \(\pi\) irredu
 \end{prop}
 \begin{proof}
 Fix \(A\subseteq\mathcal X\) with positive probability \(\pi(A)>0\) and \(x\in\mathcal X\). If we have \(f(x)>0\), then we have \(\mu(A\cap S(y))>0\) for one \(y\in(0, f(x))\). We obtain
-\[K(x, A) \ge \frac{y}{f(x)}\cdot \frac{\mu(A\cap S(y))}{\mu(S(0))} > 0. \]
+\[K(x, A) \ge \int\limits_{\mathbb R} \frac{\mathds{1}_{[0, y]}(z)}{f(x)} \cdot \frac{\mu(A\cap S(z))}{\mu(S(z))} %\frac{y}{f(x)}\cdot \frac{\mu(A\cap S(y))}{\mu(S(0))} 
+> 0. \]
 If however \(f(x)=0\), then we get
 \[K^2(x, A) = K(\hat x, A) > 0. \]
 \end{proof}

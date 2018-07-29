@@ -487,13 +487,14 @@ However \eqref{ConProb1} and \eqref{ConProb2} shows that the probability for thi
 \end{proof}
 
 \begin{rem}[Speed of convergence]
-Although the result above states that the estimators \(\hat K\) converges to \(K\) in probability, it does give no information about the speed of convergence. This problem is addressed in \cite{urschel2017learning}, but it turns out that the convergence is very slow. For example for the very moderate case \(\alpha = 0.4\) and \(l=3\) one already needs more than \(10^6\) samples to get some theoretical guarantees from their result. This is not due to careless estimates since they even show that this bound is optimal\todo{is this true?}. However since this result is beyond practical relevance, we will keep away from those calculations.
+Although the result above states that the estimators \(\hat K\) converges to \(K\) in probability, it does give no information about the speed of convergence. This problem is addressed in \cite{urschel2017learning}, but it turns out that the convergence is very slow. For example for the very moderate case \(\alpha = 0.4\) and \(l=3\) one already needs more than \(10^6\) samples to get some theoretical guarantees from their result. This is not due to careless estimates since they show that you need very high sample sizes in order to ensure that the estimator is close to the actual kernel with probability bigger than \(\frac23\). In practice such sample sizes can almost never be achieved.  % since this result is beyond practical relevance, we will keep away from those calculations.
 \end{rem}
 %\todo{explain how the algorithm for the reconstruction works}
 %\todo{how hard it is to prove}
 
 \begin{emp}[Computation of the estimator]
-Although we have already seen how the estimator can -- mathematically -- be constructed, we will now touch on a few implementation details for the actual computation of the estimator.\todo{finish this}
+Although we have already seen how the estimator can -- mathematically -- be constructed, we will now touch on the implementation details for the actual computation of the estimator. In fact the only two non trivial steps in the definition of the estimator are the construction of a shortest maximal cycle basis and the solution of the linear equation \eqref{LinEqu2} over the finite field \(\mathbb F_2\). There have been various algorithms proposed for the computation of a shortest maximal cycle basis and we refer to the original work of Horton \cite{horton1987polynomial} and a recent improvement of his algorithm in \cite{amaldi2010efficient}. Further we note that the linear equation can be solved just like a linear equation over any other field using Gaussian elimination.
+%\todo{finish this}
 \end{emp}
 
 %\subsection{Computation of the estimator}

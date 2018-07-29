@@ -229,7 +229,7 @@ The Metropolis-Hastings random walk is maybe the most wide spread MCMC method an
 
 \begin{emp}[Setting]
 Let \(\Theta\) be a measurable space, \(\mu\) a measure on that space and \(f\colon\mathcal X\to[0, \infty]\) a function with finite positive integral
-\[Z = \int\limits_{\mathcal X} f(x) \mu(\mathrm{d}x)\in(0, \infty).\]
+\[Z \coloneqq \int\limits_{\mathcal X} f(x) \mu(\mathrm{d}x)\in(0, \infty).\]
 Our goal is to find a Harris recurrent Markov chain with invariant distribution
 \[\pi(A)\coloneqq \frac1Z \int\limits_A f(x)\mu(\mathrm dx). \]
 Let further
@@ -391,15 +391,15 @@ In order to obtain a higher acceptance rate without the loss of generally choosi
 
 \subsection{Slice sampling}
 
-Slice sampling is a different MCMC method and quite similar to the MH random walk. Nevertheless it has the theoretical benefit that one does not have to define a family of proposal distributions and that the constructed Markov chain is always irreducible. However we will see that at least when one wants to simulate the slice sampling one runs into similar problems. We begin by fixing our frame we will work in. %  where one has to model 
+Slice sampling is a different MCMC method and quite similar to the MH random walk. Nevertheless it has the benefit that one does not have to define a family of proposal distributions and that the constructed Markov chain is always irreducible. However we will see that at least when one wants to simulate the slice sampling one runs into similar problems of having to choose a parameter that influences the auto correlation function and hence the speed of convergence of the method. We begin by fixing our frame we will work in. %  where one has to model 
 
 \begin{emp}[Setting]
 Let \(\Theta\) be a measurable space, \(\mu\) a measure on that space and \(f\colon\mathcal X\to[0, \infty]\) a function with finite integral
-\[Z = \int\limits_{\mathcal X} f(x) \mu(\mathrm{d}x)\in(0, \infty).\]
-In particular there is \(\hat x\in\mathcal X\) such that \(f(\hat x)>0\). Our goal is to find a Harris recurrent Markov chain with invariant distribution
+\[Z \coloneqq \int\limits_{\mathcal X} f(x) \mu(\mathrm{d}x)\in(0, \infty).\]
+In particular there is \(\hat x\in\mathcal X\) such that \(f(\hat x)>0\). Our goal is to find an ergodic Markov chain with invariant distribution
 \[\pi(A)\coloneqq \frac1Z \int\limits_A f(x)\mu(\mathrm dx). \]
 Further we will assume -- after an eventual modification of \(f\) on a \(\mu\) Null set -- that 
-\[f\le \left\lVert f \right\rVert_{L^\infty(\mu)} = \inf \Big\{ \alpha\in\mathbb R \mid f \le \alpha \text{ almost surely with respect to } \mu \Big\}. \]
+\[f\le \left\lVert f \right\rVert_{L^\infty(\mu)} = \inf \Big\{ \alpha\in\mathbb R \mid f \le \alpha \text{ almost surely with respect to } \mu \Big\}\in[0, \infty]. \]
 \end{emp}
 
 \begin{emp}[Definition of the slice sampling]
@@ -415,7 +415,7 @@ Assume we have already given the first \(n\) samples \(x_1, \dots, x_n\) of the 
 
 Note that because \(y \le f(x_n)\le \left\lVert f \right\rVert_{L^\infty(\mu)}\) we have \(\mu(S)>0\) as well as
 \[ \mu(S) \le y^{-1} \int\limits_S f(x)\mu(\mathrm dx)<\infty \]
-where we used Markov’s inequality as well as \(y>0\) almost surely. Now draw \(x_{n+1}\) according to the uniform distribution\footnote{Of course we mean the uniform distribution with respect to \(\mu\) that gives weight \(\mu(S)^{-1} \cdot \mu(A)\) to a set \(A\subseteq S\).} on \(S\). Note that \(f(x_n)>0\), then \(f(x_{n+1})\ge y > 0\) almost surely, hence \(f(x_n) = 0\) can only hold for \(n=0\). Further the reason why we have to treat the case \(f(x_n)=0\) individually is, that there typically is no uniform distribution on the slice \(S(0)\).
+where we used Markov’s inequality as well as \(y>0\) almost surely. Now draw \(x_{n+1}\) according to the uniform distribution\footnote{Of course we mean the uniform distribution with respect to \(\mu\) that gives weight \(\mu(S)^{-1} \cdot \mu(A)\) to a set \(A\subseteq S\).} on \(S\). Note that \(f(x_n)>0\), then \(f(x_{n+1})\ge y > 0\) almost surely, hence \(f(x_n) = 0\) can only hold for \(n=0\). Further the reason why we have to treat the case \(f(x_n)=0\) individually is, that there typically is no uniform distribution on the slice \(S(0) = \mathcal X\).
 In pseudo code the steps of the resulting Markov chain can be written in the following form.
 \begin{algorithm}
 \caption{A single slice sampling step \label{alg:slice-sampling}}
@@ -464,9 +464,9 @@ The probability distribution \(\pi\) is a stationary distribution of the Markov 
 For any \(A\subseteq\mathcal X\) we can compute
 \begin{equation*}
 \begin{split}
-\int\limits_{\mathcal X} K(x, A) \pi(\mathrm dx) & = \int\limits_{\mathcal X }\int\limits_\mathbb R\frac{\mathds{1}_{[0, f(x)]}(y)}{f(x)}\cdot Z(y)^{-1} \int\limits_A \mathds{1}_{[y, \infty)}(f(z)) \mu(\mathrm dz) \lambda(\mathrm dy) f(x) \mu(\mathrm dx) \\
-& = \int\limits_{ A }\int\limits_\mathbb R Z(y)^{-1} \int\limits_{\mathcal X}\mathds{1}_{[y, \infty)}(f(x)) \mu(\mathrm dx) \mathds{1}_{[0, f(z)]}(y) \lambda(\mathrm dy) \mu(\mathrm dz) \\
-& = \int\limits_A f(z)\mu(\mathrm dz) = \pi(A)
+\int\limits_{\mathcal X} K(x, A) \pi(\mathrm dx) & = \frac1Z\int\limits_{\mathcal X }\int\limits_\mathbb R\frac{\mathds{1}_{[0, f(x)]}(y)}{f(x)}\cdot Z(y)^{-1} \int\limits_A \mathds{1}_{[y, \infty)}(f(z)) \mu(\mathrm dz) \lambda(\mathrm dy) f(x) \mu(\mathrm dx) \\
+& =\frac1Z \int\limits_{ A }\int\limits_\mathbb R Z(y)^{-1} \int\limits_{\mathcal X}\mathds{1}_{[y, \infty)}(f(x)) \mu(\mathrm dx) \mathds{1}_{[0, f(z)]}(y) \lambda(\mathrm dy) \mu(\mathrm dz) \\
+& = \frac1Z\int\limits_A f(z)\mu(\mathrm dz) = \pi(A)
 \end{split}
 \end{equation*}
 where we again used Fubini’s theorem for non negative functions.
@@ -500,9 +500,9 @@ See Theorem 6 in \cite{mira2002efficiency}.
 
 Just like in the case of the MH random walk we will provide a few comments about the actual simulation of the slice sampling algorithm. Again those will rather be general guide lines and not be justified by rigorous arguments.
 
-From now on we will assume \(\mathcal X\subseteq\mathbb R^d\). The main difficulty in the implementation is the sampling of a uniform distribution on a slice \(S\). In practice it is even impossible to calculate the slice. Hence one has to come up with a trick. This trick is based on the following observation. Assume that we are able to sample a uniform distribution on a set \(C\) that contains the slice \(S\). Then the following algorithm -- which is nothing but the conditioning of this uniform distribution on the event that the outcome is in \(S\) -- samples uniformly from \(S\).
+From now on we will assume \(\mathcal X\subseteq\mathbb R^d\). The main difficulty in the implementation is the sampling of a uniform distribution on a slice \(S\). In practice it is even impossible to calculate the slice and therefore one has to come up with a trick. This trick is based on the following observation. Assume that we are able to sample a uniform distribution on a set \(C\) that contains the slice \(S\). Then the following algorithm -- which is nothing but the conditioning of this uniform distribution on the event that the outcome is in \(S\) -- samples uniformly from \(S\).
 \begin{algorithm}
-\caption{Sampling a uniform distribution on a subset \(S\subseteq C\) \label{alg:slice-sample}}
+\caption{Sampling from a uniform distribution on a subset \(S\subseteq C\) \label{alg:slice-sample}}
 \begin{algorithmic}[1]
 \Require{\(S\) and \(C\supseteq S\)}
 \State \(x\sim\mathcal U(C)\)
@@ -515,7 +515,7 @@ From now on we will assume \(\mathcal X\subseteq\mathbb R^d\). The main difficul
 
 An obvious choice for \(C\) would be a cuboid 
 \[C = \prod_{i = 1}^d [a_i, b_i]\]
-since it is straight forward to sample a uniform distribution on a cuboid. Namely one only has to sample the individual coordinates uniformly in the intervals \([a_i, b_i]\). The problem still remains how one can find a cuboid that surely contains the whole slice \(S\). The short and frustrating answer is that there is no way to do this. However not everything is lost, since we can use random cuboids that have the property that every part of the slice is contained in the cuboid with positive probability. This will be crucial in retaining the irreducibility of the Markov chain. In fact it been found that in applications the following procedure works well\todo{cite}. Given the current state \(x_n\) of the Markov chain, we propose a random interval \([a_i, b_i]\) around the \(i\)-th component fo \(x_n\). Then we extend those intervals until the endpoints \(a\) and \(b\) of the cuboid do not lie in the slice anymore. In pesudocode this relates to Algorithm \ref{alg:cuboid}.  %Further the algorithm returns the 
+since it is straight forward to sample a uniform distribution on a cuboid. Namely one only has to sample the individual coordinates uniformly in the intervals \([a_i, b_i]\). The problem still remains how one can find a cuboid that surely contains the whole slice \(S\). The short and frustrating answer is that there is no way to do this. However not everything is lost, since we can use random cuboids that have the property that every part of the slice is contained in the cuboid with positive probability. This will be crucial in retaining the irreducibility of the Markov chain. In fact it has been found that in applications the following procedure works well\todo{cite}. Given the current state \(x_n\) of the Markov chain, we propose a random interval \([a_i, b_i]\) around the \(i\)-th component fo \(x_n\). Then we extend those intervals until the endpoints \(a\) and \(b\) of the cuboid do not lie in the slice anymore. In pesudocode this relates to Algorithm \ref{alg:cuboid}.  %Further the algorithm returns the 
 \begin{algorithm}
 \caption{Sampling a random cuboid \label{alg:cuboid}}
 \begin{algorithmic}[1]
@@ -524,6 +524,7 @@ since it is straight forward to sample a uniform distribution on a cuboid. Namel
   \State \(a_i, b_i \sim \mathcal E(\alpha)\)
 %  \State \(b_i \sim \mathcal E(\alpha)\)
 \EndFor
+\State \(a\gets (a_1, \dots, a_d), b\gets(b_1, \dots, b_d)\)
 \While {\(x - a \in S\)}
   \State \(a \gets 2 \cdot a\)
 \EndWhile
@@ -533,7 +534,38 @@ since it is straight forward to sample a uniform distribution on a cuboid. Namel
 \State\Return{\((x - a, x + b)\)}
 \end{algorithmic}
 \end{algorithm}
-Here \(\mathcal E(\alpha)\) denotes the exponential distribution with parameter \(\alpha\) and determines how large the first proposed intervals are. Note that it is straight forward and computationally very easy to determine whether a point \(x\) is in the slice \(S(y)\) since one only has to check \(f(x) \ge y\). The reason for the choice of the exponential distribution is that this ensures that the cuboid can get arbitrarily large with possible probability. This leads to the effect that the Markov chain one obtains in exchanging the sample from \(\mathcal U(S)\) by a sample from \(\mathcal U(S\cap C)\) still is irreducible\todo{explain this in greater detail}.
+
+Here \(\mathcal E(\alpha)\) denotes the exponential distribution with parameter \(\alpha\) and determines how large the first proposed intervals are. Note that it is straight forward and computationally very easy to determine whether a point \(x\) is in the slice \(S(y)\) since one only has to check \(f(x) \ge y\). The reason for the choice of the exponential distribution is that this ensures that the cuboid can get arbitrarily large with possible probability. This leads to the effect that the Markov chain one obtains in exchanging the sample from \(\mathcal U(S)\) by a sample from \(\mathcal U(S\cap C)\) still is irreducible. %\todo{explain this in greater detail}.
+To see this we can slightly modify the proof of irreducibility, so for \(A\subseteq\mathcal X\) with positive probability we choose \(y>0\) such that \(\mu(A\cap S(y))>0\). Further we can choose a cuboid \(C\) around \(x\) such that \(\mu\big(A\cap S(y)\cap C\big)>0\). Further this cuboid is contained in the cuboid proposed by Algorithm \ref{alg:cuboid} with positive probability and hence we have
+\[K(x, A) = \mathbb P_x(X_1\in A) %\ge \frac{y}{f(x)} \cdot \delta \cdot \frac{\mu\big(A\cap S(y)\cap C\big)}{\mu(S(y)\cap C)} 
+> 0. \]
+
+Finally we can present the pseudocode of the algorithm that arises from the combination of the usual slice sampling method and the approximation of the uniform distribution on the slice.
+
+\begin{algorithm}
+\caption{Algorithm for the slice sampling \label{alg:slice-sampling-implementation}}
+\begin{algorithmic}[1]
+\Require{Unnormalised density \(f\), starting value \(x_0\), desired length \(n\) of the chain, \(\alpha>0\)}
+\If {\(f(x_0) = 0\)}
+  \State \(x_0 \gets \hat x\)
+\EndIf
+\For {\(i = 0, \dots, n-1\)}
+  \State \(y\sim \mathcal U([0, f(x_{i})])\)
+  \State \(C\) random cuboid around \(x_{i}\) with parameter \(\alpha\)
+  \State \(x\sim\mathcal U(C)\)
+  \While {\(f(x)<y\)}
+    \State \(x\sim\mathcal U(C)\)
+  \EndWhile
+  \State \(x_{i+1} \gets x\)
+\EndFor
+\State\Return{\(x = (x_0, \dots, x_n)\)}
+\end{algorithmic}
+\end{algorithm}
+
+It shall be noted, that the above algorithm also uses a point \(\hat x\) of positive density, which can be determined easily for a lot of densities \(f\). If this is however not straight forward, one could also sample \(x_0\) according to a normal distribution until we select a point of positive density.
+
+Obviously the algorithm presented above produces a Markov chain that is not identical with the one presented in the theoretical discussion of the slice sampling method. However if one wants to ensure the convergence of this slightly modified Markov chain, one has to check whether \(\pi\) remains a stationary distribution and whether the chain is still ergodic. This is usually done in the specific setting one works in, c.f. \cite{neal2003slice}. We will quickly discuss this in a very easy case. Namely let us assume \(d=1\) and that \(f\) is continuous and has only one local maximum. We call \(f\) \emph{unimodal} in this case and note that every slice \(S(y)\) is an interval. Hence the proposed cuboid is an interval around \(x_n\in S(y)\) such that both endpoints are outside of the slice \(S(y)\) and hence we have \(S(y)\subseteq C\). Therefore the algorithm above is equivalent to the original slice sampling method and hence produces an ergodic Markov chain with the desired invariant distribution.
+%Further we will quickly discuss the case where \(f\) has only one local maximum and we call \(f\) \emph{unimodal} in this particular case.
 
 \begin{emp}[The choice of \(\alpha\)]
 One could think that a small choice of \(\alpha\) -- which relates into large values of \(a_i\) and \(b_i\) -- would be the best since this increases the probability that the whole slice \(S\) is contained in the cuboid \(C\). There is some truth in this approach, since \(\mathcal U(S\cap C)\) is a better approximation of \(\mathcal U(S)\) if \(C\) is larger and further the two while loops in Algorithm \ref{alg:cuboid} need more repetitions if \(a_i\) and \(b_i\) initially are small. This relates into longer running time of the algorithm that samples the random cuboid. However one should not choose \(\alpha\) too small, because a large cuboid \(C\) also means that a lot of samples from \(\mathcal U(C)\) will lie outside of \(S\cap C\). Hence Algorithm \ref{alg:slice-sample} that samples from \(\mathcal U(S\cap C)\) will get slower as it will need more repetitions of the while loop.
@@ -558,30 +590,6 @@ Those effects of \(\alpha\) on the auto correlation and therefore effective samp
 \end{figure}
 \end{emp}
 
-Finally we can present the pseudocode of the algorithm that arises from the combination of the usual slice sampling method and the approximation of the uniform distribution on the slice.
-
-\begin{algorithm}
-\caption{Algorithm for the slice sampling \label{alg:slice-sampling-implementation}}
-\begin{algorithmic}[1]
-\Require{Unnormalised density \(f\), starting value \(x_0\), desired length \(n\) of the chain, \(\alpha>0\)}
-\If {\(f(x_0) = 0\)}
-  \State \(x_0 \gets \hat x\)
-\EndIf
-\For {\(i = 0, \dots, n-1\)}
-  \State \(y\sim \mathcal U([0, f(x_{i})])\)
-  \State \(C\) random cuboid around \(x_{i}\) with parameter \(\alpha\)
-  \State \(x\sim\mathcal U(C)\)
-  \While {\(x\notin S(y)\)}
-    \State \(x\sim\mathcal U(C)\)
-  \EndWhile
-  \State \(x_{i+1} \gets x\)
-\EndFor
-\State\Return{\(x = (x_0, \dots, x_n)\)}
-\end{algorithmic}
-\end{algorithm}
-
-It shall be noted, that the above algorithm also uses a point \(\hat x\) of positive density, which can be determined easily for a lot of densities \(f\). If this is however not straight forward, one could also sample \(x_0\) according to a normal distribution until we select a point of positive density.
-
 %\subsection{Tuning the algorithm}
 
 \subsection{Variational MCMC methods}
@@ -595,13 +603,13 @@ In the light of the theoretical guarantees this will surely work and actually Fi
 \begin{emp}[Setting]
 Let \(\Theta\) be a measurable space, \(\mu\) a measure on that space and \(f\colon\mathcal X\to[0, \infty]\) a function with finite positive integral
 \[Z = \int\limits_{\mathcal X} f(x) \mu(\mathrm{d}x)\in(0, \infty).\]
-Let further \(f\le \left\lVert f \right\rVert_{L^\infty(\mu)}\) and
+Let further \(f\le \left\lVert f \right\rVert_{L^\infty(\mu)}\) and let
 \[\left\{ f(\cdot|x) \mid x \in\mathcal X\right\}\]
 be a family of proposel distributions.
-Let now \(f_n^-, f_n^+\colon\mathcal X\to [0, \infty]\) functions such that \(f_n^-(x)\le f(x)\le f_n^+(x)\) for all \(x\in\mathcal X\) as well as
+Let now \(f_n^-, f_n^+\colon\mathcal X\to [0, \infty]\) be functions such that \(f_n^-(x)\le f(x)\le f_n^+(x)\) for all \(x\in\mathcal X\) as well as
 \[f_n^\pm(x) \xlongrightarrow{n\to\infty} f(x) %\quad \text{and } f_n^+(x)\to f(x) \quad \text{for } n\to\infty 
 \quad \text{for all } x\in\mathcal X. \]
-We seek an expression of the MH random walk and the slice sampling that purely relies on those bounds \(f_n^-\) and \(f_n^+\) of the unnormalised density.
+We seek an expression of the MH random walk and the slice sampling method that purely relies on those bounds \(f_n^-\) and \(f_n^+\) of the unnormalised density.
 \end{emp}
 
 \subsubsection*{Variational MH random walk}
@@ -634,7 +642,7 @@ Now we can adjust the algorithm of the MH random walk accordingly and obtain Alg
 
 \subsubsection*{Variational slice sampling}
 
-In the slice sampling we use the unnormalised density twice. The first time by sampling \(y\sim\mathcal U([0, f(x_n)])\) and the second time when checking \(x\in S(y)\) or equivalently \(f(x)\ge y\). For the first problem we note that we surely have \([0, f(x_n)]\subseteq [0, f_1^+(x_n)]\) and hence we can use Algorithm \ref{alg:slice-sample} to sample from uniformly from \([0, f(x_n)]\). However in this algorithm we need to check \(y\in [0,f(x_n)]\) or equivalently \(f(x_n)\ge y\) which is just what we had to do determine whether \(x\in S(y)\). Therefore it suffices to see how one can check \(f(x)\ge y\) which we will do analogously to the variational MH random walk by gradually tightening the bounds. This yields the following algorithm that returns ‚TRUE‘ if \(f(x)\ge y\) and ‚FALSE‘ otherwise.
+In the slice sampling we use the unnormalised density twice. The first time by sampling \(y\sim\mathcal U([0, f(x_n)])\) and the second time when checking \(x\in S(y)\) or equivalently \(f(x)\ge y\). For the first problem we note that we surely have \([0, f(x_n)]\subseteq [0, f_1^+(x_n)]\) and hence we can use Algorithm \ref{alg:slice-sample} to sample from uniformly from \([0, f(x_n)]\). However in this algorithm we need to check \(y\in [0,f(x_n)]\) or equivalently \(f(x_n)\ge y\) which is just what we had to do determine whether \(x\in S(y)\). Therefore it suffices to see how one can check \(f(x)\ge y\) which we will do analogously to the variational MH random walk by gradually tightening the bounds. This yields Algorithm \ref{alg:decide} that returns ‚TRUE‘ if \(f(x)\ge y\) and ‚FALSE‘ otherwise.
 
 \begin{algorithm}
 \caption{Deciding \(f(x)\ge y\) through the bounds \label{alg:decide}}

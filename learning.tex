@@ -489,9 +489,13 @@ However \eqref{ConProb1} and \eqref{ConProb2} shows that the probability for thi
 \begin{rem}[Speed of convergence]
 Although the result above states that the estimators \(\hat K\) converges to \(K\) in probability, it does give no information about the speed of convergence. This problem is addressed in \cite{urschel2017learning}, but it turns out that the convergence is very slow. For example for the very moderate case \(\alpha = 0.4\) and \(l=3\) one already needs more than \(10^6\) samples to get some theoretical guarantees from their result. This is not due to careless estimates since they even show that this bound is optimal\todo{is this true?}. However since this result is beyond practical relevance, we will keep away from those calculations.
 \end{rem}
-\todo{explain how the algorithm for the reconstruction works}
+%\todo{explain how the algorithm for the reconstruction works}
 %\todo{how hard it is to prove}
 
-\subsection{Computation of the estimator}
+\begin{emp}[Computation of the estimator]
+Although we have already seen how the estimator can -- mathematically -- be constructed, we will now touch on a few implementation details for the actual computation of the estimator.\todo{finish this}
+\end{emp}
+
+%\subsection{Computation of the estimator}
 
 \todo{is this estimator unbiased?}

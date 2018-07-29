@@ -67,10 +67,6 @@ A further advantage over the MLE is that it might be possible to computationally
 This step can often not be performed efficiently but the Markov chain Monte Carlo methods introduced later will yield an approximation of the posterior without the need to compute the normalisation constant.
 \end{emp}
 
-\begin{emp}[Regularisation through the prior]
-
-\end{emp}
-
 %\begin{enumerate}
 %\item explain general procedure and say something about intuition
 %\item explain the benefits, namely:
@@ -103,7 +99,15 @@ Unfortunately the normalisation constant
 \begin{equation}\label{norma}
 \int\limits_{\Theta} f(\theta|A_1, \dots, A_n)\nu(\mathrm{d}\theta) = \int\limits_{\Theta} f_\Theta(\theta) \prod_{i=1}^n \frac{\det(L(\theta)_{A_i})}{\det(L(\theta) + I)}\nu(\mathrm{d}\theta)
 \end{equation}
-can neither be computed analytically nor numerically in an efficient way. This problem can be solved through the powerful method of Markov chain Monte Carlo simulation that allow to approximate a distribution with only the knowledge of its unnormalised density.
+can neither be computed analytically nor numerically in an efficient way. This problem can be solved through the powerful method of Markov chain Monte Carlo simulation that allow to approximate a distribution with only the knowledge of its unnormalised density. But before we introduce those methods, we quickly explain how the Bayesian approach offers a possibility of regularisation and hence can be used to increase the noise sensitivity of the parameter estimation.
+
+\begin{emp}[Regularisation through the prior]
+We will assume that we are in the setting of the estimation of the log linearity constant \(\theta\in\mathbb R^M\) and we will define the prior density to be the standard normal density on \(\mathbb R^M\). Further let \(Y_1, \dots, Y_n\) be some data such that the MLE \(\hat\theta_n\) does not consist. Recall that if this is the case, one of the items \(i\in\mathcal Y\) is either present in none or in all of the observations and hence the quality estimation would (formally) be \(0\) or \(\infty\). Therefore the respective log linearity constant might not exist in \(\mathbb R^M\).
+
+Of course we have seen in the section about coercivity of the log likelihood functions that the probability for this to happen tends to zero with increasing sample size, however in practice it might not be possible to obtain more samples. In this scenario the maximum likelihood approach fails but the posterior density \eqref{post2} still exists. One way of explaining this is that the prior assigns small values to parameters far away from zero. Hence the prior can be seen as a kind of regularisation since it penalises parameters that lead to very irregular models. In our case irregular means that the log linearity constant is big which implies that one quality is either very high or close to zero. Having a high quality corresponds to the model almost not being a \(L\)-ensemble any more and having quality zero means that the model can not be expressed any more through log linear qualities.
+
+In similar fashion a suitable prior distribution can be used to make the parameter estimation more stable in the case that the data is perturbed by some noise. \todo{work on this.}
+\end{emp}
 
 \section{Markov chain Monte Carlo methods}
 

@@ -615,18 +615,32 @@ Obviously in the proof of the consistency of the whole elementary kernel \(L\) a
 % \[\mathcal L(L) \coloneqq -\log\left(\prod_{i = 1}^n \mathbb P_L(Y_i)\right) = -\sum\limits_{i=1}^n\log\left( \det(L_{Y_i})\right) + n \log\left( \det(L+I)\right)\]
 % where high values of \(\mathcal L\) correspond to kernels \(L\) where at least one element \(Y_t\) of our training set is very unlikely. Thus it is natural to minimise the loss function \(\mathcal L\) over all positive semidefinit \(L\in\mathbb R^{N\times N}\). Note that we have \(\mathcal L(L) = \infty\) if and only if an observation \(Y_t\) of our training set is impossible under the DPP \(\mathbb P_L\), i.e. we do not consider those kernels in our estimation.
 
-\subsubsection*{Likelihood maximisation for \(L\)}
+Having discussed the theoretical properties and guarantees on convergence of the MLE we will now turn towards the question of computability. In particular we will see that the MLE for the whole kernel can not be computed in an efficient way which justifies the use of smaller parametric models like the log linear model.
 
-We note that \(\mathcal L\) is smooth and that its gradient can be expressed explicitly, at least on the domain \(\left\{ \mathcal L>-\infty\right\}\). This is due to the fact that the determinants of the submatrices are polynomials in the entries of \(L\) and the composition of those with the smooth function \(\log\colon(0,\infty)\to\mathbb R\) stays smooth. This property allows the use of gradient methods but they face the problem that the loss function is non concave and thus those algorithms will generally not converge to a global maximiser. % (cf. \cite{affandi2014learning}).
+\subsubsection*{Likelihood maximisation for the elementary kernel \(L\)}
+
+We recall that the log likelihood function for the elementary kernel is given by
+\begin{equation}\label{loglikagain}
+\mathcal L(L) = \sum\limits_{i=1}^n\log\left( \det(L_{\mathbf Y_i})\right) - n \log\left( \det(L+I)\right).
+\end{equation}
+We note that this is smooth function and and that its gradient can be expressed explicitly, at least on the domain \(\left\{ \mathcal L>-\infty\right\}\). This is due to the fact that the determinants of the submatrices are polynomials in the entries of \(L\) and the composition of those with the smooth function \(\log\colon(0,\infty)\to\mathbb R\) stays smooth. This property makes it possible to use of gradient methods for the maximisation of \(\mathcal L\), but they face the problem that the loss function is non concave and thus those algorithms will generally not converge to a global maximiser. % (cf. \cite{affandi2014learning}).
 % \todo{Explain why it is non convex}{ } 
 To see that the log linear likelihood function is not concave, we may consider the span \(\left\{ q I\mid q\in\mathbb R\right\}\) of the identity matrix. On this subspace \(\mathcal L\) takes the form
 \[\mathcal L(q I) = \sum\limits_{i = 1}^n \log(q^{\left\lvert Y_i \right\rvert}) - n \log((1 + q)^N) = \sum\limits_{i = 1}^n \left\lvert Y_i \right\rvert \log(q) - n N \log(1 + q) \] %= \log(q) \cdot \left( \sum\limits_{i = 1}^n \left\lvert Y_i \right\rvert - n\cdot N\right)\]
-which is not concave in general.
+which is not concave in general. Unfortunately there are no algorithms that can approximate the global maximum of a concave function \todo{cite} and it also has been conjecture in \cite{kulesza2012learning} that no such algorithm exists for the log likelihood of the elementary kernel. Nevertheless one can still use optimisation techniques to obtain local maximisers of the log likelihood and indeed \cite{mariet2015fixed} uses a fixed point iteration to do this.
 
-This obviously causes substantial computational problems in the calculation of the MLE let alone it exists. In fact it is NP hard\todo{explain this term}{ } to maximise a general non concave function and it is also conjectured to be NP hard to maximise the log likelihood function \(\mathcal L\) in the case of \(L\)-ensembles. However there are still efficient maximising techniques for such functions that will eventually converge to local maximiser and that also work in very high dimensional spaces\todo{cite}{ } and thus this approach was taken by \todo{cite}. Nevertheless we will not present this approach here, but rather favour a maximisation technique that is based on a fixed point iteration and was proposed in \todo{cite}.
+In fact the non concavity can be seen even without computing anything. In fact if we have a maximiser \(L\) of the log likelihood function and take any other matrix \(\tilde L\) that is determinantally equivalent, then obviously the log likelihood of the two kernels agree. Hence we can never expect to get a unique maximiser of the log likelihood function. Hence a direct maximisation is a slightly missleading approach and it could be more sensible to work with equivalence classes of kernels that have the same principle minors that appear in \eqref{loglikagain}. However it is not clear how this quotient space would look like and what structural properties it has, let alone whether one can efficiently maximise a function over it.
 
-\subsubsection{Fixed point iteration based maximisation}
-\todo{read, understand and summarise the paper}
+\todo{comment on the argmax function}
+
+%Nevertheless there was a 
+
+
+%This obviously causes substantial computational problems in the calculation of the MLE let alone it exists. In fact it is NP hard\todo{explain this term}{ } to maximise a general non concave function and it is also conjectured to be NP hard to maximise the log likelihood function \(\mathcal L\) in the case of \(L\)-ensembles. However there are still efficient maximising techniques for such functions that will eventually converge to local maximiser and that also work in very high dimensional spaces\todo{cite}{ } and thus this approach was taken by \todo{cite}. Nevertheless we will not present this approach here, but rather favour a maximisation technique that is based on a fixed point iteration and was proposed in \todo{cite}.
+
+%\begin{emp}[Fixed point iteration based maximisation]
+%\todo{read, understand and summarise the paper}
+%\end{emp}
 
 %\subsection{Learning the quality}
 
@@ -649,7 +663,12 @@ This obviously causes substantial computational problems in the calculation of t
 
 \subsubsection*{Computation for the log linear model}
 
-The first two terms are affine linear in \(\theta\) and thus concave. To see that the last expression is also concave, it is convenient to to introduce the notion of log concavity and give a fundamental result.%\todo{reformulate this!}
+The motivation to introduce the log linear model was to obtain a log likelihood function that is easier to maximise in practice. We will now see that this is indeed the case and remember that the individual terms of the log likelihood are given by
+\begin{equation}\label{logliklogmodagain}
+2\cdot\theta^T\sum\limits_{i\in Y}f_{i} + \det(\hat{S}_{Y}) - \log\left( \sum_{A\subseteq\mathcal Y} \exp\left(2\cdot \theta^T\sum_{i\in A}f_{i}\right)\det(\hat{S}_A) \right).
+\end{equation}
+
+The first two terms are linear in \(\theta\) and constant and thus concave. To see that the last expression is also concave we introduce the notion of log concavity and give a general result.%, it is convenient to to introduce the notion of log concavity and give a fundamental result.%\todo{reformulate this!}
 
 \begin{defi}[Log concavity]
 We call a function \(f\) \emph{log concave}, \emph{log convex} or \emph{log (affine) linear} if \(\log(f)\) has the respective property.
@@ -659,14 +678,20 @@ We call a function \(f\) \emph{log concave}, \emph{log convex} or \emph{log (aff
 The sum of log concave functions is again log concave.
 \end{prop}
 \begin{proof}
-\todo{Give of cite proof.}
+\todo{Give or cite proof.}
 \end{proof}
 
-As an immediate consequence we obtain that the expression in \eqref{e3.3} is log concave which we will fix in a separate statement.
+The summands inside the logarithm in \eqref{logliklogmodagain} are log convex, in fact even log affine linear since their logarithm is equal to
+\[2\cdot\theta^T\sum\limits_{i\in A}f_{i} + \det(\hat{S}_{A}).\]
+Hence we obtain as an immediate consequence %we obtain 
+that the whole expression %the log likelihood function
+ \eqref{logliklogmodagain} and therefore the log likelihood function is concave which we will fix in a separate statement.
 
 \begin{cor}[Concavity of the likelihood function]
 Under the log linear model for the qualities, the log likelihood function is concave in the log linearity parameter \(\theta\in\mathbb R^M\). % In particular critical points are global maximisers and the 
 \end{cor}
+
+This result together with the coercivity -- which holds with probability tending to one -- ensures that the MLE for the log linearity constant of the quality can be efficiently computed. Further such optimisation algorithms are pre-implemented in most major programming languages and software environments like Mathematica, MATLAB and R. For theoretical guarantees and algorithmic detail of those methods we refer once again to \cite{boyd2004convex}.
 
 % Before we discuss the actual process of maximisation of the log likelihood function we will be concered with the existence of maximisers and the consistency of the resulting estimators.
 
@@ -676,8 +701,6 @@ Under the log linear model for the qualities, the log likelihood function is con
 % \end{emp}
 
 % \subsubsection*{Comparison to learning the kernel \(L\)}
-
-\subsection{Learning for conditional DPPs}
 
 % \subsection{Learning kernels of conditional DPPs}
 
@@ -754,6 +777,10 @@ Under the log linear model for the qualities, the log likelihood function is con
 
 %\subsection{Learning the repulsiveness}
 
-\subsection{Estimating the mixture coefficients of \(k\)-DPPs}
-
 \subsection{A toy example: Learning the log linearity constant of a spatial DPP}
+
+\subsection{Further learning approaches}
+
+\subsubsection{Learning for conditional DPPs}
+
+\subsubsection{Estimating the mixture coefficients of \(k\)-DPPs}

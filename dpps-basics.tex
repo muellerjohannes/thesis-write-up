@@ -1,7 +1,7 @@
 \chapter{Determinantal points processes: Basic notions and properties}
 
 %\section{Historical remarks}
-
+\todo{explain why DPPs are awesome}
 
 
 \section{Definitions and properties}
@@ -22,9 +22,7 @@ We call \(\mathbb P\) a \emph{determinantal point process}, or in short a DPP, i
 where \(K\) is a symmetric matrix indexed by the elements in \(\mathcal Y\) and \(K_A\) denotes the submatrix of \(K\) to indexed by the elements of \(A\). We call \(K\) the \emph{marginal kernel} of the DPP. If the marginal kernel \(K\) is diagonal, then we call \(\mathbb P\) a \emph{Poisson point process}.
 \end{defi}
 
-We note that all principal minors\footnote{The \emph{principle minors} of \(K\) are the determinants of the submatrices \(K_A\) for \(A\subseteq \mathcal Y\).} of \(K\) are non negative and Sylvester’s criterion implies that \(K\) is non negative definite\footnote{\(K\) is called \emph{non negative definite} if \(x^TKx\ge0\) for all \(x\in\mathbb R^{\mathcal Y}\). The Sylvester criterion states that a matrix is non negative definite if and only if all principle minors are non negative.}. Further it can be shown (cf. page 3 in \cite{borodin2009determinantal})
-\todo{have a look at this and maybe explain it!}{ }
- that also the complement of a DPP is a DPP with marginal kernel \(I-K\) where \(I\) is the identity matrix, i.e.
+We note that all principal minors\footnote{The \emph{principle minors} of \(K\) are the determinants of the submatrices \(K_A\) for \(A\subseteq \mathcal Y\).} of \(K\) are non negative and Sylvester’s criterion implies that \(K\) is non negative definite.\footnote{\(K\) is called \emph{non negative definite} if \(x^TKx\ge0\) for all \(x\in\mathbb R^{\mathcal Y}\). The Sylvester criterion states that a matrix is non negative definite if and only if all principle minors are non negative.} Further it can be shown (cf. \cite{borodin2009determinantal}) that also the complement of a DPP is a DPP with marginal kernel \(I-K\) where \(I\) is the identity matrix, i.e.
 \[\mathbb P(A\subseteq\mathbf Y^c) = \det(I_A-K_A).\]
 Thus we conclude \(I-K\ge0\) and obtain \(0\le K\le I\). This actually turns out to be sufficient for \(K\) to define a DPP through \eqref{e2.1} which we will see in the fourth section of this chapter.%(cf. \cite{kulesza2012determinantal}).\todo{why? explain!}{ }
 
@@ -142,6 +140,33 @@ and thus
 \end{emp}
 
 % \section{\(L\)-ensembles}
+
+\subsubsection*{The mode problem}
+
+One general motivation for modelling is the hope that one can make predictions based on the selected model. If the model is of stochastic nature, like in our case, and if one wants to predict its outcome, there are a few possible approaches. The first one would be to sample from this model. This relies on the intuition that a realisation of our random variable will be a rather typical example for the random event. Going one step further one could try to find the most likely outcome of the random variable, which is known as the mode problem.
+
+\begin{emp}[The mode problem]
+Let \(X\) be a random variable with values in some space \(\mathcal X\) and let \(f\) be the density of the distribution of \(X\) with respect to some reference measure. Then the \emph{mode} is the maximiser
+\[\hat x = \underset{x\in\mathcal X}{\arg\max}f(x)\]
+of the density if it exists. The search for the mode is called the \emph{mode problem}.
+\end{emp}
+
+
+Our motivation for finding the mode of a random variable was to make better predictions for it. This is motivated by the believe that the mode should be a typical realisation of the random variable. However this is not generally the case and therefore one should be cautious with this intuition.
+To see this we consider a random natural number with the following distribution
+\[\mathbb P(\left\{ n\right\}) \coloneqq \begin{cases} \;0.1 \quad & \text{if } n = 20 \\\; 0.09 & \text{if } n = 0, 1, \dots, 9 \\\; 0 &\text{otherwise} \end{cases}. \]
+Although \(20\) is the most likely elementary event, it is not a very typical outcome, since in \(90\%\) of the cases the random variable will have values in \(\left\{ 0, 1, \dots, 9\right\}\) and hence is far away from its mode. Similar examples can easily be constructed for continuous distributions.
+%It is clear that mode is \(0\) in this example, but it is not a very typical outcome of the random variable, since the majority of events is centered around \(10\).
+
+
+
+%Consider for example the mixture of two independent Gaussian random variables
+%\[0.1\cdot X + 0.9\cdot Y\] % \quad \text{where } X\sim N(0, 10), Y\sim N()\]
+%where \(X\) is centered with variance \(10\) and \(Y\) has mean \(5\) with variance \(1\), the densities are shown in Figure ....\todo{check whether this gives the desired effect and plot the density!}{ } 
+
+The mode problem can be solved explicitely or at least numerically if the density \(f\) is a smooth function defined on a subset of \(\mathbb R^d\). However in the case of DPPs we have to deal with the probability measure on a finite set and thus the mode problem is a discrete optimisation problem over the powerset \(2^{\mathcal Y}\). The size of the exponential size of the powerset turns this into a very hard computational task and it has been shown that the time to compute the mode -- or even an event with more than \(\frac89\) its probability -- grows exponentially with the cardinality \(N\) of \(\mathcal Y\) (cf. \cite{kulesza2012determinantal}). \todo{refer to other papers that do approximations?}
+%This is in general very hard to solve and it has been shown in \todo{cite} that it is NP hard to do so or even approximate it upto a factor of \(\frac89\). However there were still different strategies proposed and we will present some of them including their main ideas. \todo{do this!}
+
 
 \section{Variations of DPPs} %: conditional DPPs, \(k\)-DPPs and structured DPPs}
 
@@ -516,23 +541,7 @@ Let \(\big((W_{n_1})_1(W_{n_2})_2\dots (W_{n_k})_k\big)\) denote the \(k\times k
 
 \end{emp}
 
-\section{The mode problem}
-
-One general motivation for modelling is the hope that predictions can be made from the selected model. If the model is of stochastic nature, like in our case, and if one wants to predict its outcome, there are a few possible approaches. The first one would be to sample from this model. This relies on the intuition that a realisation of our random variable will be a rather typical example for the random event. Going one step further one could try to find the most likely outcome of the random variable, which is known as the mode problem.
-
-\begin{emp}[The mode problem]
-Let \(X\) be a random variable with values in some space \(\mathcal X\) and let \(f\) be the density of the distribution of \(X\) with respect to some reference measure. Then the \emph{mode} is the maximiser
-\[\hat x = \underset{x\in\mathcal X}{\arg\max}f(x)\]
-of the density if it exists. The search for the mode is called the \emph{mode problem}.
-\end{emp}
-
-Our motivation for finding the mode of a random variable was to make better predictions for it. This is justified\todo{look for better word}{ } by the assumption that the mode should be a typical realisation of the random variable. However this is not generally the case and therefore one should be cautious with this intuition. Consider for example the mixture of two independent Gaussian random variables
-\[0.1\cdot X + 0.9\cdot Y\] % \quad \text{where } X\sim N(0, 10), Y\sim N()\]
-where \(X\) is centered with variance \(10\) and \(Y\) has mean \(5\) with variance \(1\), the densities are shown in Figure ....\todo{check whether this gives the desired effect and plot the density!}{ } It is clear that mode is \(0\) in this example, but it is not a very typical outcome of the random variable, since the majority of events is centered around \(10\).
-
-The mode problem is rather well behaved if the density \(f\) is a smooth function defined on a subset of \(\mathbb R^d\), but in the case of DPPs we have to deal with the probability measure on a finite set. Thus this turns into a discrete optimisation problem over the exponentially large powerset \(2^{\mathcal Y}\). This is in general very hard to solve and it has been shown in \todo{cite} that it is NP hard to do so or even approximate it upto a factor of \(\frac89\). However there were still different strategies proposed and we will present some of them including their main ideas. \todo{do this!}
-
-
+\section{Toy examples}
 
 %\section{Calculations}
 

@@ -368,7 +368,7 @@ If this is not the case %, \ref{dirmet} together with (\emph{iv}) implies that
 % \subseteq U\]
 %for some \(\delta>0\). This is due to the fact that
  \(F\) attains its maximum %\footnote{Any upper semicontinuous function on a topological Hausdorff space attains its maximum over a compact set.} 
- \(\alpha\) on \(K_0\setminus U\) because \(F\) is upper semicontinuous and \(K_0\setminus U\) is compact (c.f. \ref{dirmet}). Further (\emph{iii}) implies \(\alpha < F(\theta_0)\) and thus we have %only have to show that the probability for \(\theta\in K\) and \(L(\hat{\theta})>\alpha\) tends to one since %. % \(\theta\in U\) and we will use this criterion to show the consistency.
+ \(\alpha\) on \(K_0\setminus U\) because \(F\) is upper semicontinuous and \(K_0\setminus U\) is compact (cf. \ref{dirmet}). Further (\emph{iii}) implies \(\alpha < F(\theta_0)\) and thus we have %only have to show that the probability for \(\theta\in K\) and \(L(\hat{\theta})>\alpha\) tends to one since %. % \(\theta\in U\) and we will use this criterion to show the consistency.
  \[K_0\cap \Big\{ \theta\in\Theta\mid F(\theta) > \alpha \Big\} \subseteq U. \]
  
 So in order to show \(\hat{\theta}_n\in U\), it suffices to show \(\hat{\theta}_n\in K_0\) and \(F(\hat{\theta}_n)>\alpha\). Since we have already seen that the first statement holds, it remains to show the second one. However (\emph{ii}) implies
@@ -444,7 +444,7 @@ Let \(\theta\ne\theta_0\), then we either have \(F(\theta) = -\infty < F(\theta_
 \begin{equation}\label{entropybound}
 F(\theta) = \mathbb E\big[\log(f(X| \theta))\big] > - \infty.
 \end{equation}
-In this case we want to exploit the strict Jensen inequality (c.f. \cite{lehmann2006theory}) that yields for any positive random variable \(Y\) with finite expectation that is not constant
+In this case we want to exploit the strict Jensen inequality (cf. \cite{lehmann2006theory}) that yields for any positive random variable \(Y\) with finite expectation that is not constant
 \[\mathbb E[\log(Y)] < \log(\mathbb E[Y]).\]
 %or \(F(\theta)\)
 We set \(Y\coloneqq \frac{f(X| \theta)}{f(X| \theta_0)}\). This is positive \(f(\cdot| \theta_0) \mathrm d\mu\) almost everywhere because otherwise \eqref{entropybound} could not hold. 
@@ -599,6 +599,7 @@ Hence the random variable
 \[\sup_{q\in K_0} \big\lvert \log(f(\mathbf Y| q)) \big\rvert\]
 is almost surely finite and since the probability space \(2^{\mathcal Y}\) is finite, the second condition holds.
 \end{proof}
+\todo{check whether this actually works in the other cases!}
 
 \begin{rem}
 Obviously in the proof of the consistency of the whole elementary kernel \(L\) and the log linearity constant \(\theta\) one runs into the problem of unidentifiability. This is why one has to identify the parameters with each other that give rise to the same probability densities. In the case of the elementary kernel this is just the determinantal equivalence once again and in the case of the log linearity constant two parameters give rise to the same densities if and only if their projection onto \(U\) agrees.
@@ -754,3 +755,5 @@ Under the log linear model for the qualities, the log likelihood function is con
 %\subsection{Learning the repulsiveness}
 
 \subsection{Estimating the mixture coefficients of \(k\)-DPPs}
+
+\subsection{A toy example: Learning the log linearity constant of a spatial DPP}

@@ -630,7 +630,7 @@ To see that the log linear likelihood function is not concave, we may consider t
 which is not concave in general. Unfortunately there are no algorithms that can approximate the global maximum of a concave function \todo{cite} and it also has been conjecture in \cite{kulesza2012learning} that no such algorithm exists for the log likelihood of the elementary kernel. Nevertheless one can still use optimisation techniques to obtain local maximisers of the log likelihood and indeed \cite{mariet2015fixed} uses a fixed point iteration to do this.
 
 In fact the non concavity can be seen even without computing anything. In fact if we have a maximiser \(L\) of the log likelihood function and take any other matrix \(\tilde L\) that is determinantally equivalent, then obviously the log likelihood of the two kernels agree. Hence we can never expect to get a unique maximiser of the log likelihood function. Hence a direct maximisation is a slightly missleading approach and it could be more sensible to work with equivalence classes of kernels that have the same principle minors that appear in \eqref{loglikagain}. However it is not clear how this quotient space would look like and what structural properties it has, let alone whether one can efficiently maximise a function over it.
-
+\todo{does this make any sense at all?}
 \todo{comment on the argmax function}
 
 %Nevertheless there was a 
@@ -675,10 +675,24 @@ We call a function \(f\) \emph{log concave}, \emph{log convex} or \emph{log (aff
 \end{defi}
 
 \begin{prop}[Additivity of log concavity]
-The sum of log concave functions is again log concave.
+The sum of log convex functions is again log convex.
 \end{prop}
 \begin{proof}
-\todo{Give or cite proof.}
+Let \(f\) and \(g\) be log convex and thus \(F\coloneqq\log(f)\) and \(G\coloneqq\log(g)\) are convex. We will consider the function
+\[H\colon\mathbb R^2\to\mathbb R, \quad (x, y)\mapsto \log(e^x + e^y)\]
+which is increasing both coordinates. Further we note that \(\log(f + g) = H(F, G)\) and hence it suffices to show that \(H\) is convex %. %, since this implies
+%\begin{equation}
+%\begin{split}
+% \log\big(f(\theta x + (1-\theta) y) + g(\theta x + (1-\theta) y)\big) & = H\big(F(\theta x + (1-\theta) y), G(\theta x + (1-\theta) y)\big) \\
+% & \le H(\theta F(x) + (1-\theta) F(y), \theta G(x) + (1-\theta) G(y))
+%\end{split}•
+%\end{equation}•
+%It remains to check that \(H\) is convex 
+which we do by noting that the Hessian matrix
+\[D^2H(x, y) = (e^x + e^y)^2 \cdot\begin{pmatrix}
+e^xe^y & -e^xe^y \\ -e^xe^y & e^xe^y
+\end{pmatrix}\]
+is non negative definite by Sylvester’s criterion.
 \end{proof}
 
 The summands inside the logarithm in \eqref{logliklogmodagain} are log convex, in fact even log affine linear since their logarithm is equal to

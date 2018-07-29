@@ -128,15 +128,24 @@ In the fourth chapter we will see that there is a natural choice for the mapping
 points in a metric space. On the other hand the choice of \(f\) is crucial since it determines the structure and strength of the repulsion.
 \end{emp}
 
-\begin{emp}[Transitivity of repulsion]
-One last property of DPPs that we shall mention is the fact that the negative correlations of the DPP posses a transient property in the sense, that if \(i\) and \(j\) and \(j\) and \(k\) are similar, then \(i\) and \(k\) are also similar. This is due to the fact
-\[\left\lVert \phi_i - \phi_j \right\rVert^2 = \left\lVert \phi_i \right\rVert^2 + \left\lVert \phi_j \right\rVert^2 - 2\phi_i^T\phi_j = 2(1-\phi_i^T\phi_j)\]
-and thus
-\[\sqrt{1-\phi_i^T\phi_k} = \frac12\left\lVert \phi_i - \phi_k \right\rVert\le\frac12\big(\left\lVert \phi_i - \phi_j \right\rVert + \left\lVert \phi_j - \phi_k \right\rVert\big) = \sqrt{1-\phi_i^T\phi_j} + \sqrt{1-\phi_j^T\phi_k}.\]\todo{reformulate that part!}
-\end{emp}
+%\begin{emp}[Transitivity of repulsion]
+%One last property of DPPs that we shall mention is the fact that the negative correlations of the DPP posses a transient property in the sense, that if \(i\) and \(j\) and \(j\) and \(k\) are %similar, then \(i\) and \(k\) are also similar. This is due to the fact
+%\[\left\lVert \phi_i - \phi_j \right\rVert^2 = \left\lVert \phi_i \right\rVert^2 + \left\lVert \phi_j \right\rVert^2 - 2\phi_i^T\phi_j = 2(1-\phi_i^T\phi_j)\]
+%and thus
+%\[\sqrt{1-\phi_i^T\phi_k} = \frac12\left\lVert \phi_i - \phi_k \right\rVert\le\frac12\big(\left\lVert \phi_i - \phi_j \right\rVert + \left\lVert \phi_j - \phi_k \right\rVert\big) = \sqrt{1-\phi_i^T\phi_j} + \sqrt{1-\phi_j^T\phi_k}.\]\todo{reformulate that part!}
+%\end{emp}
+\todo{say something about the transitivity of repulsion?}
 
 \begin{emp}[Comparison to other point processes]
+A wide variety of point processes has been studied and used in different applications and determinantal point processes are by far not the only point processes with negative correlations. For example every Poisson point process can be turned into a process of negative correlation by removing some points of the selected subset. For example one could delete all points that lie within a certain distance of another point of the subset. A very important class of point processes are the so called \emph{Gibbs} or \emph{Markov point proccesses}. The elementary probabilities are given by 
+\[\mathbb P(A) \propto \exp(-F(A))\]
+where \(F\colon2^{\mathcal Y}\to\mathbb R\) is called the \emph{energy function} is interpreted as a measure of how unfavourable a subset \(A\subseteq\mathcal Y\) is.
+%Those are defined through an energy function
 
+Although some of those different classes of point processes with negative correlation posses nice theoretical properties they share one major drawback. Namely a lot computations related to those point processes can not be performed efficiently. For example in the case of Gibbs point processes even the computation time of the normalisation constant%not even the normalisation constant
+\[\sum_{A\subseteq\mathcal Y} \exp(-F(A)) \]
+grows exponentially with \(N\). However the special structure of the determinant itself leads to the explicit expression in \eqref{e2.3} of the normalisation constant for DPPs and the computation time for the analytical or numerical calculation of it only grows like \(N^3\) or \(N^{2.376}\) respectively\todo{cite}. For a more in depth comparison of different point processes see \cite{kulesza2012determinantal}.
+%In most cases even the computation of the normalisation constant 
 \end{emp}
 
 % \section{\(L\)-ensembles}
@@ -164,7 +173,7 @@ Although \(20\) is the most likely elementary event, it is not a very typical ou
 %\[0.1\cdot X + 0.9\cdot Y\] % \quad \text{where } X\sim N(0, 10), Y\sim N()\]
 %where \(X\) is centered with variance \(10\) and \(Y\) has mean \(5\) with variance \(1\), the densities are shown in Figure ....\todo{check whether this gives the desired effect and plot the density!}{ } 
 
-The mode problem can be solved explicitely or at least numerically if the density \(f\) is a smooth function defined on a subset of \(\mathbb R^d\). However in the case of DPPs we have to deal with the probability measure on a finite set and thus the mode problem is a discrete optimisation problem over the powerset \(2^{\mathcal Y}\). The size of the exponential size of the powerset turns this into a very hard computational task and it has been shown that the time to compute the mode -- or even an event with more than \(\frac89\) its probability -- grows exponentially with the cardinality \(N\) of \(\mathcal Y\) (cf. \cite{kulesza2012determinantal}). \todo{refer to other papers that do approximations?}
+The mode problem can be solved explicitely or at least numerically if the density \(f\) is a smooth function defined on a subset of \(\mathbb R^d\). However in the case of DPPs we have to deal with the probability measure on a finite set and thus the mode problem is a discrete optimisation problem over the powerset \(2^{\mathcal Y}\). The size of the exponential size of the powerset turns this into a very hard computational task and it has been shown that the time to compute the mode -- or even an event with more than \(\frac89\) its probability -- grows exponentially with the cardinality \(N\) of \(\mathcal Y\) (cf. \cite{kulesza2012determinantal}). However some algorithms for the approximation of the mode have been proposed for certain classes of DPPs or that lower their goal to only find a subset of at least \(\frac14\) of the probability of the mode. For more information on those approaches we refer to \cite{djolonga2014map} and \cite{gillenwater2012near}. % \todo{refer to other papers that do approximations?}
 %This is in general very hard to solve and it has been shown in \todo{cite} that it is NP hard to do so or even approximate it upto a factor of \(\frac89\). However there were still different strategies proposed and we will present some of them including their main ideas. \todo{do this!}
 
 
@@ -532,6 +541,8 @@ Let \(\big((W_{n_1})_1(W_{n_2})_2\dots (W_{n_k})_k\big)\) denote the \(k\times k
 %\end{emp}
 
 \subsubsection{Possible improvements}
+
+We will shortly discuss two methods how the simulation of DPPs can be made more efficient.
 
 \begin{emp}[Dual sampling]
 

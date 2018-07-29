@@ -406,7 +406,7 @@ Further we will assume -- after an eventual modification of \(f\) on a \(\mu\) N
 \[f\le \left\lVert f \right\rVert_{L^\infty(\mu)} = \inf \Big\{ \alpha\in\mathbb R \mid f \le \alpha \text{ almost surely with respect to } \mu \Big\}\in[0, \infty]. \]
 \end{emp}
 
-\begin{emp}[Definition of the slice sampling]
+\begin{emp}[The slice sampling method]
 Assume we have already given the first \(n\) samples \(x_1, \dots, x_n\) of the Markov chain. If we have \(f(x_n)=0\), then we set \(x_{n+1}\coloneqq \hat x\). Otherwise we sample \(y\) according to the uniform distribution on \([0, f(x_n)]\) and define the \emph{slice}
 \[S\coloneqq S(y)\coloneqq \left\{ x\in\mathcal X \mid f(x) \ge y \right\}. \]
 \begin{figure}[h!]

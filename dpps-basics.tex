@@ -128,8 +128,8 @@ One can now model \(\phi_i\in\mathbb R^{\mathcal R}\) via
 The function \(f\) will typically be decreasing and thus \((\phi_i)_r\) can be seen as a measure of how similar item \(i\) is to the reference point \(r\in\mathcal R\). Thus the diversity feature vector \(\phi_i\) stores how similar the item \(i\) is to all reference points and the scalar product \(\phi_i^T\phi_j\) will be close to one, if the items \(i\) and \(j\) have approximately the same degrees of similarity to the reference points. It shall be noted that the choice of the \(D\), the number of reference points bounds the rank of the kernel \(L\) and therefore of the largest subset that occurs with positive probability. Indeed we have \(\operatorname{rk}(L)\le D\) and for \(A\subseteq\mathcal Y\) with more than \(D\) elements \(\det(L_A) = 0\) and therefore \(\mathbb P(A) = 0\).
 In the fourth chapter we will see that there is a natural choice for the mapping \(d\) in most cases, at least in the ones where \(\mathcal Y\) consists of %spatial positions or 
 points in a metric space. On the other hand the choice of \(f\) is crucial since it determines the structure and strength of the repulsion.
+Similar approaches for the modelling of the diversity feature vector have been taken in \cite{leeindividualness} and \cite{kulesza2010structured}.
 \end{emp}
-
 %\begin{emp}[Transitivity of repulsion]
 %One last property of DPPs that we shall mention is the fact that the negative correlations of the DPP posses a transient property in the sense, that if \(i\) and \(j\) and \(j\) and \(k\) are %similar, then \(i\) and \(k\) are also similar. This is due to the fact
 %\[\left\lVert \phi_i - \phi_j \right\rVert^2 = \left\lVert \phi_i \right\rVert^2 + \left\lVert \phi_j \right\rVert^2 - 2\phi_i^T\phi_j = 2(1-\phi_i^T\phi_j)\]

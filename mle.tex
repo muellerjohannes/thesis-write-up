@@ -145,7 +145,7 @@ and will only consider quality vectors \(q\in\mathbb R_+^N\) that have this form
 \[\mathcal F = \left\{ f(\cdot| \theta) \;\big\lvert\; \theta\in\mathbb R^M\right\}\]
 where \(f(\cdot| \theta)\) is the density of the DPP with similarity kernel \(\hat S\) and qualities \(q_i = \exp\left(\frac12 \theta^T f_i\right)\). Further we will consider the maximum likelihood estimator
 \[\hat{\theta}_n\coloneqq \underset{\theta\in\mathbb R^M}{\arg\max}\, \mathcal L(\theta) \]
-where we regard \(\mathcal L\) again as function of \(\theta\).
+where we regard \(\mathcal L\) again as function of \(\theta\). Further we will assume that the feature vectors \(f_i\) span the whole space \(\mathbb R^M\) because otherwise we can simple work with the projections of the parameter \(\theta\) onto the span of the feature vectors and obtain an equivalent model.
 \end{emp}
 
 \begin{rem}
@@ -238,10 +238,10 @@ Note that since \(\Psi\) is continuous and therefore bounded on bounded sets and
 
 \subsubsection*{The log linear model}
 
-We have seen that the log linear model can provide a parametrisation of the whole space \((0, \infty)^N\) of possible qualities. However it can also be very ristrictive, for example if all feature vectors are trivial, i.e. \(f_i = 0\) for all items \(i\). Hence we need to convince ourselves that we do not loose too much information through the transformation %a way to determine whether the transformation
-\[F\colon\mathbb R^M \to (0, \infty)^N, \quad \theta\mapsto \big(\exp(\theta^Tf_1), \dots, \exp(\theta^Tf_N)\big)^T.\]
+%We have seen that the log linear model can provide a parametrisation of the whole space \((0, \infty)^N\) of possible qualities. However it can also be very ristrictive, for example if all feature vectors are trivial, i.e. \(f_i = 0\) for all items \(i\). Hence we need to convince ourselves that we do not loose too much information through the transformation %a way to determine whether the transformation
+%\[F\colon\mathbb R^M \to (0, \infty)^N, \quad \theta\mapsto \big(\exp(\theta^Tf_1), \dots, \exp(\theta^Tf_N)\big)^T.\]
 %loses enough information for the MLE to exist.
-In order to do this, let \(U\subseteq\mathbb R^M\) be the span of \(f_1, \dots, f_N\) and let write \(\theta = \theta_1 + \theta_2\) such that \(\theta_1\in U\) and \(\theta_2\in U^\perp\). We note that \(F(\theta) = F(\tilde\theta)\) if and only if \(\theta_1 = \tilde\theta_1\).
+%In order to do this, let \(U\subseteq\mathbb R^M\) be the span of \(f_1, \dots, f_N\) and let write \(\theta = \theta_1 + \theta_2\) such that \(\theta_1\in U\) and \(\theta_2\in U^\perp\). We note that \(F(\theta) = F(\tilde\theta)\) if and only if \(\theta_1 = \tilde\theta_1\).
 
 %\todo{show that coercivity and identifiability is the same!}
 %\begin{emp}[Coercivity of the log linear model]
@@ -252,13 +252,15 @@ In order to do this, let \(U\subseteq\mathbb R^M\) be the span of \(f_1, \dots, 
 %\end{emp}
 
 %In the proof of following result we see how the coercivity is exactly the property that allows us to adapt the prove of existence of the MLE we have used before.
+We proceed just like before.
 
 \begin{prop}[Coercivity and existence of MLE]
 Assume that \(\mathbf Y_1, \mathbf Y_2, \dots\) is a sequence of independent and identically distributed point processes that are distributed according to a \(L\)-ensemble with strictly positive qualities. Then we have
 \[\mathbb P\left(\hat \theta_n\in\mathbb R^M \text{ exists}\right) \ge \mathbb P\Big(\mathcal L \text{ is coercive as a function on } U \Big) \xlongrightarrow{n\to\infty} 1.\]
 \end{prop}
 \begin{proof}
-First we note, that it suffices to show that \(\mathcal L\) has a maximiser on \(U\), since \(F(U) = F(\mathbb R^M)\). To do this we show -- just like in the previous cases -- that the \(\mathcal L\) is coercive on \(U\) whenever we have observed the emptyset as well as every item at least once. Let now \((\theta^k)_{k\in\mathbb N}\subseteq U\) be a sequence such that \(\lvert \theta^k \rvert\to\infty\). Then there is at least one index \(i\in\left\{ 1, \dots, N\right\}\) and a subsequence \((\theta^l)_{l\in\mathbb N}\) such that 
+%First we note, that it suffices to show that \(\mathcal L\) has a maximiser on \(U\), since \(F(U) = F(\mathbb R^M)\).
+Again we show that \(\mathcal L\) is coercive on \(\mathbb R^M\) whenever we have observed the emptyset as well as every item at least once. Let now \((\theta^k)_{k\in\mathbb N}\subseteq U\) be a sequence such that \(\lvert \theta^k \rvert\to\infty\). Then there is at least one index \(i\in\left\{ 1, \dots, N\right\}\) and a subsequence \((\theta^l)_{l\in\mathbb N}\) such that 
 \[f_i^T\theta^l\to\infty\quad \text{or } f_i^T\theta^l\to-\infty \quad \text{for } l\to\infty\]
 since otherwise all sequences \(\big(f_i^T\theta^l\big)\)  therefore also \((\theta^l)\) would be bounded. However this is equivalent to
 \[\exp(f_i^T\theta^l)\to\infty\quad \text{or } \exp(f_i^T\theta^l)\to0 \quad \text{for } l\to\infty\]
@@ -567,9 +569,10 @@ Now we have all the auxiliary results to prove the desired consistency result.
 \item The maximum likelihood estimator \(\hat{L}_n\) for the elementary kernel is consistent. Namely if the observations \((\mathbf Y_n)\) follow the law of a \(L\)-ensemble with kernel \(L_0\), then we have
 \[\mathbb P\left( d(\hat L_n, L_0) \le \varepsilon\right) \xlongrightarrow{n\to\infty} 1 \quad \text{for all }\varepsilon>0.\]
 \item The maximum likelihood estimator \(\hat{q}_n\) for the quality vector is consistent. Namely if the observations \((\mathbf Y_n)\) follow the law of a \(L\)-ensemble with kernel \(\Psi(p_0, \hat S)\), then we have
-\[\mathbb P\left( \left\lVert \hat q_n - q_0 \right\rVert \le \varepsilon\right) \xlongrightarrow{n\to\infty} 1\quad \text{for all }\varepsilon>0.\]
-\item Suppose that the observations \((\mathbf Y_n)\) follow the law of a \(L\)-ensemble with kernel \(\Psi(p_0, \hat S)\) where \((p_0)_i = \exp(\theta^Tf_i)\) and let \(P\) denote the projection onto the subspace \(U\). Then we have
-\[\mathbb P\left( \big\lVert P\hat \theta_n - P\theta_0 \big\rVert \le \varepsilon\right) \xlongrightarrow{n\to\infty} 1\quad \text{for all }\varepsilon>0.\]
+\[\mathbb P\Big( \big\lVert \hat q_n - q_0 \big\rVert \le \varepsilon\Big) \xlongrightarrow{n\to\infty} 1\quad \text{for all }\varepsilon>0.\]
+\item Suppose that the observations \((\mathbf Y_n)\) follow the law of a \(L\)-ensemble with kernel \(\Psi(p_0, \hat S)\) where \((p_0)_i = \exp(\theta^Tf_i)\). % and let \(P\) denote the projection onto the subspace \(U\).
+Then we have
+\[\mathbb P\left( \big\lVert\hat \theta_n - \theta_0 \big\rVert \le \varepsilon\right) \xlongrightarrow{n\to\infty} 1\quad \text{for all }\varepsilon>0.\]
 \end{enumerate}
 \end{theo}
 \begin{proof}
@@ -627,7 +630,7 @@ We note that this is smooth function and and that its gradient can be expressed 
 % \todo{Explain why it is non convex}{ } 
 To see that the log linear likelihood function is not concave, we may consider the span \(\left\{ q I\mid q\in\mathbb R\right\}\) of the identity matrix. On this subspace \(\mathcal L\) takes the form
 \[\mathcal L(q I) = \sum\limits_{i = 1}^n \log(q^{\left\lvert Y_i \right\rvert}) - n \log((1 + q)^N) = \sum\limits_{i = 1}^n \left\lvert Y_i \right\rvert \log(q) - n N \log(1 + q) \] %= \log(q) \cdot \left( \sum\limits_{i = 1}^n \left\lvert Y_i \right\rvert - n\cdot N\right)\]
-which is not concave in general. Unfortunately there are no algorithms that can approximate the global maximum of a concave function \todo{cite} and it also has been conjecture in \cite{kulesza2012learning} that no such algorithm exists for the log likelihood of the elementary kernel. Nevertheless one can still use optimisation techniques to obtain local maximisers of the log likelihood and indeed \cite{mariet2015fixed} uses a fixed point iteration to do this.
+which is not concave in general. Unfortunately there are no algorithms that can approximate the global maximum of a non concave function \cite{vavasis1991nonlinear} and it also has been conjecture in \cite{kulesza2012learning} that no such algorithm exists for the log likelihood of the elementary kernel. Nevertheless one can still use optimisation techniques to obtain local maximisers of the log likelihood and indeed \cite{mariet2015fixed} proposes a fixed point iteration to do this.
 
 In fact the non concavity can be seen even without computing anything. In fact if we have a maximiser \(L\) of the log likelihood function and take any other matrix \(\tilde L\) that is determinantally equivalent, then obviously the log likelihood of the two kernels agree. Hence we can never expect to get a unique maximiser of the log likelihood function. Hence a direct maximisation is a slightly missleading approach and it could be more sensible to work with equivalence classes of kernels that have the same principle minors that appear in \eqref{loglikagain}. However it is not clear how this quotient space would look like and what structural properties it has, let alone whether one can efficiently maximise a function over it.
 \todo{does this make any sense at all?}
@@ -705,7 +708,7 @@ that the whole expression %the log likelihood function
 Under the log linear model for the qualities, the log likelihood function is concave in the log linearity parameter \(\theta\in\mathbb R^M\). % In particular critical points are global maximisers and the 
 \end{cor}
 
-This result together with the coercivity -- which holds with probability tending to one -- ensures that the MLE for the log linearity constant of the quality can be efficiently computed. Further such optimisation algorithms are pre-implemented in most major programming languages and software environments like Mathematica, MATLAB and R. For theoretical guarantees and algorithmic details of those methods we refer once again to \cite{boyd2004convex}. \todo{show expression of the gradient}
+This result together with the coercivity -- which holds with probability tending to one -- ensures that the MLE for the log linearity constant of the quality can be efficiently computed. Further such optimisation algorithms are pre-implemented in most major programming languages and software environments like Mathematica, MATLAB and R. For theoretical guarantees and algorithmic details of those methods we refer once again to \cite{boyd2004convex}. %\todo{show expression of the gradient}
 
 Although being easily available, those methods have the drawback that they need to approximate the gradient of the log likelihood function. However the gradient can be expressed analytically by differentiating \eqref{logliklogmodagain}
 \begin{equation*}

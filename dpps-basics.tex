@@ -40,10 +40,12 @@ Note that Poisson point processes are exactly the DPPs without correlations of t
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.44\textwidth]{DPP-in-square-2}
-	\includegraphics[width=0.44\textwidth]{Poisson-in-square-2}
+	%\includegraphics[width=0.44\textwidth]{DPP-in-square-2}
+	%\includegraphics[width=0.44\textwidth]{Poisson-in-square-2}
+	\includegraphics[width=0.444\textwidth]{DPP-in-square-large-3}
+	\includegraphics[width=0.44\textwidth]{Poisson-in-square-large-2}
 %	\tag{1}
-	\caption{A DPP with negative correlations of close points on a \(40\times40\) grid in the unit square on the left and a Poisson point process on the same grid on the right with the same expected cardinality. The -- in this case spatially -- repellent structure of the DPP is clearly visible.}
+	\caption{A DPP with negative correlations of close points on a \(100\times100\) grid in the unit square on the left and a Poisson point process on the same grid on the right with the same expected cardinality. The -- in this case spatially -- repellent structure of the DPP is clearly visible.}
 	\label{fig:1}
 \end{figure}
 
@@ -691,21 +693,30 @@ This example is very closely related to the previous one, although we will only 
 This time we want to built a DPP in a two dimensional square \([0,1]^2\) or at least a discrete approximation of it. This might be used to model positions of trees that repel themselves due to a competition for natural resources\todo{cite}, positions of mast in telecommunication networks or the positions people choose for a picnic in a park.
 
 In order to do this we follow a very similar approach than in the case of one dimensional DPPs. Hence we set
-\[\mathcal Y \coloneqq 39^{-1} \left\{ 0, \dots, 39\right\}^2 \]%\left\{ (i, j) \mid 39\cdot  \right\} \]
-and obtain a \(40\times 40\) grid in the unit square. We again choose \(\mathcal R \coloneqq \mathcal Y \) and \(f\) to be the normal density with mean \(0\) and variance \(\sigma>0\). Then we choose the similarity feature vectors to be 
+\[\mathcal Y \coloneqq 99^{-1} \left\{ 0, \dots, 99\right\}^2 \]%\left\{ (i, j) \mid 39\cdot  \right\} \]
+and obtain a \(100\times 100\) grid in the unit square. We again choose \(\mathcal R \coloneqq \mathcal Y \) and \(f\) to be the normal density with mean \(0\) and variance \(\sigma>0\). Then we choose the similarity feature vectors to be 
 \[(\phi_i)_j\propto f(\left\lVert i - j \right\rVert) \quad \text{for } i, j\in\mathcal Y.\]
 where \(\left\lVert \cdot \right\rVert\) is the Euclidean norm. We propose constant qualities just like before and scale them and also the parameter in such a way that we get a reasonable cardinality and also a notable repulsion of the DPP. %This is done by trial and error.
 The resulting samples are depicted in Figure \ref{pointsinthesqure}.
 \begin{figure}[h!]\label{pointsinthesqure}
 	\centering
-	\includegraphics[width=0.44\textwidth]{DPP-in-square-2}
-	\includegraphics[width=0.44\textwidth]{Poisson-in-square-2}
+	\includegraphics[width=0.444\textwidth]{DPP-in-square-large-3}
+	\includegraphics[width=0.44\textwidth]{Poisson-in-square-large-2}
 	\caption{A DPP with negative correlations of close points on a \(40\times40\) grid in the unit square on the left and a Poisson point process on the same grid on the right with the same expected cardinality. The -- in this case spatially -- repellent structure of the DPP is clearly visible.}
 \end{figure}
 
-It should be noted at this stage, that the simulation of the DPP can still be performed in relatively short time, even without making use the dual sampling or the dimension reduction. In fact one sample could be produced on a six year old MacBook air with only one processor in a few seconds. This is actually quite astonishing given that the DPP is a discrete probability distribution over \(2^{1600} \approx 10^{480}\) elements. This is roughly the estimated number of particles in the universe to the power of 8.
+It should be noted at this stage, that the simulation of the DPP can still be performed in relatively short time, even without making use the dual sampling or the dimension reduction. In fact one sample could be produced on a six year old MacBook air with only one processor in about two minutes. This is actually quite astonishing given that the DPP is a discrete probability distribution over \(2^{10^4} \approx 10^{3000}\) elements. This is roughly the estimated number of particles in the universe to the power of 37.
 
-\vfill
+Let us assume now that we some reason to believe that the qualities of the individual points on the grid are not equal. Maybe there might be a road just around the park and hence people prefer to sit in the middle of the park and we can implement this into our model by letting the qualities of the items decrease depending on their distance to the centre \(m \coloneqq(0.5, 0.5)\) of the grid. More precisely we choose
+\[q_i\coloneqq a \cdot \exp\big(-b \left\lVert i - m \right\rVert\big) \]
+where \(a, b>0\) are scaled such that the decrease of quality is visible but not too strong and that a reasonable cardinality of the DPP is obtained. The results for this can be seen in Figure \ref{pointsinthesqurelog}
+\begin{figure}[h!]\label{pointsinthesqurelog}
+	\centering
+	\includegraphics[width=0.60\textwidth]{DPP-in-square-2}
+	\caption{A DPP with negative correlations of close points on a \(40\times40\) grid in the unit square on the left and a Poisson point process on the same grid on the right with the same expected cardinality. The -- in this case spatially -- repellent structure of the DPP is clearly visible.}
+\end{figure}
+
+\clearpage
 %one core \(1.8\si{Ghz}\) Intel i5 MacBook Air in around \(\si{s}\). 
 
 %\section{Calculations}

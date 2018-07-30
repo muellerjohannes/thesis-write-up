@@ -72,7 +72,7 @@ This implies
 
 Assume again that we have a set of observations \((\mathbf Y_n)_{n\in\mathbb N}\subseteq\mathcal Y\) drawn independently and according to the DPP. This time we want to find the maximum likelihood estimator for the elementary kernel and in order to do this we need to be able to express the density of the DPP which is nothing but the values of the elementary probabilities. Thus we will assume that we are dealing with \(L\)-ensembles in this section. Since the observations \((\mathbf Y_n)\) are defined on some common probability space which we will denote by \((\Omega, \mathbb P)\) we will change the notation in this section and write
 \[%f(A, L) \quad \text{or } 
-f(A| \theta) \propto \det(L(\theta)_A) \]
+f(A| \theta) = \frac{\det(L(\theta)_A)}{\det(L(\theta) + I)} \]
 for the elementary probabilities of the DPP that arises from the parameter \(\theta\). Note that the elementary probabilities are nothing than the density with respect to the counting measure. We will now present the maximum likelihood estimators for different parametric classes, i.e. different families \(\mathcal F\) of DPPs.
 
 \subsubsection*{MLE of the elementary kernel \(L\)}
@@ -81,8 +81,8 @@ The most intuitive parameter that one can estimate is the elementary kernel \(L\
 
 \begin{emp}[Maximum likelihood estimator for \(L\)]
 We consider the parameter space \(\Theta = \mathbb R^{N\times N}_{\text{sym}, +}\) of positive definite symmetric matrices and the parametric family 
-\[\mathcal F = \Big\{ f(\cdot, L) \;\big\lvert\; L\in \mathbb R^{N\times N}_{\text{sym}, +}\Big\}\]
-where \(f(A, L)\propto \det(L_A)\) is the elementary probability of DPP with elementary kernel \(L\). We seek to find the MLE 
+\[\mathcal F = \Big\{ f(\cdot| L) \;\big\lvert\; L\in \mathbb R^{N\times N}_{\text{sym}, +}\Big\}\]
+where \(f(A| L)\propto \det(L_A)\) is the elementary probability of DPP with elementary kernel \(L\). We seek to find the MLE 
 \[\hat L_n \coloneqq \underset{L\in\mathbb R^{N\times N}_{\text{sym}, +}}{\arg\max}\, \mathcal L(L). \]
 %for the elementary kernel \(L\) in the set \(\mathbb R^{N\times N}_{\text{sym}, +}\) of all symmetric and positive semidefinite \(N\times N\) matrices.
 The log likelihood function is now given by
@@ -149,7 +149,7 @@ where we regard \(\mathcal L\) again as function of \(\theta\).
 \end{emp}
 
 \begin{rem}
-It shall be noted that although this log linear model seems to be a harsh restriction, it isn’t a restriction at all, at least theoretically. If we take \(M=N\) and choose \(f_i\) to be the unit vectors in \(\mathbb R^N\), then this just a logarithmic transformation of the parameters and thus the maximal likelihood that can be achieved with this model does not change. In practice however it will be of interest to work with rather low dimensional parameters \(\theta\), because if the ground set \(\mathcal Y\) gets large, optimisation in \(\mathcal R^N\) can be inefficient. In this case of course the maximal likelihood under the optimal parameter may decrease. However the approximation of the optimal parameter might become possible again which justifies this sacrifice.
+It shall be noted that although this log linear model seems to be a harsh restriction, it isn’t a restriction at all, at least theoretically. If we take \(M=N\) and choose \(f_i\) to be the unit vectors in \(\mathbb R^N\), then this just a logarithmic transformation of the parameters and thus the maximal likelihood that can be achieved with this model does not change. In practice however it will be of interest to work with rather low dimensional parameters \(\theta\), because if the ground set \(\mathcal Y\) gets large, optimisation in \(\mathbb R^N\) can be inefficient. In this case of course the maximal likelihood under the optimal parameter may decrease. However the approximation of the optimal parameter might become possible again which justifies this sacrifice.
 \end{rem}
 
 Under the assumption of a log linear model for the qualities the individual terms of the log likelihood function take the form
@@ -705,7 +705,7 @@ that the whole expression %the log likelihood function
 Under the log linear model for the qualities, the log likelihood function is concave in the log linearity parameter \(\theta\in\mathbb R^M\). % In particular critical points are global maximisers and the 
 \end{cor}
 
-This result together with the coercivity -- which holds with probability tending to one -- ensures that the MLE for the log linearity constant of the quality can be efficiently computed. Further such optimisation algorithms are pre-implemented in most major programming languages and software environments like Mathematica, MATLAB and R. For theoretical guarantees and algorithmic detail of those methods we refer once again to \cite{boyd2004convex}.
+This result together with the coercivity -- which holds with probability tending to one -- ensures that the MLE for the log linearity constant of the quality can be efficiently computed. Further such optimisation algorithms are pre-implemented in most major programming languages and software environments like Mathematica, MATLAB and R. For theoretical guarantees and algorithmic details of those methods we refer once again to \cite{boyd2004convex}. \todo{show expression of the gradient}
 
 % Before we discuss the actual process of maximisation of the log likelihood function we will be concered with the existence of maximisers and the consistency of the resulting estimators.
 

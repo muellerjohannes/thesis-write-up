@@ -707,6 +707,23 @@ Under the log linear model for the qualities, the log likelihood function is con
 
 This result together with the coercivity -- which holds with probability tending to one -- ensures that the MLE for the log linearity constant of the quality can be efficiently computed. Further such optimisation algorithms are pre-implemented in most major programming languages and software environments like Mathematica, MATLAB and R. For theoretical guarantees and algorithmic details of those methods we refer once again to \cite{boyd2004convex}. \todo{show expression of the gradient}
 
+Although being easily available, those methods have the drawback that they need to approximate the gradient of the log likelihood function. However the gradient can be expressed analytically by differentiating \eqref{logliklogmodagain}
+\begin{equation*}
+\begin{split}
+& 2\cdot\sum\limits_{i\in Y}f_{i} - 2\cdot \frac{ \sum_{A\subseteq\mathcal Y} \exp\left(2\cdot \theta^T\sum_{i\in A}f_{i}\right)  \sum_{i\in A}f_{i} \det(\hat{S}_A)}{ \sum_{A\subseteq\mathcal Y} \exp\left(2\cdot \theta^T\sum_{i\in A}f_{i}\right)\det(\hat{S}_A)} \\
+= & \; 2\cdot\sum\limits_{i\in Y}f_{i} - 2\cdot\sum_{A\subseteq\mathcal Y} f(A|\theta) \sum_{i\in A}f_{i} \\
+= & \; 2\cdot\sum\limits_{i\in Y}f_{i} - 2\cdot\sum_{i\in \mathcal Y} f_i \sum_{A\supseteq \left\{ i\right\}}f(A|\theta) \\
+= & \; 2\cdot\sum\limits_{i\in Y}f_{i} - 2\cdot\sum_{i\in \mathcal Y} f_i K(\theta)_{ii}.  % \frac{ \sum_{A\subseteq\mathcal Y} \exp\left(2\cdot \theta^T\sum_{i\in A}f_{i}\right) \sum_{i\in A}f_{i} \det(\hat{S}_A)}{ \sum_{A\subseteq\mathcal Y} \exp\left(2\cdot \theta^T\sum_{i\in A}f_{i}\right)\det(\hat{S}_A)}
+%2f_Y - \frac{\sum_{A\subseteq\mathcal Y} f_A L_A(\theta)  }{\sum_{A\subseteq\mathcal Y} L_A(\theta)} & = -f_Y + \sum_{A\subseteq\mathcal Y} f_A \mathbb P_\theta(A) \\
+%& =  -f_Y + \sum_{i\in\mathcal Y}f_i \sum_{i\in A\subseteq \mathcal Y(X)} \mathbb P_\theta(A) \\
+%& =  -f_Y + \sum_{i\in\mathcal Y}f_i \mathbb P_\theta(i\in\mathbf Y) \\
+%& = -f_Y + \sum_{i\in\mathcal Y}f_i K_{ii}(\theta).
+\end{split}
+\end{equation*}
+%Note that the last sum is just the marginal property of \(i\) and hence equal to \(K(\theta)_{ii}\) 
+where \(K(\theta)\) is the marginal kernel arising from the parameter \(\theta\). This expression can be used to speed up the gradient descent method if implemented by hand.
+ %it shall be noted that the gradient can be expressed 
+
 % Before we discuss the actual process of maximisation of the log likelihood function we will be concered with the existence of maximisers and the consistency of the resulting estimators.
 
 % \begin{emp}[Existence of maximisers]

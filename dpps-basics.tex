@@ -698,11 +698,15 @@ where \(\left\lVert \cdot \right\rVert\) is the Euclidean norm. We propose const
 The resulting samples are depicted in Figure \ref{pointsinthesqure}.
 \begin{figure}[h!]\label{pointsinthesqure}
 	\centering
-	%\includegraphics[width=0.60\textwidth]{comparison-DPPs-Poisson-2}
-%	\includegraphics[width=0.49\textwidth]{Poisson-in-square}
-%	\tag{1}
+	\includegraphics[width=0.44\textwidth]{DPP-in-square-2}
+	\includegraphics[width=0.44\textwidth]{Poisson-in-square-2}
 	\caption{A DPP with negative correlations of close points on a \(40\times40\) grid in the unit square on the left and a Poisson point process on the same grid on the right with the same expected cardinality. The -- in this case spatially -- repellent structure of the DPP is clearly visible.}
 \end{figure}
+
+It should be noted at this stage, that the simulation of the DPP can still be performed in relatively short time, even without making use the dual sampling or the dimension reduction. In fact one sample could be produced on a six year old MacBook air with only one processor in a few seconds. This is actually quite astonishing given that the DPP is a discrete probability distribution over \(2^{1600} \approx 10^{480}\) elements. This is roughly the estimated number of particles in the universe to the power of 8.
+
+\vfill
+%one core \(1.8\si{Ghz}\) Intel i5 MacBook Air in around \(\si{s}\). 
 
 %\section{Calculations}
 

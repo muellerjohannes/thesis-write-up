@@ -247,26 +247,92 @@ In this section we will focus on the efficient simulation of DPPs and give a sho
 
 But before we can do this we will present a famous identity for integrals -- or sums -- of the product of determinants.
 
-\subsubsection*{Two Cauchy-Binet type identities}
+\subsection{Cauchy-Binet type identities}
 
-The result we present is a little technical, but we will need it later in the proof of existence and also in the proof of the sampling algorithm, so we will give the proof of it here, although it should be mentioned that all the major ideas can be found in \cite{hough2006determinantal}. In this section write \([n]\) for the set \(\left\{ 1, \dots, n\right\}\) where \(n\) is a natural number and \(A_{IJ}\) for the submatrix of \(A\) where the first index is in \(I\) and the second one in \(J\). Further we keep the notation \(A_I = A_{II}\).
+First we state a general form of the famous Cauchy-Binet identity and will then derive the version for matrices afterwards. For some part we will adapt ideas from \cite{rezakhanlou2012lectures}.
+
+\begin{prop}[Cauchy-Binet]
+Let \((\mathcal X, \mu)\) be a measure space and let \(\phi_i, \psi_i\in L^2(\mu)\) be square integrable functions for \(i = 1, \dots, n\). Then we have
+\begin{equation*}
+\begin{split}
+\frac1{n!} \int\limits_{\mathcal X^n} & \det\left( \phi_i(x_j)\right)_{1\le i, j\le n}\det\left( \psi_i(x_j)\right)_{1\le i, j\le n} \mu(\mathrm dx_1)\cdot \ldots\cdot \mu(\mathrm dx_n) \\
+ & = \det\left( \int_{\mathcal X} \phi_i(x)\psi_j(x)\mu(\mathrm dx)\right)_{1\le i, j\le n}.
+\end{split}
+\end{equation*}
+\end{prop}
+\begin{proof}
+We use the Leibniz formula to express the determinants in terms of permutations. This yields
+\begin{equation*}
+\begin{split}
+& \int\limits_{\mathcal X^n} \det\left( \phi_i(x_j)\right)_{1\le i, j\le n}\det\left( \psi_i(x_j)\right)_{1\le i, j\le n} \mu(\mathrm dx_1)\cdot\ldots\cdot\mu(\mathrm dx_n) \\
+= & \; \int\limits_{\mathcal X^n} \sum_{\sigma, \tau\in S_n} \operatorname{sgn}(\sigma)\operatorname{sgn}(\tau) \prod_{i=1}^n \phi_i(x_{\sigma(i)})\psi_i(x_{\tau(i)}) \mu(\mathrm dx_1)\cdot\ldots\cdot\mu(\mathrm dx_n) \\
+= & \; \int\limits_{\mathcal X^n} \sum_{\sigma, \tau\in S_n} \operatorname{sgn}(\sigma)\operatorname{sgn}(\tau) \prod_{i=1}^n \phi_i(x_{\sigma(i)})\psi_{\tau^{-1}(\sigma(i))}(x_{\sigma(i)}) \mu(\mathrm dx_1)\cdot\ldots\cdot\mu(\mathrm dx_n) \\
+= & \; \sum_{\sigma, \tau\in S_n} \operatorname{sgn}\big(\tau^{-1} \circ\sigma\big) \prod_{i=1}^n \int\limits_{\mathcal X} \phi_i(x) \psi_{\tau^{-1}(\sigma(i))}(x)\mu(\mathrm dx) \\
+= & \; n! \sum_{\rho\in S_n} \prod_{i=1}^n \int\limits_{\mathcal X} \phi_i(x) \psi_{\rho(i)}(x)\mu(\mathrm dx) \\
+= & \; n!\det\left( \int_{\mathcal X} \phi_i(x)\psi_j(x)\mu(\mathrm dx)\right)_{1\le i, j\le n}.
+\end{split}
+\end{equation*}
+In the calculation we have used that the sign function is a group homomorphism from the permutation group to \(\left\{ \pm1\right\}\) and thus
+\[\operatorname{sgn}(\tau^{-1}\circ\sigma) = \operatorname{sgn}(\tau)^{-1} \operatorname{sgn}(\sigma) = \operatorname{sgn}(\sigma)\operatorname{sgn}(\tau). \]
+Further the second to last step is valid since for \(\rho\in S_n\) exactly \(n!\) pairs of permutations \((\sigma, \tau)\) satisfy \(\tau^{-1}\circ\sigma = \rho\).
+\end{proof}
+
+%The result we present is a little technical, but we will need it later in the proof of existence and also in the proof of the sampling algorithm, so we will give the proof of it here, although it should be mentioned that all the major ideas can be found in \cite{hough2006determinantal}.
+Now we present a discrete analogon of the Cauchy-Binet identity which will be of great use later. We write \([n]\) for the set \(\left\{ 1, \dots, n\right\}\) where \(n\) is a natural number and \(A_{IJ}\) for the submatrix of \(A\) where the first index is in \(I\) and the second one in \(J\). Further we keep the notation \(A_I = A_{II}\).
 
 %Let \([n]\coloneqq \left\{ 1, \dots, n\right\}\) further for \(I\subseteq\left\{ 1, \dots, m\right\}\) and \(J\subseteq\left\{ 1, \dots, n\right\}\) let \(A_{IJ}\) be the submatrix of \(A\) with indices in \(I\) and \(J\).
 
-\begin{prop}[Cauchy-Binet]
+\begin{prop}[Cauchy-Binet for matrices]
 Let \(m, n \in\mathbb N, m\le n\) be two natural numbers and \(A\in\mathbb R^{m\times n}, B\in\mathbb R^{n\times m}\) two matrices.  Then we have
-\[\det(AB) = \sum_{\begin{subarray}{c} I\subseteq\left\{ 1, \dots, n\right\} \\ \left\lvert I \right\rvert = m \end{subarray}} \det\left(A_{[m]I}\right) \det\left(B_{I[m]}\right). \]
+\[\det(AB) = \sum_{\begin{subarray}{c} I\subseteq[n] \\ \left\lvert I \right\rvert = m \end{subarray}} \det\left(A_{[m]I}\right) \det\left(B_{I[m]}\right). \]
 \end{prop}
 \begin{proof}
-Let without loss of generality \(A\) and \(B\) have full rank, otherwise both sides are zero. First we note that both sides are multilinear in the rows of \(A\) and columns of \(B\). Hence we can assume by Gaussian row, respectively column elimination that each row of \(A\) and each column of \(B\) has exactly one non zero entry which is \(1\)\todo{really?}.
-Hence there is \(J_1 = \left\{ i_1, \dots, i_m\right\}\) and \(J_2 = \left\{ j_1, \dots, j_m\right\}\) such that \(A_{ki_k} = 1\) and \(B_{kj_k} = 1\) and all other entries are empty. 
-Note that the right hand side is only non trivial if \(I = J_1\) and \(I = J_2\). If \(J_1\ne J_2\) then this case does not occur in the sum, but then at least one row of \(AB\) consists of zeroes and hence also the left hand side is equal to \(0\). If however \(J=J_1=J_2\) we get
-\[\det\left(A_{[m]J}\right) \det\left(B_{J[m]}\right) = \det\left( A_{[m]J}B_{J[m]}\right) = \det(AB) \]
-since \(A_{ij} = B_{ji} = 0\) whenever \(j\notin J\).
+The assertion follows from the general Cauchy-Binet identity by setting using the counting measure on \([m]\) since the right hand side is equal to%. Note that the factor \(m!\) appears  out since the right hand side is equal to
+\[ \frac1{m!}\sum_{i_1, \dots, i_m\in[n]} \det\left(A_{ki_l}\right)_{1\le k, l\le m} \det\left(B_{i_kl}\right)_{1\le k, l\le m} \]
+where we used that the determinants vanish if two indices \(i_k\) and \(i_l\) agree for \(k\ne l\).
+ %there are \(m!\) ways how the index sets of length \(m\) can be arranged.
+%Let without loss of generality \(A\) and \(B\) have full rank, otherwise both sides are zero. First we note that both sides are multilinear in the rows of \(A\) and columns of \(B\). Hence we can assume by Gaussian row, respectively column elimination that each row of \(A\) and each column of \(B\) has exactly one non zero entry which is \(1\)\todo{really?}.
+%Hence there is \(J_1 = \left\{ i_1, \dots, i_m\right\}\) and \(J_2 = \left\{ j_1, \dots, j_m\right\}\) such that \(A_{ki_k} = 1\) and \(B_{kj_k} = 1\) and all other entries are empty. 
+%Note that the right hand side is only non trivial if \(I = J_1\) and \(I = J_2\). If \(J_1\ne J_2\) then this case does not occur in the sum, but then at least one row of \(AB\) consists of zeroes and hence also the left hand side is equal to \(0\). If however \(J=J_1=J_2\) we get
+%\[\det\left(A_{[m]J}\right) \det\left(B_{J[m]}\right) = \det\left( A_{[m]J}B_{J[m]}\right) = \det(AB) \]
+%since \(A_{ij} = B_{ji} = 0\) whenever \(j\notin J\).
 \end{proof}
 
+
+\begin{prop}[Marginalisation]
+Let \((\mathcal X, \mu)\) be a measure space and let \(\left\{ \phi_i\right\}_{i=1, \dots, n}\in L^2(\mu)\) be an orthonormal set. Let \(x_1, \dots, x_m\in\mathcal X\) for \(m<n\), then we have
+\begin{equation*}
+\begin{split}
+\frac{1}{(n-m)} \int\limits_{\mathcal X^m} & \det\left( \phi_i(x_j)\right)_{1\le i, j\le n}^2 \mu(\mathrm dx_{m+1})\cdot \ldots\cdot \mu(\mathrm dx_n) \\
+ & = \det\left( \sum_{k=1}^n \phi_k(x_i)\phi_k(x_j)\right)_{1\le i, j\le m}.
+\end{split}
+\end{equation*}
+\end{prop}
+\begin{proof}
+Just like in the proof of the Cauchy-Binet identity we begin by expressing the determinants through permutations and obtain
+\begin{equation*}
+\begin{split}
+& \int\limits_{\mathcal X^m} \det\left( \phi_i(x_j)\right)_{1\le i, j\le n}^2 \mu(\mathrm dx_{m+1})\cdot \ldots\cdot \mu(\mathrm dx_n) \\
+= & \sum_{\sigma, \tau\in S_n} \operatorname{sgn}(\sigma)\operatorname{sgn}(\tau) %\prod_{k=1}^m \phi_{\sigma(k)}(x_k) \phi_{\tau(k)}(x_k) 
+\int\limits_{\mathcal X^m} \prod_{k=1}^n \phi_{\sigma(k)}(x_k) \phi_{\tau(k)}(x_k) \mu(\mathrm dx_{m+1}) \cdot\ldots\cdot\mu(\mathrm dx_n). % \\
+%= & \sum_{\begin{subarray}{c} \sigma, \tau\in S_n \\ \sigma\sim\tau \end{subarra}} \operatorname{sgn}(\sigma)\operatorname{sgn}(\tau) \prod_{k=1}^m \phi_{\sigma(k)}(x_k) \phi_{\tau(k)}(x_k) 
+\end{split}
+\end{equation*}
+The multiple integrals over the product can be evaluated individually and hence the term above is only non trivial if we have \(\sigma(k) = \tau(k)\) for \(k=m+1, \dots, n\) which we will denote by \(\sigma\sim\tau\). Hence we obtain
+\begin{equation*}
+\begin{split}
+& \sum_{\begin{subarray}{c} \sigma, \tau\in S_n \\ \sigma\sim\tau \end{subarray}} \operatorname{sgn}(\sigma)\operatorname{sgn}(\tau) \prod_{k=1}^m \phi_{\sigma(k)}(x_k) \phi_{\tau(k)}(x_k) \\
+= & (n-m)! \sum_{\begin{subarray}{c} J\subseteq[n] \\ \left\lvert J \right\rvert = m \end{subarray}} \det\left( \phi_{j_k}(x_l)\right)_{1\le k, l\le m}^2 \\
+= & (n-m)! \det\left( \sum_{k=1, \dots, n} \phi_k(x_i)\phi_k(x_j)\right)_{1\le k, l\le m}
+\end{split}
+\end{equation*}
+where we used Cauchy-Binet and the notation \(J = \left\{ j_1, \dots, j_m\right\}\).
+\end{proof}
+
+Just like in the case of the Cauchy-Binet identity we will give a discrete version of the previous result in which the normalisation factor does not appear.
+
 \begin{prop}[Variation of Cauchy-Binet]\label{CB-type}
-Let \(m \le n\) be two natural numbers and \(B\in\mathbb R^{n\times m}\) be a matrix such that the columns \(B_i\in\mathbb R^n\) of \(B\) form an orthonormal system. Further let \(I \subseteq[m]\), then we have
+Let \(m \le n\) be two natural numbers and \(B\in\mathbb R^{n\times m}\) be a matrix such that the rows of \(B\) form an orthonormal system. Further let \(I \subseteq[m]\), then we have
 \begin{equation*}
 \begin{split}
 %i_{r+1}, \dots, i_{p}=1
@@ -276,10 +342,51 @@ Let \(m \le n\) be two natural numbers and \(B\in\mathbb R^{n\times m}\) be a ma
 %where\(p\le m\).
 \end{prop}
 \begin{proof}
-This can be proved in analogue fashion to the result above. \todo{check this, I think the statement is slightly wrong...}
+At first we note that the right hand side is equal to
+\begin{equation}\label{CBP}
+ \frac1{(m-r)!} \cdot \sum_{i_{r+1}, \dots, i_m\in[n]} \det\left( B_{ki_l} \right)_{1\le k, l\le r}^2
+\end{equation}
+where we used that the determinant vanishes if two indices \(i_k\) and \(i_l\) agree for \(k\ne l\). Now the previous result completes the proof.
+%We begin just like in the proof of the Cauchy-Binet formula by
+%Now we express the determinants through permutations and obtain
+%\begin{equation}\label{CBP2}
+%\begin{split}
+%& \sum_{i_{r+1}, \dots, i_m\in[n]} \sum_{\sigma, \tau\in S_m} \operatorname{sgn}(\sigma)\operatorname{sgn}(\tau) \prod_{k=1}^m B_{ki_{\sigma(k)}} B_{ki_{\tau(k)}} \\
+%= & \sum_{\sigma, \tau\in S_m} \operatorname{sgn}(\sigma)\operatorname{sgn}(\tau) \prod_{k=1}^r B_{ki_{\sigma(k)}}B_{ki_{\tau(k)}} \prod_{k=r+1}^m \sum_{i\in[n]} B_{ki} B_{\tau^{-1}(\sigma(k))i}.
+%\end{split}
+%\end{equation}
+%Since the rows of \(B\) are orthogonal the last product one if \(\sigma(k) = \tau(k)\) for all \(k = r+1, \dots, m\) and zero otherwise, hence the sum simplifies to those pairs of permutations that agree on \(\left\{ r+1, \dots, m\right\}\). For those we write \(\sigma = \sigma_1\circ\sigma_2\) where \(\sigma_1\) is the restriction of \(\sigma\) to \(\left\{ 1, \dots, r\right\}\) and analogously \(\tau = \tau_1\circ\tau_2\). Since \(\sigma\) and \(\tau\) have to agree on \(\left\{ r+1, \dots, m\right\}\) we have \(\sigma_2=\tau_2\) and we have \((m-r)!\) possible choices for \(\sigma_2=\tau_2\) which eliminates the first factor in \eqref{CBP}. Further we get
+%\[\operatorname{sgn}(\sigma)\operatorname{sgn}(\tau) = \operatorname{sgn}(\sigma_1)\operatorname{sgn}(\tau_1)\]
+%and obtain that \eqref{CBP2} is equal to
+%\[ (m-r)!\sum_{\sigma_1, \tau_1\in S_m} \operatorname{sgn}(\sigma_1)\operatorname{sgn}(\tau_2) \prod_{k=1}^r B_{ki_{\sigma_1(k)}}B_{ki_{\tau_2(k)}}\]
+%where we only sum over those pairs \((\sigma_1, \tau_1)\) such that \(\sigma_1([r]) = \tau_1([r])\).
+
+%For \(J = \left\{ j_1, \dots, j_r\right\}\) let \(\mathcal J\) denote those permutations \(\sigma_1, \tau_1\) such that \(\sigma_1([r]) = \tau_1([r]) = J\). Further we will identify those %permutations \(\sigma_1, \tau_1\) with permutations \(\tilde\sigma, \tilde\tau\in S_r\) such that
+%\[\sigma_1(k) = j_{\tilde\sigma(k)} \quad \text{and } \tau_1(k) = j_{\tilde\tau(k)} \quad \text{for all } k\in[n]. \]
+%Note that we have
+%\[\operatorname{sgn}(\sigma_1)\operatorname{sgn}(\tau_1) = \operatorname{sgn}(\tilde\sigma)\operatorname{sgn}(\tilde\tau).\]
+%If we sum over all permutations \(\sigma_1, \tau_1\in\mathcal J\) we obtain
+%\begin{equation*}
+%\begin{split}
+%\sum_{\tilde\sigma, \tilde\tau\in S_r} \operatorname{sgn}(\tilde\sigma)\operatorname{sgn}(\tilde\tau) \prod_{k=1}^r B_{k j_{\tilde\sigma(k)}}B_{k j_{\tau(k)}} = \det\left( B_{kj_l}\right)_{1\le k, l\le r}^2.
+%\end{split}
+%\end{equation*}
+%Now the summation over \(J\) and application of Cauchy-Binet yields the assertion.
+
+
+%Hence we obtain
+%\[\sum_{\sigma, \tau} \operatorname{sgn}(\sigma)\operatorname{sgn}(\tau) \prod_{k=1}^r B_{ki_{\sigma(k)}}B_{ki_{\tau(k)}}\]
+%where the sum is taken about all pairs of bijective functions \(\sigma, \tau\colon[r]\to J(\sigma)\subseteq [m]\)\todo{comment on the sign!}. We can split this sum into according to the images \(J(\sigma) = \left\{ j_1, \dots, j_r\right\}\). Let us now fix \(J = \left\{ j_1, \dots, j_r\right\}\), then the sum over all \(\sigma\) with \(J(\sigma) = J\) takes the form
+%\begin{equation*}
+%\begin{split}
+%\sum_{\sigma, \tau\in S_r} \operatorname{sgn}(\sigma)\operatorname{sgn}(\tau) \prod_{k=1}^r B_{k j_{\sigma(k)}}B_{k j_{\tau(k)}} = \det\left( B_{kj_l}\right)_{1\le k, l\le r}^2.
+%\end{split}
+%\end{equation*}
+%Now the summation over \(J\) and application of Cauchy-Binet yields the assertion.
+%This can be proved in analogue fashion to the result above. \todo{check this, I think the statement is slightly wrong...}
 \end{proof}
 
-\subsubsection*{Sampling and Existence}
+\subsection{Sampling and Existence}
 
 We roughly follow the approaches taken in \cite{hough2006determinantal} and \cite{kulesza2012determinantal} and will start by showing that every determinantal point process can be seen as a mixture of a smaller class of determinantal point processes.%\todo{reference to the paper}
 

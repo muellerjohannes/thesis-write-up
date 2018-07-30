@@ -40,8 +40,8 @@ Note that Poisson point processes are exactly the DPPs without correlations of t
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.49\textwidth]{DPP-in-square}
-	\includegraphics[width=0.49\textwidth]{Poisson-in-square}
+	\includegraphics[width=0.44\textwidth]{DPP-in-square-2}
+	\includegraphics[width=0.44\textwidth]{Poisson-in-square-2}
 %	\tag{1}
 	\caption{A DPP with negative correlations of close points on a \(40\times40\) grid in the unit square on the left and a Poisson point process on the same grid on the right with the same expected cardinality. The -- in this case spatially -- repellent structure of the DPP is clearly visible.}
 	\label{fig:1}
@@ -661,11 +661,48 @@ We will shortly discuss two methods how the simulation of DPPs can be made more 
 
 \section{Toy examples}
 
+We will present two examples and although -- or maybe even because -- they are very basic in nature they show how the choice of different parameters in the modelling process affect the DPP. 
+
 \subsubsection{Points on a line}
+
+We start by defining and simulating from a one dimensional DPP. More precisely we consider the ground set \(\mathcal Y \coloneqq \left\{ 1, \dots, 100\right\}\). Further we model the diversity feature vectors like in \ref{moddiv} and define as a reference set the whole set itself \(\mathcal R\coloneqq\mathcal Y\). Now we choose \(f\) to be the normal density with mean \(0\) and variance \(10\), i.e. we have
+\[(\phi_i)_j\propto \exp\left( - \frac{(i-j)^2}{20}\right) \quad \text{for } i, j\in\mathcal Y.\]
+Finally we set the qualities to be constant and scale them so that the expected cardinality of the DPP is approximately \(15\). Further we define a Poisson point process with the same expected cardinality. This means the second point process includes every point independently with probability \(\frac{15}{100}\). A comparison of a sample from those point processes is depicted in Figure \ref{pointsonaline} and the -- in this case spatially -- repulsive structure of the DPP is apparent.
+\begin{figure}[h!]\label{pointsonaline}
+	\centering
+	\includegraphics[width=0.60\textwidth]{comparison-DPPs-Poisson-2}
+%	\includegraphics[width=0.49\textwidth]{Poisson-in-square}
+%	\tag{1}
+	\caption{A DPP and a Poisson point process on a (discretised) line with same expected cardinality. The spatial repulsion of the DPP is clearly visible.}
+\end{figure}
+
+\subsubsection*{Binary sequences}
+
+This example is very closely related to the previous one, although we will only consider a chain of 30 position, i.e. \(\mathcal Y \coloneqq \left\{ 1, \dots, 30\right\}\). We will define the DPP in the exact same way as above, but will scale the qualities such that the expected cardinality is \(15\). In complete analogue fashion we define a Poisson point process with same expected cardinality. This time we will represent the samples from the two point processes through a \(0-1\) sequence where a \(1\) at the \(i\)-th position indicates that item \(i\) was in the sample. We obtain the two following samples:
+\begin{equation*}
+\begin{split}
+& 1 0 1 0 0 1 0 1 1 0 1 0 0 0 1 0 1 0 0 1 0 1 0 1 0 1 0 0 1 1 \\
+& 1 1 1 1 1 1 1 0 1 0 1 0 0 0 0 1 1 0 1 0 0 0 1 1 0 1 0 0 1 1
+\end{split}
+\end{equation*}
 
 \subsubsection{Points in a square}
 
+This time we want to built a DPP in a two dimensional square \([0,1]^2\) or at least a discrete approximation of it. This might be used to model positions of trees that repel themselves due to a competition for natural resources\todo{cite}, positions of mast in telecommunication networks or the positions people choose for a picnic in a park.
 
+In order to do this we follow a very similar approach than in the case of one dimensional DPPs. Hence we set
+\[\mathcal Y \coloneqq 39^{-1} \left\{ 0, \dots, 39\right\}^2 \]%\left\{ (i, j) \mid 39\cdot  \right\} \]
+and obtain a \(40\times 40\) grid in the unit square. We again choose \(\mathcal R \coloneqq \mathcal Y \) and \(f\) to be the normal density with mean \(0\) and variance \(\sigma>0\). Then we choose the similarity feature vectors to be 
+\[(\phi_i)_j\propto f(\left\lVert i - j \right\rVert) \quad \text{for } i, j\in\mathcal Y.\]
+where \(\left\lVert \cdot \right\rVert\) is the Euclidean norm. We propose constant qualities just like before and scale them and also the parameter in such a way that we get a reasonable cardinality and also a notable repulsion of the DPP. %This is done by trial and error.
+The resulting samples are depicted in Figure \ref{pointsinthesqure}.
+\begin{figure}[h!]\label{pointsinthesqure}
+	\centering
+	%\includegraphics[width=0.60\textwidth]{comparison-DPPs-Poisson-2}
+%	\includegraphics[width=0.49\textwidth]{Poisson-in-square}
+%	\tag{1}
+	\caption{A DPP with negative correlations of close points on a \(40\times40\) grid in the unit square on the left and a Poisson point process on the same grid on the right with the same expected cardinality. The -- in this case spatially -- repellent structure of the DPP is clearly visible.}
+\end{figure}
 
 %\section{Calculations}
 

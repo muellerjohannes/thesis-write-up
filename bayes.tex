@@ -56,7 +56,7 @@ Maybe one feels slightly uncomfortable with the need to choose a prior distribut
 Hence we can regain the MLE from our posterior distribution since it is just the mode, i.e. the maximiser of the posterior density. This relation to the MLE can be seen in Figure \ref{fig:4.1}. Hence the Bayesian approach is a more general tool than MLE and allows also to capture the random uncertainty of the parameter \(\theta\). This is desirable since  we have seen that the mode is not always a vey typical outcome of a random variable\todo{cite}.
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.6\textwidth]{heatmap-log-linearity-SliceSampling-new-3}
+	\includegraphics[width=0.6\textwidth]{figures/heatmap-log-linearity-SliceSampling-new-3}
 %	\tag{1}
 	\caption{Approximated posterior density of the two dimensional log linearity constant of a two dimensional DPP with a uniform distribution as a prior. The MLE estimator is marked green and is at the mode of the distribution.}
 	\label{fig:4.1}
@@ -376,12 +376,12 @@ This simulation illustrates the problem of to aggressive -- \(\alpha = 100\) -- 
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.4\textwidth]{alpha-small}
-	\includegraphics[width=0.4\textwidth]{auto-alpha-small}
-	\includegraphics[width=0.4\textwidth]{alpha-optimal}
-	\includegraphics[width=0.4\textwidth]{auto-alpha-optimal}
-	\includegraphics[width=0.4\textwidth]{alpha-big}
-	\includegraphics[width=0.4\textwidth]{auto-alpha-big}
+	\includegraphics[width=0.4\textwidth]{figures/alpha-small}
+	\includegraphics[width=0.4\textwidth]{figures/auto-alpha-small}
+	\includegraphics[width=0.4\textwidth]{figures/alpha-optimal}
+	\includegraphics[width=0.4\textwidth]{figures/auto-alpha-optimal}
+	\includegraphics[width=0.4\textwidth]{figures/alpha-big}
+	\includegraphics[width=0.4\textwidth]{figures/auto-alpha-big}
 %	\tag{1}
 	\caption{Histograms and autocorrelation functions of for three differently aggressive proposal distributions. It is apparent that the histogram for \(\alpha=3\) fits the actual density the best and also that the autocorrelation decays the quickest for this parameter. Note that for \(\alpha=0.01\) the MH random walk only explored some area of high density. The actual density if obtained by numerical integration.}
 	\label{fig:4.1.2}
@@ -411,7 +411,7 @@ Assume we have already given the first \(n\) samples \(x_1, \dots, x_n\) of the 
 \[S\coloneqq S(y)\coloneqq \left\{ x\in\mathcal X \mid f(x) \ge y \right\}. \]
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.6\textwidth]{Slice-sampling-neal-new}
+	\includegraphics[width=0.6\textwidth]{figures/Slice-sampling-neal-new}
 %	\tag{1}
 	\caption{Schematic sketch of the selection of a slice. (a) first \(y\) is sampling uniformly on \([0, f(x)]\) and then (b) select the slice. Original graphic from \cite{neal2003slice}.}
 	\label{fig:4.2}
@@ -582,12 +582,12 @@ Those effects of \(\alpha\) on the auto correlation and therefore effective samp
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.42\textwidth]{slice-alpha-small}
-	\includegraphics[width=0.42\textwidth]{slice-auto-alpha-small}
-	\includegraphics[width=0.42\textwidth]{slice-alpha-optimal}
-	\includegraphics[width=0.42\textwidth]{slice-auto-alpha-optimal}
-	\includegraphics[width=0.42\textwidth]{slice-alpha-big}
-	\includegraphics[width=0.42\textwidth]{slice-auto-alpha-big}
+	\includegraphics[width=0.42\textwidth]{figures/slice-alpha-small}
+	\includegraphics[width=0.42\textwidth]{figures/slice-auto-alpha-small}
+	\includegraphics[width=0.42\textwidth]{figures/slice-alpha-optimal}
+	\includegraphics[width=0.42\textwidth]{figures/slice-auto-alpha-optimal}
+	\includegraphics[width=0.42\textwidth]{figures/slice-alpha-big}
+	\includegraphics[width=0.42\textwidth]{figures/slice-auto-alpha-big}
 %	\tag{1}
 	\caption{Histograms and autocorrelation functions for the choices of \(\alpha = 0.01, 0.5, 10\). The auto correlation obviously decreases the fastest for \(\alpha=0.01\), however the computation time is much higher than for the parameter the other parameters.}
 	\label{fig:4.3}

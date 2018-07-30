@@ -42,8 +42,8 @@ Note that Poisson point processes are exactly the DPPs without correlations of t
 	\centering
 	%\includegraphics[width=0.44\textwidth]{DPP-in-square-2}
 	%\includegraphics[width=0.44\textwidth]{Poisson-in-square-2}
-	\includegraphics[width=0.444\textwidth]{DPP-in-square-large-3}
-	\includegraphics[width=0.44\textwidth]{Poisson-in-square-large-2}
+	\includegraphics[width=0.444\textwidth]{figures/DPP-in-square-large-3}
+	\includegraphics[width=0.44\textwidth]{figures/Poisson-in-square-large-2}
 %	\tag{1}
 	\caption{A DPP with negative correlations of close points on a \(100\times100\) grid in the unit square on the left and a Poisson point process on the same grid on the right with the same expected cardinality. The -- in this case spatially -- repellent structure of the DPP is clearly visible.}
 	\label{fig:1}
@@ -113,7 +113,7 @@ If we identify \(i\) with the vector \(B_i=q_i\phi_i\in\mathbb R^D\), we can obt
 %\vspace{2cm}
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.8\textwidth]{qd-decomposition}
+	\includegraphics[width=0.8\textwidth]{figures/qd-decomposition}
 %	\tag{1}
 	\caption{Taken from \cite{kulesza2012determinantal}; the first line (a) illustrates the volumes spanned by vectors, and in the second line it can be seen how this volume increases if the length -- associated with the quality -- increases (b) and decreases if they become more similar in direction which we interpret as two items becoming more similar (c)}
 	\label{fig:1}
@@ -672,7 +672,7 @@ We start by defining and simulating from a one dimensional DPP. More precisely w
 Finally we set the qualities to be constant and scale them so that the expected cardinality of the DPP is approximately \(15\). Further we define a Poisson point process with the same expected cardinality. This means the second point process includes every point independently with probability \(\frac{15}{100}\). A comparison of a sample from those point processes is depicted in Figure \ref{pointsonaline} and the -- in this case spatially -- repulsive structure of the DPP is apparent.
 \begin{figure}[h!]\label{pointsonaline}
 	\centering
-	\includegraphics[width=0.60\textwidth]{comparison-DPPs-Poisson-2}
+	\includegraphics[width=0.60\textwidth]{figures/comparison-DPPs-Poisson-2}
 %	\includegraphics[width=0.49\textwidth]{Poisson-in-square}
 %	\tag{1}
 	\caption{A DPP and a Poisson point process on a (discretised) line with same expected cardinality. The spatial repulsion of the DPP is clearly visible.}
@@ -712,8 +712,8 @@ where \(\left\lVert \cdot \right\rVert\) is the Euclidean norm. We propose const
 The resulting samples are depicted in Figure \ref{pointsinthesqure}.
 \begin{figure}[h!]\label{pointsinthesqure}
 	\centering
-	\includegraphics[width=0.444\textwidth]{DPP-in-square-large-3}
-	\includegraphics[width=0.44\textwidth]{Poisson-in-square-large-2}
+	\includegraphics[width=0.444\textwidth]{figures/DPP-in-square-large-3}
+	\includegraphics[width=0.44\textwidth]{figures/Poisson-in-square-large-2}
 	\caption{A DPP (right) and a Poisson point process (left) on a \(100\times100\) grid in the unit square with the same expected cardinality. The -- in this case spatially -- repellent structure of the DPP is clearly visible.}
 \end{figure}
 
@@ -724,7 +724,7 @@ Let us assume now that we some reason to believe that the qualities of the indiv
 where \(a, b>0\) are scaled such that the decrease of quality is visible but not too strong and that a reasonable cardinality of the DPP is obtained. The results for this can be seen in Figure \ref{pointsinthesqurelog}
 \begin{figure}[h!]\label{pointsinthesqurelog}
 	\centering
-	\includegraphics[width=0.60\textwidth]{DPP-in-square-large-log-linear}
+	\includegraphics[width=0.60\textwidth]{figures/DPP-in-square-large-log-linear}
 	\caption{A DPP on a \(100\times100\) grid in the unit square with decreasing quality towards the edges.}
 \end{figure}
 

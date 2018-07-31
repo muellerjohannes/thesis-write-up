@@ -21,7 +21,7 @@ a parameter \(\theta\in\Theta\) based on
 \begin{emp}[Setting]
 Let \(\Theta\) be a measurable space and \(\nu\) be a measure on \(\Theta\). Let \(f_\Theta\colon \Theta\to[0, \infty]\) be a probability density with respect to \(\nu\), i.e.
 \[\int\limits_{\Theta} f_\Theta(\theta)\nu(\mathrm{d}\theta) = 1\]
-which we will call the \emph{prior} distribution of the parameter \(\theta\). Further let
+which we will call the \emph{prior} distribution of the parameter \(\theta\).\footnote{The requirement of \(f\) being a probability density can easily be loosened. In fact if it has final integral it is obvious that the normalisation cancels in the definition \eqref{post} of the posterior and even if it has infinite integral, \eqref{post} might still give a probability density.} Further let
 \[\mathcal F = \Big\{ f_{X| \Theta}(\cdot |\theta) \mid \theta\in\Theta\Big\}\]
 by a family of probability densities with respect to \(\mu^n\coloneqq\prod_{i=1}^n\mu(\mathrm d x_i)\).
 \end{emp}
@@ -51,7 +51,7 @@ The density \(f_{\Theta|X}\) is called the \emph{posterior distribution} of the 
 First we will convince ourselves that the approach of calculating a posterior distribution is a generalisation of the MLE in a lot of cases.
 
 \begin{emp}[Comparison to MLE]
-Maybe one feels slightly uncomfortable with the need to choose a prior distribution and it turns out that this is in fact a difficult step that has to be taken with a certain amount of care. However we could pretend for one moment to be completely ignorant in the sense that we do not know anything about the parameter and hence we don’t feel in the position to propose a reasonable prior. Then we could simply choose the uniform distribution as a prior -- given it exists -- and would obtain
+Maybe one feels slightly uncomfortable with the need to choose a prior distribution and it turns out that this is in fact a difficult step that has to be taken with a certain amount of care. However we could pretend for one moment to be completely ignorant in the sense that we do not know anything about the parameter and hence we don’t feel in the position to propose a reasonable prior. Then we could simply choose the uniform distribution as a prior -- given it exists\footnote{Even it doesn’t one can still define the prior density to be constant and hope that the posterior is a probability density.} -- and would obtain
 \[f_{\Theta| X}(\theta|x) \propto f_{X|\Theta}(x|\theta). \]
 Hence we can regain the MLE from our posterior distribution since it is just the mode, i.e. the maximiser of the posterior density. This relation to the MLE can be seen in Figure \ref{fig:4.1}. Hence the Bayesian approach is a more general tool than MLE and allows also to capture the random uncertainty of the parameter \(\theta\). This is desirable since  we have seen that the mode is not always a vey typical outcome of a random variable\todo{cite}.
 \begin{figure}[h!]
@@ -667,7 +667,9 @@ In the slice sampling we use the unnormalised density twice. The first time by s
 In conclusion we can express both MCMC methods exactly through those bounds as long as the bounds converge. This enables a fast simulation of the Markov chains if the unnormalised density is slow the bounds \(f_n^\pm\) are easy to compute. In the case that \(f\) is the posterior \eqref{post3} of a DPP such bounds are given in \cite{affandi2014learning} and \cite{bardenet2015inference}.
 %this decision algorithm in combination with Algorithm \ref{alg:slice-sample} gives an expression of the slice sampling Markov chain completely through the bounds \(f_n^\pm\).
 
-\section{Application to parameter estimation for DPPs}
+\section{Toy example: Estimation for the log linear model}
+
+We will continue the example of the estimation of the log linearity constant from the section about maximum likelihood estimation and will see how two different priors influence the posterior of the parameter.
 
 %\section{Towards deep DPPs}
 

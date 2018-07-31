@@ -813,6 +813,41 @@ where \(K(\theta)\) is the marginal kernel arising from the parameter \(\theta\)
 
 \subsection{A toy example: Learning the log linearity constant of a spatial DPP}
 
+We will continue the example of the DPP on a two dimensional grid in the unit square from the previous chapter. For this we note that for a \(100\times100\) grid the evaluation of the elementary probabilities 
+\[ f(A|\theta) = \frac{\det(L(\theta)_A)}{\det(L(\theta) + I)} \]
+would involve the calculation of a determinant of a \(10^4\times 10^4\) matrix and even the storage of such a matrix would pose a problem since it consists of \(10^8\) numbers. Since the storage of a real number is usually done as in the double-precision floating-point format which takes \(64\) bits, the storage required for this matrix is \(64\times 10^8\si{bit} = 800\si{MB}\), so almost one Gigabyte.\footnote{One byte is defined to be \(8\) bits. The units of Megabytes and Gigabytes are defined in the familiar way and denoted by \(\si{MB}\) and \(\si{GB}\) respectively.} This would make just the computation of the log likelihood function very time consuming, let alone its maximisation. Hence we will decrease the size %of the grid to \(30\times30\)
+for computational reasons, but the ideas remain exactly the same.
+We will recall the definition of the model and also give the exact values of the parameters chosen.
+
+\begin{emp}[Setting]
+We set
+\[\mathcal Y \coloneqq 29^{-1} \left\{ 0, \dots, 29\right\}^2 \]%\left\{ (i, j) \mid 39\cdot  \right\} \]
+and obtain a \(30\times 30\) grid in the unit square. We again choose \(\mathcal R \coloneqq \mathcal Y \) and \(f\) to be %the normal density with mean \(0\) and variance \(10>0\). Then we choose the similarity feature vectors to be 
+\[f(x) \coloneqq \exp( - 8\cdot x^2) \]
+and set
+\[(\phi_i)_j\propto f(\left\lVert i - j \right\rVert) \quad \text{for } i, j\in\mathcal Y.\]
+Further we choose the qualities to be be decreasing with the distance from the centre \(m\) of the and set
+\[q_i\coloneqq e^6 \cdot \exp\big(-10 \left\lVert i - m \right\rVert\big) = \exp\big( - 10\left\lVert i - m \right\rVert + 6\big). \]
+\end{emp}
+
+The exact constants in the function \(f\) and the qualities \(q_i\) where adjusted so that the repellent property of the DPP is visible, a drop off of the qualities towards the corners is visible and a reasonable cardinality of the DPP is obtained. Now we want to estimate the two parameters that characterise the qualities, which are \(e^6\) and \(-10\). In order to do this we note that the qualities are given by a log linear model since we have
+\[q_i = \exp(\theta_0^Tf_i) \quad \text{where } f_i = \begin{pmatrix}
+\left\lVert i - m \right\rVert \\ 1
+\end{pmatrix} \text{ and } \theta_0 = \begin{pmatrix}
+-10 \\ 6
+\end{pmatrix}.\]
+Hence we should be able to estimate this log linearity constant \(\theta\in\mathbb R^2\) through some data that is distributed by this DPP. In fact we generate \(n=8\) samples from the DPP by the sampling algorithm introduced in the second chapter, define the log likelihood function associated with those observations and the actual similarity kernel \(S_{ij} = \phi_i^T\phi_j\). Then we maximise it over \(\mathbb R^2\) using a pre-implemented optimisation algorithm in R. The resulting estimate was
+\[\hat\theta = \begin{pmatrix}
+-10.32045 \\   6.07648
+\end{pmatrix}\]
+but from the consistency results we already knew that it should get close to the actual parameter for increasing sample sizes. Although this is just a controlled toy example, this procedure can easily be generalised to real world settings. However one would have to face the following two major challenges:
+\begin{enumerate}
+\item In practice one will not know the feature vectors \(f_i\) like we did, so one will have to model those. Usually one would put all quantitative properties into this vector that one would believe could have an effect on the quality of an item. For example if the DPP should model the picnic positions of people in a park one could argue that the quality, i.e. the popularity of a picnic spot depends amongst other things on the distance to the next trash bin, the next toilet and overall noise level. Although one thinks that those parameters can play a role, we could not argue a priori whether they have a positive or a negative impact. For example if the toilets are nice and clean it might be favourable to be closer to them, if they are dirty it might be better to be far away from them in order to avoid their unpleasant odour. However one does not have to know this straight away as this effect is determined by the according log linearity constant and hence can be estimated in the above manner.
+\item Secondly and maybe even more impartantly the actual similarity kernel is also unknown and hence one also has to come up with a reasonable model for it. Either this can be done by purely relying on models created by people familiar with the real world phenomenon that is being investigated, or one could also try to estimated the similarity kernel itself. 
+\end{enumerate}¥
+
+
+
 \subsection{Further learning approaches}
 
 \subsubsection{Learning for conditional DPPs}

@@ -669,7 +669,52 @@ In conclusion we can express both MCMC methods exactly through those bounds as l
 
 \section{Toy example: Estimation for the log linear model}
 
-We will continue the example of the estimation of the log linearity constant from the section about maximum likelihood estimation and will see how two different priors influence the posterior of the parameter.
+We will continue the example of the estimation of the log linearity constant from the section about maximum likelihood estimation and will see how two different priors influence the posterior of the parameter, but first we quickly recall the example.
+
+\begin{emp}[Setting]
+We work with the \(30\times30\) grid
+\[\mathcal Y \coloneqq 29^{-1} \left\{ 0, \dots, 29\right\}^2 .\]%\left\{ (i, j) \mid 39\cdot  \right\} \]
+Further we set %\(\mathcal R \coloneqq \mathcal Y \) and
+% \(f\) to be %the normal density with mean \(0\) and variance \(10>0\). Then we choose the similarity feature vectors to be 
+%\(f(x) \coloneqq \exp( - 8\cdot x^2) \) 
+%and set
+\[(\phi_i)_j\propto f(\left\lVert i - j \right\rVert) \quad \text{for } i, j\in\mathcal Y.\]
+Finally we choose the qualities to be be decreasing with the distance from the centre \(m\) of the and set
+\[q_i\coloneqq e^6 \cdot \exp\big(-10 \left\lVert i - m \right\rVert\big) = \exp\big( - 10\left\lVert i - m \right\rVert + 6\big). \]
+\end{emp}
+
+We will use the same data set consisting of \(8\) samples from this DPP like in the maximum likelihood estimation that lead to the estimation
+\[\hat\theta = \begin{pmatrix}
+-10.32045 \\   6.07648
+\end{pmatrix}.\]
+However this time we will use the Bayesian approach and hence the posterior is given by
+\[f(\theta|A_1, \dots, A_n) \propto f_\Theta(\theta) \prod_{i=1}^n \frac{\det(L(\theta)_{A_i})}{\det(L(\theta) + I)}\]
+and will use the MH random walk presented above, although the same approach with similar considerations can be taken for the slice sampling method. In fact this is even easier in practice since one does not have to tune the proposals distributions.
+
+To do this we will impose a very conservative prior in the sense that we assume to not know the rough size of the parameter theta. Therefore we define the prior to be a very flat normal distribution centered at the origin and with covariance \(2^{19}\cdot I\). This amounts to almost choosing a uniform distribution on the space and hence we expect to get a similar picture to Figure \ref{fig:4.1}. In order to obtain this we proceed in the following steps.
+
+\begin{emp}[Step 1: First burn in to find a starting point]
+%In the first phase we pick the origin as a starting point and choose the proposal \(f(\cdot| \theta)\) to be a Gaussian centered at \(\theta\) and with variance adjust so that an acceptance rate of roughly \(25\%-75\%\) is obtained. Usually if one is starting of at a point in a region with very low density, the variance one has to choose will be rather high.
+
+%This amounts to saying one is very coarsely exploring the parameter space by taking proposing rather large steps. 
+In the first phase we want to get a first impression of where the areas of high density might be located and hence of the rough shape of the probability distribution we try to approximate. In order to do this we simulate MH random walks with different starting positions and try to identify the regions where they get stuck since this will typically happen in areas of at least locally highest probability. We have already seen that in order to obtain a reasonable MH random walk one has to choose a suitable proposal family. We use Gaussian proposals \(f(\cdot| \theta)\) that are centered at \(\theta\) and adjust the variance via trial and error such that we obtain an acceptance rate of roughly \(25\%-75\%\).  %the proposal plays a crucial role
+
+Although there is no rigorous method to choose the variance of the proposal distribution at this point we make to general observations. A very high acceptance rate hints to the fact that every proposed step is within a region of almost equal density and hence one probably has to increase the variance and hence the proposed steps. On the other hand if the acceptance rate is close to zero is usually due to the fact that one proposes mostly steps into areas of very low density and hence it is reasonable in the most cases to decrease the variance.
+
+Once the variance is adjusted to obtain a reasonable acceptance rate, one can run a first simulation, in our case of length \(10^2\) in order to see where the MH random walk is going to focus on. %We will expect this to be a region of at least locally highest density and this can be determined by 
+We take the mean value of the second half of the samples as a measure of the area where the MH random walk spends most of its time. 
+Here we neglect the first half since it is very highly dependent on the starting point and it shall be noted that if a state of the Markov chain has high density, the chances are rather high that it will stay there for a few more steps and hence this point is weighted more heavily in the mean of the random walk.
+
+Once we have run this first phase of burn in we see that the MH random walks all centered around a similar region independent from their starting point. Hence we can choose one point in this region as the starting point of all further MCMC simulations.
+\end{emp}
+
+\begin{emp}[Step 2: Second burn in to tune the proposal]
+
+\end{emp}
+
+\begin{emp}[Step3: The actual MCMC simulation]
+
+\end{emp}
 
 %\section{Towards deep DPPs}
 

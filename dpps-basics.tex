@@ -1,7 +1,11 @@
-\chapter{Determinantal points processes: Basic notions and properties}
+\chapter{Determinantal point processes: Basic notions and properties}
+
+In this chapter we aim to provide an overview over the basic notions and results for discrete determinantal point processes that we will need to study the parameter estimation later on. This means that we first rigorously introduce the concept of determinantal point processes and define the most important subclass that we will work with a lot later. This is exactly the subclass where one can express the elementary probabilities of the point process nicely. This will be crucial later on if one wants to perform the parameter estimation based on elementary probabilities, like for example maximum likelihood estimation or Bayesian parameter estimation.
+
+Then we will turn towards the question of existence and simulation of determinantal point processes. This will lead to an algorithm that samples from a DPP which we will use to built some toy examples and also to generate the data sets we will perform parameter estimation for in the following chapters.
 
 %\section{Historical remarks}
-\todo{explain why DPPs are awesome}
+
 
 
 \section{Definitions and properties}
@@ -284,8 +288,8 @@ We use the Leibniz formula to express the determinants in terms of permutations.
 = & \; \int\limits_{\mathcal X^n} \sum_{\sigma, \tau\in S_n} \operatorname{sgn}(\sigma)\operatorname{sgn}(\tau) \prod_{i=1}^n \phi_i(x_{\sigma(i)})\psi_i(x_{\tau(i)}) \mu(\mathrm dx_1)\cdot\ldots\cdot\mu(\mathrm dx_n) \\
 = & \; \int\limits_{\mathcal X^n} \sum_{\sigma, \tau\in S_n} \operatorname{sgn}(\sigma)\operatorname{sgn}(\tau) \prod_{i=1}^n \phi_i(x_{\sigma(i)})\psi_{\tau^{-1}(\sigma(i))}(x_{\sigma(i)}) \mu(\mathrm dx_1)\cdot\ldots\cdot\mu(\mathrm dx_n) \\
 = & \; \sum_{\sigma, \tau\in S_n} \operatorname{sgn}\big(\tau^{-1} \circ\sigma\big) \prod_{i=1}^n \int\limits_{\mathcal X} \phi_i(x) \psi_{\tau^{-1}(\sigma(i))}(x)\mu(\mathrm dx) \\
-= & \; n! \sum_{\rho\in S_n} \prod_{i=1}^n \int\limits_{\mathcal X} \phi_i(x) \psi_{\rho(i)}(x)\mu(\mathrm dx) \\
-= & \; n!\det\left( \int_{\mathcal X} \phi_i(x)\psi_j(x)\mu(\mathrm dx)\right)_{1\le i, j\le n}.
+= & \; n!\cdot \sum_{\rho\in S_n} \prod_{i=1}^n \int\limits_{\mathcal X} \phi_i(x) \psi_{\rho(i)}(x)\mu(\mathrm dx) \\
+= & \; n!\cdot\det\left( \int_{\mathcal X} \phi_i(x)\psi_j(x)\mu(\mathrm dx)\right)_{1\le i, j\le n}.
 \end{split}
 \end{equation*}
 In the calculation we have used that the sign function is a group homomorphism from the permutation group to \(\left\{ \pm1\right\}\) and thus
@@ -316,10 +320,10 @@ where we used that the determinants vanish if two indices \(i_k\) and \(i_l\) ag
 
 
 \begin{prop}[Marginalisation]
-Let \((\mathcal X, \mu)\) be a measure space and let \(\left\{ \phi_i\right\}_{i=1, \dots, n}\in L^2(\mu)\) be an orthonormal set. Let \(x_1, \dots, x_m\in\mathcal X\) for \(m<n\), then we have
+Let \((\mathcal X, \mu)\) be a measure space and let \(\left\{ \phi_i\right\}_{i=1, \dots, n}\subseteq L^2(\mu)\) be an orthonormal set. Let \(x_1, \dots, x_m\in\mathcal X\) for \(m<n\), then we have
 \begin{equation*}
 \begin{split}
-\frac{1}{(n-m)} \int\limits_{\mathcal X^m} & \det\left( \phi_i(x_j)\right)_{1\le i, j\le n}^2 \mu(\mathrm dx_{m+1})\cdot \ldots\cdot \mu(\mathrm dx_n) \\
+\frac{1}{(n-m)!} \int\limits_{\mathcal X^m} & \det\left( \phi_i(x_j)\right)_{1\le i, j\le n}^2 \mu(\mathrm dx_{m+1})\cdot \ldots\cdot \mu(\mathrm dx_n) \\
  & = \det\left( \sum_{k=1}^n \phi_k(x_i)\phi_k(x_j)\right)_{1\le i, j\le m}.
 \end{split}
 \end{equation*}
@@ -334,12 +338,12 @@ Just like in the proof of the Cauchy-Binet identity we begin by expressing the d
 %= & \sum_{\begin{subarray}{c} \sigma, \tau\in S_n \\ \sigma\sim\tau \end{subarra}} \operatorname{sgn}(\sigma)\operatorname{sgn}(\tau) \prod_{k=1}^m \phi_{\sigma(k)}(x_k) \phi_{\tau(k)}(x_k) 
 \end{split}
 \end{equation*}
-The multiple integrals over the product can be evaluated individually and hence the term above is only non trivial if we have \(\sigma(k) = \tau(k)\) for \(k=m+1, \dots, n\) which we will denote by \(\sigma\sim\tau\). Hence we obtain
+The multiple integrals over the product can be evaluated individually and hence the term above is only non trivial if we have \(\sigma(k) = \tau(k)\) for \(k=m+1, \dots, n\) which we will denote by \(\sigma\sim\tau\). Therefore the expression is equal to
 \begin{equation*}
 \begin{split}
 & \sum_{\begin{subarray}{c} \sigma, \tau\in S_n \\ \sigma\sim\tau \end{subarray}} \operatorname{sgn}(\sigma)\operatorname{sgn}(\tau) \prod_{k=1}^m \phi_{\sigma(k)}(x_k) \phi_{\tau(k)}(x_k) \\
-= & (n-m)! \sum_{\begin{subarray}{c} J\subseteq[n] \\ \left\lvert J \right\rvert = m \end{subarray}} \det\left( \phi_{j_k}(x_l)\right)_{1\le k, l\le m}^2 \\
-= & (n-m)! \det\left( \sum_{k=1, \dots, n} \phi_k(x_i)\phi_k(x_j)\right)_{1\le k, l\le m}
+= & \; (n-m)!\cdot \sum_{\begin{subarray}{c} J\subseteq[n] \\ \left\lvert J \right\rvert = m \end{subarray}} \det\left( \phi_{j_k}(x_l)\right)_{1\le k, l\le m}^2 \\
+= &\; (n-m)!\cdot \det\left( \sum_{k=1, \dots, n} \phi_k(x_i)\phi_k(x_j)\right)_{1\le k, l\le m}
 \end{split}
 \end{equation*}
 where we used Cauchy-Binet and the notation \(J = \left\{ j_1, \dots, j_m\right\}\).
@@ -347,8 +351,9 @@ where we used Cauchy-Binet and the notation \(J = \left\{ j_1, \dots, j_m\right\
 
 Just like in the case of the Cauchy-Binet identity we will give a discrete version of the previous result in which the normalisation factor does not appear.
 
+\todo{clean up this result!}
 \begin{prop}[Variation of Cauchy-Binet]\label{CB-type}
-Let \(m \le n\) be two natural numbers and \(B\in\mathbb R^{n\times m}\) be a matrix such that the rows of \(B\) form an orthonormal system. Further let \(I \subseteq[m]\), then we have
+Let \(m \le n\) be two natural numbers and \(B\in\mathbb R^{m\times n}\) be a matrix such that the rows of \(B\) form an orthonormal system. Further let \(I \subseteq[n]\) with \(\left\lvert I \right\rvert\le m\), then we have
 \begin{equation*}
 \begin{split}
 %i_{r+1}, \dots, i_{p}=1
@@ -358,7 +363,7 @@ Let \(m \le n\) be two natural numbers and \(B\in\mathbb R^{n\times m}\) be a ma
 %where\(p\le m\).
 \end{prop}
 \begin{proof}
-At first we note that the right hand side is equal to
+Set \(r\coloneqq \left\lvert I \right\rvert \le m\), then the right hand side is equal to
 \begin{equation}\label{CBP}
  \frac1{(m-r)!} \cdot \sum_{i_{r+1}, \dots, i_m\in[n]} \det\left( B_{ki_l} \right)_{1\le k, l\le r}^2
 \end{equation}
@@ -407,11 +412,11 @@ where we used that the determinant vanishes if two indices \(i_k\) and \(i_l\) a
 We roughly follow the approaches taken in \cite{hough2006determinantal} and \cite{kulesza2012determinantal} and will start by showing that every determinantal point process can be seen as a mixture of a smaller class of determinantal point processes.%\todo{reference to the paper}
 
 \begin{theo}[Mixture representation of DPPs]\label{mixDPPs}
-Let \(\mathbb P\) be a DPP and \[K = \sum_{k=1}^N \lambda_kv_kv_k^T\] be the spectral decomposition of its marginal kernel. Let now \(\left\{ B_k\right\}_{k =1, \dots, N}\) be a collection of independent Bernoulli random variables with mean \(\lambda_i\). Define now the random kernel
+Let \(\mathbb P\) be a DPP and \[K = \sum_{k=1}^N \lambda_kv_kv_k^T\] be the spectral decomposition of its marginal kernel. Let now \(\left\{ \xi_k\right\}_{k =1, \dots, N}\) be a collection of independent Bernoulli random variables with mean \(\lambda_i\). Define now the random kernel
 \begin{equation}\label{BerKer}
-K_B = \sum_{k=1}^N B_k v_kv_k^T.
+K_\xi = \sum_{k=1}^N \xi_k v_kv_k^T.
 \end{equation}
-Finally define a second point process \(\tilde{\mathbb P}\) on \(\mathcal Y\) that is obtain by first drawing the Bernoulli variables \(B_k\) and then a DPP according to \(K_B\). Then we have \(\tilde{\mathbb P} = \mathbb P\) and thus \(\tilde{\mathbb P}\) is also a DPP with marginal kernel \(K\).
+Finally define a second point process \(\tilde{\mathbb P}\) on \(\mathcal Y\) that is obtain by first drawing the Bernoulli variables \(\xi_k\) and then a DPP according to \(K_\xi\). Then we have \(\tilde{\mathbb P} = \mathbb P\) and thus \(\tilde{\mathbb P}\) is also a DPP with marginal kernel \(K\).
 \end{theo}
 
 %Before we proof this result we discuss the most important consequences.
@@ -435,10 +440,11 @@ Then \(\mathbb P\) is a DPP on \(\mathcal Y\) with marginal kernel \(K\). In par
 First we have to show that \eqref{elemDPPs} defines a probability measure. For this let \(B\in\mathbb R^{m\times N}\) be the matrix with rows \(v_k\) for \(k=1, \dots, m\). By definition we have \(K = B^TB\) and hence
 \begin{equation*}
 \begin{split}
-\sum_{A\subseteq \mathcal Y, \left\lvert A \right\rvert = m} \det(K_A) & = \sum_{\begin{subarray}{c} I\subseteq\mathcal Y \\ \left\lvert I \right\rvert = m \end{subarray}} \det\left(K_{I}\right) %\\
+\sum_{\begin{subarray}{c} A\subseteq\mathcal Y \\ \left\lvert A \right\rvert = m \end{subarray}} \det(K_A) %& = %\sum_{\begin{subarray}{c} I\subseteq\mathcal Y \\ \left\lvert I \right\rvert = m \end{subarray}} \det\left(K_{I}\right) %\\
 %& = \sum_{i_1, \dots, i_m\in\mathcal Y} \det(B^T_{i_kl})_{1\le k, l \le m} \det(B_{i_kl})_{1\le k, l \le m} \\
- = \sum_{\begin{subarray}{c} I\subseteq\mathcal Y \\ \left\lvert I \right\rvert = m \end{subarray}} \det\left(B_{[m]I}\right)^2 \\
-& = \det\left( B^TB \right) %\\
+ = \sum_{\begin{subarray}{c} A\subseteq\mathcal Y \\ \left\lvert A \right\rvert = m \end{subarray}} \det\left(B_{[m]A}\right)^2% \\
+%& 
+= \det\left( BB^T \right) %\\
  = \det\left( v_{k}^Tv_{l} \right)_{1\le k, l\le m} = 1
 \end{split}
 \end{equation*}
@@ -481,34 +487,35 @@ Now we can turn towards the simulation of elementary DPPs where we will make use
   \State \(p_i\gets Pe_i\) the projection of \(e_i\) onto \(\operatorname{span}(V)\) for \(i\in\mathcal Y\)
   \State Select \(i\in\mathcal Y\) with probability \(\frac1{\left\lvert V \right\rvert} \cdot \left\lVert p_i \right\rVert^2\)% \sum\limits_{v\in V} (v^Te_i)^2 \)
   \State \(Y\gets Y\cup\left\{ i\right\}\)
-  \State \(V\gets V_\perp\) an orthonormal basis of the subspace of \(V\) perpendicular to \(p_i\)
+  \State \(V\gets V_\perp\) an orthonormal basis of the subspace of \(V\) orthogonal to \(p_i\)
 \EndWhile
   \State \Return{\(Y\)}
 \end{algorithmic}
 \end{algorithm}
 
 \begin{prop}[Sampling from elementary DPPs]
-Let \(K=\sum_{k=1}^m v_kv_k^T\), then Algorithm \ref{alg:elementary-DPP-sampling} produces a random variable \(\mathbf Y\) with values in \(\mathcal Y\) which is an elementary DPP with marginal kernel \(K\).
+Let \(K=\sum_{k=1}^m v_kv_k^T\), then Algorithm \ref{alg:elementary-DPP-sampling} produces a random variable \(\mathbf Y\) with values in \(2^{\mathcal Y}\) which is an elementary DPP with marginal kernel \(K\).
 \end{prop}
 \begin{proof}
-\todo{reread!}
+%\todo{reread!}
 We note that we only have to check that \eqref{elemDPPs} holds and for this we fix \(A\subseteq\mathcal Y\). First we note that the output \(\mathbf Y\) has cardinality \(\left\lvert m \right\rvert\) since no element can be selected twice in the while loop and the size of \(V\) decreases by exactly one in each iteration. Hence it remains to show
 \[\mathbb P(A = \mathbf Y ) = \det(K_A) \]
 if \(\left\lvert A \right\rvert = m\). Let for the sake of convenience \(A = \left\{ 1, \dots, m\right\}\) and \(\mathcal Y = \left\{ 1, \dots, N\right\}\). Note that it suffices to show that the while loop selects \(1, \dots, m\) in this exact order with probability \(\frac1{m!}\det(K_A)\).
 
 Let \(V_k\) denote the orthonormal set \(V\) in the \(k\)-th step of the while loop and let \(P_{k-1}\) be the projection onto \(\operatorname{span}(V_k)\) and set \(b_i\coloneqq P_0e_i\) for \(i = 1, \dots, N\). We note that if \(1, \dots, k-1\) were selected in the first steps, then \(P_{k-1}\) is exactly the projection to the subspace of \(\operatorname{span}(V_{k-1})\) that is orthogonal to \(b_1, \dots, b_{k-1}\). Since the spaces \(\operatorname{span}(V_k)\) are decreasing we have \(P_kP_j = P_k\) for \(k\ge j\) and thus \(P_{k-1} e_k = P_{k-1}P_0e_k = P_{k-1}b_k \).
+
  Suppose now that we have selected \(1, \dots, k-1\) in the first \(k-1\) steps of the while loop. The probability to select \(k\) in the next iteration is
 \[ \frac1{\left\lvert V_k \right\rvert} \cdot\left\lVert P_{k-1}e_k \right\rVert^2 = \frac1{m-k} \cdot\left\lVert P_{k-1}b_k \right\rVert^2. \]
 Thus the probability to sample \(1, \dots, m\) in this order is equal to
 \[\frac1{m!} \cdot\left\lVert b_1 \right\rVert^2\cdot\ldots\cdot\left\lVert P_{m-1}b_m \right\rVert^2. \]
-Since \(P_{k-1}\) is the projection onto the subspace orthogonal to \(b_1, \dots, b_k\), the product is equal to the squared \(m\)-dimensional surface measure of the parallel epiped spanned by \(b_1, \dots, b_m\). It is well known from measure and integration theory that the squared surface is given by the determinant of the Gram matrix
+Since \(P_{k-1}\) is the projection onto the subspace orthogonal to \(b_1, \dots, b_{k-1}\), the product is equal to the squared \(m\)-dimensional surface measure of the parallel epiped spanned by \(b_1, \dots, b_m\). It is well known from measure and integration theory that the squared surface is given by the determinant of the Gram matrix
 \[\det\begin{pmatrix}
 b_1^Tb_1 & \cdots & b_1^Tb_m \\ \vdots & \ddots & \vdots \\ b_m^Tb_1 & \cdots & b_m^Tb_m
 \end{pmatrix} = \det\!\big((B^TB)_A\big)\]
-where \(B\in\mathbb R^{N\times N}\) is the matrix which rows are equal to \(b_k\). Therefore it remains to show \(B^TB = K^V\). However by definition \(B\) is the projection onto the span of \(V\) and thus \(B=K^V\). Because \(K^V\) is symmetric like every projection, we have \(B^T = B\) and hence can conclude \(B^TB = B^2 = B = K^V\) where we used that \(B\) is a projection.
-\end{proof}
+where \(B\in\mathbb R^{N\times N}\) is the matrix which columns\todo{rows or columns?!}{ } are equal to \(b_k\). Therefore it remains to show \(B^TB = K\). However by definition \(B\) is the projection onto the span of \(V\) and thus \(B=K\). Because \(K\) is symmetric like every projection, we have \(B^T = B\) and hence can conclude \(B^TB = B^2 = B = K\) where we used that \(B\) is a projection.
+\end{proof}\todo{add span to nomenclature}
 
-We will use Theorem \ref{mixDPPs} to prove that the following algorithm samples from a DPP. This will also show the existence of DPPs to a given marginal kernel since it gives an explicit construction.
+A straight forward application of Theorem \ref{mixDPPs} proves that the following algorithm samples from a DPP. This will also show the existence of DPPs to a given marginal kernel since it gives an explicit construction.
 
 \begin{algorithm}
 \caption{Sampling from a DPP \label{alg:DPP-sampling}}
@@ -532,8 +539,8 @@ We will use Theorem \ref{mixDPPs} to prove that the following algorithm samples 
 \end{algorithm}
 
 \begin{theo}[Sampling algorithm]
-Let \(K\in\mathbb R^{N\times N}\) be any symmetric and positive definite matrix such that \(K\le I\). Then the distribution of the output \(Y\) of Algorithm \ref{alg:DPP-sampling} is a DPP with marginal kernel \(K\). %In particular 
-\end{theo}
+Let \(K\in\mathbb R^{N\times N}\) be any symmetric and non negative definite matrix such that \(K\le I\). Then the distribution of the output \(Y\) of Algorithm \ref{alg:DPP-sampling} is a DPP with marginal kernel \(K\). %In particular 
+\end{theo}\todo{add \(A\le B\) for matrices to nomenclature.}
 \begin{proof}
 Theorem \ref{mixDPPs} states that an arbitrary DPP is the mixture of elementary DPPs and the for loop in the algorithm represents exactly this mixing with the respective weights. Further the sampling result for elementary DPPs yields that the output of the second part of the algorithm, namely the while loop, is distributed according to a DPP with marginal kernel \(K^V\coloneqq\sum_{v\in V} vv^T \).
 %Thus we only have to show that the output of the second part of the algorithm, namely the while loop, is distributed according to a DPP with marginal kernel \(K^V\coloneqq\sum_{v\in V} vv^T \). 
@@ -607,16 +614,16 @@ Let \(K\) be a symmetric \(N\times N\) matrix. Then \(K\) is the marginal kernel
 %\end{proof}
 
 \begin{cor}[Cardinality of DPPs]\label{carDPP}
-Let \(\mathbb P\) be a DPP with kernel \[K = \sum_{k=1}^N \lambda_kv_kv_k^T.\] Then the cardinality of the DPP is distributed like the sum of the Bernoulli variables \(\left\{ B_k\right\}_{k =1, \dots, N}\) from theorem \ref{mixDPPs}.
+Let \(\mathbb P\) be a DPP with kernel \[K = \sum_{k=1}^N \lambda_kv_kv_k^T.\] Then the cardinality of the DPP is distributed like the sum of the Bernoulli variables \(\left\{ \xi_k\right\}_{k =1, \dots, N}\) from theorem \ref{mixDPPs}.
 \end{cor}
 \begin{proof}%[Proof of Theorem]
-To proof this, we only have to convince ourselves that after the Bernoulli experiments the cardinality of a DPP with kernel \eqref{BerKer} has size \(m\coloneqq\sum_{k=1}^NB_k\) almost surely. Since \(K_B\) has rank at most \(k\), the cardinality is almost surely smaller than \(m\). On the other hand we have
+To proof this, we only have to convince ourselves that after the Bernoulli experiments the cardinality of a DPP with kernel \eqref{BerKer} has size \(m\coloneqq\sum_{k=1}^N\xi_k\) almost surely. Since \(K_\xi\) has rank at most \(m\), the cardinality is almost surely smaller than \(m\). On the other hand we have
 \begin{equation}
 \begin{split}
-\mathbb E\big[\!\left\lvert \mathbf Y \right\rvert\!\big] = \sum\limits_{i\in\mathcal Y} \mathbb P(i\in\mathbf Y) = \sum\limits_{i\in\mathcal Y} (K_B)_{ii} = \operatorname{Tr}(K_B) = m.
+\mathbb E\big[\!\left\lvert \mathbf Y \right\rvert\!\big] = \sum\limits_{i\in\mathcal Y} \mathbb P(i\in\mathbf Y) = \sum\limits_{i\in\mathcal Y} (K_\xi)_{ii} = \operatorname{Tr}(K_\xi) = m.
 \end{split}
 \end{equation}
-In the last step we used that the trace of a symmetric matrix is the sum over its eigenvalues, which are \(B_k\) in our case. This computation lets us conclude \(\left\lvert \mathbf Y \right\rvert = m\) almost surely.
+In the last step we used that the trace of a symmetric matrix is the sum over its eigenvalues, which are \(\xi_k\) in our case. This computation lets us conclude \(\left\lvert \mathbf Y \right\rvert = m\) almost surely.
 \end{proof}
 
 
@@ -636,19 +643,19 @@ We close this section with the proof of \ref{mixDPPs} given in \cite{kulesza2012
 \begin{proof}[Proof of Theorem \ref{mixDPPs}]
 \todo{reread!}
 Let %\(W_n\coloneqq v_nv_n^T\), then we have for 
-\(A\subseteq\mathcal Y, k\coloneqq\left\lvert A \right\rvert\). Further set \(W_n\coloneqq (v_nv_n^T)_A\) and \(W_J\coloneqq\sum_{n\in J} W_n\). Then we have
-\[\tilde{\mathbb P}(A\subseteq\mathbf Y) = \sum_{J\subseteq\mathcal Y} \det(W_J) \cdot\tilde{\mathbb P}\big(B_{i} = 1 \text{ for } i \in J\big).\]
-Let \(\big((W_{n_1})_1(W_{n_2})_2\dots (W_{n_k})_k\big)\) denote the \(k\times k\) matrix with \(i\)-th row equal to the \(i\)-th row of \(W_{n_i}\). Using the multilinearity of the determinant we obtain that the marginal probability above is equal to
+\(A\subseteq\mathcal Y, m\coloneqq\left\lvert A \right\rvert\) and set \(W_n\coloneqq (v_kv_k^T)_A\) and \(W_J\coloneqq\sum_{k\in J} W_k\). Then we have
+\[\tilde{\mathbb P}(A\subseteq\mathbf Y) = \sum_{J\subseteq[N]} \det(W_J) \cdot\tilde{\mathbb P}\big(\xi_{j} = 1 \text{ for } j \in J\big).\]
+Let \(\big((W_{k_1})_1(W_{k_2})_2\dots (W_{k_m})_m\big)\) denote the \(m\times m\) matrix with \(j\)-th row equal to the \(j\)-th row of \(W_{k_j}\). Using the multilinearity of the determinant we obtain that the marginal probability above is equal to
 \begin{equation*}
 \begin{split}
 %\tilde{\mathbb P}(A\subseteq\mathbf Y) & = \sum_{J\subseteq\mathcal Y} \det(W_J) \cdot\tilde{\mathbb P}\big(B_{i} = 1 \text{ for } i \in J\big) \\% \prod_{i\in J} \lambda_i \prod_{i\notin J} (1-\lambda_i) \\
 & % \overset{\ref{aux}}{=}
-\sum_{J\subseteq\mathcal Y}\sum_{n_1, \dots, n_k\in J} \det\big((W_{n_1})_1(W_{n_2})_2\dots (W_{n_k})_k\big) \cdot\tilde{\mathbb P}\big(B_{i} = 1 \text{ for } i \in J\big) \\%\prod_{i\in J} \lambda_i \prod_{i\notin J} (1-\lambda_i) \\
- = & \sum_{n_1, \dots, n_k\in \mathcal Y} \det\big((W_{n_1})_1(W_{n_2})_2\dots (W_{n_k})_k\big) \sum_{J\supseteq\left\{ n_1, \dots, n_k\right\}} \tilde{\mathbb P}\big(B_{i} = 1 \text{ for } i \in J\big) \\%\prod_{i\in J} \lambda_i \prod_{i\notin J} (1-\lambda_i) \\
- = & \sum_{n_1, \dots, n_k\in \mathcal Y} \det\big((W_{n_1})_1(W_{n_2})_2\dots (W_{n_k})_k\big) \cdot\tilde{\mathbb P}\big(B_{n_i} = 1 \text{ for } i = 1, \dots, k\big) \\%\prod_{i = 1}^k \lambda_{n_i} \\
- = & \sum_{n_1, \dots, n_k\in \mathcal Y} \det\big((\lambda_{n_1}W_{n_1})_1(\lambda_{n_2}W_{n_2})_2\dots (\lambda_{n_k}W_{n_k})_k\big) \\
+\sum_{J\subseteq[N]}\sum_{k_1, \dots, k_m\in J} \det\big((W_{k_1})_1(W_{k_2})_2\dots (W_{k_m})_m\big) \cdot\tilde{\mathbb P}\big(\xi_{j} = 1 \text{ for } j \in J\big) \\%\prod_{i\in J} \lambda_i \prod_{i\notin J} (1-\lambda_i) \\
+ = & \sum_{k_1, \dots, k_m=1}^N \det\big((W_{k_1})_1(W_{k_2})_2\dots (W_{k_m})_m\big) \sum_{J\supseteq\left\{ k_1, \dots, k_m\right\}} \tilde{\mathbb P}\big(\xi_{j} = 1 \text{ for } j \in J\big) \\%\prod_{i\in J} \lambda_i \prod_{i\notin J} (1-\lambda_i) \\
+ = & \sum_{k_1, \dots, k_m=1}^N \det\big((W_{k_1})_1(W_{k_2})_2\dots (W_{k_m})_m\big) \cdot\tilde{\mathbb P}\big(\xi_{k_j} = 1 \text{ for } j = 1, \dots, m\big) \\%\prod_{i = 1}^k \lambda_{n_i} \\
+ = & \sum_{k_1, \dots, k_m=1}^N \det\big((\lambda_{k_1}W_{k_1})_1(\lambda_{k_2}W_{k_2})_2\dots (\lambda_{k_m}W_{k_m})_m\big) \\
 %\overset{\ref{aux}}{=}
-= & \det\Big(\sum_{n\in \mathcal Y} W_n\Big) = \det(K_A).
+= & \det\Big(\sum_{k=1}^N W_k\Big) = \det(K_A).
 \end{split}
 \end{equation*}
 %where the indices \(n_1, \dots, n_k\) are distinct.

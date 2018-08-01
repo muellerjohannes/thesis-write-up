@@ -1,5 +1,6 @@
 \appendix
 \renewcommand{\thesection}{\Alph{chapter}.\arabic{section}}
+\renewcommand*{\thesatz}{\Alph{chapter}.\arabic{satz}}
 \setcounter{section}{0}
 
 % \begin{appendices}
@@ -7,12 +8,36 @@
 
 \chapter{Calculations}
 
-\begin{enumerate}
-\item Complement of DPPs.
-\item Normalisation constant of \(L\)-ensembles.
-\item Cantor’s intersection theorem for Hausdorff spaces.
-\item 
-\end{enumerate}•
+\begin{prop}[Complement of DPPs]
+Let \(\mathbf Y\) be a random subset that is distributed according to a DPP with marginal kernel \(K\in\mathbb R^{N\times N}\). Then we have
+\[\mathbb P(A\subseteq\mathbf Y^c) = \det\big( (I-K)_A\big). \]
+Hence the complement \(\mathbf Y^c\) is distributed according to a DPP with marginal kernel \(I-K\).
+\end{prop}
+\begin{proof}
+
+\end{proof}
+
+\begin{prop}[Normalisation]
+Let \(L\in\mathbb R^{N\times N}\) for \(N\in\mathbb N\). Then we have
+\[\sum_{A\subseteq [N]} \det(L_A) = \det(L + I) \]
+where \([N]\coloneqq\left\{ 1, \dots, N\right\}\).
+\end{prop}
+\begin{proof}
+
+\end{proof}
+
+\begin{theo}[Cantor’s intersection theorem]
+Let \(\mathcal X\) be a topological Hausdorff space and let \(K_1\supseteq K_2\supseteq \dots\) be a sequence of descending, non empty compact sets. Then also the intersection
+\[\bigcap_{n=1}^\infty K_n\]
+is non empty.
+\end{theo}
+\begin{proof}
+Assume that the intersection would be empty, and set \(U_n\coloneqq \mathcal X\setminus K_n\) which is open since \(K_n\) is closed as the compact subset of a Hausdorff space. Then \((U_n)_{n\in\mathbb N}\) is an open covering of \(K_1\) since we have
+\[\bigcup_{n=1}^\infty U_n = \mathcal X\setminus\left( \bigcap_{n=1}^\infty K_n\right) = \mathcal X. \]
+Hence we can select a finite subcover and obtain
+\[K_1\subseteq \bigcup_{n=1}^N U_n = \mathcal X\setminus \left( \bigcap_{n=1}^N K_n\right) = \mathcal X\setminus K_N.\]
+However since \(K_n\subseteq K_1\) this implies \(K_N = \varnothing\) which is a contradiction.
+\end{proof}
 
 \chapter{Generated code}
 

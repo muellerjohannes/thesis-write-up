@@ -389,7 +389,7 @@ This simulation illustrates the problem of to aggressive -- \(\alpha = 100\) -- 
 
 \end{ex}
 
-\begin{emp}[Tuning the proposal]
+\begin{emp}[Tuning the proposal]\label{tuning}
 In order to obtain a higher acceptance rate without the loss of generally choosing the variance of the proposal distribution small one can do tune the proposal distribution. This means one adjusts the proposal distribution after a while, lets say after the first \(10^3\) samples in such a way that one replaces the original covariance matrix \(\Sigma\) by the empirical covariance of the first \(10^3\) samples\todo{is this true?}. Then one forgets about all the samples so far -- they are called usually the \emph{burn in period} -- and starts a new MH random walk usually at one of the data points of the burn in period, since they should already indicate where an area of high density is. The reason why this increases the acceptance rate is, that the proposal now only is aggressive in those directions where the density is broadly spread. \todo{find a reference for this}%This effect can be seen in Figure \todo{make this figure}.
 \end{emp}
 
@@ -703,16 +703,41 @@ Although there is no rigorous method to choose the variance of the proposal dist
 
 Once the variance is adjusted to obtain a reasonable acceptance rate, one can run a first simulation, in our case of length \(10^2\) in order to see where the MH random walk is going to focus on. %We will expect this to be a region of at least locally highest density and this can be determined by 
 We take the mean value of the second half of the samples as a measure of the area where the MH random walk spends most of its time. 
-Here we neglect the first half since it is very highly dependent on the starting point and it shall be noted that if a state of the Markov chain has high density, the chances are rather high that it will stay there for a few more steps and hence this point is weighted more heavily in the mean of the random walk.
+Here we neglect the first half since it is very highly dependent on the starting point and it shall be noted that if a state of the Markov chain has high density, the chances are rather high that it will stay there for a few more steps and hence this point is weighted more heavily in the mean of the random walk. Those positions are shown in Figure \ref{fig:findingstart} for different starting positions of the MH random walk.\todo{do a second starting value}
 
-Once we have run this first phase of burn in we see that the MH random walks all centered around a similar region independent from their starting point. Hence we can choose one point in this region as the starting point of all further MCMC simulations.
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.6\textwidth]{figures/bayes-finding-starting-point}
+%	\tag{1}
+	\caption{A plot of the samples of the MH random walk starting in zero. The MLE for the log linearity constant is marked by the green cross and the mean or centre of mass of the second half of the random walk by the red cross.}
+	\label{fig:findingstart}
+\end{figure}
+
+Once we have run this first phase of burn in we see that the MH random walks all centered around a similar region independent from their starting point. Hence we can choose one point in this region as the starting point of all further MCMC simulations. One could argue that it would be reasonable to choose the MLE as a starting point since for a very flat prior distribution it should also be approximately the mode of the posterior distribution. However since we partly motivated the Bayesian approach to be an alternative to the infeasible maximum likelihood estimation for the elementary kernel \(L\), we presented the procedure above that can also be used for the estimation of \(L\).
 \end{emp}
 
 \begin{emp}[Step 2: Second burn in to tune the proposal]
-
+We use the second burn in method to tune the proposal according to \ref{tuning} for the final simulation. To do this we first select a starting point according to the result of the first burn in period. Then we adjust the variance of the Gaussian proposals such that we obtain a reasonable acceptance rate. Note that this will typically be much lower than the one of the first burn in. The reason for this is, that if one uses a proposal with big variance and starts at a point with high density, then the proposal will mostly propose points far away from this point which will mostly have low denstities and therefore are likely to be declined. In a heuristic way it can be said that one now works ‚locally‘ and tries to explore the finer structure of the distribution and has to take smaller steps in order to do so.
+We run this MH random walk for \(10^3\) samples and calculate their empirical covariance \(\Sigma\in\mathbb R^{2\times 2}\) and obtain the Markov chain depicted in \ref{fig:tuning}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.6\textwidth]{figures/bayes-burn-in-period}
+%	\tag{1}
+	\caption{A plot of the samples of the MH of the second burn in period. One can see how the points are distributed around the MLE which is marked green. Their empirical covariance will be use to tune the proposal.}
+	\label{fig:tuning}
+\end{figure}
 \end{emp}
 
 \begin{emp}[Step3: The actual MCMC simulation]
+In this final step we will run a MH random walk with length \(10^4\) and the same starting point as in the second step. Now we use adjust the priors to have the covariance that was empirically determined from the second burn in period. This means we choose \(f(\cdot|\theta)\) to be the density of a normal distribution centered at \(\theta\) and with covariance \(\Sigma\). % This procedure adjusts the proposed steps into the diffrernt directions on the 
+ The resulting heat map can be seen in Figure \ref{fig:MHrw}.\todo{say something about intuition}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.6\textwidth]{figures/bayes-heat-map}
+%	\tag{1}
+	\caption{Heat map of the MH random walks with \(10^4\) iterations. The MLE estimator is shown as a green and the actual parameter as a white cross.}
+	\label{fig:MHrw}
+\end{figure}
 
 \end{emp}
 

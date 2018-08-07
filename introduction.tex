@@ -1,7 +1,7 @@
-%\chapter{Introduction and motivating examples}
-\chapter*{Preface}
+\chapter*{Introduction}
+%\chapter*{Preface}
 %\addtocontents{toc}{Preface}
-\addcontentsline{toc}{chapter}{Preface}
+\addcontentsline{toc}{chapter}{Introduction}
 
 %\section{Motivation}
 
@@ -13,16 +13,53 @@
 
 %This dissertation emerged from the 
 
-Before we begin to give an introduction to determinantal point processes (DPPs) we should give a short overview over the dissertations, its contributions and who should read it. Firstly, it is the aim to give a mostly self contained approach to different parameter estimation approaches for DPPs that is accessible to any student familiar with the basic notions of linear algebra, analysis and probability theory. We proof almost everything we use in this dissertation or give precise references if the statements are not (mathematical) general knowledge.
 
-\begin{emp}[Outline of the thesis]
-In the first chapter we introduce discrete determinantal point processes and present the fundamental concepts we will need. Further, we show that DPPs with a given marginal kernel exist and see how they can be simulated and apply this to some toy examples. In the second chapter we will present two different ways how an estimator can be obtained for the marginal kernel or parametrisations of it. We will see that both strategies yield a consistent estimator. In the last chapter we will present the fundamentally different Bayesian approach to parameter estimation and apply it to the estimation of parameters of DPPs. In order to do this in practice we will have to make use of Markov chain Monte Carlo (MCMC) methods and hence provide a minimalistic introduction to those.
-The appendix contains a collection of some statements used in the thesis and also the R code that was produced for the simulation of DPPs and also the parameter estimations that where performed.
-\end{emp}
 
-\begin{emp}[Contributions]
-The dissertation is mainly built around the PhD thesis \cite{kulesza2012learning} and the research initiated by it. However we provide a few novelties. We present a completely self contained presentation of the estimator of the marginal kernel that was first proposed in \cite{urschel2017learning} and give a different, arguably easier proof for the consistency of this estimator. Furthermore, we will provide proofs for the consistency of the maximum likelihood estimators for different parametric models of DPPs that could not be found in the literature so far. In the last chapter we give a short introduction to MCMC methods including a collection of its mathematical foundations that is shorter -- and of course not as comprehensive -- than in the according text books. We hope that the toy examples given help the understanding of DPPs and the influence of the different parameters to its properties and that the provision of the code will save some people some time, although it should be mentioned that most algorithms will be far from computationally optimal.
-\end{emp}
+Before we introduce determinantal point processes (DPPs) formally we should give a short overview over the dissertations and its contributions. It is the goal to give a mostly self contained approach to different parameter estimation approaches for DPPs that is accessible to any student familiar with the basic notions of linear algebra, analysis and probability theory. We prove most statements of this dissertation or give precise references if the statements are not (mathematical) general knowledge.
+
+\subsubsection*{Motivation}
+
+Determinantal point processes are point processes, i.e. random subsets that exhibit a diversifying, repulsive behaviour in the sense that the subset is likely to obtain only elements that are different in some way. They arose first in the theory of random matrices as the distribution of the eigenvalues in \cite{mehta1960density} and later on in theoretical physics as the positions of Fermions like positively charged \(\alpha\)-particles that repell themselves (cf. \cite{benard1973detection}). Since then they have appeared in the study of different random objects like non intersecting random walks and the descent positions in a random digit sequence (cf. \cite{johansson2004determinantal} and \cite{borodin2010adding}). The Wigner hypothesis states that the energy levels at which a neutron is scattered or reflected by a Gadolinium-\(156\) nucleus are distributed according to a DPP\todo{cite}. Furthermore, DPPs arise in number theory as it has been conjectured that the positions of the non trivial roots of the Riemannian zeta function are distributed according to a determinantal point process (cf. \cite{bourgade2013quantum}). Hence, DPPs are fundamental to different theories and are therefore very interesting mathematical objects and a rich theory of those has been developed (cf. \cite{borodin2009determinantal}, \cite{hough2006determinantal}, \cite{lyons2003determinantal}).
+
+In recent years DPPs have also been used to treat different real world phenomena and we will only present two of them shortly here.
+\begin{enumerate}
+\item \emph{Image search}: Assume we have given a set of \(10^6\) pictures that were returned by a search engine for a particular query. On the first page only a few, lets say \(20\) can be presented and in order to increase the probability that the user is satisfied with at least one picture it is favourable to include pictures that are not very similar in some notion. This can be modelled by a DPP since the goal is to select a diverse subset (cf. \cite{kulesza2011k}). % however one has to estimate 
+\item \emph{Text summarisation:} DPPs have also been used successfully for extractive summarisation of news articles. The task of extractive summarisation is to select a subset of the sentences in order to obtain a reasonable summary of the text. The reason for the use of DPPs -- or any other diversifying point process -- is that similar sentences should not be selected since the summary would be quite repetitive then and hence one of the sentences should rather not be included in the summary (cf. \cite{kulesza2012learning1}). 
+\end{enumerate}
+%In practice the procedure in those real world applications can be divided into two parts, the first one being the modelling of some properties of the phenomenon, the second one being the estimation of certain parameters. We will focus on the second part, since it is universal to a lot of real world applications and can be put into rigorous terms.
+A crucial step in order to tackle those real world problems is to estimate certain parameters of the DPP and this will be the focus of this work. % and hence it is of great interest how this can be done.
+
+%\section{Historical remarks}
+%\begin{enumerate}
+%\item Theoretical work:
+%\begin{enumerate}
+%\item DPPs are point processes, i.e. random (locally finite) subsets that exhibit a diversifying, repulsive behaviour.
+%\item They first arose as the positions of Fermions, for example positively charged \(\alpha\)-particles that repell themselves spatially or eigenvalues of random matrices.
+%\item They continue to appear in
+%\begin{enumerate}
+%\item the study of many different random events like non intersection random walks and ...
+%\item theoretical physics like the spectra of stars ...
+%\item other areas of mathematics, for example the non trivial roots of the Riemmannian zeta function are conjectured to are distributed according to a DPP.
+%\end{enumerate}
+%\end{enumerate}
+%\item In recent years DPPs have been used in the study of different real world phenomena including
+%\begin{enumerate}
+%\item Text summarisation
+%\item Image search
+%\item Pose estimation
+% \item Applications to clustering
+% \item Applications in computer vision (pose estimation special case)
+%\end{enumerate}
+%\item In practice the procedure in the procedure in those real world applications can be divided into two parts, the first one being the modelling of some properties of the phenomenon, the second one being the estimation of certain parameters. We will focus on the second part, since it is universal to a lot of real world applications and can be put into rigorous terms.
+%\item All of applications include the estimation of the (some) parameters of the DPP and hence we will focus on this
+%\end{enumerate}
+
+\subsubsection{Outline of the thesis}
+In the first chapter we introduce discrete determinantal point processes and present the fundamental concepts we will need. Further, we show that for a given marginal kernel a corresponding DPP exists and see how DPPs can be simulated and apply this to some toy examples. In the second chapter we will present two different ways how an estimator can be obtained for the marginal kernel or parametrisations of it. We will see that both strategies yield a consistent estimator. In the last chapter we will present the fundamentally different Bayesian approach to parameter estimation and apply it to the estimation of parameters of DPPs. In order to do this in practice we have to make use of Markov chain Monte Carlo (MCMC) methods and hence provide a minimalistic introduction to those.
+The appendix contains a collection of some statements used in the thesis and also the R code that was used for the simulation of DPPs and also the parameter estimations that where performed.
+
+\subsubsection{Contributions}
+The dissertation is mainly built around the PhD thesis \cite{kulesza2012learning} and the research initiated by it. However, we provide a few novelties. We present a completely self contained presentation of the estimator of the marginal kernel that was first proposed in \cite{urschel2017learning} and give a different, arguably easier proof for the consistency of this estimator. Furthermore, we will provide proofs for the consistency of the maximum likelihood estimators for different parametric models of DPPs that could not be found in the literature so far.\footnote{At least to the best knowledge of the author.} In the last chapter we give a short introduction to MCMC methods including a collection of its mathematical foundations that is shorter -- and of course not as comprehensive -- than in the according text books. We hope that the given toy examples help the understanding of DPPs and the influence of the different parameters to its properties. The provision of the code could save some people some time, although it should be mentioned that most algorithms will be far from computationally optimal.
 
 
 %\begin{enumerate}

@@ -1,32 +1,8 @@
-%\chapter{Determinantal point processes: Basic notions and properties}
-\chapter{Introduction to discrete determinantal point processes}
+\chapter{Determinantal point processes: Basic notions and properties}
+%\chapter{Introduction to discrete determinantal point processes}
 
-%\section{Historical remarks}
-\begin{enumerate}
-\item Theoretical work:
-\begin{enumerate}
-\item DPPs are point processes, i.e. random (locally finite) subsets that exhibit a diversifying, repulsive behaviour.
-\item They first arose as the positions of Bosons that are ...., eigenvalues of random matrices.
-\item They continue to appear in
-\begin{enumerate}
-\item the study of many different random events like non intersection random walks and ...
-\item theoretical physics like the spectra of stars ...
-\item other areas of mathematics, for example the non trivial roots of the Riemmannian zeta function are conjectured to are distributed according to a DPP.
-\end{enumerate}
-\end{enumerate}
-\item In recent years DPPs have been used in the study of different real world phenomena including
-\begin{enumerate}
-\item Text summarisation
-\item Image search
-\item Pose estimation
-% \item Applications to clustering
-% \item Applications in computer vision (pose estimation special case)
-\end{enumerate}
-\item In practice the procedure in the procedure in those real world applications can be divided into two parts, the first one being the modelling of some properties of the phenomenon, the second one being the estimation of certain parameters. We will focus on the second part, since it is universal to a lot of real world applications and can be put into rigorous terms.
-%\item All of applications include the estimation of the (some) parameters of the DPP and hence we will focus on this
-\end{enumerate}
-
-In this chapter we aim to provide an overview over the basic notions and results for discrete determinantal point processes that we will need to study the parameter estimation later on. This means that we first rigorously introduce the concept of determinantal point processes and define the most important subclass that we will work with a lot later. This is exactly the subclass where one can express the elementary probabilities of the point process nicely. This will be crucial later on if one wants to perform the parameter estimation based on elementary probabilities, like for example maximum likelihood estimation or Bayesian parameter estimation.
+In this chapter we aim to provide %a short motivation for the topic itself and 
+an overview over the basic notions and results for discrete determinantal point processes. Those will be necessary to study the problem of parameter estimation later on. First we rigorously introduce the concept of discrete determinantal point processes and define the most important subclass that we will work with a lot later. This is exactly the subclass where one can express the elementary probabilities of the point process nicely. This will be crucial later on if one wants to perform the parameter estimation based on elementary probabilities, like for example maximum likelihood estimation or Bayesian parameter estimation.
 
 Then we will turn towards the question of existence and simulation of determinantal point processes. This will lead to an algorithm that samples from a DPP which we will use to built some toy examples and also to generate the data sets we will perform parameter estimation for in the following chapters.
 
@@ -264,9 +240,10 @@ q(y) = & \prod_{\alpha\in F}q_\alpha(y_\alpha) \\
 \phi(y) = & \sum_{\alpha\in F} \phi_\alpha(y_\alpha)
 \end{split}
 \end{equation}
-for a suitable set of factorisations \(F\) and qualities and diversities \(q_\alpha\) and \(\phi_\alpha\) for \(\alpha\in F\). Note that so far this is neither a restriction of generality -- we could simply choose \(F = \big\{\!\left\{ 1, \dots, R\right\}\!\big\}\) -- nor a simplification -- in that case we have the exact same number of qualities and diversities. However we are interested in the case where \(F\) consists only of small subsets of \(\left\{ 1, \dots, R\right\}\). For example suppose that \(F\) is the set of all subsets with one or two elements, then we only have
+for a suitable set of factorisations \(F\) and qualities and diversities \(q_\alpha\) and \(\phi_\alpha\) for \(\alpha\in F\). Note that so far this is neither a restriction of generality -- we could simply choose \(F = \big\{\!\left\{ 1, \dots, R\right\}\!\big\}\) -- nor a simplification -- in that case we have the exact same number of qualities and diversities. However we are interested in the case where \(F\) consists only of small subsets of \(\left\{ 1, \dots, R\right\}\). For example suppose that \(F\) is the set of all subsets with one or two elements, then we only have\footnote{%We use the usual âbig-\(O\)-notationÔ; namely w
+We write \(f(x) = O(g(x))\) if \(f(x) \le M g(x)\) for all \(x\ge x_0\) and one \(M>0\).}
 \[R\cdot M + \binom{R}{2} \cdot M^2 = O(R^2M^2)\]
-\todo{introduce Landau symbols}
+%\todo{introduce Landau symbols}
 quality and diversity features instead of
 \[M^R = O(M^R).\]
 This reduction of variables will make modelling, storing and estimating them possible again in a lot of cases where naive approaches are foredoomed because of their shear size.
@@ -373,7 +350,7 @@ where we used Cauchy-Binet and the notation \(J = \left\{ j_1, \dots, j_m\right\
 
 Just like in the case of the Cauchy-Binet identity we will give a discrete version of the previous result in which the normalisation factor does not appear.
 
-\todo{clean up this result!}
+%\todo{clean up this result!}
 \begin{prop}[Variation of Cauchy-Binet]\label{CB-type}
 Let \(m \le n\) be two natural numbers and \(B\in\mathbb R^{m\times n}\) be a matrix such that the rows of \(B\) form an orthonormal system. Further let \(I \subseteq[n]\) with \(\left\lvert I \right\rvert\le m\), then we have
 \begin{equation*}
@@ -434,7 +411,7 @@ where we used that the determinant vanishes if two indices \(i_k\) and \(i_l\) a
 We roughly follow the approaches taken in \cite{hough2006determinantal} and \cite{kulesza2012determinantal} and will start by showing that every determinantal point process can be seen as a mixture of a smaller class of determinantal point processes.%\todo{reference to the paper}
 
 \begin{theo}[Mixture representation of DPPs]\label{mixDPPs}
-Let \(\mathbb P\) be a DPP and \[K = \sum_{k=1}^N \lambda_kv_kv_k^T\] be the spectral decomposition of its marginal kernel. Let now \(\left\{ \xi_k\right\}_{k =1, \dots, N}\) be a collection of independent Bernoulli random variables with mean \(\lambda_i\). Define now the random kernel
+Let \(\mathbb P\) be a DPP and \[K = \sum_{k=1}^N \lambda_kv_kv_k^T\] be the spectral decomposition of its marginal kernel. Let now \(\left\{ \xi_k\right\}_{k =1, \dots, N}\) be a collection of independent Bernoulli random variables with mean \(\lambda_k\). Define now the random kernel
 \begin{equation}\label{BerKer}
 K_\xi = \sum_{k=1}^N \xi_k v_kv_k^T.
 \end{equation}
@@ -534,8 +511,9 @@ Since \(P_{k-1}\) is the projection onto the subspace orthogonal to \(b_1, \dots
 \[\det\begin{pmatrix}
 b_1^Tb_1 & \cdots & b_1^Tb_m \\ \vdots & \ddots & \vdots \\ b_m^Tb_1 & \cdots & b_m^Tb_m
 \end{pmatrix} = \det\!\big((B^TB)_A\big)\]
-where \(B\in\mathbb R^{N\times N}\) is the matrix which columns\todo{rows or columns?!}{ } are equal to \(b_k\). Therefore it remains to show \(B^TB = K\). However by definition \(B\) is the projection onto the span of \(V\) and thus \(B=K\). Because \(K\) is symmetric like every projection, we have \(B^T = B\) and hence can conclude \(B^TB = B^2 = B = K\) where we used that \(B\) is a projection.
-\end{proof}\todo{add span to nomenclature}
+where \(B\in\mathbb R^{N\times N}\) is the matrix which columns %\todo{rows or columns?!}{ } 
+are equal to \(b_k\). Therefore it remains to show \(B^TB = K\). However by definition \(B\) is the projection onto the span of \(V\) and thus \(B=K\). Because \(K\) is symmetric like every projection, we have \(B^T = B\) and hence can conclude \(B^TB = B^2 = B = K\) where we used that \(B\) is a projection.
+\end{proof}%\todo{add span to nomenclature}
 
 A straight forward application of Theorem \ref{mixDPPs} proves that the following algorithm samples from a DPP. This will also show the existence of DPPs to a given marginal kernel since it gives an explicit construction.
 
@@ -562,7 +540,7 @@ A straight forward application of Theorem \ref{mixDPPs} proves that the followin
 
 \begin{theo}[Sampling algorithm]
 Let \(K\in\mathbb R^{N\times N}\) be any symmetric and non negative definite matrix such that \(K\le I\). Then the distribution of the output \(Y\) of Algorithm \ref{alg:DPP-sampling} is a DPP with marginal kernel \(K\). %In particular 
-\end{theo}\todo{add \(A\le B\) for matrices to nomenclature.}
+\end{theo}%\todo{add \(A\le B\) for matrices to nomenclature.}
 \begin{proof}
 Theorem \ref{mixDPPs} states that an arbitrary DPP is the mixture of elementary DPPs and the for loop in the algorithm represents exactly this mixing with the respective weights. Further the sampling result for elementary DPPs yields that the output of the second part of the algorithm, namely the while loop, is distributed according to a DPP with marginal kernel \(K^V\coloneqq\sum_{v\in V} vv^T \).
 %Thus we only have to show that the output of the second part of the algorithm, namely the while loop, is distributed according to a DPP with marginal kernel \(K^V\coloneqq\sum_{v\in V} vv^T \). 
@@ -626,7 +604,7 @@ Theorem \ref{mixDPPs} states that an arbitrary DPP is the mixture of elementary 
 %\[\frac1{k!}\left\lVert B_1 \right\rVert\cdot \left\lVert P_1B_2 \right\rVert \cdot\ldots\cdot\left\lVert P_{k-1}B_k \right\rVert = \frac1{k!}\det(K^V_A)\]
 %what we had to show.
 \end{proof}
-\todo{comment on the intuition one can get from this!}
+\todo{comment on the intuition one can get from this?}
 
 \begin{cor}[Existence of DPPs]
 Let \(K\) be a symmetric \(N\times N\) matrix. Then \(K\) is the marginal kernel of a DPP if and only if \(0\le K\le I\).
@@ -663,21 +641,21 @@ We close this section with the proof of \ref{mixDPPs} given in \cite{kulesza2012
 %\end{proof}
 
 \begin{proof}[Proof of Theorem \ref{mixDPPs}]
-\todo{reread!}
+%\todo{reread!}
 Let %\(W_n\coloneqq v_nv_n^T\), then we have for 
-\(A\subseteq\mathcal Y, m\coloneqq\left\lvert A \right\rvert\) and set \(W_n\coloneqq (v_kv_k^T)_A\) and \(W_J\coloneqq\sum_{k\in J} W_k\). Then we have
+\(A\subseteq\mathcal Y, m\coloneqq\left\lvert A \right\rvert\) and set \(W_k\coloneqq (v_kv_k^T)_A\) and \(W_J\coloneqq\sum_{k\in J} W_k\). Then we have
 \[\tilde{\mathbb P}(A\subseteq\mathbf Y) = \sum_{J\subseteq[N]} \det(W_J) \cdot\tilde{\mathbb P}\big(\xi_{j} = 1 \text{ for } j \in J\big).\]
-Let \(\big((W_{k_1})_1(W_{k_2})_2\dots (W_{k_m})_m\big)\) denote the \(m\times m\) matrix with \(j\)-th row equal to the \(j\)-th row of \(W_{k_j}\). Using the multilinearity of the determinant we obtain that the marginal probability above is equal to
+Let \(\big((W_{k_1})_1(W_{k_2})_2\cdots (W_{k_m})_m\big)\) denote the \(m\times m\) matrix with \(j\)-th row equal to the \(j\)-th row of \(W_{k_j}\). Using the multilinearity of the determinant we obtain that the marginal probability above is equal to
 \begin{equation*}
 \begin{split}
 %\tilde{\mathbb P}(A\subseteq\mathbf Y) & = \sum_{J\subseteq\mathcal Y} \det(W_J) \cdot\tilde{\mathbb P}\big(B_{i} = 1 \text{ for } i \in J\big) \\% \prod_{i\in J} \lambda_i \prod_{i\notin J} (1-\lambda_i) \\
 & % \overset{\ref{aux}}{=}
-\sum_{J\subseteq[N]}\sum_{k_1, \dots, k_m\in J} \det\big((W_{k_1})_1(W_{k_2})_2\dots (W_{k_m})_m\big) \cdot\tilde{\mathbb P}\big(\xi_{j} = 1 \text{ for } j \in J\big) \\%\prod_{i\in J} \lambda_i \prod_{i\notin J} (1-\lambda_i) \\
- = & \sum_{k_1, \dots, k_m=1}^N \det\big((W_{k_1})_1(W_{k_2})_2\dots (W_{k_m})_m\big) \sum_{J\supseteq\left\{ k_1, \dots, k_m\right\}} \tilde{\mathbb P}\big(\xi_{j} = 1 \text{ for } j \in J\big) \\%\prod_{i\in J} \lambda_i \prod_{i\notin J} (1-\lambda_i) \\
- = & \sum_{k_1, \dots, k_m=1}^N \det\big((W_{k_1})_1(W_{k_2})_2\dots (W_{k_m})_m\big) \cdot\tilde{\mathbb P}\big(\xi_{k_j} = 1 \text{ for } j = 1, \dots, m\big) \\%\prod_{i = 1}^k \lambda_{n_i} \\
- = & \sum_{k_1, \dots, k_m=1}^N \det\big((\lambda_{k_1}W_{k_1})_1(\lambda_{k_2}W_{k_2})_2\dots (\lambda_{k_m}W_{k_m})_m\big) \\
+\sum_{J\subseteq[N]}\sum_{k_1, \dots, k_m\in J} \det\big((W_{k_1})_1(W_{k_2})_2\cdots (W_{k_m})_m\big) \cdot\tilde{\mathbb P}\big(\xi_{j} = 1 \text{ for } j \in J\big) \\%\prod_{i\in J} \lambda_i \prod_{i\notin J} (1-\lambda_i) \\
+ = &\; \sum_{k_1, \dots, k_m=1}^N \det\big((W_{k_1})_1(W_{k_2})_2\cdots (W_{k_m})_m\big) \sum_{J\supseteq\left\{ k_1, \dots, k_m\right\}} \tilde{\mathbb P}\big(\xi_{j} = 1 \text{ for } j \in J\big) \\%\prod_{i\in J} \lambda_i \prod_{i\notin J} (1-\lambda_i) \\
+ = &\; \sum_{k_1, \dots, k_m=1}^N \det\big((W_{k_1})_1(W_{k_2})_2\cdots (W_{k_m})_m\big) \cdot\tilde{\mathbb P}\big(\xi_{k_j} = 1 \text{ for } j = 1, \dots, m\big) \\%\prod_{i = 1}^k \lambda_{n_i} \\
+ = &\; \sum_{k_1, \dots, k_m=1}^N \det\big((\lambda_{k_1}W_{k_1})_1(\lambda_{k_2}W_{k_2})_2\cdots (\lambda_{k_m}W_{k_m})_m\big) \\
 %\overset{\ref{aux}}{=}
-= & \det\Big(\sum_{k=1}^N W_k\Big) = \det(K_A).
+= & \; \det\bigg(\sum_{k=1}^N \lambda_kW_k\bigg) = \det(K_A).
 \end{split}
 \end{equation*}
 %where the indices \(n_1, \dots, n_k\) are distinct.

@@ -1,1 +1,14 @@
 \chapter{Summary and conclusion}
+
+\begin{enumerate}
+\item We’ve seen different approaches to the parameter estimation of DPPs
+\item The first two we’re point estimators and we’ve seen that they are both consistent. However, the maximum likelihood estimation runs into computational problems since one has to maximise a non concave function.
+\item This and also the goal to capture uncertainty and to regularise the parameter estimation -- which will solve the problem that the MLE doesn’t always exist -- lead to the Bayesian approach to parameter estimation. Here the problem is that the normalisation constant of the posterior density can not be computed analytically or numerically. Nevertheless, the posterior density can be approximated through MCMC methods.
+\end{enumerate}•
+
+\subsubsection{Further work}
+
+\begin{enumerate}
+\item Estimation of the ‚repulsiveness parameter‘, in the best case simultaneously to the log linearity constant of the quality; comparison to other estimators
+\item Investigate whether it is beneficial to perceive the log likelihood function of the whole elementary kernel as a function of the determinantal equivalence classes. In the best case one could proof that then a unique maximiser exists, which is equivalent with the statement that all local maxima of the log likelihood function are global minima. Then standard optimisation tools could be used. However, the structure of those equivalent classes is not obvious....
+\end{enumerate}

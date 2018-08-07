@@ -53,7 +53,7 @@ First we will convince ourselves that the approach of calculating a posterior di
 \begin{emp}[Comparison to MLE]
 Maybe one feels slightly uncomfortable with the need to choose a prior distribution and it turns out that this is in fact a difficult step that has to be taken with a certain amount of care. However we could pretend for one moment to be completely ignorant in the sense that we do not know anything about the parameter and hence we don’t feel in the position to propose a reasonable prior. Then we could simply choose the uniform distribution as a prior -- given it exists\footnote{Even it doesn’t one can still define the prior density to be constant and hope that the posterior is a probability density.} -- and would obtain
 \[f_{\Theta| X}(\theta|x) \propto f_{X|\Theta}(x|\theta). \]
-Hence we can regain the MLE from our posterior distribution since it is just the mode, i.e. the maximiser of the posterior density. This relation to the MLE can be seen in Figure \ref{fig:4.1}. Hence the Bayesian approach is a more general tool than MLE and allows also to capture the random uncertainty of the parameter \(\theta\). This is desirable since  we have seen that the mode is not always a vey typical outcome of a random variable\todo{cite}.
+Hence we can regain the MLE from our posterior distribution since it is just the mode, i.e. the maximiser of the posterior density. This relation to the MLE can be seen in Figure \ref{fig:4.1}. Hence the Bayesian approach is a more general tool than MLE and allows also to capture the random uncertainty of the parameter \(\theta\). This is desirable since  we have seen that the mode is not always a vey typical outcome of a random variable. %\todo{cite}.
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.6\textwidth]{figures/heatmap-log-linearity-SliceSampling-new-3}
@@ -106,7 +106,7 @@ We will assume that we are in the setting of the estimation of the log linearity
 
 Of course we have seen in the section about coercivity of the log likelihood functions that the probability for this to happen tends to zero with increasing sample size, however in practice it might not be possible to obtain more samples. In this scenario the maximum likelihood approach fails but the posterior density \eqref{post2} still exists. One way of explaining this is that the prior assigns small values to parameters far away from zero. Hence the prior can be seen as a kind of regularisation since it penalises parameters that lead to very irregular models. In our case irregular means that the log linearity constant is big which implies that one quality is either very high or close to zero. Having a high quality corresponds to the model almost not being a \(L\)-ensemble any more and having quality zero means that the model can not be expressed any more through log linear qualities.
 
-In similar fashion a suitable prior distribution can be used to make the parameter estimation more stable in the case that the data is perturbed by some noise. \todo{work on this.}
+In similar fashion a suitable prior distribution might be used to make the parameter estimation more stable in the case that the data is perturbed by some noise. However, this would need some further investigation. %\todo{work on this.}
 \end{emp}
 
 \section{Markov chain Monte Carlo methods}
@@ -275,9 +275,9 @@ where \(\delta_x\) is the Dirac measure in \(x\) and
 is the \emph{acceptance probability} of the chain at state \(x\).
 
 \begin{prop}[Stationary distribution]
-\todo{do you need any conditions on the support of the proposals?}
+%\todo{do you need any conditions on the support of the proposals?}
 %Let \((X_n)_{n\in\mathbb N}\) be the Metropolis-Hastings random walk. Then
-The probability measure \(\pi\) is a stationary distribution of MH random walk.
+The probability measure \(\pi\) is a stationary distribution of the MH random walk.
 \end{prop}
 \begin{proof}
 We have
@@ -304,7 +304,7 @@ where we used Fubini-Tonelli theorem\footnote{The Fubini-Tonelli theorem states 
 \[\int\limits_{\mathcal X} K(x, A) \pi(\mathrm dx) = \frac1Z \int\limits_{\mathcal X} \delta_x(A) f(x) \mu(\mathrm dx) = \pi(A). \]
 \end{proof}
 
-Now we are aiming to prove that the MH random walk is Harris recurrent because then the ergodic theorem yields that the empirical measures associated with the Markov chain will actually converge to \(\pi\). Obviously this is not for all proposal families in general the case, for example we could consider that the proposal distribution \(f(\cdot|x)\) is just the Dirac measures in \(x\)\footnote{Obviously this is slightly formal, because the Dirac measure can typically not be expressed through a density. However rigorous examples can be constructed similarly.}. Then the MH random walk would never leave its initial position which will typically be a deterministic point. Hence the empirical measures only be the Dirac measure in the starting point and hence not converge towards \(\pi\).
+Now we are aiming to prove that the MH random walk is Harris recurrent because then the ergodic theorem yields that the empirical measures associated with the Markov chain will actually converge to \(\pi\). Obviously this is not for all proposal families in general the case, for example we could consider that the proposal distribution \(f(\cdot|x)\) is just the Dirac measures in \(x\).\footnote{Obviously this is slightly formal, because the Dirac measure can typically not be expressed through a density. However rigorous examples can be constructed similarly.} Then the MH random walk would never leave its initial position which will typically be a deterministic point. Hence the empirical measures only be the Dirac measure in the starting point and hence not converge towards \(\pi\).
 
 The first step towards Harris recurrence is to show irreducibility and this will already give us some hints what families of proposal are sensible.
 % and the first step for this is the irreducibility.
@@ -390,7 +390,7 @@ This simulation illustrates the problem of to aggressive -- \(\alpha = 100\) -- 
 \end{ex}
 
 \begin{emp}[Tuning the proposal]\label{tuning}
-In order to obtain a higher acceptance rate without the loss of generally choosing the variance of the proposal distribution small one can do tune the proposal distribution. This means one adjusts the proposal distribution after a while, lets say after the first \(10^3\) samples in such a way that one replaces the original covariance matrix \(\Sigma\) by the empirical covariance of the first \(10^3\) samples\todo{is this true?}. Then one forgets about all the samples so far -- they are called usually the \emph{burn in period} -- and starts a new MH random walk usually at one of the data points of the burn in period, since they should already indicate where an area of high density is. The reason why this increases the acceptance rate is, that the proposal now only is aggressive in those directions where the density is broadly spread. \todo{find a reference for this}%This effect can be seen in Figure \todo{make this figure}.
+In order to obtain a higher acceptance rate without the loss of generally choosing the variance of the proposal distribution small one can do tune the proposal distribution. This means one adjusts the proposal distribution after a while, lets say after the first \(10^3\) samples in such a way that one replaces the original covariance matrix \(\Sigma\) by the empirical covariance of the first \(10^3\) samples\todo{is this true?}. Then one forgets about all the samples so far -- they are called usually the \emph{burn in period} -- and starts a new MH random walk usually at one of the data points of the burn in period, since they should already indicate where an area of high density is. The reason why this increases the acceptance rate is, that the proposal now only is aggressive in those directions where the density is widely spread. \todo{find a reference for this}%This effect can be seen in Figure \todo{make this figure}.
 \end{emp}
 
 \subsection{Slice sampling}

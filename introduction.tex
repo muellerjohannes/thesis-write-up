@@ -1,35 +1,29 @@
-\chapter{Introduction and motivating examples}
+%\chapter{Introduction and motivating examples}
+\chapter*{Preface}
+%\addtocontents{toc}{Preface}
+\addcontentsline{toc}{chapter}{Preface}
 
-\section{Motivation}
+%\section{Motivation}
 
-\todo{explain why DPPs are awesome}
+%\todo{explain why DPPs are awesome}
 
-\section{Previous work}
+%\section{Previous work}
 
-\begin{enumerate}
-\item Theoretical work:
-\begin{enumerate}
-\item ¥ 
-\end{enumerate}¥
-\item A lot of real world applications that raised interest in DPPs:
-\begin{enumerate}
-\item Text summarisation
-\item Image search
-\item Pose estimation
-\item Applications to clustering
-\item Applications in computer vision (pose estimation special case)
-\end{enumerate}
-\end{enumerate}
-
-
-\section{Aim and outline of the dissertation}
+%\section{Aim and outline of the dissertation}
 
 \begin{enumerate}
-\item All of applications include the estimation of the (some) parameters of the DPP and hence we will focus on this
 \item Outline:
 \begin{enumerate}
-\item Chapter II: Basics that we need to investigate the task of parameter estimation including the existence and simulation of DPPs and some toy examples.
-\item Chapter III: Presentation of two different point estimators including the proof of consistency of both.
-\item Chapter IV: Discussion of a Bayesian framework for parameter estimation in general and for DPPs specifically including the benefits of this approach.
-\end{enumerate}¥
-\end{enumerate}¥
+\item Chapter I: Basics that we need to investigate the task of parameter estimation including the existence and simulation of DPPs and some toy examples.
+\item Chapter II: Presentation of two different point estimators including the proof of consistency of both.
+\item Chapter III: Discussion of a Bayesian framework for parameter estimation in general and for DPPs specifically including the benefits of this approach.
+\end{enumerate}
+\item Contributions:
+\begin{enumerate}
+\item Give a self contained presentation of the estimator for the marginal kernel that is presented in ... including a different, arguably easier proof of the consistency
+\item Show that the MLEs for different parameters exist with increasing probability and are in fact consistent.
+\item Give a short introduction into Bayesian parameter estimation and MCMC methods with a presentation of the mathematical foundations of those.
+\item Provide easy examples throughout the thesis including simulation and parameter estimations for those. The code for this is also included in the appendix.
+\end{enumerate}
+\item It is the aim to give a mostly self contained approach to the topic that is accessible to any student familiar with basic notions of linear algebra, analysis and probability theory. We proof almost everything we use in this dissertation or give precise references if the statements are not (mathematical) general knowledge.
+\end{enumerate}

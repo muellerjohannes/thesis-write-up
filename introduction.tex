@@ -11,19 +11,33 @@
 
 %\section{Aim and outline of the dissertation}
 
-\begin{enumerate}
-\item Outline:
-\begin{enumerate}
-\item Chapter I: Basics that we need to investigate the task of parameter estimation including the existence and simulation of DPPs and some toy examples.
-\item Chapter II: Presentation of two different point estimators including the proof of consistency of both.
-\item Chapter III: Discussion of a Bayesian framework for parameter estimation in general and for DPPs specifically including the benefits of this approach.
-\end{enumerate}
-\item Contributions:
-\begin{enumerate}
-\item Give a self contained presentation of the estimator for the marginal kernel that is presented in ... including a different, arguably easier proof of the consistency
-\item Show that the MLEs for different parameters exist with increasing probability and are in fact consistent.
-\item Give a short introduction into Bayesian parameter estimation and MCMC methods with a presentation of the mathematical foundations of those.
-\item Provide easy examples throughout the thesis including simulation and parameter estimations for those. The code for this is also included in the appendix.
-\end{enumerate}
-\item It is the aim to give a mostly self contained approach to the topic that is accessible to any student familiar with basic notions of linear algebra, analysis and probability theory. We proof almost everything we use in this dissertation or give precise references if the statements are not (mathematical) general knowledge.
-\end{enumerate}
+%This dissertation emerged from the 
+
+Before we begin to give an introduction to determinantal point processes (DPPs) we should give a short overview over the dissertations, its contributions and who should read it. Firstly, it is the aim to give a mostly self contained approach to different parameter estimation approaches for DPPs that is accessible to any student familiar with the basic notions of linear algebra, analysis and probability theory. We proof almost everything we use in this dissertation or give precise references if the statements are not (mathematical) general knowledge.
+
+\begin{emp}[Outline of the thesis]
+In the first chapter we introduce discrete determinantal point processes and present the fundamental concepts we will need. Further, we show that DPPs with a given marginal kernel exist and see how they can be simulated and apply this to some toy examples. In the second chapter we will present two different ways how an estimator can be obtained for the marginal kernel or parametrisations of it. We will see that both strategies yield a consistent estimator. In the last chapter we will present the fundamentally different Bayesian approach to parameter estimation and apply it to the estimation of parameters of DPPs. In order to do this in practice we will have to make use of Markov chain Monte Carlo (MCMC) methods and hence provide a minimalistic introduction to those.
+The appendix contains a collection of some statements used in the thesis and also the R code that was produced for the simulation of DPPs and also the parameter estimations that where performed.
+\end{emp}
+
+\begin{emp}[Contributions]
+The dissertation is mainly built around the PhD thesis \cite{kulesza2012learning} and the research initiated by it. However we provide a few novelties. We present a completely self contained presentation of the estimator of the marginal kernel that was first proposed in \cite{urschel2017learning} and give a different, arguably easier proof for the consistency of this estimator. Furthermore, we will provide proofs for the consistency of the maximum likelihood estimators for different parametric models of DPPs that could not be found in the literature so far. In the last chapter we give a short introduction to MCMC methods including a collection of its mathematical foundations that is shorter -- and of course not as comprehensive -- than in the according text books. We hope that the toy examples given help the understanding of DPPs and the influence of the different parameters to its properties and that the provision of the code will save some people some time, although it should be mentioned that most algorithms will be far from computationally optimal.
+\end{emp}
+
+
+%\begin{enumerate}
+%\item Outline:
+%\begin{enumerate}
+%\item Chapter I: Basics that we need to investigate the task of parameter estimation including the existence and simulation of DPPs and some toy examples.
+%\item Chapter II: Presentation of two different point estimators including the proof of consistency of both.
+%\item Chapter III: Discussion of a Bayesian framework for parameter estimation in general and for DPPs specifically including the benefits of this approach.
+%\end{enumerate}
+%\item Contributions:
+%\begin{enumerate}
+%\item Give a self contained presentation of the estimator for the marginal kernel that is presented in ... including a different, arguably easier proof of the consistency
+%\item Show that the MLEs for different parameters exist with increasing probability and are in fact consistent.
+%\item Give a short introduction into Bayesian parameter estimation and MCMC methods with a presentation of the mathematical foundations of those.
+%\item Provide easy examples throughout the thesis including simulation and parameter estimations for those. The code for this is also included in the appendix.
+%\end{enumerate}
+%\item It is the aim to give a mostly self contained approach to the topic that is accessible to any student familiar with basic notions of linear algebra, analysis and probability theory. We proof almost everything we use in this dissertation or give precise references if the statements are not (mathematical) general knowledge.
+%\end{enumerate}

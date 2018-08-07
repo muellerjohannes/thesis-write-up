@@ -688,15 +688,16 @@ We will present two examples and although -- or maybe even because -- they are v
 
 \subsubsection{Points on a line}
 
-We start by defining and simulating from a one dimensional DPP. More precisely we consider the ground set \(\mathcal Y \coloneqq \left\{ 1, \dots, 100\right\}\). Further we model the diversity feature vectors like in \ref{moddiv} and define as a reference set the whole set itself \(\mathcal R\coloneqq\mathcal Y\). Now we choose \(f\) to be the normal density with mean \(0\) and variance \(10\), i.e. we have
-\[(\phi_i)_j\propto \exp\left( - \frac{(i-j)^2}{20}\right) \quad \text{for } i, j\in\mathcal Y.\]
-Finally we set the qualities to be constant and scale them so that the expected cardinality of the DPP is approximately \(15\). Further we define a Poisson point process with the same expected cardinality. This means the second point process includes every point independently with probability \(\frac{15}{100}\). A comparison of a sample from those point processes is depicted in Figure \ref{pointsonaline} and the -- in this case spatially -- repulsive structure of the DPP is apparent.
+We start by defining and simulating from a one dimensional DPP. More precisely we consider the ground set \(\mathcal Y \coloneqq \left\{ 1, \dots, 100\right\}\). Further we model the diversity feature vectors like in \ref{moddiv} and define as a reference set the whole set itself \(\mathcal R\coloneqq\mathcal Y\). Now we choose \(f\) to be a normal density with mean \(0\), i.e. we have
+\[(\phi_i)_j\propto \exp\left( - \frac{(i-j)^2}{\sigma}\right) \quad \text{for } i, j\in\mathcal Y.\]
+We will choose \(\sigma = 20\) first and then \(\sigma = 5\) to see how this parameter affects the repulsion of the DPP.
+Finally we set the qualities to be constant and scale them so that the expected cardinality of the DPP is approximately \(15\). Further we define a Poisson point process with the same expected cardinality. This means the second point process includes every point independently with probability \(\frac{15}{100}\). A comparison of a sample from those three point processes is depicted in Figure \ref{pointsonaline} and the -- in this case spatially -- repulsive structure of the DPP is apparent.
 \begin{figure}[h!]\label{pointsonaline}
 	\centering
-	\includegraphics[width=0.60\textwidth]{figures/comparison-DPPs-Poisson-2}
+	\includegraphics[width=0.60\textwidth]{figures/comparison-different-DPPs-Poisson-4}
 %	\includegraphics[width=0.49\textwidth]{Poisson-in-square}
 %	\tag{1}
-	\caption{A DPP and a Poisson point process on a (discretised) line with same expected cardinality. The spatial repulsion of the DPP is clearly visible.}
+	\caption{Two DPPs with a different strenght of repulsion on the left and a Poisson point process on a (discretised) line with same expected cardinality. The spatial repulsion of the DPPs is clearly visible.}
 \end{figure}
 
 We shall quickly discuss what influence the choice of \(f\) has on the strength of the repulsion of the DPP. Indeed lets say we choose
@@ -705,8 +706,8 @@ for some \(\sigma>0\). Then we obviously have
 \[\phi_i \xlongrightarrow{\sigma\to\infty} \sqrt{N}\cdot \begin{pmatrix}
 1\\ \vdots \\ 1
 \end{pmatrix}\in\mathbb R^N. \]
-Hence the similarity \(\phi_i^T\phi_j\) between item \(i\) and \(j\) will increase and therefore the negative correlation gets stronger. Hence the DPP will become increasingly repulsive if we increase the parameter \(\sigma\) which can be seen in Figure \ref{}. On a more formal level one can argue that if one models the diversity feature vectors this way, we center Gaussian densities at the reference points and then associate an item \(i\) with how it looks seen from those reference points under this Gaussian density. If we increase the standard deviation \(\sigma\) of this density all items become increasingly similar from the standpoints of the reference points. Similar considerations apply if \(f\) is not a normal denstiy.\todo{is this similar to kernel methods?}
- \todo{complete this and add picture!}
+Hence the similarity \(\phi_i^T\phi_j\) between item \(i\) and \(j\) will increase and therefore the negative correlation gets stronger as \(\sigma\) grows. Hence the DPP will become increasingly repulsive if we increase the parameter \(\sigma\) which can be seen in Figure \ref{pointsonaline} where the first sample corresponds to the choice \(\sigma = 20\), the second one to \(\sigma = 5\) and the last one to a Poisson point process. On a more formal level one can argue that if one models the diversity feature vectors this way, we center Gaussian densities at the reference points and then associate an item \(i\) with how it looks seen from those reference points under this Gaussian density. If we increase the standard deviation \(\sigma\) of this density all items become increasingly similar from the standpoints of the reference points. Similar considerations apply if \(f\) is not a normal denstiy.\todo{is this similar to kernel methods?}
+% \todo{complete this and add picture!}
 
 \subsubsection*{Binary sequences}
 

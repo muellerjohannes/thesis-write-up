@@ -1,14 +1,25 @@
 \chapter{Summary and conclusion}
 
-\begin{enumerate}
-\item We’ve seen different approaches to the parameter estimation of DPPs
-\item The first two we’re point estimators and we’ve seen that they are both consistent. However, the maximum likelihood estimation runs into computational problems since one has to maximise a non concave function.
-\item This and also the goal to capture uncertainty and to regularise the parameter estimation -- which will solve the problem that the MLE doesn’t always exist -- lead to the Bayesian approach to parameter estimation. Here the problem is that the normalisation constant of the posterior density can not be computed analytically or numerically. Nevertheless, the posterior density can be approximated through MCMC methods.
-\end{enumerate}•
+In this thesis we have seen different approaches to the estimation of different parametric models of discrete DPPs. First we presented a point estimator that reconstructs an estimation for the marginal kernel over the empirical marginal densities. The central tool for this is the solution of the principle minor assignment problem that reconstructs a matrix with predescribed principle minors up to an equivalence relation. This can be done by solving a set of linear equations over the prime field \(\mathbb F_2\). One drawback of this approach is, that one has to calculate a minimal shortest cycle basis of the estimated adjacency graph which is not straight forward to implement. Further we have seen that this estimator is consistent, but the results in \cite{urschel2017learning} also imply that the convergence might be very slow. % which again relies on the 
+
+The second approach was to exploit the well established theory of maximum likelihood estimation, which yields another point estimator. However the main difficulty here is that the log likelihood function for the whole elementary kernel \(L\) is not concave and therefore very hard to maximise in practice. Nevertheless, we have seen that this problem can be solved by the use of a log linear model for the qualities. The trade off is that this model has a lower descriptive power and that one has to model the similarity of the DPP which determines the structure and strength of the repulsion. Finally, we proved that the MLEs exist with increasing probability and are consistent estimators for the respective parameters. %\todo{add consistency}
+
+In the last chapter we also introduced the Bayesian approach to parameter estimation which is fundamentally different in the sense that it treats the estimated parameter as a random varibale rather than a single value. This does not only allow to capture the uncertainty of the estimation but also has a regularising effect in the sense that the posterior distribution always exists even if the according maximum likelihood estimator doesn’t. Further, it might be possible to approximate the posterior density of the parameter through different MCMC methods even if the MLE is impossible to compute in practice.
+
+%\begin{enumerate}
+%\item We’ve seen different approaches to the parameter estimation of DPPs
+%\item The first two we’re point estimators and we’ve seen that they are both consistent. However, the maximum likelihood estimation runs into computational problems since one has to maximise a non concave function.
+%\item This and also the goal to capture uncertainty and to regularise the parameter estimation -- which will solve the problem that the MLE doesn’t always exist -- lead to the Bayesian approach to parameter estimation. Here the problem is that the normalisation constant of the posterior density can not be computed analytically or numerically. Nevertheless, the posterior density can be approximated through MCMC methods.
+%\end{enumerate}•
 
 \subsubsection{Further work}
 
+During the work on this dissertation the following questions arose that might be worth to consider further. 
+
 \begin{enumerate}
-\item Estimation of the ‚repulsiveness parameter‘, in the best case simultaneously to the log linearity constant of the quality; comparison to other estimators
-\item Investigate whether it is beneficial to perceive the log likelihood function of the whole elementary kernel as a function of the determinantal equivalence classes. In the best case one could proof that then a unique maximiser exists, which is equivalent with the statement that all local maxima of the log likelihood function are global minima. Then standard optimisation tools could be used. However, the structure of those equivalent classes is not obvious....
+\item Can one effectively perform maximum likelihood estimation of the repulsiveness parameter \(\sigma\), in the best case even simultaneously to the log linearity constant \(\theta\) of the quality? If not, could this be done by iteratively optimising \(\sigma\) and \(\theta\) after another? If one of those procedures works theoretically, does it provide any significant improvement over the other estimations?
+\item Is it beneficial to perceive the log likelihood function of the whole elementary kernel as a function of the determinantal equivalence classes? Is there a unique maximiser of the log likelihood function in this case and maybe even a unique critical point? What is the structure of the set of those equivalence clases and can one effectively optimise functions on this set? %Then standard optimisation tools could be used. However, the structure of those equivalent classes is not obvious....
+\item Does the regularising effect of the prior bring any substantial benefits if one perturbs the observation with random noise? %How strong and beneficial is the regularising effect of the prior in terms of noise on the observation?
 \end{enumerate}
+
+To conlude, we want to emphasise that we believe that determinantal point processes will continue to get attention from the research communities concerned with machine learning, data science and computational statistics. We assume that they could help to improve various current techniques in those fields and actually think that they already on the way of doing this.  %-- although the focus of this dissertation was the estimation of the parameters of DPPs -- 

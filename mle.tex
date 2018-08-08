@@ -1,6 +1,6 @@
 \section{Maximum likelihood estimation using optimisation techniques}
 
-\todo{rewrite introduction to MLE}{ }
+%recent\todo{rewrite introduction to MLE}{ }
 The method of maximum likelihood estimation is a very well established procedure to estimate parameters. The philosophy of MLE is that one selects the parameter under which the given data would be the most likely to be observed and to motivate this in more detail we roughly follow the corresponding section in \cite{rice2006mathematical}.
 %Assume again that we have \(n\) samples \(\mathbf Y_1, \dots, \mathbf Y_n\) and then the maximum likelihood estimator would be the kernel 
 
@@ -157,7 +157,7 @@ Under the assumption of a log linear model for the qualities the individual term
 2\cdot\theta^T\sum\limits_{i\in Y}f_{i} + \det(\hat{S}_{Y}) - \log\left( \sum_{A\subseteq\mathcal Y} \exp\left(2\cdot \theta^T\sum_{i\in A}f_{i}\right)\det(\hat{S}_A) \right).
 \end{equation}
 
-\subsubsection*{MLE of the repulsiveness parameter}
+%\subsubsection*{MLE of the repulsiveness parameter}
 
 \subsection{Coercivity and existence of the maximum likelihood estimators}
 
@@ -236,7 +236,7 @@ Note that since \(\Psi\) is continuous and therefore bounded on bounded sets and
 \[\mathcal L(L) = \mathcal L(\Psi(q, \phi))\to-\infty\quad \text{for }\left\lvert L \right\rvert\to\infty.\]
 \end{proof}
 
-\subsubsection*{The log linear model}
+\subsubsection*{Coercivity for the log linear model}
 
 %We have seen that the log linear model can provide a parametrisation of the whole space \((0, \infty)^N\) of possible qualities. However, it can also be very ristrictive, for example if all feature vectors are trivial, i.e. \(f_i = 0\) for all items \(i\). Hence, we need to convince ourselves that we do not loose too much information through the transformation %a way to determine whether the transformation
 %\[F\colon\mathbb R^M \to (0, \infty)^N, \quad \theta\mapsto \big(\exp(\theta^Tf_1), \dots, \exp(\theta^Tf_N)\big)^T.\]
@@ -267,7 +267,7 @@ since otherwise all sequences \(\big(f_i^T\theta^l\big)\)  therefore also \((\th
 and we have seen in the proof of \ref{PosMLE} that the log likelihood function tends to \(-\infty\) in this case.
 \end{proof}
 
-\subsubsection*{MLE for the repulsiveness parameter}
+%\subsubsection*{MLE for the repulsiveness parameter}
 
 \subsection{Consistency of the maximum likelihood estimators}
 
@@ -388,7 +388,7 @@ for \(\varepsilon\) small enough.
 %\[F(\hat{\theta}_n) \ge F_n(\hat{\theta}_n) - \varepsilon \ge F_n(\theta_0) - \varepsilon \ge F(\theta_0) - 2\varepsilon > \alpha\]
 %for \(\varepsilon\) small enough.
 \end{proof}
-\todo{maybe add a sketch?}
+ %recent\todo{maybe add a sketch?}
 
 %The proof above can be read in the following way. The two conditions (\emph{i}), (\emph{ii}) and (\emph{v}) force \(\hat{\theta}_n\in K_0\) and hence we can restrict our considerations to a compact set. This is actually the setting the consistency results are usually presented in. Then we argue that if \(F(\theta)\) is close to \(F(\theta_0)\), then \(\theta\) has to be close to \(\theta_0\), where we use that we are on a compact subset as well as (\emph{iii}) and (\emph{iv}). However, since \(F_n\) is close to \(F\) on \(K_0\) we obtain that \(F(\hat{\theta}_n)\) is close to \(F_n(\hat{\theta}_n)\) which is close to \(F(\theta_0)\) since the maximum values converge to each other.
 
@@ -602,7 +602,7 @@ Hence the random variable
 \[\sup_{q\in K_0} \big\lvert \log(f(\mathbf Y| q)) \big\rvert\]
 is almost surely finite and since the probability space \(2^{\mathcal Y}\) is finite, the second condition holds.
 \end{proof}
-\todo{check whether this actually works in the other cases!}
+%recent\todo{check whether this actually works in the other cases!}
 
 \begin{rem}
 Obviously in the proof of the consistency of the whole elementary kernel \(L\) and the log linearity constant \(\theta\) one runs into the problem of unidentifiability. This is why one has to identify the parameters with each other that give rise to the same probability densities. In the case of the elementary kernel this is just the determinantal equivalence once again and in the case of the log linearity constant two parameters give rise to the same densities if and only if their projection onto \(U\) agrees.
@@ -633,7 +633,7 @@ To see that the log linear likelihood function is not concave, we may consider t
 which is not concave in general. Unfortunately there are no algorithms that can approximate the global maximum of a non concave function \cite{vavasis1995complexity} and it also has been conjecture in \cite{kulesza2012learning} that no such algorithm exists for the log likelihood of the elementary kernel. Nevertheless one can still use optimisation techniques to obtain local maximisers of the log likelihood and indeed \cite{mariet2015fixed} proposes a fixed point iteration to do this.
 
 In fact the non concavity can be seen even without computing anything. In fact if we have a maximiser \(L\) of the log likelihood function and take any other matrix \(\tilde L\) that is determinantally equivalent, then obviously the log likelihood of the two kernels agree. Hence, we can never expect to get a unique maximiser of the log likelihood function. Hence, a direct maximisation is a slightly missleading approach and it could be more sensible to work with equivalence classes of kernels that have the same principle minors that appear in \eqref{loglikagain}. However, it is not clear how this quotient space would look like and what structural properties it has, let alone whether one can efficiently maximise a function over it.
-\todo{does this make any sense at all?}
+%recent\todo{does this make any sense at all?}
 %\todo{comment on the argmax function}
 
 %Nevertheless there was a 

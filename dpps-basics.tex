@@ -144,7 +144,7 @@ Similar approaches for the modelling of the diversity feature vector have been t
 %and thus
 %\[\sqrt{1-\phi_i^T\phi_k} = \frac12\left\lVert \phi_i - \phi_k \right\rVert\le\frac12\big(\left\lVert \phi_i - \phi_j \right\rVert + \left\lVert \phi_j - \phi_k \right\rVert\big) = \sqrt{1-\phi_i^T\phi_j} + \sqrt{1-\phi_j^T\phi_k}.\]\todo{reformulate that part!}
 %\end{emp}
-\todo{say something about the transitivity of repulsion?}
+%recent\todo{say something about the transitivity of repulsion?}
 
 \begin{emp}[Comparison to other point processes]
 A wide variety of point processes has been studied and used in different applications and determinantal point processes are by far not the only point processes with negative correlations. For example every Poisson point process can be turned into a process of negative correlation by removing %some points of the selected subset. For example one could delete
@@ -155,7 +155,8 @@ where \(F\colon2^{\mathcal Y}\to\mathbb R\) is called the \emph{energy function}
 
 Although some of those different classes of point processes with negative correlation posses nice theoretical properties they share one major drawback. Namely a lot computations and also the simulation of those point processes can not be performed efficiently. For example in the case of Gibbs point processes even the computation time needed for the normalisation constant%not even the normalisation constant
 \[\sum_{A\subseteq\mathcal Y} \exp(-F(A)) \]
-grows exponentially with \(N\). However, the special structure of the determinant itself leads to the explicit expression in \eqref{e2.3} of the normalisation constant for DPPs and the computation time for the algebraic computation of it only grows like \(N^3\) or even slower for numerical approximations (cf. \cite{emiris2005improved})\todo{cite}. For a more in depth comparison of different point processes see \cite{kulesza2012determinantal}.
+grows exponentially with \(N\). However, the special structure of the determinant itself leads to the explicit expression in \eqref{e2.3} of the normalisation constant for DPPs and the computation time for the algebraic computation of it only grows like \(N^3\) or even slower for numerical approximations (cf. \cite{emiris2005improved})%recent\todo{cite}
+. For a more in depth comparison of different point processes see \cite{kulesza2012determinantal}.
 %In most cases even the computation of the normalisation constant 
 \end{emp}
 
@@ -175,7 +176,7 @@ of the density if it exists. The search for the mode is called the \emph{mode pr
 Our motivation for finding the mode of a random variable was to make better predictions for it. This hope is based on the believe that the mode should be a typical realisation of the random variable. However, this is not generally the case and therefore one should be cautious with this intuition.
 To see this we consider a random natural number with the following distribution
 \[\mathbb P(\left\{ n\right\}) \coloneqq \begin{cases} \;0.1 \quad & \text{if } n = 20 \\\; 0.09 & \text{if } n = 0, 1, \dots, 9 \\\; 0 &\text{otherwise} \end{cases}. \]
-Although \(20\) is the most likely elementary event, it is not a very typical outcome, since in \(90\%\) of the cases the random variable will have values in \(\left\{ 0, 1, \dots, 9\right\}\) and hence is far away from the mode of the distribution. Similar examples can easily be constructed for continuous distributions.\todo{add histrogram?}
+Although \(20\) is the most likely elementary event, it is not a very typical outcome, since in \(90\%\) of the cases the random variable will have values in \(\left\{ 0, 1, \dots, 9\right\}\) and hence is far away from the mode of the distribution. Similar examples can easily be constructed for continuous distributions.%recent\todo{add histrogram?}
 %It is clear that mode is \(0\) in this example, but it is not a very typical outcome of the random variable, since the majority of events is centered around \(10\).
 
 
@@ -604,7 +605,7 @@ Theorem \ref{mixDPPs} states that an arbitrary DPP is the mixture of elementary 
 %\[\frac1{k!}\left\lVert B_1 \right\rVert\cdot \left\lVert P_1B_2 \right\rVert \cdot\ldots\cdot\left\lVert P_{k-1}B_k \right\rVert = \frac1{k!}\det(K^V_A)\]
 %what we had to show.
 \end{proof}
-\todo{comment on the intuition one can get from this?}
+%recent\todo{comment on the intuition one can get from this?}
 
 \begin{cor}[Existence of DPPs]
 Let \(K\) be a symmetric \(N\times N\) matrix. Then \(K\) is the marginal kernel of a DPP if and only if \(0\le K\le I\).
@@ -731,7 +732,7 @@ for some \(\sigma>0\). Then we obviously have
 \[\phi_i \xlongrightarrow{\sigma\to\infty} \sqrt{N}\cdot \begin{pmatrix}
 1\\ \vdots \\ 1
 \end{pmatrix}\in\mathbb R^N. \]
-Hence the similarity \(\phi_i^T\phi_j\) between item \(i\) and \(j\) will increase and therefore the negative correlation gets stronger as \(\sigma\) grows. Hence, the DPP will become increasingly repulsive if we increase the parameter \(\sigma\) which can be seen in Figure \ref{pointsonaline} where the first sample corresponds to the choice \(\sigma = 20\), the second one to \(\sigma = 5\) and the last one to a Poisson point process. On a more formal level one can argue that if one models the diversity feature vectors this way, we center Gaussian densities at the reference points and then associate an item \(i\) with how it looks seen from those reference points under this Gaussian density. If we increase the standard deviation \(\sigma\) of this density all items become increasingly similar from the standpoints of the reference points. Similar considerations apply if \(f\) is not a normal denstiy.\todo{is this similar to kernel methods?}
+Hence the similarity \(\phi_i^T\phi_j\) between item \(i\) and \(j\) will increase and therefore the negative correlation gets stronger as \(\sigma\) grows. Hence, the DPP will become increasingly repulsive if we increase the parameter \(\sigma\) which can be seen in Figure \ref{pointsonaline} where the first sample corresponds to the choice \(\sigma = 20\), the second one to \(\sigma = 5\) and the last one to a Poisson point process. On a more formal level one can argue that if one models the diversity feature vectors this way, we center Gaussian densities at the reference points and then associate an item \(i\) with how it looks seen from those reference points under this Gaussian density. If we increase the standard deviation \(\sigma\) of this density all items become increasingly similar from the standpoints of the reference points. Similar considerations apply if \(f\) is not a normal denstiy.%recent\todo{is this similar to kernel methods?}
 % \todo{complete this and add picture!}
 
 \subsubsection*{Binary sequences}

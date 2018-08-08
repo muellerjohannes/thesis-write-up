@@ -45,7 +45,7 @@ The density \(f_{\Theta|X}\) is called the \emph{posterior distribution} of the 
 
 %From now on we will assume -- just like in the case of MLE -- that our observations are independent and identically distributed and hence their joint distribution factorises and we obtain
 %\[f_{\Theta| X}(\theta|x) \propto f_\Theta(\theta) \prod_{i=1}^n f_{X|\Theta}(x_i| \theta)\]
-\todo{add remark on intuition?}
+%recent\todo{add remark on intuition?}
 %This posterior density is already the object which is supposed to give us the information of the distribution of the parameter given the data \(x\). It is proportional to the likelihood \(f_{X|\Theta}(x|\theta)\) of the occuring data times the prior \(f_\Theta(\theta)\) which can be understood in the way, that 
 
 First we will convince ourselves that the approach of calculating a posterior distribution is a generalisation of the MLE in a lot of cases.
@@ -390,7 +390,8 @@ This simulation illustrates the problem of to aggressive -- \(\alpha = 100\) -- 
 \end{ex}
 
 \begin{emp}[Tuning the proposal]\label{tuning}
-In order to obtain a higher acceptance rate without the loss of generally choosing the variance of the proposal distribution small one can do tune the proposal distribution. This means one adjusts the proposal distribution after a while, lets say after the first \(10^3\) samples in such a way that one replaces the original covariance matrix \(\Sigma\) by the empirical covariance of the first \(10^3\) samples\todo{is this true?}. Then one forgets about all the samples so far -- they are called usually the \emph{burn in period} -- and starts a new MH random walk usually at one of the data points of the burn in period, since they should already indicate where an area of high density is. The reason why this increases the acceptance rate is, that the proposal now only is aggressive in those directions where the density is widely spread. \todo{find a reference for this}%This effect can be seen in Figure \todo{make this figure}.
+In order to obtain a higher acceptance rate without the loss of generally choosing the variance of the proposal distribution small one can do tune the proposal distribution. This means one adjusts the proposal distribution after a while, lets say after the first \(10^3\) samples in such a way that one replaces the original covariance matrix \(\Sigma\) by the empirical covariance of the first \(10^3\) samples%recent\todo{is this true?}
+. Then one forgets about all the samples so far -- they are called usually the \emph{burn in period} -- and starts a new MH random walk usually at one of the data points of the burn in period, since they should already indicate where an area of high density is. The reason why this increases the acceptance rate is, that the proposal now only is aggressive in those directions where the density is widely spread. %recent\todo{find a reference for this}%This effect can be seen in Figure \todo{make this figure}.
 \end{emp}
 
 \subsection{Slice sampling}
@@ -498,7 +499,7 @@ See Theorem 6 in \cite{mira2002efficiency}.
 %Under the condition of the theorem above one even obtains a stronger version of ergodicity, namely uniform %in the starting point \(\)
 %\[\sup_{x\in\mathcal X} \left\lVert \hat{\mathbb P}_n - \pi \right\rVert_{TV} \xlongrightarrow{n\to\infty} 0. \]
 
-\todo{Let someone check whether this is correct...}
+%recent\todo{Let someone check whether this is correct...}
 
 \subsubsection*{Implementation details}
 
@@ -519,7 +520,8 @@ From now on we will assume \(\mathcal X\subseteq\mathbb R^d\). The main difficul
 
 An obvious choice for \(C\) would be a cuboid 
 \[C = \prod_{i = 1}^d [a_i, b_i]\]
-since it is straight forward to sample a uniform distribution on a cuboid. Namely one only has to sample the individual coordinates uniformly in the intervals \([a_i, b_i]\). The problem still remains how one can find a cuboid that surely contains the whole slice \(S\). The short and frustrating answer is that there is no way to do this. However, not everything is lost, since we can use random cuboids that have the property that every part of the slice is contained in the cuboid with positive probability. This will be crucial in retaining the irreducibility of the Markov chain. In fact it has been found that in applications the following procedure works well\todo{cite}. Given the current state \(x_n\) of the Markov chain, we propose a random interval \([a_i, b_i]\) around the \(i\)-th component fo \(x_n\). Then we extend those intervals until the endpoints \(a\) and \(b\) of the cuboid do not lie in the slice anymore. In pesudocode this relates to Algorithm \ref{alg:cuboid}.  %Further the algorithm returns the 
+since it is straight forward to sample a uniform distribution on a cuboid. Namely one only has to sample the individual coordinates uniformly in the intervals \([a_i, b_i]\). The problem still remains how one can find a cuboid that surely contains the whole slice \(S\). The short and frustrating answer is that there is no way to do this. However, not everything is lost, since we can use random cuboids that have the property that every part of the slice is contained in the cuboid with positive probability. This will be crucial in retaining the irreducibility of the Markov chain. In fact it has been found that in applications the following procedure works well%recent\todo{cite}
+. Given the current state \(x_n\) of the Markov chain, we propose a random interval \([a_i, b_i]\) around the \(i\)-th component fo \(x_n\). Then we extend those intervals until the endpoints \(a\) and \(b\) of the cuboid do not lie in the slice anymore. In pesudocode this relates to Algorithm \ref{alg:cuboid}.  %Further the algorithm returns the 
 \begin{algorithm}
 \caption{Sampling a random cuboid \label{alg:cuboid}}
 \begin{algorithmic}[1]
@@ -703,7 +705,7 @@ Although there is no rigorous method to choose the variance of the proposal dist
 
 Once the variance is adjusted to obtain a reasonable acceptance rate, one can run a first simulation, in our case of length \(10^2\) in order to see where the MH random walk is going to focus on. %We will expect this to be a region of at least locally highest density and this can be determined by 
 We take the mean value of the second half of the samples as a measure of the area where the MH random walk spends most of its time. 
-Here we neglect the first half since it is very highly dependent on the starting point and it shall be noted that if a state of the Markov chain has high density, the chances are rather high that it will stay there for a few more steps and hence this point is weighted more heavily in the mean of the random walk. Those positions are shown in Figure \ref{fig:findingstart} for different starting positions of the MH random walk.\todo{do a second starting value}
+Here we neglect the first half since it is very highly dependent on the starting point and it shall be noted that if a state of the Markov chain has high density, the chances are rather high that it will stay there for a few more steps and hence this point is weighted more heavily in the mean of the random walk. Those positions are shown in Figure \ref{fig:findingstart} for different starting positions of the MH random walk.%recent\todo{do a second starting value}
 
 \begin{figure}[h!]
 	\centering
@@ -730,7 +732,7 @@ We run this MH random walk for \(10^3\) samples and calculate their empirical co
 
 \begin{emp}[Step3: The actual MCMC simulation]
 In this final step we will run a MH random walk with length \(10^4\) and the same starting point as in the second step. Now we use adjust the priors to have the covariance that was empirically determined from the second burn in period. This means we choose \(f(\cdot|\theta)\) to be the density of a normal distribution centered at \(\theta\) and with covariance \(\Sigma\). % This procedure adjusts the proposed steps into the diffrernt directions on the 
- The resulting heat map can be seen in Figure \ref{fig:MHrw}.\todo{say something about intuition}
+ The resulting heat map can be seen in Figure \ref{fig:MHrw}.%recent\todo{say something about intuition}
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.6\textwidth]{figures/bayes-heat-map}

@@ -13,7 +13,10 @@
 {\LARGE\textsc{Abstract}\\[.9cm]}
 \begin{minipage}{11cm}
 %Determinantal point processes are random subsets that exhibit a diversifying behaviour in the sense that the randomly selected points tend to be not similar in some way. This repellent structure first arrose in theortical physics and pure mathematics, but they have recently been used to model a variety of many real world scenarios in a machine learning setup. We aim to give an overview over the main ideas of this approach which is easily accessible even without prior knowledge in the area of machine learning and sometimes omit technical calculations in order to keep the focus on the concepts.
+Determinantal point processes (DPPs) are a probabilistic model of diverse subsets that exhibits desirable computational properties in terms of its simulation, marginalisation and other operations. That is why they have recently been used in an increasing amount of real world applications like text summarisation and the selection of a diverse subset of pictures returned by an image search (cf. \cite{kulesza2012learning}). A crucial step in all of those applications is the estimation of different parameters and therefore this will be the focus of this dissertation. We will give an overview over two different point estimators and their benefits and hindrances and provide proofs for their consistency. We will see that the main drawback of the maximum likelihood estimation is that it results in the maximisation of the log likelihood function which is not concave in the case of DPPs and therefore not possible in an efficient way. This motivates the Bayesian approach to the estimation of those parameters and we see how the posterior density can be approximated using different Markov chain Monte Carlo (MCMC) methods.
 \end{minipage}
 \end{center}
+
+%\todo{cite, or give more obvious examples}{ }
 
 \clearpage

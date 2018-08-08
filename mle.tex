@@ -845,13 +845,36 @@ Hence we should be able to estimate this log linearity constant \(\theta\in\math
 but from the consistency results we already knew that it should get close to the actual parameter for increasing sample sizes. Although this is just a controlled toy example, this procedure can easily be generalised to real world settings. However one would have to face the following two major challenges:
 \begin{enumerate}
 \item In practice one will not know the feature vectors \(f_i\) like we did, so one will have to model those. Usually one would put all quantitative properties into this vector that one would believe could have an effect on the quality of an item. For example if the DPP should model the picnic positions of people in a park one could argue that the quality, i.e. the popularity of a picnic spot depends amongst other things on the distance to the next trash bin, the next toilet and overall noise level. Although one thinks that those parameters can play a role, we could not argue a priori whether they have a positive or a negative impact. For example if the toilets are nice and clean it might be favourable to be closer to them, if they are dirty it might be better to be far away from them in order to avoid their unpleasant odour. However one does not have to know this straight away as this effect is determined by the according log linearity constant and hence can be estimated in the above manner.
-\item Secondly and maybe even more importantly the actual similarity kernel is also unknown and hence one also has to come up with a reasonable model for it. Either this can be done by purely relying on models created by people familiar with the real world phenomenon that is being investigated, or one could also try to estimated the similarity kernel itself. However estimating the whole similarity kernel itself is equivalent to a maximum likelihood estimation of the whole elementary kernel \(L\) and we have seen in the previous discussion about computability that this results in an optimisation problem that can not be solved efficiently. However a more subtle approach would be to assume that the diversity feature vectors \(\phi_i\) have the form 
-\[(\phi_i)_j\propto f( \sigma \left\lVert i - j \right\rVert) \quad \text{for } i, j\in\mathcal Y\]
-and then try to estimate the parameter \(\sigma\). With this approach one would only have to estimate one additional parameter instead of the \(N^2 = 900\) parameters of the similarity kernel \(S\). However with this approach the log likelihood function is likely to be non concave and hence it remains to investigate whether there are any other efficient optimisation techniques for it. \todo{think more towards this direction}
+\item Secondly and maybe even more importantly the actual similarity kernel is also unknown and hence one also has to come up with a reasonable model for it. Either this can be done by purely relying on models created by people familiar with the real world phenomenon that is being investigated, or one could also try to estimated the similarity kernel itself. However estimating the whole similarity kernel itself is equivalent to a maximum likelihood estimation of the whole elementary kernel \(L\) and we have seen in the previous discussion about computability that this results in an optimisation problem that can not be solved efficiently. However, we will propose a different, possibly more practical approach in the next section, but it still remains to be seen whether this will actually give any benefits.
+% a more subtle approach would be to assume that the diversity feature vectors \(\phi_i\) have the form 
+%\[(\phi_i)_j\propto f( \sigma \left\lVert i - j \right\rVert) \quad \text{for } i, j\in\mathcal Y\]
+%and then try to estimate the parameter \(\sigma\). With this approach one would only have to estimate one additional parameter instead of the \(N^2 = 900\) parameters of the similarity kernel \(S\). However with this approach the log likelihood function is likely to be non concave and hence it remains to investigate whether there are any other efficient optimisation techniques for it. \todo{think more towards this direction}
 \end{enumerate}
 
 \subsection{Further learning approaches}
 
+We will quickly touch on two approaches of parameter estimation that have proven to work very well for certain real world examples. Further, we propose one different parametric model one could work with that would allow simultaneously estimate the qualities and the similarity kernel, but it remains to be shown whether this circumvents the problems associated with the maximums likelihood estimation of the whole kernel \(L\).
+
 \subsubsection{Learning for conditional DPPs}
 
+The estimation of the log linearity constant of conditional DPPs has been used in \cite{kulesza2012learning1} to obtain extractive summaries of news articles. In fact the procedure is analogue to the one presented for the estimation of the log linearity constant of normal DPPs, apart from the fact that one has to model now a family of feature vectors
+\[f_i(X) \in\mathbb R^M \quad \text{for } i\in \mathcal Y(X), X\in\mathcal X. \]
+
+We will quickly discuss how this could be done in the case of the DPP on a two dimensional grid. For this we could suppose that we do not want to restrict ourselves to one grid size and hence consider the conditional DPP
+\[\mathcal X = \mathbb N, \quad \mathcal Y(n) = n^{-1}\left\{ 0, \dots, n\right\}^2 \quad \text{for } n\in\mathbb N.\]
+We can now model the similarity feature vectors \(\phi_i(n)\) analogously to the case where we only considered one grid and impose the following log linear model for the qualities
+\[q_i(n) = \exp\big(\theta^Tf_i(n)\big) \quad \text{for } i\in\mathcal Y(n). \]
+The diversity feaure vectors are given just like earlier by
+\[f_i(n) = \begin{pmatrix}
+\left\lVert i - m \right\rVert \\ 1
+\end{pmatrix} \text{for } i\in\mathcal Y(n) \]
+where \(m\) is again the centre of the unit square. Now the estimation can be carried out just like in the case of an ordinary DPP and for the same reason this will be consistent.
+
+However, it shall be noted that the modelling of the diversity feature vectors can be far more complicated in more complex real world applications.
+
 \subsubsection{Estimating the mixture coefficients of \(k\)-DPPs}
+
+
+
+\subsubsection{Learning the repulsiveness of a DPP}
+

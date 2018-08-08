@@ -626,6 +626,12 @@ To proof this, we only have to convince ourselves that after the Bernoulli exper
 In the last step we used that the trace of a symmetric matrix is the sum over its eigenvalues, which are \(\xi_k\) in our case. This computation lets us conclude \(\left\lvert \mathbf Y \right\rvert = m\) almost surely.
 \end{proof}
 
+\begin{rem}
+Later on it will usually be more convenient to model or estimate the elementary kernel \(L\) instead of the marginal kernel \(K\). Thus we should explain how the sampling algorithm would work in this case. Since the two kernels are related by
+\[ K = L(L+I)^{-1} \]
+their eigendecompositions can easily be transformed. Namely if \(v\) is an eigenvector of \(L\) with eigenvalue \(\lambda\ge0\), then \(v\) is also an eigenvector of \(K\) with eigenvalue \(\frac{\lambda}{\lambda+1}>0\). After this transformation of the eigendecomposition of \(L\) the sampling algorithm for \(K\) can be applied.
+\end{rem}
+
 
 We close this section with the proof of \ref{mixDPPs} given in \cite{kulesza2012determinantal}.
 
@@ -672,15 +678,34 @@ Let \(\big((W_{k_1})_1(W_{k_2})_2\cdots (W_{k_m})_m\big)\) denote the \(m\times 
 
 \subsubsection{Possible improvements}
 
-We will shortly discuss two methods how the simulation of DPPs can be made more efficient.
+We will shortly discuss one method how the simulation of DPPs can be made more efficient.
 
-\begin{emp}[Dual sampling]
+\begin{emp}[Dual representation]
+The by far computationally most costly step in the sampling algorithm presented above is the computation of the eigendecomposition of the matrix \(K\) or \(L\). Hence we will quickly explain how this can be reduced to the computation of the eigendecomposition of a smaller matrix.
 
+Assume we have given a matrix \(A = B^TB\in\mathbb R^{N\times N}_{\text{sym}, +}\) with \(B\in\mathbb R^{D\times N}\) and set \(C\coloneqq BB^T\in\mathbb R^{D\times D}_{\text{sym}, +}\). Then the spectral decomposition of \(A\) and \(C\) can be related in the following way.
+\begin{enumerate}
+\item The eigenvalues of \(A\) and \(C\) agree.
+\item If \(v\in\mathbb R^D\) is an eigenvector to the eigenvalue \(\lambda\in\mathbb R\), then \(B^Tv\) is an eigenvector to the eigenvalue \(\lambda\), since
+\[AB^Tv = B^TBB^Tv = B^TCv = \lambda B^Tv.\]
+\item If \(v\) is a normed eigenvector to the eigenvalue \(\lambda>0\), then we have
+\[\big\lVert B^Tv \big\rVert^2 = (B^Tv)^T(B^Tv) = v^TBB^Tv = v^TC^Tv = \lambda \]
+and hence \(\frac{B^Tv}{\sqrt{\lambda}}\) is a normed eigenvector to the eigenvalue \(\lambda>0\).
+\item Finally, if \(\left\{ v_1, \dots, v_m\right\}\) is an orthonormal set of eigenvectors to the non trivial eigenvalues \(\left\{ \lambda_1, \dots, \lambda_m\right\}\) of \(C\), then
+\[\left\{ \frac{B^Tv_k}{\sqrt{\lambda_k}} \;\Big\lvert\; k = 1, \dots, m\right\}\]
+is an orthonormal set of eigenvectors to the non trivial eigenvalues of \(A\). %Further the scalar product between two of those
+\end{enumerate}
+
+Hence, if \(K\) or \(L\) are given as a gram matrix \(B^TB\), it suffices to compute the eigendecomposition of \(BB^T\in\mathbb R^{D\times D}_{\text{sym}, +}\), which could be significantly faster if \(D<N\). Since the sampling algorithm relies only on the eigendecomposition and scalar products between eigenvectors, it can be performed based on the dual representation presented above. It should be mentioned that typically \(L\) will modelled as a gram matrix via the quality diversity decomposition and hence this dual representation will mostly be used for \(L\). Further it comes with even greater benefits here, since the normalisation constant 
+\[\det(L + I) = \prod_{k=1}^N (1 + \lambda_k) = \det\left(BB^T + I\right) \]
+reduces to the computation of the determinant of a \(D\times D\) matrix.
 \end{emp}
 
-\begin{emp}[Dimension reduction]
+The dual representation can make the computations involved with DPPs efficient, but in some cases it might not be effective enough. Therefore, different techniques have been proposed in order to achieve faster computation times, like random projections. This relies on the result from \cite{magen2008near} that points in an \(N\)-dimensional space can be randomly projected into a space of approximate dimension \(\log(N)\) in such a way, that the volume spanned by those points is almost preserved with a high probability. For a discussion of this approach we refer to \cite{kulesza2012learning}.
 
-\end{emp}
+%\begin{emp}[Dimension reduction]
+
+%\end{emp}
 
 \section{Simulation of toy examples}
 
@@ -726,7 +751,7 @@ Although the DPP presented above incorporates some of the properties one might e
 
 \subsubsection{Points in a square}
 
-This time we want to built a DPP in a two dimensional square \([0,1]^2\) or at least a discrete approximation of it. This might be used to model positions of trees that repel themselves due to a competition for natural resources\todo{cite}, positions of football players on the field or the positions people choose for a picnic in a park.
+This time we want to built a DPP in a two dimensional square \([0,1]^2\) or at least a discrete approximation of it. This might be used to model positions of trees that repel themselves due to a competition for natural resources, positions of football players on the field or the positions people choose for a picnic in a park.
 
 In order to do this we follow a very similar approach than in the case of one dimensional DPPs. Hence we set
 \[\mathcal Y \coloneqq 99^{-1} \left\{ 0, \dots, 99\right\}^2 \]%\left\{ (i, j) \mid 39\cdot  \right\} \]

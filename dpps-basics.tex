@@ -13,7 +13,7 @@ We begin by presenting the general frame we will work in. This means that we wil
 \begin{emp}[Setting]
 Let in the following \(\mathcal Y\) be a finite set, which we call the \emph{ground set} and \(N\coloneqq \left\lvert \mathcal Y \right\rvert\) its cardinality. We call the elements of \(\mathcal Y\) \emph{items } and assume for the sake of easy notation \(\mathcal Y = \left\{ 1, \dots, N\right\}\) unless otherwise specified. %\coloneqq\left\{ 1,\dots, N\right\}\). 
 A \emph{point process} on \(\mathcal Y\) is a random subset %\(\mathbf Y\) 
-of \(\mathcal Y\), i.e. a random variable with values in the powerset \(2^{\mathcal Y}\). We will identify this random variable with its law\footnote{The law of a random variable is just the push forward measure of the probability measure of the probability space the random variable is defined on.} \(\mathbb P\) and thus refer to probability measures \(\mathbb P\) on \(2^{\mathcal Y}\) as point processes and will not distinguish between those objects. Further \(\mathbf Y\) will always denote a random subset distributed according to \(\mathbb P\).
+of \(\mathcal Y\), i.e. a random variable with values in the powerset \(2^{\mathcal Y}\). We will identify this random variable with its law\footnote{The law of a random variable is just the push forward measure of the probability measure of the probability space the random variable is defined on.} \(\mathbb P\) and thus refer to probability measures \(\mathbb P\) on \(2^{\mathcal Y}\) as point processes and will not distinguish between those objects. Further, \(\mathbf Y\) will always denote a random subset distributed according to \(\mathbb P\).
 \end{emp}
 
 \begin{defi}[Determinantal point process]
@@ -93,10 +93,10 @@ The quality diversity parametrisation is a continuous and surjective mapping %bi
 \begin{rem}
 \begin{enumerate}
 \item In the case \(D = N\) the quality diversity decomposition gives a parametrisation of the whole symmetric non negative definite \(N\times N\) matrices.
-% \item One could argue that one should rather call the pseudo inverse of the described surection the quality diversity decomposition. However the 
+% \item One could argue that one should rather call the pseudo inverse of the described surection the quality diversity decomposition. However, the 
 \item Note that this parametrisation is not unique, i.e. \(\Psi\) is not injective. For example the identity matrix \(I\) can be parametrised by any orthonormal system \(\phi\) and \(q = (1, \dots, 1)^T\).
-\item One can without any problems consider diversity features \(\phi_i\) in an abstract Hilbert space \(\mathcal H\). However we will not need this in the remainder and thus restrict ourselves to the easier case Euclidean diversity features.
-\item We call every preimage \((q, \phi)\) of \(L\) under \(\Psi\) \emph{quality diversity decomposition} of \(L\). Further we call the tupel \(\phi\in \mathbb S_D^N\) of normalised vectors the \emph{diversity feature matrix}.
+\item One can without any problems consider diversity features \(\phi_i\) in an abstract Hilbert space \(\mathcal H\). However, we will not need this in the remainder and thus restrict ourselves to the easier case Euclidean diversity features.
+\item We call every preimage \((q, \phi)\) of \(L\) under \(\Psi\) \emph{quality diversity decomposition} of \(L\). Further, we call the tupel \(\phi\in \mathbb S_D^N\) of normalised vectors the \emph{diversity feature matrix}.
 \end{enumerate}
 \end{rem}
 
@@ -111,7 +111,7 @@ Not only will the quality diversity decomposition play a central role when it co
 %An intuitive understanding of the quality diversity decomposition will play a central role in the modelling process of real world phenomena through DPPs.
 %later on if one wants to model real world phenomena as DPPs.
 % To get this %, we can identify an item \(i\in\mathcal Y\) with the vector \(B_i=q_i\phi_i\in\mathbb R^D\) and
-In order to get an intuitive understanding of the quality diversity decomposition we can think of \(q_i\ge0\) as a measure of how important or high in quality the item is and the diversity feature vector \(\phi_i\in\mathbb R^D\) can be thought of as some kind of state vector that consists of internal quantities that describe the item \(i\) in some way. Further we interpret the scalar product \(\phi_i^T\phi_j\in[0,1]\) as a measure of similarity between the items \(i\) and \(j\) which justifies the name similarity matrix for \(S\). Note that if \(i\) and \(j\) are perfectly similar or antisimilar, i.e. \(\phi_i^T\phi_j=\pm1\), then they can not occur at the same time, since
+In order to get an intuitive understanding of the quality diversity decomposition we can think of \(q_i\ge0\) as a measure of how important or high in quality the item is and the diversity feature vector \(\phi_i\in\mathbb R^D\) can be thought of as some kind of state vector that consists of internal quantities that describe the item \(i\) in some way. Further, we interpret the scalar product \(\phi_i^T\phi_j\in[0,1]\) as a measure of similarity between the items \(i\) and \(j\) which justifies the name similarity matrix for \(S\). Note that if \(i\) and \(j\) are perfectly similar or antisimilar, i.e. \(\phi_i^T\phi_j=\pm1\), then they can not occur at the same time, since
 \[\mathbb P(i,j\in\mathbf Y) = \det\begin{pmatrix} 1 & \pm1 \\ \pm1 & 1 \end{pmatrix} = 0. \]
 If we identify \(i\) with the vector \(B_i=q_i\phi_i\in\mathbb R^D\), we can obtain a geometric interpretation of \eqref{e2.4} since \(\det\!\big((B^TB)_A\big)\) is the volume that is spanned by the columns \(B_i, i\in A\), which is visualised in \ref{fig:1}. This volume increases if the lengths of the edges that correspond to the quality increase and decrease when the similarity feature vectors point into more similar directions.
 
@@ -125,12 +125,12 @@ If we identify \(i\) with the vector \(B_i=q_i\phi_i\in\mathbb R^D\), we can obt
 \end{figure}
 
 \begin{emp}[Modelling diversity over distance]\label{moddiv}
-Since we will use one approach for the diversity features multiple times, we will now give a short general formulation of it. Let \(\mathcal R = \left\{ r_1, \dots, r_D\right\}\) be a finite set which we will call the \emph{reference set} and its elements the \emph{reference points}. Further let
+Since we will use one approach for the diversity features multiple times, we will now give a short general formulation of it. Let \(\mathcal R = \left\{ r_1, \dots, r_D\right\}\) be a finite set which we will call the \emph{reference set} and its elements the \emph{reference points}. Further, let
 \[d\colon \mathcal Y\times \mathcal R\to\mathbb R_+, \quad f\colon\mathbb R_+\to \mathbb R\]
 be mappings. Usually \(d(i, r)\) will be interpreted as a measure of distance between an item \(i\in\mathcal Y\) and a reference point \(r\in\mathcal R\) and will typically be given by a metric on a larger space that contains \(\mathcal Y\) and \(\mathcal R\).
 One can now model \(\phi_i\in\mathbb R^{\mathcal R}\) via
 \[(\phi_i)_r \propto f\!\big(d(i, r)\big) \quad \text{for } r\in\mathcal R.\] % j = 1, \dots, D. \]
-The function \(f\) will typically be decreasing and thus \((\phi_i)_r\) can be seen as a measure of how similar item \(i\) is to the reference point \(r\in\mathcal R\). Thus the diversity feature vector \(\phi_i\) stores how similar the item \(i\) is to all reference points and the scalar product \(\phi_i^T\phi_j\) will be close to one, if the items \(i\) and \(j\) have approximately the same degrees of similarity to the reference points. It shall be noted that the choice of the number \(D\) of reference points bounds the rank of the kernel \(L\) and therefore also the largest subset that occurs with positive probability. Indeed we have \(\operatorname{rk}(L)\le D\) and for \(A\subseteq\mathcal Y\) with more than \(D\) elements \(\det(L_A) = 0\) and therefore \(\mathbb P(A) = 0\).
+The function \(f\) will typically be decreasing and thus \((\phi_i)_r\) can be seen as a measure of how similar item \(i\) is to the reference point \(r\in\mathcal R\). Thus, the diversity feature vector \(\phi_i\) stores how similar the item \(i\) is to all reference points and the scalar product \(\phi_i^T\phi_j\) will be close to one, if the items \(i\) and \(j\) have approximately the same degrees of similarity to the reference points. It shall be noted that the choice of the number \(D\) of reference points bounds the rank of the kernel \(L\) and therefore also the largest subset that occurs with positive probability. Indeed we have \(\operatorname{rk}(L)\le D\) and for \(A\subseteq\mathcal Y\) with more than \(D\) elements \(\det(L_A) = 0\) and therefore \(\mathbb P(A) = 0\).
 In the last section of this chapter we will give examples where \(d\) is quite naturally a metric % in most cases, at least in the ones where \(\mathcal Y\) consists of %spatial positions or 
 %points in a metric space. On the other hand 
 and will see how
@@ -155,7 +155,7 @@ where \(F\colon2^{\mathcal Y}\to\mathbb R\) is called the \emph{energy function}
 
 Although some of those different classes of point processes with negative correlation posses nice theoretical properties they share one major drawback. Namely a lot computations and also the simulation of those point processes can not be performed efficiently. For example in the case of Gibbs point processes even the computation time needed for the normalisation constant%not even the normalisation constant
 \[\sum_{A\subseteq\mathcal Y} \exp(-F(A)) \]
-grows exponentially with \(N\). However the special structure of the determinant itself leads to the explicit expression in \eqref{e2.3} of the normalisation constant for DPPs and the computation time for the algebraic computation of it only grows like \(N^3\) or even slower for numerical approximations (cf. \cite{emiris2005improved})\todo{cite}. For a more in depth comparison of different point processes see \cite{kulesza2012determinantal}.
+grows exponentially with \(N\). However, the special structure of the determinant itself leads to the explicit expression in \eqref{e2.3} of the normalisation constant for DPPs and the computation time for the algebraic computation of it only grows like \(N^3\) or even slower for numerical approximations (cf. \cite{emiris2005improved})\todo{cite}. For a more in depth comparison of different point processes see \cite{kulesza2012determinantal}.
 %In most cases even the computation of the normalisation constant 
 \end{emp}
 
@@ -172,7 +172,7 @@ of the density if it exists. The search for the mode is called the \emph{mode pr
 \end{emp}
 
 
-Our motivation for finding the mode of a random variable was to make better predictions for it. This hope is based on the believe that the mode should be a typical realisation of the random variable. However this is not generally the case and therefore one should be cautious with this intuition.
+Our motivation for finding the mode of a random variable was to make better predictions for it. This hope is based on the believe that the mode should be a typical realisation of the random variable. However, this is not generally the case and therefore one should be cautious with this intuition.
 To see this we consider a random natural number with the following distribution
 \[\mathbb P(\left\{ n\right\}) \coloneqq \begin{cases} \;0.1 \quad & \text{if } n = 20 \\\; 0.09 & \text{if } n = 0, 1, \dots, 9 \\\; 0 &\text{otherwise} \end{cases}. \]
 Although \(20\) is the most likely elementary event, it is not a very typical outcome, since in \(90\%\) of the cases the random variable will have values in \(\left\{ 0, 1, \dots, 9\right\}\) and hence is far away from the mode of the distribution. Similar examples can easily be constructed for continuous distributions.\todo{add histrogram?}
@@ -184,8 +184,8 @@ Although \(20\) is the most likely elementary event, it is not a very typical ou
 %\[0.1\cdot X + 0.9\cdot Y\] % \quad \text{where } X\sim N(0, 10), Y\sim N()\]
 %where \(X\) is centered with variance \(10\) and \(Y\) has mean \(5\) with variance \(1\), the densities are shown in Figure ....\todo{check whether this gives the desired effect and plot the density!}{ } 
 
-The mode problem can be solved explicitely or at least numerically if the density \(f\) is a smooth function defined on a subset of \(\mathbb R^d\). However in the case of DPPs we have to deal with the probability measure on a finite set and thus the mode problem is a discrete optimisation problem over the powerset \(2^{\mathcal Y}\). The exponential size of the powerset turns this into a very hard computational task and it has been shown that the time to compute the mode -- or even an event with more than \(\frac89\) its probability -- grows exponentially with the cardinality \(N\) of \(\mathcal Y\) (cf. \cite{kulesza2012determinantal}). However some algorithms for the approximation of the mode have been proposed for certain classes of DPPs or for the goal to find a subset of at least \(\frac14\) of the probability of the mode. For more information on those approaches we refer to \cite{djolonga2014map} and \cite{gillenwater2012near}. % \todo{refer to other papers that do approximations?}
-%This is in general very hard to solve and it has been shown in \todo{cite} that it is NP hard to do so or even approximate it upto a factor of \(\frac89\). However there were still different strategies proposed and we will present some of them including their main ideas. \todo{do this!}
+The mode problem can be solved explicitely or at least numerically if the density \(f\) is a smooth function defined on a subset of \(\mathbb R^d\). However, in the case of DPPs we have to deal with the probability measure on a finite set and thus the mode problem is a discrete optimisation problem over the powerset \(2^{\mathcal Y}\). The exponential size of the powerset turns this into a very hard computational task and it has been shown that the time to compute the mode -- or even an event with more than \(\frac89\) its probability -- grows exponentially with the cardinality \(N\) of \(\mathcal Y\) (cf. \cite{kulesza2012determinantal}). However, some algorithms for the approximation of the mode have been proposed for certain classes of DPPs or for the goal to find a subset of at least \(\frac14\) of the probability of the mode. For more information on those approaches we refer to \cite{djolonga2014map} and \cite{gillenwater2012near}. % \todo{refer to other papers that do approximations?}
+%This is in general very hard to solve and it has been shown in \todo{cite} that it is NP hard to do so or even approximate it upto a factor of \(\frac89\). However, there were still different strategies proposed and we will present some of them including their main ideas. \todo{do this!}
 
 
 \section{Variations of DPPs} %: conditional DPPs, \(k\)-DPPs and structured DPPs}
@@ -195,11 +195,11 @@ In this section we will present some useful variations of determinantal point pr
 %\subsection*{Conditional DPPs}
 
 \begin{emp}[Conditional DPPs]
-A \emph{conditional DPP} is a collection of DPPs indexed by \(X\in\mathcal X\), where \(X\) is called the \emph{input} of the conditional DPP. Thus for every \(X\in\mathcal X\) we get a finite set \(\mathcal Y(X)\) and a determinantal point process \(\mathbb P(\cdot\mid X)\) on \(\mathcal Y(X)\) which is given by the elementary kernel \(L(X)\), i.e.
+A \emph{conditional DPP} is a collection of DPPs indexed by \(X\in\mathcal X\), where \(X\) is called the \emph{input} of the conditional DPP. Thus, for every \(X\in\mathcal X\) we get a finite set \(\mathcal Y(X)\) and a determinantal point process \(\mathbb P(\cdot\mid X)\) on \(\mathcal Y(X)\) which is given by the elementary kernel \(L(X)\), i.e.
 \[\mathbb P(A\lvert X) \propto \det\left(L_A(X)\right) \quad \text{for all } A\subseteq\mathcal Y(X). \]
 Further we denote the quality and diversity features of the conditional DPP by \(q_i(X)\) and \(\phi_i(X)\) respectively.
 
-% Conditional DPPs can probably be understood the best way by giving an easy example. For this purpose we will extend our example above of the pseudo randomly selected points in a grid, but this time we donÕt want to restrict ourselves to one specific grid size. Thus we will consider the input space \(\mathcal X = \mathbb N\) where the input \(n\in\mathbb N\) gives the fineness of the grid, i.e.
+% Conditional DPPs can probably be understood the best way by giving an easy example. For this purpose we will extend our example above of the pseudo randomly selected points in a grid, but this time we donÕt want to restrict ourselves to one specific grid size. Thus, we will consider the input space \(\mathcal X = \mathbb N\) where the input \(n\in\mathbb N\) gives the fineness of the grid, i.e.
 % \[\mathcal Y(n)\coloneqq n^{-1}\cdot\big\{ 0, \dots, n\big\}^2. \]
 % So this time \(\mathcal Y(n)\) is the equally spaced grid in \([0,1]^2\) with space \(n^{-1}\) between two grid lines and we have \(N(n)=\left\lvert \mathcal Y(n) \right\rvert = (n+1)^2\).
 % We model the diversities \(\phi_i(n)\in\mathbb R^{N}\) in the exact analogue way, i.e.
@@ -208,7 +208,7 @@ Further we denote the quality and diversity features of the conditional DPP by \
 
 It is not immediately clear why one would want to model a family of DPPs as a conditional DPP rather than as 
 % the scenario described above by a conditional DPP rather than by a 
-separate DPPs. The reason for this is that one wants to estimate the kernels \(L(X)\) for every \(X\in \mathcal X\). However if we would do this naively we would need to observe each of the DPPs \(\mathbb P(\cdot\mid X)\) individually which is often not possible. Thus one hopes 
+separate DPPs. The reason for this is that one wants to estimate the kernels \(L(X)\) for every \(X\in \mathcal X\). However, if we would do this naively we would need to observe each of the DPPs \(\mathbb P(\cdot\mid X)\) individually which is often not possible. Thus, one hopes 
 %The reason for this is that we hope
  to not only memorise the kernels \(L(X)\) for every single input \(X\in\mathcal X\) but rather to estimate the mapping that assigns every input \(X\) its elementary kernel \(L(X)\). If one achieved this task, one would be able to simulate and predict a DPP that one has not observed so far just by the knowledge about some DPPs that belong to the same conditional DPP. 
 %  based on some training set. 
@@ -219,9 +219,9 @@ In conclusion conditional DPPs are suitable for the extrapolation of parameter e
 
 %\subsection*{Fixed size or \(k\)-DPPs}
 \begin{emp}[Fixed size or \(k\)-DPPs]
-We have introduced DPPs as a model of random diverse subsets of a finite set. However there are a lot of cases where the size of this subset is already known, like for example if the DPP models the position of football players on the field, we already know how many points we have to select, namely 11 -- at least if no player was sent off or injured.
+We have introduced DPPs as a model of random diverse subsets of a finite set. However, there are a lot of cases where the size of this subset is already known, like for example if the DPP models the position of football players on the field, we already know how many points we have to select, namely 11 -- at least if no player was sent off or injured.
 
-The straight forward procedure to obtain a probability distribution over all subsets of a fixed size that still propagates diversity is to condition a DPP on the event that it has this exact size. If we conditioned on the event that the point process has \(k\le N\) elements, we call this new point process \(k\)-DPP. Luckily \(k\)-DPPs possess similarly attractive properties like normal DPPs, in the sense that there is an analytical form of the normalisation constant as well as ad effective sampling algorithm (cf. \cite{kulesza2011k}). Hence \(k\)-DPPs allow to describe random diverse subsets of fixed size and one application for this will be discussed at the end of the next chapter.
+The straight forward procedure to obtain a probability distribution over all subsets of a fixed size that still propagates diversity is to condition a DPP on the event that it has this exact size. If we conditioned on the event that the point process has \(k\le N\) elements, we call this new point process \(k\)-DPP. Luckily \(k\)-DPPs possess similarly attractive properties like normal DPPs, in the sense that there is an analytical form of the normalisation constant as well as ad effective sampling algorithm (cf. \cite{kulesza2011k}). Hence, \(k\)-DPPs allow to describe random diverse subsets of fixed size and one application for this will be discussed at the end of the next chapter.
 \end{emp}
 
 %\subsection*{Structured DPPs}
@@ -233,14 +233,14 @@ where \(R\) is a natural number, \(M = \left\lvert \mathcal M \right\rvert\) and
 \[L_{ij} = q(y_i) \phi(y_i)^T \phi(y_j) q(y_j)\]
 and since \(N = M^R\) is typically very big, it is impractical to define or store the quality and diversity features for every item \(y_i\in\mathcal Y\). To deal with this problem we will assume that they admit factorisations and are thus a combination of only a few qualities and diversities.
 
-More precisely we call \(F\subseteq 2^{\left\{ 1, \dots, R\right\}}\) a \emph{set of factorisations} and for a \emph{factor} \(\alpha\in F\), \(y_\alpha\) denotes the subtupel of \(y\in\mathcal Y\) that is indexed by \(\alpha\). Further we will work with the decompositions
+More precisely we call \(F\subseteq 2^{\left\{ 1, \dots, R\right\}}\) a \emph{set of factorisations} and for a \emph{factor} \(\alpha\in F\), \(y_\alpha\) denotes the subtupel of \(y\in\mathcal Y\) that is indexed by \(\alpha\). Further, we will work with the decompositions
 \begin{equation}
 \begin{split}
 q(y) = & \prod_{\alpha\in F}q_\alpha(y_\alpha) \\
 \phi(y) = & \sum_{\alpha\in F} \phi_\alpha(y_\alpha)
 \end{split}
 \end{equation}
-for a suitable set of factorisations \(F\) and qualities and diversities \(q_\alpha\) and \(\phi_\alpha\) for \(\alpha\in F\). Note that so far this is neither a restriction of generality -- we could simply choose \(F = \big\{\!\left\{ 1, \dots, R\right\}\!\big\}\) -- nor a simplification -- in that case we have the exact same number of qualities and diversities. However we are interested in the case where \(F\) consists only of small subsets of \(\left\{ 1, \dots, R\right\}\). For example suppose that \(F\) is the set of all subsets with one or two elements, then we only have\footnote{%We use the usual âbig-\(O\)-notationÔ; namely w
+for a suitable set of factorisations \(F\) and qualities and diversities \(q_\alpha\) and \(\phi_\alpha\) for \(\alpha\in F\). Note that so far this is neither a restriction of generality -- we could simply choose \(F = \big\{\!\left\{ 1, \dots, R\right\}\!\big\}\) -- nor a simplification -- in that case we have the exact same number of qualities and diversities. However, we are interested in the case where \(F\) consists only of small subsets of \(\left\{ 1, \dots, R\right\}\). For example suppose that \(F\) is the set of all subsets with one or two elements, then we only have\footnote{%We use the usual âbig-\(O\)-notationÔ; namely w
 We write \(f(x) = O(g(x))\) if \(f(x) \le M g(x)\) for all \(x\ge x_0\) and one \(M>0\).}
 \[R\cdot M + \binom{R}{2} \cdot M^2 = O(R^2M^2)\]
 %\todo{introduce Landau symbols}
@@ -261,7 +261,7 @@ Because we neglect sDPPs in the following, we should quickly mention the reason 
 
 \section{Simulation and Existence of DPPs}
 
-One of the main difficulties that arrises in the theory of discrete point processes is that they are probability measures on an exponentially large set, namely the powerset \(2^{\mathcal Y}\) which has cardinality \(2^N\). Determinantal point processes have the benefit that they describe this distribution through the matrix \(K\) which consists of only \(N^2\) parameters. This reduction of the number of parameters plays a central role in making a lot of operations possible in an computationally efficient way. However it is not only the relatively small amount of parameters that lead to this, but also the structure of the determinant itself that leads to analytical expressions for a lot of quantities like the normalisation constant in \eqref{e2.3}.
+One of the main difficulties that arrises in the theory of discrete point processes is that they are probability measures on an exponentially large set, namely the powerset \(2^{\mathcal Y}\) which has cardinality \(2^N\). Determinantal point processes have the benefit that they describe this distribution through the matrix \(K\) which consists of only \(N^2\) parameters. This reduction of the number of parameters plays a central role in making a lot of operations possible in an computationally efficient way. However, it is not only the relatively small amount of parameters that lead to this, but also the structure of the determinant itself that leads to analytical expressions for a lot of quantities like the normalisation constant in \eqref{e2.3}.
 In this section we will focus on the simulation of DPPs and see how the very special properties of the determinant play a central role here as well. In the end we will give a short overview of further techniques that can improve the performance of this algorithm.
 
 %But before we can do this we will present a famous identity for integrals -- or sums -- of the product of determinants.
@@ -297,7 +297,7 @@ Further the second to last step is valid since for \(\rho\in S_n\) exactly \(n!\
 \end{proof}
 
 %The result we present is a little technical, but we will need it later in the proof of existence and also in the proof of the sampling algorithm, so we will give the proof of it here, although it should be mentioned that all the major ideas can be found in \cite{hough2006determinantal}.
-Now we present a discrete analogon of the Cauchy-Binet identity which will be of great use later. We write \([n]\) for the set \(\left\{ 1, \dots, n\right\}\) where \(n\) is a natural number and \(A_{IJ}\) for the submatrix of \(A\) where the first index is in \(I\) and the second one in \(J\). Further we keep the notation \(A_I = A_{II}\).
+Now we present a discrete analogon of the Cauchy-Binet identity which will be of great use later. We write \([n]\) for the set \(\left\{ 1, \dots, n\right\}\) where \(n\) is a natural number and \(A_{IJ}\) for the submatrix of \(A\) where the first index is in \(I\) and the second one in \(J\). Further, we keep the notation \(A_I = A_{II}\).
 
 %Let \([n]\coloneqq \left\{ 1, \dots, n\right\}\) further for \(I\subseteq\left\{ 1, \dots, m\right\}\) and \(J\subseteq\left\{ 1, \dots, n\right\}\) let \(A_{IJ}\) be the submatrix of \(A\) with indices in \(I\) and \(J\).
 
@@ -310,7 +310,7 @@ The assertion follows from the general Cauchy-Binet identity by using the counti
 \[ \frac1{m!}\sum_{i_1, \dots, i_m\in[n]} \det\left(A_{ki_l}\right)_{1\le k, l\le m} \det\left(B_{i_kl}\right)_{1\le k, l\le m} \]
 where we used that the determinants vanish if two indices \(i_k\) and \(i_l\) agree for \(k\ne l\).
  %there are \(m!\) ways how the index sets of length \(m\) can be arranged.
-%Let without loss of generality \(A\) and \(B\) have full rank, otherwise both sides are zero. First we note that both sides are multilinear in the rows of \(A\) and columns of \(B\). Hence we can assume by Gaussian row, respectively column elimination that each row of \(A\) and each column of \(B\) has exactly one non zero entry which is \(1\)\todo{really?}.
+%Let without loss of generality \(A\) and \(B\) have full rank, otherwise both sides are zero. First we note that both sides are multilinear in the rows of \(A\) and columns of \(B\). Hence, we can assume by Gaussian row, respectively column elimination that each row of \(A\) and each column of \(B\) has exactly one non zero entry which is \(1\)\todo{really?}.
 %Hence there is \(J_1 = \left\{ i_1, \dots, i_m\right\}\) and \(J_2 = \left\{ j_1, \dots, j_m\right\}\) such that \(A_{ki_k} = 1\) and \(B_{kj_k} = 1\) and all other entries are empty. 
 %Note that the right hand side is only non trivial if \(I = J_1\) and \(I = J_2\). If \(J_1\ne J_2\) then this case does not occur in the sum, but then at least one row of \(AB\) consists of zeroes and hence also the left hand side is equal to \(0\). If however \(J=J_1=J_2\) we get
 %\[\det\left(A_{[m]J}\right) \det\left(B_{J[m]}\right) = \det\left( A_{[m]J}B_{J[m]}\right) = \det(AB) \]
@@ -337,7 +337,7 @@ Just like in the proof of the Cauchy-Binet identity we begin by expressing the d
 %= & \sum_{\begin{subarray}{c} \sigma, \tau\in S_n \\ \sigma\sim\tau \end{subarra}} \operatorname{sgn}(\sigma)\operatorname{sgn}(\tau) \prod_{k=1}^m \phi_{\sigma(k)}(x_k) \phi_{\tau(k)}(x_k) 
 \end{split}
 \end{equation*}
-The multiple integrals over the product can be evaluated individually and hence the term above is only non trivial if we have \(\sigma(k) = \tau(k)\) for \(k=m+1, \dots, n\) which we will denote by \(\sigma\sim\tau\). Therefore the expression is equal to
+The multiple integrals over the product can be evaluated individually and hence the term above is only non trivial if we have \(\sigma(k) = \tau(k)\) for \(k=m+1, \dots, n\) which we will denote by \(\sigma\sim\tau\). Therefore, the expression is equal to
 \begin{equation*}
 \begin{split}
 & \sum_{\begin{subarray}{c} \sigma, \tau\in S_n \\ \sigma\sim\tau \end{subarray}} \operatorname{sgn}(\sigma)\operatorname{sgn}(\tau) \prod_{k=1}^m \phi_{\sigma(k)}(x_k) \phi_{\tau(k)}(x_k) \\
@@ -352,7 +352,7 @@ Just like in the case of the Cauchy-Binet identity we will give a discrete versi
 
 %\todo{clean up this result!}
 \begin{prop}[Variation of Cauchy-Binet]\label{CB-type}
-Let \(m \le n\) be two natural numbers and \(B\in\mathbb R^{m\times n}\) be a matrix such that the rows of \(B\) form an orthonormal system. Further let \(I \subseteq[n]\) with \(\left\lvert I \right\rvert\le m\), then we have
+Let \(m \le n\) be two natural numbers and \(B\in\mathbb R^{m\times n}\) be a matrix such that the rows of \(B\) form an orthonormal system. Further, let \(I \subseteq[n]\) with \(\left\lvert I \right\rvert\le m\), then we have
 \begin{equation*}
 \begin{split}
 %i_{r+1}, \dots, i_{p}=1
@@ -375,13 +375,13 @@ where we used that the determinant vanishes if two indices \(i_k\) and \(i_l\) a
 %= & \sum_{\sigma, \tau\in S_m} \operatorname{sgn}(\sigma)\operatorname{sgn}(\tau) \prod_{k=1}^r B_{ki_{\sigma(k)}}B_{ki_{\tau(k)}} \prod_{k=r+1}^m \sum_{i\in[n]} B_{ki} B_{\tau^{-1}(\sigma(k))i}.
 %\end{split}
 %\end{equation}
-%Since the rows of \(B\) are orthogonal the last product one if \(\sigma(k) = \tau(k)\) for all \(k = r+1, \dots, m\) and zero otherwise, hence the sum simplifies to those pairs of permutations that agree on \(\left\{ r+1, \dots, m\right\}\). For those we write \(\sigma = \sigma_1\circ\sigma_2\) where \(\sigma_1\) is the restriction of \(\sigma\) to \(\left\{ 1, \dots, r\right\}\) and analogously \(\tau = \tau_1\circ\tau_2\). Since \(\sigma\) and \(\tau\) have to agree on \(\left\{ r+1, \dots, m\right\}\) we have \(\sigma_2=\tau_2\) and we have \((m-r)!\) possible choices for \(\sigma_2=\tau_2\) which eliminates the first factor in \eqref{CBP}. Further we get
+%Since the rows of \(B\) are orthogonal the last product one if \(\sigma(k) = \tau(k)\) for all \(k = r+1, \dots, m\) and zero otherwise, hence the sum simplifies to those pairs of permutations that agree on \(\left\{ r+1, \dots, m\right\}\). For those we write \(\sigma = \sigma_1\circ\sigma_2\) where \(\sigma_1\) is the restriction of \(\sigma\) to \(\left\{ 1, \dots, r\right\}\) and analogously \(\tau = \tau_1\circ\tau_2\). Since \(\sigma\) and \(\tau\) have to agree on \(\left\{ r+1, \dots, m\right\}\) we have \(\sigma_2=\tau_2\) and we have \((m-r)!\) possible choices for \(\sigma_2=\tau_2\) which eliminates the first factor in \eqref{CBP}. Further, we get
 %\[\operatorname{sgn}(\sigma)\operatorname{sgn}(\tau) = \operatorname{sgn}(\sigma_1)\operatorname{sgn}(\tau_1)\]
 %and obtain that \eqref{CBP2} is equal to
 %\[ (m-r)!\sum_{\sigma_1, \tau_1\in S_m} \operatorname{sgn}(\sigma_1)\operatorname{sgn}(\tau_2) \prod_{k=1}^r B_{ki_{\sigma_1(k)}}B_{ki_{\tau_2(k)}}\]
 %where we only sum over those pairs \((\sigma_1, \tau_1)\) such that \(\sigma_1([r]) = \tau_1([r])\).
 
-%For \(J = \left\{ j_1, \dots, j_r\right\}\) let \(\mathcal J\) denote those permutations \(\sigma_1, \tau_1\) such that \(\sigma_1([r]) = \tau_1([r]) = J\). Further we will identify those %permutations \(\sigma_1, \tau_1\) with permutations \(\tilde\sigma, \tilde\tau\in S_r\) such that
+%For \(J = \left\{ j_1, \dots, j_r\right\}\) let \(\mathcal J\) denote those permutations \(\sigma_1, \tau_1\) such that \(\sigma_1([r]) = \tau_1([r]) = J\). Further, we will identify those %permutations \(\sigma_1, \tau_1\) with permutations \(\tilde\sigma, \tilde\tau\in S_r\) such that
 %\[\sigma_1(k) = j_{\tilde\sigma(k)} \quad \text{and } \tau_1(k) = j_{\tilde\tau(k)} \quad \text{for all } k\in[n]. \]
 %Note that we have
 %\[\operatorname{sgn}(\sigma_1)\operatorname{sgn}(\tau_1) = \operatorname{sgn}(\tilde\sigma)\operatorname{sgn}(\tilde\tau).\]
@@ -428,7 +428,7 @@ Since it is fairly easy to simulate Bernoulli experiments, it remains to know ho
 Now we study the existence and simulation of elementary DPPs first and will be able to generalise those results to general DPPs without much effort.
 
 \begin{prop}[Existence of elementary DPPs]
-Let \(K=\sum_{k=1}^m v_kv_k^T\) for some orthonormal set \(V = \left\{ v_k\right\}_{k=1, \dots, m}\subseteq\mathbb R^{\mathcal Y}\). Further %set \(k\coloneqq\left\lvert I \right\rvert\) and 
+Let \(K=\sum_{k=1}^m v_kv_k^T\) for some orthonormal set \(V = \left\{ v_k\right\}_{k=1, \dots, m}\subseteq\mathbb R^{\mathcal Y}\). Further, %set \(k\coloneqq\left\lvert I \right\rvert\) and 
 define the measure on \(2^\mathcal Y\) through
 \begin{equation}\label{elemDPPs}
 \mathbb P(A)\coloneqq \begin{cases} \; \det(K_A) \quad & \text{if } \left\lvert A \right\rvert = m \\ \; 0 & \text{else} \end{cases}.
@@ -463,7 +463,7 @@ For \(\left\lvert A \right\rvert\ge m\) this follows immediately, so let \(A = \
 \end{equation*}
 where we used Proposition \ref{CB-type}.
 %\todo{argue with multilinearity!}
-%This expression is only non trivial when \(\sigma(k)\ne\tau(k)\) for all \(k\ge r\) and hence we can restrict the sum to those permutations that satisfy this. % which also eliminates the factor \(\frac{(m-r)!}{m!}\). Hence we get%Further we will identify 
+%This expression is only non trivial when \(\sigma(k)\ne\tau(k)\) for all \(k\ge r\) and hence we can restrict the sum to those permutations that satisfy this. % which also eliminates the factor \(\frac{(m-r)!}{m!}\). Hence, we get%Further we will identify 
 %Further we will identify all pairs \((\sigma, \tau)\) permutations \(\)
 %We obtain that this is equal to
 %\begin{equation*}
@@ -497,7 +497,7 @@ Let \(K=\sum_{k=1}^m v_kv_k^T\), then Algorithm \ref{alg:elementary-DPP-sampling
 \end{prop}
 \begin{proof}
 %\todo{reread!}
-We note that we only have to check that \eqref{elemDPPs} holds and for this we fix \(A\subseteq\mathcal Y\). First we note that the output \(\mathbf Y\) has cardinality \(\left\lvert m \right\rvert\) since no element can be selected twice in the while loop and the size of \(V\) decreases by exactly one in each iteration. Hence it remains to show
+We note that we only have to check that \eqref{elemDPPs} holds and for this we fix \(A\subseteq\mathcal Y\). First we note that the output \(\mathbf Y\) has cardinality \(\left\lvert m \right\rvert\) since no element can be selected twice in the while loop and the size of \(V\) decreases by exactly one in each iteration. Hence, it remains to show
 \[\mathbb P(A = \mathbf Y ) = \det(K_A) \]
 if \(\left\lvert A \right\rvert = m\). Let for the sake of convenience \(A = \left\{ 1, \dots, m\right\}\) and \(\mathcal Y = \left\{ 1, \dots, N\right\}\). Note that it suffices to show that the while loop selects \(1, \dots, m\) in this exact order with probability \(\frac1{m!}\det(K_A)\).
 
@@ -512,7 +512,7 @@ Since \(P_{k-1}\) is the projection onto the subspace orthogonal to \(b_1, \dots
 b_1^Tb_1 & \cdots & b_1^Tb_m \\ \vdots & \ddots & \vdots \\ b_m^Tb_1 & \cdots & b_m^Tb_m
 \end{pmatrix} = \det\!\big((B^TB)_A\big)\]
 where \(B\in\mathbb R^{N\times N}\) is the matrix which columns %\todo{rows or columns?!}{ } 
-are equal to \(b_k\). Therefore it remains to show \(B^TB = K\). However by definition \(B\) is the projection onto the span of \(V\) and thus \(B=K\). Because \(K\) is symmetric like every projection, we have \(B^T = B\) and hence can conclude \(B^TB = B^2 = B = K\) where we used that \(B\) is a projection.
+are equal to \(b_k\). Therefore, it remains to show \(B^TB = K\). However, by definition \(B\) is the projection onto the span of \(V\) and thus \(B=K\). Because \(K\) is symmetric like every projection, we have \(B^T = B\) and hence can conclude \(B^TB = B^2 = B = K\) where we used that \(B\) is a projection.
 \end{proof}%\todo{add span to nomenclature}
 
 A straight forward application of Theorem \ref{mixDPPs} proves that the following algorithm samples from a DPP. This will also show the existence of DPPs to a given marginal kernel since it gives an explicit construction.
@@ -542,7 +542,7 @@ A straight forward application of Theorem \ref{mixDPPs} proves that the followin
 Let \(K\in\mathbb R^{N\times N}\) be any symmetric and non negative definite matrix such that \(K\le I\). Then the distribution of the output \(Y\) of Algorithm \ref{alg:DPP-sampling} is a DPP with marginal kernel \(K\). %In particular 
 \end{theo}%\todo{add \(A\le B\) for matrices to nomenclature.}
 \begin{proof}
-Theorem \ref{mixDPPs} states that an arbitrary DPP is the mixture of elementary DPPs and the for loop in the algorithm represents exactly this mixing with the respective weights. Further the sampling result for elementary DPPs yields that the output of the second part of the algorithm, namely the while loop, is distributed according to a DPP with marginal kernel \(K^V\coloneqq\sum_{v\in V} vv^T \).
+Theorem \ref{mixDPPs} states that an arbitrary DPP is the mixture of elementary DPPs and the for loop in the algorithm represents exactly this mixing with the respective weights. Further, the sampling result for elementary DPPs yields that the output of the second part of the algorithm, namely the while loop, is distributed according to a DPP with marginal kernel \(K^V\coloneqq\sum_{v\in V} vv^T \).
 %Thus we only have to show that the output of the second part of the algorithm, namely the while loop, is distributed according to a DPP with marginal kernel \(K^V\coloneqq\sum_{v\in V} vv^T \). 
 
 %To see this let \(\mathbf Y\) denote the output and assume that \(k\) eigenvectors where selected in the first part of the algorithm and fix now \(A\).
@@ -552,7 +552,7 @@ Theorem \ref{mixDPPs} states that an arbitrary DPP is the mixture of elementary 
 %However we have seen in Proposition \ref{carDPP}, that the DPP with 
 %Obviously the marginal kernel \(K^V\) has rank
  %is almost surely of size
-%  \(k\) and the output \(\mathbf Y\) has exactly \(k\) elements. This is due to the fact that no element can be selected twice in the while loop and the size of \(V\) decreases by exactly one in each iteration. Thus for \(\left\lvert A \right\rvert>k\) both sides are equal to zero and further for \(\left\lvert A \right\rvert<k\) we get\todo{what do we get?}
+%  \(k\) and the output \(\mathbf Y\) has exactly \(k\) elements. This is due to the fact that no element can be selected twice in the while loop and the size of \(V\) decreases by exactly one in each iteration. Thus, for \(\left\lvert A \right\rvert>k\) both sides are equal to zero and further for \(\left\lvert A \right\rvert<k\) we get\todo{what do we get?}
 %\[\mathbb P(A\subseteq \mathbf Y) = \sum\limits_{B\supseteq A, \left\lvert B \right\rvert = k} \mathbb P(B = \mathbf Y) = \sum\limits_{B\supseteq A, \left\lvert B \right\rvert = k} \det(K^V_B) \overset{????}{=} \det(K^V_A). \]
 
 %Thus we only have to consider the case that \(A\) has \(k\) elements %\todo{is it that simple?}{ } 
@@ -579,7 +579,7 @@ Theorem \ref{mixDPPs} states that an arbitrary DPP is the mixture of elementary 
 %\[\det\begin{pmatrix}
 %b_1^Tb_1 & \cdots & b_1^Tb_k \\ \vdots & \ddots & \vdots \\ b_k^Tb_1 & \cdots & b_k^Tb_k
 %\end{pmatrix} = \det\!\big((B^TB)_A\big)\]
-%where \(B\in\mathbb R^{N\times N}\) is the matrix which rows are equal to \(b_i\). Therefore it remains to show \(B^TB = K^V\).
+%where \(B\in\mathbb R^{N\times N}\) is the matrix which rows are equal to \(b_i\). Therefore, it remains to show \(B^TB = K^V\).
 %, i.e. that \(B\) is the projection onto the space spanned by \(V\). 
 %However by definition \(B\) is the projection onto the span of \(V\) and thus \(B=K^V\). Because \(K^V\) is symmetric like every projection, we have \(B^T = B\) and hence can conclude \(B^TB = B^2 = B = K^V\) where we used that \(B\) is a projection.
 % is exactly this projection and further \(B\) is symmetric because of
@@ -627,7 +627,7 @@ In the last step we used that the trace of a symmetric matrix is the sum over it
 \end{proof}
 
 \begin{rem}
-Later on it will usually be more convenient to model or estimate the elementary kernel \(L\) instead of the marginal kernel \(K\). Thus we should explain how the sampling algorithm would work in this case. Since the two kernels are related by
+Later on it will usually be more convenient to model or estimate the elementary kernel \(L\) instead of the marginal kernel \(K\). Thus, we should explain how the sampling algorithm would work in this case. Since the two kernels are related by
 \[ K = L(L+I)^{-1} \]
 their eigendecompositions can easily be transformed. Namely if \(v\) is an eigenvector of \(L\) with eigenvalue \(\lambda\ge0\), then \(v\) is also an eigenvector of \(K\) with eigenvalue \(\frac{\lambda}{\lambda+1}>0\). After this transformation of the eigendecomposition of \(L\) the sampling algorithm for \(K\) can be applied.
 \end{rem}
@@ -681,7 +681,7 @@ Let \(\big((W_{k_1})_1(W_{k_2})_2\cdots (W_{k_m})_m\big)\) denote the \(m\times 
 We will shortly discuss one method how the simulation of DPPs can be made more efficient.
 
 \begin{emp}[Dual representation]
-The by far computationally most costly step in the sampling algorithm presented above is the computation of the eigendecomposition of the matrix \(K\) or \(L\). Hence we will quickly explain how this can be reduced to the computation of the eigendecomposition of a smaller matrix.
+The by far computationally most costly step in the sampling algorithm presented above is the computation of the eigendecomposition of the matrix \(K\) or \(L\). Hence, we will quickly explain how this can be reduced to the computation of the eigendecomposition of a smaller matrix.
 
 Assume we have given a matrix \(A = B^TB\in\mathbb R^{N\times N}_{\text{sym}, +}\) with \(B\in\mathbb R^{D\times N}\) and set \(C\coloneqq BB^T\in\mathbb R^{D\times D}_{\text{sym}, +}\). Then the spectral decomposition of \(A\) and \(C\) can be related in the following way.
 \begin{enumerate}
@@ -696,7 +696,7 @@ and hence \(\frac{B^Tv}{\sqrt{\lambda}}\) is a normed eigenvector to the eigenva
 is an orthonormal set of eigenvectors to the non trivial eigenvalues of \(A\). %Further the scalar product between two of those
 \end{enumerate}
 
-Hence, if \(K\) or \(L\) are given as a gram matrix \(B^TB\), it suffices to compute the eigendecomposition of \(BB^T\in\mathbb R^{D\times D}_{\text{sym}, +}\), which could be significantly faster if \(D<N\). Since the sampling algorithm relies only on the eigendecomposition and scalar products between eigenvectors, it can be performed based on the dual representation presented above. It should be mentioned that typically \(L\) will modelled as a gram matrix via the quality diversity decomposition and hence this dual representation will mostly be used for \(L\). Further it comes with even greater benefits here, since the normalisation constant 
+Hence, if \(K\) or \(L\) are given as a gram matrix \(B^TB\), it suffices to compute the eigendecomposition of \(BB^T\in\mathbb R^{D\times D}_{\text{sym}, +}\), which could be significantly faster if \(D<N\). Since the sampling algorithm relies only on the eigendecomposition and scalar products between eigenvectors, it can be performed based on the dual representation presented above. It should be mentioned that typically \(L\) will modelled as a gram matrix via the quality diversity decomposition and hence this dual representation will mostly be used for \(L\). Further, it comes with even greater benefits here, since the normalisation constant 
 \[\det(L + I) = \prod_{k=1}^N (1 + \lambda_k) = \det\left(BB^T + I\right) \]
 reduces to the computation of the determinant of a \(D\times D\) matrix.
 \end{emp}
@@ -713,10 +713,10 @@ We will present two examples and although -- or maybe even because -- they are v
 
 \subsubsection{Points on a line}
 
-We start by defining and simulating from a one dimensional DPP. More precisely we consider the ground set \(\mathcal Y \coloneqq \left\{ 1, \dots, 100\right\}\). Further we model the diversity feature vectors like in \ref{moddiv} and define as a reference set the whole set itself \(\mathcal R\coloneqq\mathcal Y\). Now we choose \(f\) to be a normal density with mean \(0\), i.e. we have
+We start by defining and simulating from a one dimensional DPP. More precisely we consider the ground set \(\mathcal Y \coloneqq \left\{ 1, \dots, 100\right\}\). Further, we model the diversity feature vectors like in \ref{moddiv} and define as a reference set the whole set itself \(\mathcal R\coloneqq\mathcal Y\). Now we choose \(f\) to be a normal density with mean \(0\), i.e. we have
 \[(\phi_i)_j\propto \exp\left( - \frac{(i-j)^2}{\sigma}\right) \quad \text{for } i, j\in\mathcal Y.\]
 We will choose \(\sigma = 20\) first and then \(\sigma = 5\) to see how this parameter affects the repulsion of the DPP.
-Finally we set the qualities to be constant and scale them so that the expected cardinality of the DPP is approximately \(15\). Further we define a Poisson point process with the same expected cardinality. This means the second point process includes every point independently with probability \(\frac{15}{100}\). A comparison of a sample from those three point processes is depicted in Figure \ref{pointsonaline} and the -- in this case spatially -- repulsive structure of the DPP is apparent.
+Finally we set the qualities to be constant and scale them so that the expected cardinality of the DPP is approximately \(15\). Further, we define a Poisson point process with the same expected cardinality. This means the second point process includes every point independently with probability \(\frac{15}{100}\). A comparison of a sample from those three point processes is depicted in Figure \ref{pointsonaline} and the -- in this case spatially -- repulsive structure of the DPP is apparent.
 \begin{figure}[h!]\label{pointsonaline}
 	\centering
 	\includegraphics[width=0.60\textwidth]{figures/comparison-different-DPPs-Poisson-4}
@@ -731,12 +731,12 @@ for some \(\sigma>0\). Then we obviously have
 \[\phi_i \xlongrightarrow{\sigma\to\infty} \sqrt{N}\cdot \begin{pmatrix}
 1\\ \vdots \\ 1
 \end{pmatrix}\in\mathbb R^N. \]
-Hence the similarity \(\phi_i^T\phi_j\) between item \(i\) and \(j\) will increase and therefore the negative correlation gets stronger as \(\sigma\) grows. Hence the DPP will become increasingly repulsive if we increase the parameter \(\sigma\) which can be seen in Figure \ref{pointsonaline} where the first sample corresponds to the choice \(\sigma = 20\), the second one to \(\sigma = 5\) and the last one to a Poisson point process. On a more formal level one can argue that if one models the diversity feature vectors this way, we center Gaussian densities at the reference points and then associate an item \(i\) with how it looks seen from those reference points under this Gaussian density. If we increase the standard deviation \(\sigma\) of this density all items become increasingly similar from the standpoints of the reference points. Similar considerations apply if \(f\) is not a normal denstiy.\todo{is this similar to kernel methods?}
+Hence the similarity \(\phi_i^T\phi_j\) between item \(i\) and \(j\) will increase and therefore the negative correlation gets stronger as \(\sigma\) grows. Hence, the DPP will become increasingly repulsive if we increase the parameter \(\sigma\) which can be seen in Figure \ref{pointsonaline} where the first sample corresponds to the choice \(\sigma = 20\), the second one to \(\sigma = 5\) and the last one to a Poisson point process. On a more formal level one can argue that if one models the diversity feature vectors this way, we center Gaussian densities at the reference points and then associate an item \(i\) with how it looks seen from those reference points under this Gaussian density. If we increase the standard deviation \(\sigma\) of this density all items become increasingly similar from the standpoints of the reference points. Similar considerations apply if \(f\) is not a normal denstiy.\todo{is this similar to kernel methods?}
 % \todo{complete this and add picture!}
 
 \subsubsection*{Binary sequences}
 
-It is well known that a \(0-1\) sequence that is generated by a human will typically differ strongly from a randomly generated \(0-1\) sequence. For example the total amount of changes between zeros and ones is significantly higher in the human pseudorandom sequence. Also the length of the longest chain of zeros or ones will likely be significantly shorter (cf. \cite{ruschendorf2014mathematische}). Hence the position of the ones tend to repell themselves since a human will typically think that a long chain of successive ones will be untypical for a random sequence and thus one could model these positions through a DPP.
+It is well known that a \(0-1\) sequence that is generated by a human will typically differ strongly from a randomly generated \(0-1\) sequence. For example the total amount of changes between zeros and ones is significantly higher in the human pseudorandom sequence. Also the length of the longest chain of zeros or ones will likely be significantly shorter (cf. \cite{ruschendorf2014mathematische}). Hence, the position of the ones tend to repell themselves since a human will typically think that a long chain of successive ones will be untypical for a random sequence and thus one could model these positions through a DPP.
 
 We will consider \(0-1\) sequences of length 30 and therefore set \(\mathcal Y \coloneqq \left\{ 1, \dots, 30\right\}\). We will define the DPP in the exact same way as above and with the same function \(f\), but will scale the qualities such that the expected cardinality is \(15\), since a human would probably aim to write down around fifteen ones. In complete analogue fashion to the previous examples we define a Poisson point process with the same expected cardinality. This time we will represent the samples from the two point processes through a \(0-1\) sequence where a \(1\) at the \(i\)-th position indicates that item \(i\) was in the sample. We obtain the two following samples:
 \begin{equation*}
@@ -747,13 +747,13 @@ We will consider \(0-1\) sequences of length 30 and therefore set \(\mathcal Y \
 \end{equation*}
 Although the first one might actually look more random at first, this one is the one generated by the DPP and on second sight one realises that the positions of the ones are negatively correlated. Indeed in the first sequence the longest chain of zeros or ones is of length three, in the second one of length 7. The amount of changes between zero and one is \(22\) in the first sequence and only \(14\) in the second sequence.%\todo{comment on \(0-1\) sequences arising from random digit sequence}
 
-Although the DPP presented above incorporates some of the properties one might expect from a \(0-1\) sequence created by a human, this process will not exactly be determinantal. However it shall be noted that different \(0-1\) sequences studied in probability theory exhibit an exact determinantal structure. For example Borodin studied the sequence of descent positions in \cite{borodin2010adding}. To obtain those sequences one first samples a sequence of \(N+1\) independent digits \(\left\{ 0, 1, \dots, 9\right\}\). Then one marks the positions in \(\left\{ 1, \dots, N\right\}\) where the successor of the digit is strictly than current digit. The heuristical argument why those positions of descent repell themselves is that if \(k\) is not a point of descent, then the digit on the position \(k+1\) likely to be big and hence likely to be a point of descent.
+Although the DPP presented above incorporates some of the properties one might expect from a \(0-1\) sequence created by a human, this process will not exactly be determinantal. However, it shall be noted that different \(0-1\) sequences studied in probability theory exhibit an exact determinantal structure. For example Borodin studied the sequence of descent positions in \cite{borodin2010adding}. To obtain those sequences one first samples a sequence of \(N+1\) independent digits \(\left\{ 0, 1, \dots, 9\right\}\). Then one marks the positions in \(\left\{ 1, \dots, N\right\}\) where the successor of the digit is strictly than current digit. The heuristical argument why those positions of descent repell themselves is that if \(k\) is not a point of descent, then the digit on the position \(k+1\) likely to be big and hence likely to be a point of descent.
 
 \subsubsection{Points in a square}
 
 This time we want to built a DPP in a two dimensional square \([0,1]^2\) or at least a discrete approximation of it. This might be used to model positions of trees that repel themselves due to a competition for natural resources, positions of football players on the field or the positions people choose for a picnic in a park.
 
-In order to do this we follow a very similar approach than in the case of one dimensional DPPs. Hence we set
+In order to do this we follow a very similar approach than in the case of one dimensional DPPs. Hence, we set
 \[\mathcal Y \coloneqq 99^{-1} \left\{ 0, \dots, 99\right\}^2 \]%\left\{ (i, j) \mid 39\cdot  \right\} \]
 and obtain a \(100\times 100\) grid in the unit square. We again choose \(\mathcal R \coloneqq \mathcal Y \) and \(f\) to be the normal density with mean \(0\) and variance \(\sigma>0\). Then we choose the similarity feature vectors to be 
 \[(\phi_i)_j\propto f(\left\lVert i - j \right\rVert) \quad \text{for } i, j\in\mathcal Y.\]

@@ -4,13 +4,13 @@
 The method of maximum likelihood estimation is a very well established procedure to estimate parameters. The philosophy of MLE is that one selects the parameter under which the given data would be the most likely to be observed and to motivate this in more detail we roughly follow the corresponding section in \cite{rice2006mathematical}.
 %Assume again that we have \(n\) samples \(\mathbf Y_1, \dots, \mathbf Y_n\) and then the maximum likelihood estimator would be the kernel 
 
-Suppose that we want to estimate a parameter \(\theta\in\Theta\) based on some realisations \(x_1, \dots, x_n\) of some random variables \(X_1, \dots, X_n\). We have given some candidates  \(f(x_1, \dots, x_n| \theta)\) for the joint density of \(X_1, \dots, X_n\) with respect to some reference measure \(\prod_{i=1}^n\mu(\mathrm d x_i)\) and we want to decide which parameter \(\theta\in\Theta\) describes the realisations, which we will also call data or observation, best. Hence it is reasonable to pick that \(\theta\)
+Suppose that we want to estimate a parameter \(\theta\in\Theta\) based on some realisations \(x_1, \dots, x_n\) of some random variables \(X_1, \dots, X_n\). We have given some candidates  \(f(x_1, \dots, x_n| \theta)\) for the joint density of \(X_1, \dots, X_n\) with respect to some reference measure \(\prod_{i=1}^n\mu(\mathrm d x_i)\) and we want to decide which parameter \(\theta\in\Theta\) describes the realisations, which we will also call data or observation, best. Hence, it is reasonable to pick that \(\theta\)
 %For example we might consider a sequence random variables \(X_1, \dots, X_n\) with a joint density \(f(x_1, \dots, x_n| \theta)\) with respect to some reference measure \(\prod_{i=1}^n\mu(\mathrm d x_i)\). Now we want to estimate the parameter \(\theta\) based on a sample \(x_1, \dots, x_n\) of our random variables. Then one reasonable guess for \(\theta\) would be the one 
 under which the observations \(x_1, \dots, x_n\) are the most likely. In other words we want to find the parameter \(\theta\) that maximises the density \(f(x_1, \dots, x_n| \theta)\). If additionally the random variables are indepent and identically distributed, their joint density factorises and thus we obtain
 \[f(x_1, \dots, x_n| \theta) = \prod_{i=1}^n f(x_i| \theta) \]
 where \(f(x| \theta)\) is the density with respect to \(\mu\) of the \(X_i\). In practice it is often easier to maximise the logarithm of the density
 \[\mathcal L(\theta) = \log\!\big(f(x_1, \dots, x_n| \theta)\big) = \sum_{i=1}^n \log\!\big(f(x_i| \theta)\big) \]
- since this transforms the product over functions into a sum. However this is clearly equivalent to maximising the density since the logarithm is strictly monotone.
+ since this transforms the product over functions into a sum. However, this is clearly equivalent to maximising the density since the logarithm is strictly monotone.
 
 \begin{emp}[Definition of the MLE]
 Let \(\Theta\) be a set, which we call the \emph{parameter set} and let
@@ -23,7 +23,7 @@ the \emph{maximum likelihood estimator} or short MLE.
 \end{emp}
  
  
-%We call the function \(\mathcal L\) the \emph{log likelihood function} and we denote its domain which is just the set of all parameters we wish to consider by \(\Theta\). Further we call its maximiser
+%We call the function \(\mathcal L\) the \emph{log likelihood function} and we denote its domain which is just the set of all parameters we wish to consider by \(\Theta\). Further, we call its maximiser
 % \begin{equation}\label{mledef}
 % \hat \theta_n\coloneqq \underset{\theta\in\Theta}{\arg\max} \mathcal L(\theta) 
 % \end{equation}
@@ -41,18 +41,18 @@ will not be explicitly solvable and therefore one usually has to exploit numeric
 Those work particularly well if the function \(f\) is concave and possibly smooth and one powerful method is the given by the so called gradient descent.
 %, for example in this case critical points and minimisers agree %and the minimum is always attained if \(U\) is closed and \(\mathcal L(\theta)\to \infty\) for \(\left\lvert \theta \right\rvert\to\infty\), i.e. if \(\mathcal L\) is \emph{coercive}. In fact 
  %In this case every critical point is a local minimum and every local minimum is a global minimum which is central to the so called gradient methods that offer rich and powerful algorithms for the minimisation of convex functions.
-To quickly explain the philosophy of those methods, we note that \(\nabla f\) points into the direction of the steepest ascent of the function \(f\) and thus an intuitive approach the maximise \(f\) would be to follow the gradient, i.e. to take a solution \(\gamma\) of the gradient flow \(\gamma^\prime = \nabla f(\gamma)\) and work out its limit. However if the function is not concave one can not even guarantee that the gradient flow reaches a local minimum, since one can construct examples where \(\gamma\) gets stuck in a critical point. However in the concave case this suffices since critical points and global minima agree for convex functions. The gradient descent is an algorithm derived from this observation and is essentially a discretisations of the gradient flow meaning that it iteratively takes small steps into the direction of the gradient and thus lowers the value of the function. Some more sophisticated versions of gradient descent methods usually even consider higher order derivatives and use the information they provide over the geometry of the graph. Generally speaking those algorithms work extremely well even in high dimensions and thus their efficiency and stability have been studied broadly and we refer to the extensive monograph \cite{boyd2004convex}. 
-%It should be mentioned that those methods are not constrained to the concave case, but they will obviously only be able to compute local minimisers.Of course this is a major disadvantage but in the rapidly evolving area of deep learning, where the problem is similar to ours in the sense, that one wants to minimise a loss function that describes the predictive power of a model, this has widely been accepted as good enough. However it remains to be investigated whether this approach could also be taken in the area of DPPs. %  \todo{comment on DPPs}
+To quickly explain the philosophy of those methods, we note that \(\nabla f\) points into the direction of the steepest ascent of the function \(f\) and thus an intuitive approach the maximise \(f\) would be to follow the gradient, i.e. to take a solution \(\gamma\) of the gradient flow \(\gamma^\prime = \nabla f(\gamma)\) and work out its limit. However, if the function is not concave one can not even guarantee that the gradient flow reaches a local minimum, since one can construct examples where \(\gamma\) gets stuck in a critical point. However, in the concave case this suffices since critical points and global minima agree for convex functions. The gradient descent is an algorithm derived from this observation and is essentially a discretisations of the gradient flow meaning that it iteratively takes small steps into the direction of the gradient and thus lowers the value of the function. Some more sophisticated versions of gradient descent methods usually even consider higher order derivatives and use the information they provide over the geometry of the graph. Generally speaking those algorithms work extremely well even in high dimensions and thus their efficiency and stability have been studied broadly and we refer to the extensive monograph \cite{boyd2004convex}. 
+%It should be mentioned that those methods are not constrained to the concave case, but they will obviously only be able to compute local minimisers.Of course this is a major disadvantage but in the rapidly evolving area of deep learning, where the problem is similar to ours in the sense, that one wants to minimise a loss function that describes the predictive power of a model, this has widely been accepted as good enough. However, it remains to be investigated whether this approach could also be taken in the area of DPPs. %  \todo{comment on DPPs}
 All together we note that concavity is an extremely favourable property for a function that shall be maximised, which will be the log likelihood function later on.
  
 A second property which is important in the existence theory of maximisers is \emph{coercivity} in the sense that
 \[f(x)\to-\infty \quad \text{for } \left\lvert x \right\rvert\to\infty.\]
-In fact every (upper semi-) continuous and coercive function defined on a closed set \(U\subseteq\mathbb R^M\) attains its minimum. To see this one can fix \(x_0\in U\) and use the coercivity to obtain \(f<f(x_0)\) outside of a compact set \(K\) and thus the supremum of \(f\) agrees with the supremum of \(f\) over \(K\cap U\) which is compact again and thus it is attained. We will later introduce some abstract theory about the consistency of estimators and for this we will need this result in a ore general setting. However the version above is enough in the case of the maximum likelihood estimators for parameters of DPPs and therefore readers that are not familiar with elementary notions of topology are advised to neglect following statement.
+In fact every (upper semi-) continuous and coercive function defined on a closed set \(U\subseteq\mathbb R^M\) attains its minimum. To see this one can fix \(x_0\in U\) and use the coercivity to obtain \(f<f(x_0)\) outside of a compact set \(K\) and thus the supremum of \(f\) agrees with the supremum of \(f\) over \(K\cap U\) which is compact again and thus it is attained. We will later introduce some abstract theory about the consistency of estimators and for this we will need this result in a ore general setting. However, the version above is enough in the case of the maximum likelihood estimators for parameters of DPPs and therefore readers that are not familiar with elementary notions of topology are advised to neglect following statement.
 
 \begin{prop}[Existence of maximisers]\label{dirmet}
 Let \(\mathcal X\) be a topological Hausdorff space and \(f\colon \mathcal X\to [-\infty, \infty)\) be an \emph{upper semicontinuous} function, i.e.
 \[L_f(\alpha)\coloneqq\left\{ x\in\mathcal X\mid f(x) \ge \alpha\right\}\]
-is closed for all \(\alpha\in\mathbb R\). Further we will assume that \(f\) is \emph{coercive}, meaning that for any \(\alpha\in\mathbb R\) the set \(L_f(\alpha)\) is compact. %there is a compact set \(K\subseteq\mathcal X\) such that
+is closed for all \(\alpha\in\mathbb R\). Further, we will assume that \(f\) is \emph{coercive}, meaning that for any \(\alpha\in\mathbb R\) the set \(L_f(\alpha)\) is compact. %there is a compact set \(K\subseteq\mathcal X\) such that
 %\[f(x) < \alpha \quad \text{for all } x\notin K. \]
 Then \(f\) attains its maximum in at least one point, i.e. there is \(\hat x\in\mathcal X\) such that
 \[f(\hat x) = \sup_{x\in\mathcal X} f(x). \]
@@ -70,7 +70,7 @@ This implies
 
 \subsection{Presentation of different models}\label{models}
 
-Assume again that we have a set of observations \((\mathbf Y_n)_{n\in\mathbb N}\subseteq\mathcal Y\) drawn independently and according to the DPP. This time we want to find the maximum likelihood estimator for the elementary kernel and in order to do this we need to be able to express the density of the DPP which is nothing but the values of the elementary probabilities. Thus we will assume that we are dealing with \(L\)-ensembles in this section. Since the observations \((\mathbf Y_n)\) are defined on some common probability space which we will denote by \((\Omega, \mathbb P)\) we will change the notation in this section and write
+Assume again that we have a set of observations \((\mathbf Y_n)_{n\in\mathbb N}\subseteq\mathcal Y\) drawn independently and according to the DPP. This time we want to find the maximum likelihood estimator for the elementary kernel and in order to do this we need to be able to express the density of the DPP which is nothing but the values of the elementary probabilities. Thus, we will assume that we are dealing with \(L\)-ensembles in this section. Since the observations \((\mathbf Y_n)\) are defined on some common probability space which we will denote by \((\Omega, \mathbb P)\) we will change the notation in this section and write
 \[%f(A, L) \quad \text{or } 
 f(A| \theta) = \frac{\det(L(\theta)_A)}{\det(L(\theta) + I)} \]
 for the elementary probabilities of the DPP that arises from the parameter \(\theta\). Note that the elementary probabilities are nothing than the density with respect to the counting measure. We will now present the maximum likelihood estimators for different parametric classes, i.e. different families \(\mathcal F\) of DPPs.
@@ -93,7 +93,7 @@ Using \eqref{e2.3} we get the expression
 \begin{equation}\label{e3.1}
 \mathcal L(L) = \sum\limits_{i=1}^n\log\left( \det(L_{\mathbf Y_i})\right) - n \log\left( \det(L+I)\right).
 \end{equation}
-Although the parametric family of that arises from the elementary kernels \(L\) gives a high variety of different associated \(L\)-ensembles, it will also make the computation of the MLE more complex. Therefore we will consider some smaller classes of \(L\)-ensembles, which will decrease the flexibility of the model, but make computation more efficient.
+Although the parametric family of that arises from the elementary kernels \(L\) gives a high variety of different associated \(L\)-ensembles, it will also make the computation of the MLE more complex. Therefore, we will consider some smaller classes of \(L\)-ensembles, which will decrease the flexibility of the model, but make computation more efficient.
 
 \subsubsection*{MLE of the qualities}
 
@@ -116,7 +116,7 @@ where \(f(A, q)\propto \det(\Psi(q, \hat \phi)_A)\) is the elementary probabilit
 where we perceive the likelihood function as a function of \(q\).%the likelihood is still given by \eqref{e3.1}.
 \end{emp}
 
-%Since we are only interested in estimating the quality vector \(q\in\mathbb R_+^N\), we will perceive the log likelihood function as a function of \(q\). Further w
+%Since we are only interested in estimating the quality vector \(q\in\mathbb R_+^N\), we will perceive the log likelihood function as a function of \(q\). Further, w
 Using \eqref{e2.4} we obtain the following expression for the single summands of the log likelihood function %take the form following form\todo{refer to the equation!}
 \begin{equation}\label{loglikqua}
 % \mathcal L(\Psi(q, \hat S)) & = \sum\limits_{i = 1}^n 
@@ -139,17 +139,17 @@ Unfortunately we can tell from \eqref{loglikqua} that the log likelihood still i
 
 %{\scshape\bfseries .}
 \begin{emp}[Log linear model for the qualities and MLE]
-From now on we will fix vectors \(f_i\in\mathbb R^M\) for \(i\in\mathcal Y\) and call them \emph{feature vectors}. Further we set
+From now on we will fix vectors \(f_i\in\mathbb R^M\) for \(i\in\mathcal Y\) and call them \emph{feature vectors}. Further, we set
 \[q_i = \exp\left(\theta^T f_i\right)\quad \text{for } \theta\in\mathbb R^M\]
 and will only consider quality vectors \(q\in\mathbb R_+^N\) that have this form. To formulate the maximum likelihood estimator for \(\theta\) we set \(\Theta \coloneqq\mathbb R^M\) and consider the parametric family
 \[\mathcal F = \left\{ f(\cdot| \theta) \;\big\lvert\; \theta\in\mathbb R^M\right\}\]
-where \(f(\cdot| \theta)\) is the density of the DPP with similarity kernel \(\hat S\) and qualities \(q_i = \exp\left(\frac12 \theta^T f_i\right)\). Further we will consider the maximum likelihood estimator
+where \(f(\cdot| \theta)\) is the density of the DPP with similarity kernel \(\hat S\) and qualities \(q_i = \exp\left(\frac12 \theta^T f_i\right)\). Further, we will consider the maximum likelihood estimator
 \[\hat{\theta}_n\coloneqq \underset{\theta\in\mathbb R^M}{\arg\max}\, \mathcal L(\theta) \]
-where we regard \(\mathcal L\) again as function of \(\theta\). Further we will assume that the feature vectors \(f_i\) span the whole space \(\mathbb R^M\) because otherwise we can simple work with the projections of the parameter \(\theta\) onto the span of the feature vectors and obtain an equivalent model.
+where we regard \(\mathcal L\) again as function of \(\theta\). Further, we will assume that the feature vectors \(f_i\) span the whole space \(\mathbb R^M\) because otherwise we can simple work with the projections of the parameter \(\theta\) onto the span of the feature vectors and obtain an equivalent model.
 \end{emp}
 
 \begin{rem}
-It shall be noted that although this log linear model seems to be a harsh restriction, it isnÕt a restriction at all, at least theoretically. If we take \(M=N\) and choose \(f_i\) to be the unit vectors in \(\mathbb R^N\), then this just a logarithmic transformation of the parameters and thus the maximal likelihood that can be achieved with this model does not change. In practice however it will be of interest to work with rather low dimensional parameters \(\theta\), because if the ground set \(\mathcal Y\) gets large, optimisation in \(\mathbb R^N\) can be inefficient. In this case of course the maximal likelihood under the optimal parameter may decrease. However the approximation of the optimal parameter might become possible again which justifies this sacrifice.
+It shall be noted that although this log linear model seems to be a harsh restriction, it isnÕt a restriction at all, at least theoretically. If we take \(M=N\) and choose \(f_i\) to be the unit vectors in \(\mathbb R^N\), then this just a logarithmic transformation of the parameters and thus the maximal likelihood that can be achieved with this model does not change. In practice however it will be of interest to work with rather low dimensional parameters \(\theta\), because if the ground set \(\mathcal Y\) gets large, optimisation in \(\mathbb R^N\) can be inefficient. In this case of course the maximal likelihood under the optimal parameter may decrease. However, the approximation of the optimal parameter might become possible again which justifies this sacrifice.
 \end{rem}
 
 Under the assumption of a log linear model for the qualities the individual terms of the log likelihood function take the form
@@ -161,7 +161,7 @@ Under the assumption of a log linear model for the qualities the individual term
 
 \subsection{Coercivity and existence of the maximum likelihood estimators}
 
-A priori it is not clear that the maximum likelihood estimators exist and we will actually see that they do not exist in general. However one can still save this approach because the probability that they exist tends to \(1\) if the sample size increases. We begin by showing this for the MLE of the qualities and then we will adapt this proof to the other models.
+A priori it is not clear that the maximum likelihood estimators exist and we will actually see that they do not exist in general. However, one can still save this approach because the probability that they exist tends to \(1\) if the sample size increases. We begin by showing this for the MLE of the qualities and then we will adapt this proof to the other models.
 
 \subsubsection*{MLE of the qualities}
 
@@ -209,7 +209,7 @@ which we had to show.
 \end{proof}
 
 \begin{rem}
-The proof above should be read in the following way. The statement \(q^l_{j_0}\to\infty\) is equivalent to a model that would always select the item \(j_0\). However since we have observed the empty set, the observations would be impossible under this model and thus the log likelihood function takes the value \(-\infty\) for this model. An analogue argument shows that the estimated qualities are strictly positive with high probability if the actual qualities are strictly positive. This will be of interest for us if we consider the log linear model.
+The proof above should be read in the following way. The statement \(q^l_{j_0}\to\infty\) is equivalent to a model that would always select the item \(j_0\). However, since we have observed the empty set, the observations would be impossible under this model and thus the log likelihood function takes the value \(-\infty\) for this model. An analogue argument shows that the estimated qualities are strictly positive with high probability if the actual qualities are strictly positive. This will be of interest for us if we consider the log linear model.
 \end{rem}
 
 \begin{prop}[Positivity of the MLE]\label{PosMLE}
@@ -217,7 +217,7 @@ Assume that \(\mathbf Y_1, \mathbf Y_2, \dots\) is a sequence of independent and
 \[\mathbb P\left(\hat q_n\in\mathbb R_+^N \text{ exists and } \hat q_n\in (0, \infty)^N\right) \xlongrightarrow{n\to\infty} 1.\]
 \end{prop}
 \begin{proof}
-We have already seen that the probability that the MLE exists tends to one, so we only have to show that the probability that the estimated qualities are strictly positive tends to one. The philosophy to prove this is exactly the same than in the proof of existence. Indeed we note that once \(j\) occurs in one of the observations \(Y_1, \dots, Y_n\) we have \(\mathcal L(q) = -\infty\) for every \(q\in\mathbb R_+^N\) with \(q_j = 0\). Therefore we have \((\hat q_n)_j>0\) if \(j\in Y_i\) for at least one \(j\in\left\{ 1, \dots, n\right\}\). Finally we note that the probability that \(j\) occurs in the \(i\)-th sample is strictly positive since we have
+We have already seen that the probability that the MLE exists tends to one, so we only have to show that the probability that the estimated qualities are strictly positive tends to one. The philosophy to prove this is exactly the same than in the proof of existence. Indeed we note that once \(j\) occurs in one of the observations \(Y_1, \dots, Y_n\) we have \(\mathcal L(q) = -\infty\) for every \(q\in\mathbb R_+^N\) with \(q_j = 0\). Therefore, we have \((\hat q_n)_j>0\) if \(j\in Y_i\) for at least one \(j\in\left\{ 1, \dots, n\right\}\). Finally we note that the probability that \(j\) occurs in the \(i\)-th sample is strictly positive since we have
 \[\mathbb P(j\in\mathbf Y_i)\ge\mathbb P(\left\{ j\right\} = \mathbf Y_i) = q_j^2>0. \]
 \end{proof}
 
@@ -238,7 +238,7 @@ Note that since \(\Psi\) is continuous and therefore bounded on bounded sets and
 
 \subsubsection*{The log linear model}
 
-%We have seen that the log linear model can provide a parametrisation of the whole space \((0, \infty)^N\) of possible qualities. However it can also be very ristrictive, for example if all feature vectors are trivial, i.e. \(f_i = 0\) for all items \(i\). Hence we need to convince ourselves that we do not loose too much information through the transformation %a way to determine whether the transformation
+%We have seen that the log linear model can provide a parametrisation of the whole space \((0, \infty)^N\) of possible qualities. However, it can also be very ristrictive, for example if all feature vectors are trivial, i.e. \(f_i = 0\) for all items \(i\). Hence, we need to convince ourselves that we do not loose too much information through the transformation %a way to determine whether the transformation
 %\[F\colon\mathbb R^M \to (0, \infty)^N, \quad \theta\mapsto \big(\exp(\theta^Tf_1), \dots, \exp(\theta^Tf_N)\big)^T.\]
 %loses enough information for the MLE to exist.
 %In order to do this, let \(U\subseteq\mathbb R^M\) be the span of \(f_1, \dots, f_N\) and let write \(\theta = \theta_1 + \theta_2\) such that \(\theta_1\in U\) and \(\theta_2\in U^\perp\). We note that \(F(\theta) = F(\tilde\theta)\) if and only if \(\theta_1 = \tilde\theta_1\).
@@ -262,7 +262,7 @@ Assume that \(\mathbf Y_1, \mathbf Y_2, \dots\) is a sequence of independent and
 %First we note, that it suffices to show that \(\mathcal L\) has a maximiser on \(U\), since \(F(U) = F(\mathbb R^M)\).
 Again we show that \(\mathcal L\) is coercive on \(\mathbb R^M\) whenever we have observed the emptyset as well as every item at least once. Let now \((\theta^k)_{k\in\mathbb N}\subseteq U\) be a sequence such that \(\lvert \theta^k \rvert\to\infty\). Then there is at least one index \(i\in\left\{ 1, \dots, N\right\}\) and a subsequence \((\theta^l)_{l\in\mathbb N}\) such that 
 \[f_i^T\theta^l\to\infty\quad \text{or } f_i^T\theta^l\to-\infty \quad \text{for } l\to\infty\]
-since otherwise all sequences \(\big(f_i^T\theta^l\big)\)  therefore also \((\theta^l)\) would be bounded. However this is equivalent to
+since otherwise all sequences \(\big(f_i^T\theta^l\big)\)  therefore also \((\theta^l)\) would be bounded. However, this is equivalent to
 \[\exp(f_i^T\theta^l)\to\infty\quad \text{or } \exp(f_i^T\theta^l)\to0 \quad \text{for } l\to\infty\]
 and we have seen in the proof of \ref{PosMLE} that the log likelihood function tends to \(-\infty\) in this case.
 \end{proof}
@@ -303,7 +303,7 @@ Hence \(\theta_0\) is a critical point and under mild conditions the right hand 
 Although the rough structure of the rigorous proof is present in the argument above it is highly formal. For example we argue that if a sequence \((f_n)_{n\in\mathbb N}\) of functions converges towards \(f\) pointwise, then the maximisers \((x_n)_{n\in\mathbb N}\) should converge to the maximiser \(x\) of \(f\). The major tool to make this rigorous will be to use some kind of uniform convergence. Namely we have the following result where we will omit the proof since it is very easy and we prove a similar but stronger version of it later.
 
 \begin{lem}[Swapping limit and maximisation]
-Let \((f_n)_{n\in\mathbb N}\) be a sequence of real functions on a compact space with maximisers \((x_n)_{n\in\mathbb N}\) that are bounded from above and converge uniformly towards \(f\). Further assume that \(f\) is continuous and has a unique maximum in \(x_0\). Then we have \(x_n\to x_0\) for \(n\to\infty\).
+Let \((f_n)_{n\in\mathbb N}\) be a sequence of real functions on a compact space with maximisers \((x_n)_{n\in\mathbb N}\) that are bounded from above and converge uniformly towards \(f\). Further, assume that \(f\) is continuous and has a unique maximum in \(x_0\). Then we have \(x_n\to x_0\) for \(n\to\infty\).
 \end{lem}
 %\begin{proof}
 
@@ -323,7 +323,7 @@ Let in the following \(\Theta\) be a topological Hausdorff space and
 be a sequence of random functions with %that attain 
 maximisers
 \[\hat{\theta}_n \coloneqq \underset{\theta\in\Theta}{\arg\max} F_n(\theta).\]
-If no maximiser exists, we choose \(\hat{\theta}_n\in\Theta\) arbitrary. Further let \(F\colon \Theta\to [-\infty, \infty)\) be a deterministic function with maximiser \(\theta_0\). The maximisers \(\hat{\theta}_n\) are called \emph{extremal estimators} since they are the extremal points of the functions \(F_n\).
+If no maximiser exists, we choose \(\hat{\theta}_n\in\Theta\) arbitrary. Further, let \(F\colon \Theta\to [-\infty, \infty)\) be a deterministic function with maximiser \(\theta_0\). The maximisers \(\hat{\theta}_n\) are called \emph{extremal estimators} since they are the extremal points of the functions \(F_n\).
 \end{emp}
 
 %The maximisers \(\hat{\theta}_n\) are called \emph{extremal} estimators since they are the extremal points of the functions \(F_n\).
@@ -370,10 +370,10 @@ If this is not the case %, \ref{dirmet} together with (\emph{iv}) implies that
 % \subseteq U\]
 %for some \(\delta>0\). This is due to the fact that
  \(F\) attains its maximum %\footnote{Any upper semicontinuous function on a topological Hausdorff space attains its maximum over a compact set.} 
- \(\alpha\) on \(K_0\setminus U\) because \(F\) is upper semicontinuous and \(K_0\setminus U\) is compact (cf. \ref{dirmet}). Further (\emph{iii}) implies \(\alpha < F(\theta_0)\) and thus we have %only have to show that the probability for \(\theta\in K\) and \(L(\hat{\theta})>\alpha\) tends to one since %. % \(\theta\in U\) and we will use this criterion to show the consistency.
+ \(\alpha\) on \(K_0\setminus U\) because \(F\) is upper semicontinuous and \(K_0\setminus U\) is compact (cf. \ref{dirmet}). Further, (\emph{iii}) implies \(\alpha < F(\theta_0)\) and thus we have %only have to show that the probability for \(\theta\in K\) and \(L(\hat{\theta})>\alpha\) tends to one since %. % \(\theta\in U\) and we will use this criterion to show the consistency.
  \[K_0\cap \Big\{ \theta\in\Theta\mid F(\theta) > \alpha \Big\} \subseteq U. \]
  
-So in order to show \(\hat{\theta}_n\in U\), it suffices to show \(\hat{\theta}_n\in K_0\) and \(F(\hat{\theta}_n)>\alpha\). Since we have already seen that the first statement holds, it remains to show the second one. However (\emph{ii}) implies
+So in order to show \(\hat{\theta}_n\in U\), it suffices to show \(\hat{\theta}_n\in K_0\) and \(F(\hat{\theta}_n)>\alpha\). Since we have already seen that the first statement holds, it remains to show the second one. However, (\emph{ii}) implies
 \[F(\hat{\theta}_n) \ge F_n(\hat{\theta}_n) - \varepsilon \ge F_n(\theta_0) - \varepsilon \ge F(\theta_0) - 2\varepsilon > \alpha\]
 for \(\varepsilon\) small enough.
 %The probabilities for \eqref{con1} and \eqref{con2} tend to one so it suffices to show that they imply \(\hat{\theta}_n\in K_0\) as well as \(F(\hat{\theta}_n)>\alpha\). So lets assume \eqref{con1} with \(K=K_0\) and \eqref{con2} hold, then for \(\varepsilon<\varepsilon_0\) we obtain %we have %with probability tending to one
@@ -390,7 +390,7 @@ for \(\varepsilon\) small enough.
 \end{proof}
 \todo{maybe add a sketch?}
 
-%The proof above can be read in the following way. The two conditions (\emph{i}), (\emph{ii}) and (\emph{v}) force \(\hat{\theta}_n\in K_0\) and hence we can restrict our considerations to a compact set. This is actually the setting the consistency results are usually presented in. Then we argue that if \(F(\theta)\) is close to \(F(\theta_0)\), then \(\theta\) has to be close to \(\theta_0\), where we use that we are on a compact subset as well as (\emph{iii}) and (\emph{iv}). However since \(F_n\) is close to \(F\) on \(K_0\) we obtain that \(F(\hat{\theta}_n)\) is close to \(F_n(\hat{\theta}_n)\) which is close to \(F(\theta_0)\) since the maximum values converge to each other.
+%The proof above can be read in the following way. The two conditions (\emph{i}), (\emph{ii}) and (\emph{v}) force \(\hat{\theta}_n\in K_0\) and hence we can restrict our considerations to a compact set. This is actually the setting the consistency results are usually presented in. Then we argue that if \(F(\theta)\) is close to \(F(\theta_0)\), then \(\theta\) has to be close to \(\theta_0\), where we use that we are on a compact subset as well as (\emph{iii}) and (\emph{iv}). However, since \(F_n\) is close to \(F\) on \(K_0\) we obtain that \(F(\hat{\theta}_n)\) is close to \(F_n(\hat{\theta}_n)\) which is close to \(F(\theta_0)\) since the maximum values converge to each other.
 
 %\begin{rem}
 %The conditions of the 
@@ -401,7 +401,7 @@ for \(\varepsilon\) small enough.
 
 If we want to apply the previous result to the case of maximum likelihood estimation we need to set
 \[F_n(\theta) \coloneqq \frac1n\sum_{i=1}^n\log(f(X_i| \theta)).\]
-Note that the factor \(\frac1n\) does not change the maximum. However \eqref{entropy} already gives the almost surely pointwise limit of those functions and if condition (\emph{ii}) of the previous statement should hold, we have to define
+Note that the factor \(\frac1n\) does not change the maximum. However, \eqref{entropy} already gives the almost surely pointwise limit of those functions and if condition (\emph{ii}) of the previous statement should hold, we have to define
 %Hence under the light of \ref{entropy} it is reasonable to consider
 \[%L_n(\theta) \coloneqq \frac1n\sum_{i=1}^n\log(f(X_i| \theta)) \quad \text{and } 
 F(\theta) \coloneqq \mathbb E\big[\log(f(X| \theta))\big]. \]
@@ -417,7 +417,7 @@ The second and third requirement of the previous result can be proven in a gener
 \begin{emp}[Setting]
 Let in the following \(\Theta\) be a set and let 
 \[\mathcal F = \Big\{ f(\cdot| \theta)\colon\mathcal  X\to[0, \infty) \mid\theta \in\Theta\Big\}\]
-be a family of probability densities on some measurable space \(\mathcal X\) with respect to some measure \(\mu\). Further fix \(\theta_0\in\Theta\) and %let \(\mathbb P\) denote the probability measure with \(\mu\) density \(f(\cdot| \theta_0)\) and denote the expectation with respect to \(\mathbb P\) 
+be a family of probability densities on some measurable space \(\mathcal X\) with respect to some measure \(\mu\). Further, fix \(\theta_0\in\Theta\) and %let \(\mathbb P\) denote the probability measure with \(\mu\) density \(f(\cdot| \theta_0)\) and denote the expectation with respect to \(\mathbb P\) 
 denote the expectation with respect to \(f(\cdot| \theta_0) \mathrm{d}\mu\) by \[\mathbb E[h(X)]\coloneqq\int h(x)f(x| \theta_0) \mu(\mathrm d x).\] Let \((X_n)\) be a sequence of independent random variables distributed according to \(f(\cdot| \theta_0) \mathrm{d}\mu\). Finally define
 \[F_n(\theta) \coloneqq \frac1n\sum_{i=1}^n\log(f(X_i| \theta)) %\xlongrightarrow{n\to\infty} 
 \quad\text{and } F(\theta)\coloneqq \mathbb E\big[\log(f(X| \theta))\big]. \]
@@ -505,11 +505,11 @@ almost surely for \(n\ge N(\varepsilon)\) where we used the strong law of large 
 In this part we will -- for the first time -- make use of the specific structure of the model. %elementary probabilities.
 Since we have already taken care of conditions (\emph{ii}), (\emph{iii}) and (\emph{v}) and condition (\emph{iv}) will be fairly straight forward, we dedicate ourselves to proving the first requirement of Theorem \ref{conext}. For this we keep the setting of the previous section although we now consider the case that
 \[\mathcal F = \Big\{ f(\cdot| \theta)\colon 2^{\mathcal Y}\to[0, \infty) \mid\theta \in\Theta\Big\}\]
- is one of the parametric families for the \(L\)-ensembles introduced in \ref{models}. Further we denote a realisation of a DPP by \(\mathbf Y\) like earlier.% Further we assume that the data \((\mathbf Y_n)\) are indepentend and distributed according to a \(L\)-ensemble with elementary probabilities \(f(\cdot)\).\todo{formulate this better!}
+ is one of the parametric families for the \(L\)-ensembles introduced in \ref{models}. Further, we denote a realisation of a DPP by \(\mathbf Y\) like earlier.% Further we assume that the data \((\mathbf Y_n)\) are indepentend and distributed according to a \(L\)-ensemble with elementary probabilities \(f(\cdot)\).\todo{formulate this better!}
 
 \begin{lem}[Control outside of a compact set]\label{concom}
 %Assume that \(F(\theta_0)>-\infty\). Then t
-The requirement \emph{(}i\emph{)} from Theorem \ref{conext} is satisfied for the three kinds of parametric families for the kernel estimation. Further the compact set \(K_0\) can be chosen as follows. Let \(\mathcal A\) be the family of subsets \(A\subseteq\mathcal Y\) with positive probability \(f(A| \theta_0)>0\) and let \(c(A)>0\) such that
+The requirement \emph{(}i\emph{)} from Theorem \ref{conext} is satisfied for the three kinds of parametric families for the kernel estimation. Further, the compact set \(K_0\) can be chosen as follows. Let \(\mathcal A\) be the family of subsets \(A\subseteq\mathcal Y\) with positive probability \(f(A| \theta_0)>0\) and let \(c(A)>0\) such that
 \[-c(A) < \frac{2\cdot F(\theta_0)}{f(A|\theta_0)}.\]
 Then we set
 \[ K_0 \coloneqq \Big\{ \theta\in\Theta \;\big\lvert\; \log(f(A| \theta)) \ge - c(A) \text{ for all } A\in\mathcal A %\text{ with } f(A| \theta_0) > 0
@@ -538,7 +538,7 @@ and we can assume \(\hat{\mathbb P}_n(A) \ge \frac{f(A| \theta_0)}{2}\), since w
 %.\]
 For \(A\in\mathcal A\) we note that %For exactly those \(A\) we define now
 \[K_A \coloneqq \Big\{ \theta\in\Theta \;\big\lvert\; \log(f(A| \theta)) \ge - c(A) \Big\}\]
-which is closed since \(f(A| \theta)\) is upper semicontinuous. Further \(K_A\) is compact for \(A=\varnothing\in\mathcal A\) since \(\log(f(\varnothing| \theta))\) is coercive in \(\theta\) as been shown in the coercivity proofs earlier in this chapter. Further it contains \(\theta_0\) as
+which is closed since \(f(A| \theta)\) is upper semicontinuous. Further, \(K_A\) is compact for \(A=\varnothing\in\mathcal A\) since \(\log(f(\varnothing| \theta))\) is coercive in \(\theta\) as been shown in the coercivity proofs earlier in this chapter. Further, it contains \(\theta_0\) as
 \[\log(f(A| \theta_0)) \ge 2 \cdot \log(f(A| \theta_0)) > -c(A) \]
 because \(f(A| \theta)\le 1\). Now
 \[K_0= \bigcap_{A\in \mathcal A} K_A\]
@@ -564,7 +564,7 @@ where we used \(f(B|\theta)\le1\).
 Now we have all the auxiliary results to prove the desired consistency result.
 
 \begin{theo}[Consistency]
-%The maximum likelihood estimators for the elementary kernel \(L\) and the quality vector \(q\) are consistent. Further the projection of the log linearity constant \(\theta\) onto \(U\) is consistent.
+%The maximum likelihood estimators for the elementary kernel \(L\) and the quality vector \(q\) are consistent. Further, the projection of the log linearity constant \(\theta\) onto \(U\) is consistent.
 \begin{enumerate}
 \item The maximum likelihood estimator \(\hat{L}_n\) for the elementary kernel is consistent. Namely if the observations \((\mathbf Y_n)\) follow the law of a \(L\)-ensemble with kernel \(L_0\), then we have
 \[\mathbb P\left( d(\hat L_n, L_0) \le \varepsilon\right) \xlongrightarrow{n\to\infty} 1 \quad \text{for all }\varepsilon>0.\]
@@ -588,7 +588,7 @@ where the elementary probabilities are given by
 \begin{equation}\label{elepro}
 f(A| q) = \frac{\prod_{i\in A} q_i^2 \det(\hat S_A) }{\sum_{B\subseteq\mathcal Y} \prod_{i\in B} q_i^2 \det(\hat S_B) }
 \end{equation}
-which is continuous in \(q\). Hence the entropy function \(F\) is upper semicontinuous and thus condition (\emph{iv}) holds.
+which is continuous in \(q\). Hence, the entropy function \(F\) is upper semicontinuous and thus condition (\emph{iv}) holds.
 
 To check that (\emph{iii}) holds we will use the information inequality \ref{infine}. First we note that because of
 \[f(\left\{ i\right\}| q) \propto q_i^2 \]
@@ -596,7 +596,7 @@ the parameter \(q_0\) is identifiable and further we have
 \[\sup_{A\subseteq\mathcal Y, q\in\mathbb R_+^N} f(A| q) \le 1 \]
 since the densities are elementary probabilities. Finally \(F(q_0)>-\infty\) is clear from \eqref{ent} and hence the third requirement is satisfied.
 
-Since the previous lemma already takes care of condition (\emph{i}) it suffices to show the second condition for which we will use \ref{locunicon}. Hence it remains to check the two conditions of this lemma, but the second one -- the continuity condition -- obviously holds as can be seen from \eqref{elepro}. To see that the first one also holds we note that for \(A\subseteq\mathcal Y\) with \(f(A| q_0)>0\) and \(\theta\in K_0\) we have
+Since the previous lemma already takes care of condition (\emph{i}) it suffices to show the second condition for which we will use \ref{locunicon}. Hence, it remains to check the two conditions of this lemma, but the second one -- the continuity condition -- obviously holds as can be seen from \eqref{elepro}. To see that the first one also holds we note that for \(A\subseteq\mathcal Y\) with \(f(A| q_0)>0\) and \(\theta\in K_0\) we have
 \[0 \ge \log(f(A| q)) \ge -c(A) > -\infty.\]
 Hence the random variable
 \[\sup_{q\in K_0} \big\lvert \log(f(\mathbf Y| q)) \big\rvert\]
@@ -616,7 +616,7 @@ Obviously in the proof of the consistency of the whole elementary kernel \(L\) a
 
 % and we will work with its negative
 % \[\mathcal L(L) \coloneqq -\log\left(\prod_{i = 1}^n \mathbb P_L(Y_i)\right) = -\sum\limits_{i=1}^n\log\left( \det(L_{Y_i})\right) + n \log\left( \det(L+I)\right)\]
-% where high values of \(\mathcal L\) correspond to kernels \(L\) where at least one element \(Y_t\) of our training set is very unlikely. Thus it is natural to minimise the loss function \(\mathcal L\) over all positive semidefinit \(L\in\mathbb R^{N\times N}\). Note that we have \(\mathcal L(L) = \infty\) if and only if an observation \(Y_t\) of our training set is impossible under the DPP \(\mathbb P_L\), i.e. we do not consider those kernels in our estimation.
+% where high values of \(\mathcal L\) correspond to kernels \(L\) where at least one element \(Y_t\) of our training set is very unlikely. Thus, it is natural to minimise the loss function \(\mathcal L\) over all positive semidefinit \(L\in\mathbb R^{N\times N}\). Note that we have \(\mathcal L(L) = \infty\) if and only if an observation \(Y_t\) of our training set is impossible under the DPP \(\mathbb P_L\), i.e. we do not consider those kernels in our estimation.
 
 Having discussed the theoretical properties and guarantees on convergence of the MLE we will now turn towards the question of computability. In particular we will see that the MLE for the whole kernel can not be computed in an efficient way which justifies the use of smaller parametric models like the log linear model.
 
@@ -632,14 +632,14 @@ To see that the log linear likelihood function is not concave, we may consider t
 \[\mathcal L(q I) = \sum\limits_{i = 1}^n \log(q^{\left\lvert Y_i \right\rvert}) - n \log((1 + q)^N) = \sum\limits_{i = 1}^n \left\lvert Y_i \right\rvert \log(q) - n N \log(1 + q) \] %= \log(q) \cdot \left( \sum\limits_{i = 1}^n \left\lvert Y_i \right\rvert - n\cdot N\right)\]
 which is not concave in general. Unfortunately there are no algorithms that can approximate the global maximum of a non concave function \cite{vavasis1995complexity} and it also has been conjecture in \cite{kulesza2012learning} that no such algorithm exists for the log likelihood of the elementary kernel. Nevertheless one can still use optimisation techniques to obtain local maximisers of the log likelihood and indeed \cite{mariet2015fixed} proposes a fixed point iteration to do this.
 
-In fact the non concavity can be seen even without computing anything. In fact if we have a maximiser \(L\) of the log likelihood function and take any other matrix \(\tilde L\) that is determinantally equivalent, then obviously the log likelihood of the two kernels agree. Hence we can never expect to get a unique maximiser of the log likelihood function. Hence a direct maximisation is a slightly missleading approach and it could be more sensible to work with equivalence classes of kernels that have the same principle minors that appear in \eqref{loglikagain}. However it is not clear how this quotient space would look like and what structural properties it has, let alone whether one can efficiently maximise a function over it.
+In fact the non concavity can be seen even without computing anything. In fact if we have a maximiser \(L\) of the log likelihood function and take any other matrix \(\tilde L\) that is determinantally equivalent, then obviously the log likelihood of the two kernels agree. Hence, we can never expect to get a unique maximiser of the log likelihood function. Hence, a direct maximisation is a slightly missleading approach and it could be more sensible to work with equivalence classes of kernels that have the same principle minors that appear in \eqref{loglikagain}. However, it is not clear how this quotient space would look like and what structural properties it has, let alone whether one can efficiently maximise a function over it.
 \todo{does this make any sense at all?}
 %\todo{comment on the argmax function}
 
 %Nevertheless there was a 
 
 
-%This obviously causes substantial computational problems in the calculation of the MLE let alone it exists. In fact it is NP hard\todo{explain this term}{ } to maximise a general non concave function and it is also conjectured to be NP hard to maximise the log likelihood function \(\mathcal L\) in the case of \(L\)-ensembles. However there are still efficient maximising techniques for such functions that will eventually converge to local maximiser and that also work in very high dimensional spaces\todo{cite}{ } and thus this approach was taken by \todo{cite}. Nevertheless we will not present this approach here, but rather favour a maximisation technique that is based on a fixed point iteration and was proposed in \todo{cite}.
+%This obviously causes substantial computational problems in the calculation of the MLE let alone it exists. In fact it is NP hard\todo{explain this term}{ } to maximise a general non concave function and it is also conjectured to be NP hard to maximise the log likelihood function \(\mathcal L\) in the case of \(L\)-ensembles. However, there are still efficient maximising techniques for such functions that will eventually converge to local maximiser and that also work in very high dimensional spaces\todo{cite}{ } and thus this approach was taken by \todo{cite}. Nevertheless we will not present this approach here, but rather favour a maximisation technique that is based on a fixed point iteration and was proposed in \todo{cite}.
 
 %\begin{emp}[Fixed point iteration based maximisation]
 %\todo{read, understand and summarise the paper}
@@ -683,7 +683,7 @@ The sum of log convex functions is again log convex.
 \begin{proof}
 Let \(f\) and \(g\) be log convex and thus \(F\coloneqq\log(f)\) and \(G\coloneqq\log(g)\) are convex. We will consider the function
 \[H\colon\mathbb R^2\to\mathbb R, \quad (x, y)\mapsto \log(e^x + e^y)\]
-which is increasing both coordinates. Further we note that \(\log(f + g) = H(F, G)\) and hence it suffices to show that \(H\) is convex %. %, since this implies
+which is increasing both coordinates. Further, we note that \(\log(f + g) = H(F, G)\) and hence it suffices to show that \(H\) is convex %. %, since this implies
 %\begin{equation}
 %\begin{split}
 % \log\big(f(\theta x + (1-\theta) y) + g(\theta x + (1-\theta) y)\big) & = H\big(F(\theta x + (1-\theta) y), G(\theta x + (1-\theta) y)\big) \\
@@ -708,9 +708,9 @@ that the whole expression %the log likelihood function
 Under the log linear model for the qualities, the log likelihood function is concave in the log linearity parameter \(\theta\in\mathbb R^M\). % In particular critical points are global maximisers and the 
 \end{cor}
 
-This result together with the coercivity -- which holds with probability tending to one -- ensures that the MLE for the log linearity constant of the quality can be efficiently computed. Further such optimisation algorithms are pre-implemented in most major programming languages and software environments like Mathematica, MATLAB and R. For theoretical guarantees and algorithmic details of those methods we refer once again to \cite{boyd2004convex}. %\todo{show expression of the gradient}
+This result together with the coercivity -- which holds with probability tending to one -- ensures that the MLE for the log linearity constant of the quality can be efficiently computed. Further, such optimisation algorithms are pre-implemented in most major programming languages and software environments like Mathematica, MATLAB and R. For theoretical guarantees and algorithmic details of those methods we refer once again to \cite{boyd2004convex}. %\todo{show expression of the gradient}
 
-Although being easily available, those methods have the drawback that they need to approximate the gradient of the log likelihood function. However the gradient can be expressed analytically by differentiating \eqref{logliklogmodagain}
+Although being easily available, those methods have the drawback that they need to approximate the gradient of the log likelihood function. However, the gradient can be expressed analytically by differentiating \eqref{logliklogmodagain}
 \begin{equation*}
 \begin{split}
 & 2\cdot\sum\limits_{i\in Y}f_{i} - 2\cdot \frac{ \sum_{A\subseteq\mathcal Y} \exp\left(2\cdot \theta^T\sum_{i\in A}f_{i}\right)  \sum_{i\in A}f_{i} \det(\hat{S}_A)}{ \sum_{A\subseteq\mathcal Y} \exp\left(2\cdot \theta^T\sum_{i\in A}f_{i}\right)\det(\hat{S}_A)} \\
@@ -731,7 +731,7 @@ where \(K(\theta)\) is the marginal kernel arising from the parameter \(\theta\)
 
 % \begin{emp}[Existence of maximisers]
 
-%It is in general not true that the maximum likelihood estimator \(\hat\theta_n\) exists for arbitrary observations \(\left\{ Y_i\right\}_{i=1, \dots, n}\). In fact, suppose we have fixed our similarity matrix \(\hat S\) to be the identity, maybe we expect the items to be uncorrelated and only want to estimate their qualities. Further we believe that all items are equally likely and thus we set \(f_i = 1\) for all \(i\in\mathcal Y\). Assume now that we have only one observation \(Y_1\) which is the whole set \(\mathcal Y\) itself. The higher the quality of the items, the more likely this observation would be and thus the likelihood function does not posses a maximiser since it assymptotically approaches \(1\) if \(\theta\) goes to infinity.
+%It is in general not true that the maximum likelihood estimator \(\hat\theta_n\) exists for arbitrary observations \(\left\{ Y_i\right\}_{i=1, \dots, n}\). In fact, suppose we have fixed our similarity matrix \(\hat S\) to be the identity, maybe we expect the items to be uncorrelated and only want to estimate their qualities. Further, we believe that all items are equally likely and thus we set \(f_i = 1\) for all \(i\in\mathcal Y\). Assume now that we have only one observation \(Y_1\) which is the whole set \(\mathcal Y\) itself. The higher the quality of the items, the more likely this observation would be and thus the likelihood function does not posses a maximiser since it assymptotically approaches \(1\) if \(\theta\) goes to infinity.
 % \end{emp}
 
 % \subsubsection*{Comparison to learning the kernel \(L\)}
@@ -742,13 +742,13 @@ where \(K(\theta)\) is the marginal kernel arising from the parameter \(\theta\)
 % \[q_i(X) = g(f_i(X)), \quad \phi_i(X) = G(f_i(X)) \]
 % where \(f_i(X)\in\mathcal Z\) is being modelled and \(g\colon\mathcal Z\to[0,\infty)\) and \(G\colon\mathcal Z\to\mathbb R^D\) will be learned based on the observations. We will assume that \(\mathcal Z\) is a subset of a vector space and therefore we call \(f_i(X)\) the \emph{feature vector}. If it is possible to estimate the quality and diversity as above, we would be able to sample from every DPP \(\mathbb P(\cdot\mid X)\) and even from those that we havenÕt observed so far -- just by the knowledge about DPPs with a similar structure.
 
-% Let us again illustrate this procedure in the example of the human point selection and we will restrict ourselves to learn the function \(g\) that determines the quality function, we might have a reason to be absolutely sure that we have modelled the diversity features \(\phi_i(X)\) perfectly, so there is no need to learn, i.e. optimise them any further. However we are not convinced any more that humans really do not prefer some points over others -- maybe we have the feeling that they lean more towards the points located in the center of the square. Therefore it is natural to assume that the quality, which is nothing but the popularity of a point, depends on the distance to the centre point of the square \(m=(1/2,1/2)\), i.e.
+% Let us again illustrate this procedure in the example of the human point selection and we will restrict ourselves to learn the function \(g\) that determines the quality function, we might have a reason to be absolutely sure that we have modelled the diversity features \(\phi_i(X)\) perfectly, so there is no need to learn, i.e. optimise them any further. However, we are not convinced any more that humans really do not prefer some points over others -- maybe we have the feeling that they lean more towards the points located in the center of the square. Therefore, it is natural to assume that the quality, which is nothing but the popularity of a point, depends on the distance to the centre point of the square \(m=(1/2,1/2)\), i.e.
 % \[q_i(n) = g(\left\lVert i - m\right\rVert) = g(f_i(n))\]
 % where we want to learn \(g\) with respect to some loss function over a given family \(\mathcal F\) of functions.
 
 % To put this back into the general setting we note that \(g\in\mathcal F\) gives rise to a different conditional DPP which we will denote by \(\mathbb P_g(\cdot\mid X)\). Just like in the case of simple DPPs we will work with the negative of the log likelihood function 
 % \[\mathcal L(g) \coloneqq -\log\left(\prod_{t = 1}^T \mathbb P_g(Y_t\mid X_t)\right) \]
-% and seek a minimiser of the loss function \(\mathcal L\). Thus we obtain an optimisation problem over a family of functions and in practice it is convenient to restrict ourselves to a parametric family
+% and seek a minimiser of the loss function \(\mathcal L\). Thus, we obtain an optimisation problem over a family of functions and in practice it is convenient to restrict ourselves to a parametric family
 % \[\mathcal F = \left\{ g_\theta\mid \theta\in U\subseteq\mathbb R^M\right\}.\]
 % In this case we write \(\mathbb P_\theta(\cdot\mid X)\) for the conditional DPP that is induced by \(g_\theta\) and the kernels become functions of \(\theta\) and thus we write \(L(\theta;X)\) and \(K(\theta;X)\) for the kernel associated with the parameter \(\theta\). In analogue fashion we denote the loss function by
 % \[\mathcal L(g_\theta)=\mathcal L(\theta) = -\sum\limits_{t=1}^T \log\left(\mathbb P_\theta(Y_t\mid X_t)\right).\]
@@ -787,7 +787,7 @@ where \(K(\theta)\) is the marginal kernel arising from the parameter \(\theta\)
 %\end{enumerate}
 %\end{proof}
 
-%The result above shows that logarithmically affine linear models are the natural fit for the parametric family \(\mathcal F\) that we want to optimise over. However they can be easily transformed into log linear models through a simple parameter  shift if we assume \(f_i(X)\ne0\) and thus we can assume without loss of generality that the functions \(g_\theta\) have the form 
+%The result above shows that logarithmically affine linear models are the natural fit for the parametric family \(\mathcal F\) that we want to optimise over. However, they can be easily transformed into log linear models through a simple parameter  shift if we assume \(f_i(X)\ne0\) and thus we can assume without loss of generality that the functions \(g_\theta\) have the form 
 %\[g_\theta(f_i(X)) = \exp\left(\frac12\theta^T f_i(X)\right) \quad \text{for all } i\in \mathcal Y(X) \text{ and } X\in\mathcal X. \]
 %This structure can be used to derive some explicit expression for this case. 
 %Of course this log linear model is only well defined if the feature space \(\mathcal Z\) is a subset of \(\mathbb R^M\) which we will assume from now on. We note that this is no restriction if we assume a log linear model, because otherwise we could just replace the feature functions \(f_i\) by the log linearity constants \(\hat f_i(X)\in \mathbb R^M\). First we can apply the explicit structure to the elementary probabilities and get
@@ -807,7 +807,7 @@ where \(K(\theta)\) is the marginal kernel arising from the parameter \(\theta\)
 %\end{equation}
 %The later expression of this gradient has the advantage that it can be efficiently computed in contrary to the evaluation of the exponentially large sum in the first line.
 
-%Obviously the loss function is not coercive in general, since for \(f_i(X) = 0\) the probability \(\mathbb P_\theta(\left\{ i\right\}\mid X)\) is constant in \(\theta\). However it is not straight forward whether it becomes coercive under the assumption \(f_i(X)>0\) entrywise for every \(i\in\mathcal Y(X)\) and \(X\in\mathcal X\) and this could be investigated further.
+%Obviously the loss function is not coercive in general, since for \(f_i(X) = 0\) the probability \(\mathbb P_\theta(\left\{ i\right\}\mid X)\) is constant in \(\theta\). However, it is not straight forward whether it becomes coercive under the assumption \(f_i(X)>0\) entrywise for every \(i\in\mathcal Y(X)\) and \(X\in\mathcal X\) and this could be investigated further.
 
 %\subsection{Learning the repulsiveness}
 
@@ -815,7 +815,7 @@ where \(K(\theta)\) is the marginal kernel arising from the parameter \(\theta\)
 
 We will continue the example of the DPP on a two dimensional grid in the unit square from the previous chapter. For this we note that for a \(100\times100\) grid the evaluation of the elementary probabilities 
 \[ f(A|\theta) = \frac{\det(L(\theta)_A)}{\det(L(\theta) + I)} \]
-would involve the calculation of a determinant of a \(10^4\times 10^4\) matrix and even the storage of such a matrix would pose a problem since it consists of \(10^8\) numbers. Since the storage of a real number is usually done as in the double-precision floating-point format which takes \(64\) bits, the storage required for this matrix is \(64\times 10^8\si{bit} = 800\si{MB}\), so almost one Gigabyte.\footnote{One byte is defined to be \(8\) bits. The units of Megabytes and Gigabytes are defined in the familiar way and denoted by \(\si{MB}\) and \(\si{GB}\) respectively.} This would make just the computation of the log likelihood function very time consuming, let alone its maximisation. Hence we will decrease the size %of the grid to \(30\times30\)
+would involve the calculation of a determinant of a \(10^4\times 10^4\) matrix and even the storage of such a matrix would pose a problem since it consists of \(10^8\) numbers. Since the storage of a real number is usually done as in the double-precision floating-point format which takes \(64\) bits, the storage required for this matrix is \(64\times 10^8\si{bit} = 800\si{MB}\), so almost one Gigabyte.\footnote{One byte is defined to be \(8\) bits. The units of Megabytes and Gigabytes are defined in the familiar way and denoted by \(\si{MB}\) and \(\si{GB}\) respectively.} This would make just the computation of the log likelihood function very time consuming, let alone its maximisation. Hence, we will decrease the size %of the grid to \(30\times30\)
 for computational reasons, but the ideas remain exactly the same.
 We will recall the definition of the model and also give the exact values of the parameters chosen.
 
@@ -842,18 +842,18 @@ Hence we should be able to estimate this log linearity constant \(\theta\in\math
 -10.32045 \\   6.07648
 \end{pmatrix}
 \end{equation}
-but from the consistency results we already knew that it should get close to the actual parameter for increasing sample sizes. Although this is just a controlled toy example, this procedure can easily be generalised to real world settings. However one would have to face the following two major challenges:
+but from the consistency results we already knew that it should get close to the actual parameter for increasing sample sizes. Although this is just a controlled toy example, this procedure can easily be generalised to real world settings. However, one would have to face the following two major challenges:
 \begin{enumerate}
-\item In practice one will not know the feature vectors \(f_i\) like we did, so one will have to model those. Usually one would put all quantitative properties into this vector that one would believe could have an effect on the quality of an item. For example if the DPP should model the picnic positions of people in a park one could argue that the quality, i.e. the popularity of a picnic spot depends amongst other things on the distance to the next trash bin, the next toilet and overall noise level. Although one thinks that those parameters can play a role, we could not argue a priori whether they have a positive or a negative impact. For example if the toilets are nice and clean it might be favourable to be closer to them, if they are dirty it might be better to be far away from them in order to avoid their unpleasant odour. However one does not have to know this straight away as this effect is determined by the according log linearity constant and hence can be estimated in the above manner.
-\item Secondly and maybe even more importantly the actual similarity kernel is also unknown and hence one also has to come up with a reasonable model for it. Either this can be done by purely relying on models created by people familiar with the real world phenomenon that is being investigated, or one could also try to estimated the similarity kernel itself. However estimating the whole similarity kernel itself is equivalent to a maximum likelihood estimation of the whole elementary kernel \(L\) and we have seen in the previous discussion about computability that this results in an optimisation problem that can not be solved efficiently. However, we will propose a different, possibly more practical approach in the next section, but it still remains to be seen whether this will actually give any benefits.
+\item In practice one will not know the feature vectors \(f_i\) like we did, so one will have to model those. Usually one would put all quantitative properties into this vector that one would believe could have an effect on the quality of an item. For example if the DPP should model the picnic positions of people in a park one could argue that the quality, i.e. the popularity of a picnic spot depends amongst other things on the distance to the next trash bin, the next toilet and overall noise level. Although one thinks that those parameters can play a role, we could not argue a priori whether they have a positive or a negative impact. For example if the toilets are nice and clean it might be favourable to be closer to them, if they are dirty it might be better to be far away from them in order to avoid their unpleasant odour. However, one does not have to know this straight away as this effect is determined by the according log linearity constant and hence can be estimated in the above manner.
+\item Secondly and maybe even more importantly the actual similarity kernel is also unknown and hence one also has to come up with a reasonable model for it. Either this can be done by purely relying on models created by people familiar with the real world phenomenon that is being investigated, or one could also try to estimated the similarity kernel itself. However, estimating the whole similarity kernel itself is equivalent to a maximum likelihood estimation of the whole elementary kernel \(L\) and we have seen in the previous discussion about computability that this results in an optimisation problem that can not be solved efficiently. However,, we will propose a different, possibly more practical approach in the next section, but it still remains to be seen whether this will actually give any benefits.
 % a more subtle approach would be to assume that the diversity feature vectors \(\phi_i\) have the form 
 %\[(\phi_i)_j\propto f( \sigma \left\lVert i - j \right\rVert) \quad \text{for } i, j\in\mathcal Y\]
-%and then try to estimate the parameter \(\sigma\). With this approach one would only have to estimate one additional parameter instead of the \(N^2 = 900\) parameters of the similarity kernel \(S\). However with this approach the log likelihood function is likely to be non concave and hence it remains to investigate whether there are any other efficient optimisation techniques for it. \todo{think more towards this direction}
+%and then try to estimate the parameter \(\sigma\). With this approach one would only have to estimate one additional parameter instead of the \(N^2 = 900\) parameters of the similarity kernel \(S\). However, with this approach the log likelihood function is likely to be non concave and hence it remains to investigate whether there are any other efficient optimisation techniques for it. \todo{think more towards this direction}
 \end{enumerate}
 
 \subsection{Further learning approaches}
 
-We will quickly touch on two approaches of parameter estimation that have proven to work very well for certain real world examples. Further, we propose one different parametric model one could work with that would allow simultaneously estimate the qualities and the similarity kernel, but it remains to be shown whether this circumvents the problems associated with the maximums likelihood estimation of the whole kernel \(L\).
+We will quickly touch on two approaches of parameter estimation that have proven to work very well for certain real world examples. Further,, we propose one different parametric model one could work with that would allow simultaneously estimate the qualities and the similarity kernel, but it remains to be shown whether this circumvents the problems associated with the maximums likelihood estimation of the whole kernel \(L\).
 
 \subsubsection{Learning for conditional DPPs}
 
@@ -874,7 +874,20 @@ However, it shall be noted that the modelling of the diversity feature vectors c
 
 \subsubsection{Estimating the mixture coefficients of \(k\)-DPPs}
 
+For this approach we first fix symmetric non negative definite matrices \(L_1, \dots, L_M\). We assume now that the point process is the mixture of the DPPs \(\mathbb P_{L_m}\) with elementary kernel \(L_m\) and aim to estimate the mixing coefficients of
+\[\mathbb P_\theta = \sum_{m=1}^M \theta_m\mathbb P_{L_m} \quad \text{where } \theta_m\in[0, 1] \text{ and } \sum_{m=1}^M\theta_m=1.\]
+
+This approach has been taken to create a diverse selection of pictures returned by an image search (cf. \cite{kulesza2011k}). In this case one wants to fix the number of returned images up front, hence it is reasonable to work with \(k\)-DPPs instead of DPPs. The mixture coefficients were estimated based on a data set \(\big\{ (Y_t^+, Y_t^-)\big\}_{t = 1, \dots, n}\) where \(Y_t^+\) was chosen by a human to be more diverse than \(Y_t^-\). Now \(\theta\) was optimised such that 
+\[\mathbb P_\theta(Y_t^+) > \mathbb P_\theta(Y_t^-) \]
+for as many \(t\in\left\{ 1, \dots, n\right\}\) as possible.\footnote{For people familiar with binary decision problems it should be mentioned that this was done using the logistic loss.}
 
 
 \subsubsection{Learning the repulsiveness of a DPP}
 
+The estimation of the qualities, or the according log linearity constant have the major drawback that a significant part of the DPP -- the repulsive structure -- has to be modelled completely. We have seen so far that it is in practice not possible to estimate the whole repellent structure, namely the similarity kernel as this would lead to a hard optimisation problem. However, we will propose a parametrisation of the similarity kernel by only one parameter, that might have better computational properties.
+
+For this we follow \ref{moddiv} to model the similarity over the distance to some reference points with respect to a Gaussian kernel just like in the toy example presented so far. This means we choose
+\[(\phi_i)_r \propto \exp\left( \frac{d(i, r)^2}{\sigma}\right) \quad\text{for } r\in\mathcal R, i\in\mathcal Y.\]
+We have seen in the example of the DPP on a line that the parameter \(\sigma\) has a direct influence on the strength of the repulsions of the DPP. The estimation of not only the log linearity constant \(\theta\) but also the \emph{repulsiveness parameter} \(\sigma\) could now result in a significantly increased accuracy of the resulting model. 
+
+It is not immediately clear what properties the log likelihood would have in this case, but it would be -- a rather pleasant -- surprise if it was coercive. Nevertheless, it might have nice properties, like a unique critical point that could allow the use of standard optimisation techniques. A different approach would be to optimise the two parameters \(\theta\) and \(\sigma\) in an adaptive scheme, i.e. one after another and repeat this iteratively. It remains to be seen whether those approaches work theoretically and whether they give any improved results in practice.

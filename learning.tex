@@ -75,7 +75,7 @@ Therefore the empirical measures are reasonable approximations of the actual pro
 \begin{emp}[The principal minor assignment problem]
 Let \(K\in\mathbb R^{N\times N}\) be a symmetric matrix. We want to investigate whether \(K\) is uniquely specified by its principal minors
 \[\Delta_S \coloneqq \det(K_S) \quad \text{where } S\subseteq\left\{ 1, \dots, N\right\}.\]
-We call this the \emph{symmetric principal minor assignment problem} and it will turn out that the matrix \(K\) can be reconstructed up to an equivalence relation.
+We call this the \emph{symmetric principal minor assignment problem} (PMAP) and it will turn out that the matrix \(K\) can be reconstructed up to an equivalence relation.
 \end{emp}
 
 %The reconstruction of a symmetric matrix from all its principal minors is known as the \emph{principal minor assignment problem} and we aim to prove in this section that this is possible -- at least up to an equivalence relation. 
@@ -325,23 +325,25 @@ Let \(S\subseteq\left\{ 1, \dots, N\right\}\) be arbitrary. We will again work w
 \begin{equation}\label{e3.2}
 \prod_{i\in S} \operatorname{sgn}(K_{i\sigma(i)})
 \end{equation}
-of the product through the sign function. For this we %fix one permutation \(\sigma\) and 
-write \(\sigma\) as the product of disjoint cycles
-\begin{equation}\label{e3.3}
+through the sign function. For this we %fix one permutation \(\sigma\) and 
+write \(\sigma\) as the product of disjoint cycles\footnote{A permutation \(\sigma\in S_n\) is called a \emph{cycle} if it maps some elements \(i_1, \dots, i_k\) to each other in cyclic fashion, i.e. \(i_l\mapsto i_{l+1}, i_k\mapsto i_1\) while fixing the other elements.}
+\begin{equation*}
 \sigma = \sigma_1\circ \dots \circ \sigma_m
+\end{equation*}
+where \(\sigma_k\colon D_k\to D_k\) for \(k = 1, \dots, m\) and the domains \(D_k\) are pairwise disjoint. The sign \eqref{e3.2} is equal to the product of
+\begin{equation}\label{e3.3}
+\prod_{i\in D_k} \operatorname{sgn}(K_{i\sigma_k(i)})
 \end{equation}
-where \(\sigma_k\colon D_k\to D_k\) for \(k = 1, \dots, m\) and the domains \(D_k\) are pairwise disjoint. The sign \eqref{e3.2} can be written as the product of
-\[\prod_{i\in D_k} \operatorname{sgn}(K_{i\sigma_k(i)})\]
 so it suffices to give expressions for those. Note that we could assume \(\left\{ i, \sigma_k(i)\right\}\in E_K\) and therefore \(C_k = (D_k, E_k)\) with
 \[E_k = \left\{ \left\{ i, \sigma_k(i)\right\} \mid i\in D_k\right\}\]
 is a cycle and therefore \eqref{e3.3} is equal to \(\operatorname{sgn}(C_k)\).
 \end{proof}
 
-\begin{theo}%[•]
+\begin{theo}[Solution of the PMAP]
 Let \(K\in\mathbb R^{N\times N}\) be a symmetric matrix and \(l\) be the sparsity of its adjacency graph. Then the principal minors up to size \(l\) uniquely determine all principal minors of \(K\) and therefore the matrix \(K\) up to determinantal equivalence.
 \end{theo}
 \begin{proof}
-In the light of the previous proposition it suffices to show that the sign function is uniquely specified by the principal minors up to size \(l\). Recall that the sign function is determined by its values on a shortest maximal cycle basis, which consists by definition of simple chordless cycles of length at most \(l\). However, under the knowledge of the diagonal elements and the absolute values of the off diagonal ones, the sign of those simple chordless cycle is uniquely determined by the principal minors up to size \(l\) using the euqality \eqref{pmcl} .
+In the light of the previous proposition it suffices to show that the sign function is uniquely specified by the principal minors up to size \(l\). Recall that the sign function is determined by its values on a shortest maximal cycle basis, which consists by definition of simple chordless cycles of length at most \(l\). However, under the knowledge of the diagonal elements and the absolute values of the off diagonal ones, the sign of those simple chordless cycle is uniquely determined by the principal minors up to size \(l\) using the equality \eqref{pmcl} .
 \end{proof}
 %\begin{rem}
 %One can even show that this result is optimal in the sense that if one only has access to the principal minors up to size \(l-1\), then the equivalence class is not uniquely determined. See \cite{urschel2017learning} for details on this.\todo{can one also see this optimality from my proof?} \todo{comment on algorithms}
@@ -354,13 +356,13 @@ One can even show that this result is optimal in the sense that if one only has 
 \begin{emp}[Construction of the equivalence class]\label{cec}
 We have shown that the determinantal equivalence class of a symmetric matrix is uniquely specified by its principal minors up to size \(l\). Now we want to investigate how this equivalence class can be computed and we will see that we can reduce this task to the solution of a system of linear equations over the finite field \(\mathbb F_2\).
 
-Let us assume that we have knowledge of the principal minors \(\Delta_S\) for every \(S\subseteq\left\{ 1, \dots, N\right\}\) with size at most \(l\) and we want to construct a matrix \(\tilde K\) that is determinantally equivalent to \(K\). We have seen that we only need to reconstruct the signs of the off diagonal entries of \(K\) which is equivalent to reconstructing the edge weight \(w_{ij}\). To do this fix a shortest maximal cycle basis \(\left\{ C_1, \dots, C_m\right\}\) with vertex sets \(S_1, \dots, S_m\). Let us now rewrite \eqref{pmcl} in the form
-\[H_k\coloneqq \Delta_{C_k} - \!\! \sum_{P\in\mathcal P(C_k)} (-1)^{\left\lvert P \right\rvert}\cdot \!\!\!\prod_{\left\{ i, j\right\}\in P}\! K_{ij}^2 \cdot\!\!\prod_{i\notin V(P)}\! K_{ii} = 2 \cdot (-1)^{\left\lvert C_k \right\rvert + 1} \operatorname{sgn}(C_k)\cdot\!\!\!\! \prod_{\left\{ i, j\right\}\in C_k}\left\lvert K_{ij} \right\rvert. \]
-Given the principal minors, we can determine the value on the right side and taking the sign on both sides yields
-\[ (-1)^{\left\lvert C_k \right\rvert + 1} \cdot \operatorname{sgn}(H_k) = \operatorname{sgn}(C_k) = \prod_{\left\{ i, j\right\}\in E(S_k)} w_{ij} \]
-which we seek to solve for \(w\). However, this multiplicative equation is hard to solve and therefore we use the canonical group isomorphism \(\phi\) between \(\left\{ \pm 1\right\}\) and \(\left\{ 0, 1\right\}\) to turn it into a linear equation. Setting \(x_{ij}\coloneqq \phi(w_{ij})\) we get that the condition above is equivalent to
+Let us assume that we have knowledge of the principal minors \(\Delta_S\) for every \(S\subseteq\left\{ 1, \dots, N\right\}\) with size at most \(l\) and we want to construct a matrix \(\tilde K\) that is determinantally equivalent to \(K\). We have seen that we only need to reconstruct the signs of the off diagonal entries of \(K\) which is equivalent to reconstructing the edge weights \(w_{ij}\). To do this, we fix a shortest maximal cycle basis \(\left\{ C_1, \dots, C_m\right\}\) with vertex sets \(S_1, \dots, S_m\). Let us now rewrite \eqref{pmcl} in the form
+\[H_k\coloneqq \Delta_{S_k} - \!\! \sum_{P\in\mathcal P(S_k)} (-1)^{\left\lvert P \right\rvert}\cdot \!\!\!\prod_{\left\{ i, j\right\}\in P}\! K_{ij}^2 \cdot\!\!\prod_{i\notin V(P)}\! K_{ii} = 2 \cdot (-1)^{\left\lvert S_k \right\rvert + 1} \operatorname{sgn}(C_k)\cdot\!\!\!\! \prod_{\left\{ i, j\right\}\in C_k}\left\lvert K_{ij} \right\rvert. \]
+Given the principal minors, we can determine the value on the right side and comparing the signs of both sides yields
+\[ (-1)^{\left\lvert S_k \right\rvert + 1} \cdot \operatorname{sgn}(H_k) = \operatorname{sgn}(C_k) = \prod_{\left\{ i, j\right\}\in C_k} w_{ij} \]
+which we seek to solve for \(w\). However, this multiplicative equation is hard to solve and therefore we use the canonical group isomorphism \(\phi\) between \(\left\{ \pm 1\right\}\) and \(\left\{ 0, 1\right\}\) to turn it into a linear equation.\footnote{The isomorphism \(\phi\) has the explicit structure \(1\mapsto0, -1\mapsto1\).} Setting \(x_{ij}\coloneqq \phi(w_{ij})\) we get that the condition above is equivalent to
 \begin{equation*}
-b_k\coloneqq \phi( \operatorname{sgn}(H_k)) + \lvert \hat S_k \rvert + 1 = \sum_{\left\{ i, j\right\}\in E(S_k)} x_{ij} = (Ax)_k \quad \text{in } \mathbb F_2
+b_k\coloneqq \phi( \operatorname{sgn}(H_k)) + \lvert S_k \rvert + 1 = \sum_{\left\{ i, j\right\}\in C_k} x_{ij} = (Ax)_k \quad \text{in } \mathbb F_2
 \end{equation*}
 where \(A\) is the matrix with the rows \(x(C_k)^T\). Now we can fix any such solution \(x %= \phi(w)
 \in\mathbb F_2^{E}\) of
@@ -368,7 +370,7 @@ where \(A\) is the matrix with the rows \(x(C_k)^T\). Now we can fix any such so
 Ax = b
 \end{equation}
 and we know that at least one exists, namely the one given by \(x_{ij} = \phi(\operatorname{sgn}(K_{ij}))\). %In the light of \eqref{e3.0} i
-Let now \(w_{ij}\coloneqq x_{ij}\), then it is straight forward to see that \(\tilde K\) defined through
+Let now \(w_{ij}\coloneqq \phi^{-1}(x_{ij})\), then it is straight forward to see that \(\tilde K\) defined through
 \[\tilde K_{ii} \coloneq\Delta_{\left\{ i\right\}} \quad\text{and } \tilde K_{ij} = w_{ij} \cdot \sqrt{\tilde K_{ii}\tilde K_{jj} - \Delta_{\left\{ i, j\right\}}} \]
 is determinantally equivalent to \(K\).
 %More precisely we seek to find weight \(w_{ij}\) such that \eqref{pmcl} holds. This is the case if and only if
@@ -391,14 +393,14 @@ It shall be noted that there are algorithms with much better computational perfo
 \subsection{Definition of the estimator and consistency}
 
 
-So far we have seen that the principal minors determine a symmetric matrix up to determinantal equivalence. However, the empirical marginal densities do not in general need to be the principal minors of any symmetric matrix, in other words the empirical measures are not necessarily determinantal. Therefore, the definition of the estimator is till not quite straight forward and we will follow \cite{urschel2017learning} for this and make the following assumption.
+So far we have seen that the principal minors determine a symmetric matrix up to determinantal equivalence. However, the empirical marginal densities do not in general need to be the principal minors of any symmetric matrix, in other words the empirical measures are not necessarily determinantal. Therefore, the definition of the estimator is still not straight forward and we will follow \cite{urschel2017learning} for this and make the following assumption.
 
 \begin{emp}[Assumption]\label{ass}
 Let \(\alpha>0\) and assume that 
-\[\min\left\{ \left\lvert K_{ij} \right\rvert\mid K_{ij}\ne0\right\}\ge\alpha.\]
+\[\min\Big\{ \left\lvert K_{ij} \right\rvert\;\big\lvert\; K_{ij}\ne0\Big\}\ge\alpha.\]
 \end{emp}
 
-Note that such an \(\alpha\) can always be found, however it is not a priori known. For example if we want to make a statement about the speed of approximation of the estimators , which depends on \(\alpha\), we have to make the assumption above.
+Note that such an \(\alpha\) can always be found, however it is not a priori known and hence we have to postulate it. %For example if we want to make a statement about the speed of approximation of the estimators, which depends on \(\alpha\), we have to make the assumption above.
 
 %An important quantity in the estimation of the kernel \(K\) is
 %\[\alpha\coloneqq\min\left\{ \left\lvert K_{ij} \right\rvert\mid K_{ij}\ne0\right\}>0. \]
@@ -410,14 +412,16 @@ The straight forward estimators of the principal minors are
 The resulting estimates for the diagnoal elements and the squares of the off diagonals are
 \[\hat K_{ii} \coloneqq \hat\Delta_{\left\{ i\right\}} \quad \text{and } \hat B_{ij}\coloneqq \hat K_{ii}\hat K_{jj} - \hat\Delta_{\left\{ i, j\right\}}.\]
 
-Next we will introduce an estimate \(\hat G\) for the adjacency graph and will then try to choose the signs of the estimated matrix \(\hat K\) such that the its principal minors are the estimates for the principal minors. For this define the edge set \(\hat E\) of \(\hat G\) to consist of all sets \(\left\{ i, j\right\}\) such that \(\hat B_{ij}\ge\frac12\alpha^2\). This truncation yields the desired effect that by the strong law of large numbers the estimator for the graph will converge to the actual adjacency graph almost surely. In analogy to the previous paragraph we define \(\{ \hat C_1, \dots, \hat C_{\hat m}\}, \hat H_1, \dots, \hat H_{\hat m}, \hat A\) and \(\hat b\) exactly the same way. If there is a solution \(\hat x\in\mathbb F_2^{E}\) to the linear equation
+Next we will introduce an estimate \(\hat G\) for the adjacency graph and will then choose the signs of the estimated matrix \(\hat K\) such that the its principal minors are the estimates for the principal minors. For this let the edge set \(\hat E\) of \(\hat G\) consist of all sets \(\left\{ i, j\right\}\) such that \(\hat B_{ij}\ge\frac12\alpha^2\). We will see that this truncation leads to the almost surely convergence of the graph \(\hat G\) towards \(G\). 
+%effect that by the strong law of large numbers the estimator for the graph will converge to the actual adjacency graph almost surely.
+In analogy to the previous paragraph we define \(\{ \hat C_1, \dots, \hat C_{\hat m}\}, \hat H_1, \dots, \hat H_{\hat m}, \hat A\) and \(\hat b\) exactly the same way. If there is a solution \(\hat x\in\mathbb F_2^{E}\) to the linear equation
 \begin{equation}\label{LinEqu2}
 \hat A\hat x = \hat b,
 \end{equation}
 then we estimate the signs to be \(\hat w_{ij}\coloneqq \phi^{-1}(\hat x_{ij})\) and define \[\hat K_{ij} \coloneqq \hat w_{ij} \sqrt{\hat B_{ij}}.\]
 
 %If the procedure described in \ref{cec} works, namely if \eqref{linEqu} posseses a solution, then we will define our estimator \(\hat K\) this way.
-If there is no such solution \(\hat x\) then we simply set the signs of the off diagonal elements to be positive, i.e. we define \[\hat K_{ij}\coloneqq \sqrt{\hat B_{ij}}.\] This choice is completely arbitrary, but we will see in the consistency result \ref{MomCon} that the probability for this case tends to zero as the sample size increases. In fact we will see that the two linear equations \eqref{linEqu} and \ref{LinEqu2} agree with increasing probability.
+If there is no such solution \(\hat x\) then we simply set the signs of the off diagonal elements to be positive, i.e. we define \[\hat K_{ij}\coloneqq \sqrt{\hat B_{ij}}.\] This choice is completely arbitrary, but we will see in the consistency result below that the probability for this case tends to zero as the sample size increases. %In fact we will see that the two linear equations \eqref{linEqu} and \ref{LinEqu2} agree with increasing probability.
 \end{emp}
 
 %This means that every edge \(\left\{ i, j\right\}\in E\) will be contained in each estimator for large sample size and 
@@ -443,7 +447,8 @@ where \(\left\lVert A \right\rVert_\infty\coloneqq \max_{1\le i, j\le N} \left\l
 \end{emp}
 
 \begin{theo}[Consistency]\label{MomCon}
-Let \(K\) be the marginal kernel of a DPP that satisfy the assumption \ref{ass}. Let further \(l\) be the cycle sparsity of \(G_K\) and \(\varepsilon>0\). 
+Let \(K\) be the marginal kernel of a DPP that satisfies Assumption \ref{ass}. %Let further \(l\) be the cycle sparsity of \(G_K\) and
+Then we have for any \(\varepsilon>0\)
 %Then for any \(A>0\) there is a constant \(c>0\) such that for every
 %\[n\ge c\cdot\left( \frac{\varepsilon^2}{\alpha^2} + l\cdot\left( \frac{4}{\alpha}\right)^{2l}\right) \cdot \log(N)\]
 %we have \(d(\hat K, K)\le\varepsilon\) with probability at least \(1 - N^{-A}\).
@@ -494,13 +499,13 @@ However \eqref{ConProb1} and \eqref{ConProb2} shows that the probability for thi
 \end{proof}
 
 \begin{rem}[Speed of convergence]
-Although the result above states that the estimators \(\hat K\) converges to \(K\) in probability, it does give no information about the speed of convergence. This problem is addressed in \cite{urschel2017learning}, but it turns out that the convergence is very slow. For example for the very moderate case \(\alpha = 0.4\) and \(l=3\) one already needs more than \(10^6\) samples to get some theoretical guarantees from their result. This is not due to careless estimates since they show that you need very high sample sizes in order to ensure that the estimator is close to the actual kernel with probability bigger than \(\frac23\). In practice such sample sizes can almost never be achieved.  % since this result is beyond practical relevance, we will keep away from those calculations.
+Although the result above states that the estimators \(\hat K\) converges to \(K\) in probability, it doesn’t give any information about the speed of convergence. This problem is addressed in \cite{urschel2017learning}, but it turns out that the convergence is very slow. For example for the very moderate case \(\alpha = 0.4\) and \(l=3\) one already needs more than \(10^6\) samples to get some theoretical guarantees from their result. This is not due to careless estimates since they show that you need very high sample sizes in order to ensure that the estimator is close to the actual kernel with probability bigger than \(\frac23\). In practice such sample sizes can almost never be achieved.  % since this result is beyond practical relevance, we will keep away from those calculations.
 \end{rem}
 %\todo{explain how the algorithm for the reconstruction works}
 %\todo{how hard it is to prove}
 
 \begin{emp}[Computation of the estimator]
-Although we have already seen how the estimator can -- mathematically -- be constructed, we will now touch on the implementation details for the actual computation of the estimator. In fact the only two non trivial steps in the definition of the estimator are the construction of a shortest maximal cycle basis and the solution of the linear equation \eqref{LinEqu2} over the finite field \(\mathbb F_2\). There have been various algorithms proposed for the computation of a shortest maximal cycle basis and we refer to the original work of Horton \cite{horton1987polynomial} and a recent improvement of his algorithm in \cite{amaldi2010efficient}. Further, we note that the linear equation can be solved just like a linear equation over any other field using Gaussian elimination.
+Although we have already seen how the estimator can be constructed theoretically, we will now touch on the implementation details for the actual computation of the estimator. In fact the only two non trivial steps in the definition of the estimator are the construction of a shortest maximal cycle basis and the solution of the linear equation \eqref{LinEqu2} over the finite field \(\mathbb F_2\). There have been various algorithms proposed for the computation of a shortest maximal cycle basis and we refer to the original work of Horton \cite{horton1987polynomial} and a recent improvement of his algorithm in \cite{amaldi2010efficient}. Further, we note that the linear equation can be solved just like every linear equation over any field using Gaussian elimination.
 %\todo{finish this}
 \end{emp}
 

@@ -6,27 +6,29 @@
 %\todo{explain bias and consistency}
 % \section{Motivation for learning DPPs}
 
-Parameter estimation is one of the central components of every theory of real world phenomena. In a nutshell one could split the process of the construction of a descriptive model into two parts. The first one being the selection of the model which is done by a scientist and the second being the determination of the constants that belong to the model.
+Parameter estimation is one of the central components of every theory of real world phenomena. In a nutshell one could split the process of the construction of a descriptive model into two parts. The first one being the selection of the model which is done by a scientist and the second one being the determination of the constants that belong to the model.
 
-To make this more clear we will consider one of the most famous advances in the natural sciences namely the law of universal gravitation that was discovered by Sir Isaac Newton and published in one of the most famous books in the history of science, the \emph{Philosophiæ Naturalis Principia Mathematica}. More precisely Newton discovered that the gravitational force acting between two massive objects is given by
+To make this more clear we will consider one of the most famous advances in the natural sciences namely the law of universal gravitation that was discovered by Sir Isaac Newton and published in %one of the most famous books in the history of science,
+the \emph{Philosophiæ Naturalis Principia Mathematica} (cf. \cite{newton1744philosophiae}). More precisely Newton discovered that the gravitational force acting between two massive objects is given by
 \[F = G\cdot \frac{m_1m_2}{r^2}\]
-where \(m_1, m_2\) are the masses of the two objects, \(r\) is the distance of the centers of masses and \(G\) is the gravitational constant. This constant can not be deduced from the theory itself and needs to be estimated based on some empirical data.
+where \(m_1, m_2\) are the masses of the two objects, \(r\) is the distance between the centers of masses and \(G\) is the gravitational constant. This constant can not be deduced from the theory itself and needs to be estimated based on some empirical data.
 
 If we want to describe, simulate and predict the occurence of diverse subsets we can take a similar approach and impose the model of a determinantal point process. % which would correspond to the first part
-This will usually be an assumption that will not strictly hold, but will often lead to reasonable, sometimes even impressive results. We will not be concerned to measure how suitable this model selection is, although this is a highly interesting question. Leaving that aside we are left with the second step, namely the estimation of the parameters of the model, which are in the case of a DPP over a set of cardinality \(N\) exactly \(N(N-1)/2\). Because of the rather large amount of parameters and also the complicated structure of the DPPs it will in practice only be possible to perform those estimations through the use of computational tools. The task of computer based parameter or density estimation is an important field in the discipline of \emph{machine learning} and thus we will sometimes speak of the parameters being learned instead of estimated. Actually the interest of parameter estimation for DPPs arose from the machine learning community at the beginning of this decade. However, we will phrase things in a way that no prior knowledge in this field is required.
+This will usually be an assumption that will not strictly hold, but will often lead to reasonable, sometimes even impressive results. We will not be concerned with how suitable this model selection is, although this is a highly interesting question. Leaving that aside we are left with the second step, namely the estimation of the parameters of the model, which are in the case of a DPP over a set of cardinality \(N\) exactly \(N(N-1)/2\). Because of the rather large amount of parameters and also the complicated structure of the DPPs it will in practice only be possible to perform those estimations through the use of computational tools. The task of computer based parameter or density estimation is an important field in the discipline of \emph{machine learning} and thus we will sometimes speak of the parameters being learned instead of estimated. Actually the interest of parameter estimation for DPPs arose from the machine learning community at the beginning of this decade. However, we will phrase things in a way that no prior knowledge in this field is required.
 
 In this chapter we will be concerned in how we can make point estimates for either the marginal or the elementary kernels \(K\) and \(L\). Point estimators are the most basic type of estimators and consist of the suggestion of one possible parameter set, for example in the case of the gravitational constant 
 \[6.674\cdot10^{-11}\si{N.kg^{-2}.m^2}. \]
-This is in contrast to the Bayesian approach to parameter estimation that we will present in the next chapter where the philosophy is to estimate a distribution over all possible parameter sets that indicates how likely they are given some the empirical data. We will discuss two essentially different methods of point estimators, the first one provides a way to reconstruct a marginal kernel for the empirical marginal distributions at least in the case where the empirical distribution is essentially a DPP. The other type of methods are all maximum likelihood estimators in different variations. 
+This is in contrast to the Bayesian approach to parameter estimation that we will present in the next chapter where the philosophy is to estimate a distribution over all possible parameter sets that indicates how likely they are given some the empirical data. We will discuss two essentially different methods of point estimators, the first one provides a way to reconstruct a marginal kernel for the empirical marginal distributions at least in the case where the empirical distribution is essentially a DPP. The other one being %type of methods are all
+maximum likelihood estimation in different variations. 
 
 But before we can proceed we want to remind the reader of two desirable properties of point estimators. For this we will assume that we want to estimate the distribution of a random variable \(X\) from a parametric family of probability measures
 \[\left\{ \mathbb P_\theta\mid \theta\in\Theta\right\}.\]
-This means we want to estimate \(\theta\) out of a possible set of parameters \(\Theta\) such that \(X\) is distributed according to \(\mathbb P_\theta\) which we will based upon some data \(x_1, \dots, x_n\). Further, we assume that those points are actually generated by \(\mathbb P_\theta\) for one \(\theta\in\Theta\) and denote the estimator by \(\hat\theta_n\). We call \emph{unbiased} if we have
-\[\mathbb E[\hat\theta_n] = \theta\]
+This means we want to estimate \(\theta\) out of a possible set of parameters \(\Theta\) such that \(X\) is distributed according to \(\mathbb P_\theta\) which we will based upon some data \(x_1, \dots, x_n\). Further, we assume that those points are actually generated by \(\mathbb P_{\theta_0}\) for one \(\theta_0\in\Theta\) and denote the estimator by \(\hat\theta_n\). We call \emph{unbiased} if we have
+\[\mathbb E[\hat\theta_n] = \theta_0\]
 and \emph{consistent} if we have
-\[\hat\theta_n\to\theta \quad \text{in probability}.\]
+\[\hat\theta_n\to\theta_0 \quad \text{in probability}.\]
 
-It shall be noted that although those properties are beneficial, they are not crucial for an estimator to be reasonable. First they both assume that the data generating process, i.e. the process one wants to describe actually follows one of the laws \(\mathbb P_\theta\) which will typically be not the case in real world examples. Further, the asymptotic property of consistency is rather of theoretical nature since in practice it is not possible to create large sets of empirical data and certainly not infinitely large ones. 
+It shall be noted that although those properties are beneficial, they are not crucial for an estimator to be reasonable. First they both assume that the data generating process, i.e. the process one wants to describe actually follows one of the laws \(\mathbb P_{\theta_0}\) which will typically not be the case in real world examples. Further, the asymptotic property of consistency is rather of theoretical nature since in practice it is not possible to create large sets of empirical data and certainly not infinitely large ones. 
 
 %In practice this will be a rather large amount of parameters and therefore it will only be possible
 
@@ -39,19 +41,19 @@ Now we will display the first way how one can estimate the marginal kernel \(K\)
 Let \(\mathcal Y\) be a finite set of cardinality \(N\) and let \(K\in\mathbb R^{N\times N}_{\text{sym}}\) satisfy \(0\le K\le I\). Let further \(\mathbf Y_1, \mathbf Y_2, \dots\) be distributed according to the DPP with marginal kernel \(K\).
 \end{emp}
 
-In order to perform an approximate reconstruction of the marginal kernel we will need to consider the \emph{empirical measure} % \(\hat{\mathbb P}_n\) be 
+In order to perform an approximate reconstruction of the marginal kernel we will consider the \emph{empirical measures} % \(\hat{\mathbb P}_n\) be 
 \[\hat{\mathbb P}_n \coloneqq \frac1n\sum_{i=1}^n\delta_{\mathbf Y_i}.\]
 % We can identify the probability measures on a finite set, in our case \(2^{\mathcal Y}\), with the probability simplex
 % \[\left\{ x\in\mathbb R^{2^{\mathcal Y}} \;\Big\lvert\; x_A \in[0, 1] \text{ for all } A\in 2^{\mathcal Y} \text{ and } \sum_{A\in 2^{\mathcal Y}} x_A = 1 \right\}.\]
-The interest in \(\hat{\mathbb P}_n\) lies in the fact that they quite natural estimates for the actual underlying distribution. 
+The interest in \(\hat{\mathbb P}_n\) lies in the fact that they are quite natural estimates for the actual underlying distribution. 
 % It is well known that \(\hat{\mathbb P}_n\) 
-More precisely they are {unbiased estimators} for \(\mathbb P\), i.e. they agree in expectation with \(\mathbb P\). This can be seen by evaluating it at \(A\subseteq \mathcal Y\)
+In fact they are {unbiased estimators} for \(\mathbb P\), i.e. they agree in expectation with \(\mathbb P\). This can be seen by evaluating it at \(A\subseteq \mathcal Y\)
 \[\mathbb E_{\mathbb P}\big[\hat{\mathbb P}_n(A)\big] =\frac1n \sum_{i = 1}^n \mathbb E_{\mathbb P}\big[\delta_{\mathbf Y_i}(A)\big] =  \mathbb P(A).\]
-And even stronger by the strong law of large numbers they converge to \(\mathbb P\) almost surely if the sequence \((\mathbf Y_k)_{k\in\mathbb N}\) of observations is independent. This can be seen by identifying the probability measures on \(2^{\mathcal Y}\) with the probability simplex
+Furthermore, by the strong law of large numbers they converge to \(\mathbb P\) almost surely if the sequence \((\mathbf Y_k)_{k\in\mathbb N}\) of observations is independent. This can be seen by identifying the probability measures on \(2^{\mathcal Y}\) with the probability simplex
 \[\left\{ \mu\in\mathbb R^{2^{\mathcal Y}} \;\Big\lvert\; \mu_A\in[0, 1] \text{ for all } A\subseteq\mathcal Y \text{ and } \sum_{A\subseteq\mathcal Y}\mu_A = 1 \right\}\]
 and using the strong law of large numbers in \(\mathbb R^{2^{\mathcal Y}}\).
 
-Therefore the empirical measures are reasonable approximations of the actual probability distribution. Assume now for one moment that the empirical measures \(\hat{\mathbb P}_n\) are also determinantal point processes with marginal kernel \(\hat K_n\), then \(\hat K_n\) would be a quite intuitive estimate for the actual marginal kernel \(K\). Thus, we are interested in the question whether we can reconstruct the kernel marginal of a DPP if we know the DPP itself. Since the marginal density of a DPP corresponds to the principal minors of the marginal kernel, we first investigate whether we can reconstruct a matrix from its principal minors. For the answer to this problem we follow the main ideas presented in \cite{urschel2017learning} and \cite{rising2015efficient} although we modify their arguments to make them shorter and hopefully more accessible.% \todo{say something about stability?}
+Therefore the empirical measures are reasonable approximations of the actual probability distribution. Assume now for one moment that the empirical measures \(\hat{\mathbb P}_n\) are also determinantal point processes with marginal kernel \(\hat K_n\), then \(\hat K_n\) would be a quite intuitive estimate for the actual marginal kernel \(K\). Thus, we are interested in the question whether we can reconstruct the marginal kernel of a DPP if we know the DPP itself. Since the marginal density of a DPP corresponds to the principal minors of the marginal kernel, we first investigate whether we can reconstruct a matrix from its principal minors. For the answer to this problem we follow the main ideas presented in \cite{urschel2017learning} and \cite{rising2015efficient} although we modify their arguments to make them shorter and hopefully more accessible.% \todo{say something about stability?}
 
 
 %Therefore we can consistently %\todo{explain consistency}{ } 
@@ -71,17 +73,17 @@ Therefore the empirical measures are reasonable approximations of the actual pro
 %\subsubsection*{The principal minor assignment problem}\todo{phrase it very clearly}
 %\todo{define principal minors?}
 \begin{emp}[The principal minor assignment problem]
-Let \(K\in\mathbb R^{N\times N}\) be a symmetric matrix. We want to investigate whether \(K\) uniquely specified by its principal minors
+Let \(K\in\mathbb R^{N\times N}\) be a symmetric matrix. We want to investigate whether \(K\) is uniquely specified by its principal minors
 \[\Delta_S \coloneqq \det(K_S) \quad \text{where } S\subseteq\left\{ 1, \dots, N\right\}.\]
 We call this the \emph{symmetric principal minor assignment problem} and it will turn out that the matrix \(K\) can be reconstructed up to an equivalence relation.
 \end{emp}
 
 %The reconstruction of a symmetric matrix from all its principal minors is known as the \emph{principal minor assignment problem} and we aim to prove in this section that this is possible -- at least up to an equivalence relation. 
-Before we present the general procedure we want to see how this would work in the case of a symmetric \(3\times3\) matrix \(K = (K_{ij})_{1\le i, j\le 3}\). First we note that we can regain the diagonal elements as the determinant of the \(1\times1\) principal minors
+Before we present the general procedure we want to see how this would work in the case of a symmetric \(3\times3\) matrix \(K = (K_{ij})_{1\le i, j\le 3}\). First we note that we can regain the diagonal elements as the determinant of the \(1\times1\) sub matrices
 \[\det(K_{\left\{ i\right\}}) = K_{ii} \quad \text{for } i = 1, 2, 3.\]
 Further the squares of the off diagonal are determined by the \(2\times2\) principal minors since
 \[\det(K_{\left\{ i, j\right\}}) = K_{ii}K_{jj} - K_{ij}^2 \quad \text{for }i, j = 1, 2, 3.\]
-Therefore we only need to reconstruct the signs off diagonal entries. To do this, we consider the determinant of the matrix itself
+Therefore we only need to reconstruct the signs of the off diagonal entries. To do this, we consider the determinant of the matrix itself
 \begin{equation}\label{thrtimthr}
 \det(K) = K_{11}K_{22}K_{33} + 2K_{12}K_{13}K_{23} - K_{11}K_{23}^2 - K_{22}K_{13}^2 - K_{33}K_{12}^2.
 \end{equation}
@@ -92,7 +94,7 @@ Since we know all of the expressions on the right side, we can determine the sig
 
 \subsection{Graph theoretical concepts}
 
-One main part in the general procedure will be to obtain a generalisation of the formula \eqref{thrtimthr} for larger principal minors that will allow the reconstruction of the signs. For this we will need the following graph theoretical concepts.
+One major step in the general procedure will be a generalisation of the formula \eqref{thrtimthr} for larger principal minors that will allow the reconstruction of the signs. For this we will need the following graph theoretical concepts.
 %In order to generalise the procedure above to larger matrices we will need some elementary concepts from graph theory.
 
 
@@ -107,17 +109,17 @@ Let \(G = (V, E)\) be a finite graph, i.e. \(V\) is a finite set, called the \em
 %, i.e. there is a sequence \(\left\{ v, v_1\right\}, \left\{ v_1, v_2\right\}, \dots, \left\{ v_{k-1}, v_k\right\}, \left\{ v_k, w\right\}\) of edges.
 \item \emph{Cycle:} A \emph{cycle} \(C\) is a connected subgraph such that every vertex has even degree in \(C\). 
 \item \emph{Cycle space:} Each cycle \(C\) can be identified with a vector \(x = x(C)\in\mathbb F_2^{E}\) such that
-\[x_e\coloneqq \begin{cases} 1 \quad & \text{if } e\in C \\ 0 \quad & \text{if } e\notin C\end{cases}\]
+\[x_e\coloneqq \begin{cases} \; 1 \quad & \text{if } e\in C \\ \; 0 \quad & \text{if } e\notin C\end{cases}\]
 indicates whether the edge \(e\in E\) belongs to the cycle \(C\). The \emph{cycle space} \(\mathcal C\) is the span of \(\left\{ x(C)\mid C\text{ is a cycle}\right\}\) in \(\mathbb F_2^{E}\). Note that the sum of two cycles in the cycle space corresponds to the symmetric difference of the edges.
 %\item \emph{Simple cycle:} A cycle is called \emph{simple} if every vertex of \(C\) has even degree in \(C\).
 %\item \emph{Cycle basis:} A basis of the cycle space is called \emph{cycle basis} if it consists of simple cycles.
 \item \emph{Chordless cycle:} A cycle \(C\) is called \emph{chordless} if two verteces \(v, w\in C\) form an edge in \(G\) if and only they form an edge in \(C\). This is equivalent to the statement that \(C\) is an induced subgraph that is a cycle.
-\item \emph{Cycle sparsity:} The cycle sparsity is the minimal number \(l\) such that a basis of the cycle space consisting of chordless simple cycles exists. Such a basis is called \emph{shortest maximal cycle basis} or short \emph{SMCB}. If the cycle space is trivial we define the cycle sparsity to be \(2\).
-\item \emph{Pairings:} Let \(S\subseteq V\) be a set of of vertices. Then a \emph{pairing} \(P\) of \(S\) is a subset of edges of \(G(S)\) such that two different edges of \(P\) are disjoint. The vertices contained in the edges of \(P\) are denoted by \(V(P)\) and the set of all pairings by \(\mathcal P(S)\).
+\item \emph{Cycle sparsity:} The cycle sparsity is the minimal number \(l\) such that a basis of the cycle space consisting of chordless simple cycles of length at most \(l\) exists. Such a basis is called \emph{shortest maximal cycle basis} or short \emph{SMCB}. If the cycle space is trivial we define the cycle sparsity to be \(2\).
+\item \emph{Pairings:} Let \(S\subseteq V\) be a set of vertices. Then a \emph{pairing} \(P\) of \(S\) is a subset of edges of \(G(S)\) such that two different edges of \(P\) are disjoint. The vertices contained in the edges of \(P\) are denoted by \(V(P)\) and the set of all pairings by \(\mathcal P(S)\).
 \end{enumerate}
 \end{emp}%\todo{add pictures and explanations?}
 
-It is highly recommended to study the examples in Figure \ref{examplegraphs} in order to get more familiar with the definitions above. To see that the above definition of the cycle sparsity is well defined, we have need to show that shortest maximal cycle basis exist. This might be well known to people that are familiar with graph theory, but we will present an elementary proof here. The first part of the statement, namely the existence of cycle basis consisting of simple cycles is known as Veblen’s theorem and can be found in its original form in \cite{10.2307/1967604}, however we will rather follow the approach in \cite{bondy2011graph}.
+It is recommended to study the examples in Figure \ref{examplegraphs} and further ones in order to get more familiar with the definitions above. To see that the above definition of the cycle sparsity is well defined, we have need to show that shortest maximal cycle bases exist. This might be well known to people familiar with graph theory, but we will present an elementary proof here. The first part of the statement, namely the existence of cycle basis consisting of simple cycles is known as Veblen’s theorem and can be found in its original form in \cite{10.2307/1967604}, however we will rather follow the approach in \cite{bondy2011graph}.
 
 \begin{figure}[h!]\label{examplegraphs}
 	\centering
@@ -170,7 +172,7 @@ There always exists a basis \(\left\{ x(C_1), \dots, x(C_k)\right\}\) of the cyc
 \begin{proof}
 First we prove that the set of simple cycles generates the whole cycle space which we can then improve to show that the simple chordless cycles already generate the cycle space. A shortest maximal cycle basis is then attained by successively dropping simple chordless cycles.
 
-We show that every cycle \(x(C)\) can be written as the sum of simple cycles \(x(C_1), \dots, x(C_k)\) where \(C_i\subseteq C\). This is equivalent to the statement that the edges of every cycle are the disjoint union of the edges of simple cycles. Take now a maximal non intersecting path \(v_0v_1\cdots v_k\).
+We show that every cycle \(x(C)\) can be written as the sum of simple cycles \(x(C_1), \dots, x(C_k)\) where \(C_i\subseteq C\) are disjoint. This is equivalent to the statement that the edges of every cycle are the disjoint union of the edges of simple cycles. To see that this is true, fix a maximal non intersecting path \(v_0v_1\cdots v_k\).\footnote{Non intersecting should be intuitive and means that \(v_i\ne v_j\) for \(i\ne j\).}
 \begin{figure}[h!]\label{makesimple}
 	\centering
 \begin{tikzpicture}%[shorten >=1pt,->]
@@ -195,9 +197,9 @@ We show that every cycle \(x(C)\) can be written as the sum of simple cycles \(x
 \end{tikzpicture}
 \caption{Illustration of the search for a simple cycle in a graph with degrees greater than two. Once a maximal non intersecting path like \(12543\) is selected, every continuation of the path -- in this case 2 or 1 -- is already present in the path and therefore induces a simple cycle.}
 \end{figure}
-Since \(v_k\) has degree at least \(2\), there is an edge \(\left\{ v_k, v_{k+1}\right\}\) such that \(v_{k+1}\ne v_{k-1}\). Since the path is maximal, \(v_{k+1}\) has to agree with one a vertex \(v_i\in\left\{ v_0, \dots, v_{k-2}\right\}\), because otherwise we could add \(v_{k+1}\) to the path which is a contradiction to the maximality. Now \(v_iv_{i+1}\cdots v_kv_i\) corresponds to a simple cycle \(C_1\) and \(C_2\coloneqq C\setminus C_1\) is again a cycle. Thus, we can write \(C\) as the disjoint union \(C = C_1\cup C_2\) where \(C_1\) is a simple cycle. By repeating this procedure we get the desired expression for \(C\) in terms of simple cycles.
+Since \(v_k\) has degree at least \(2\), there is an edge \(\{ v_k, v_{k+1}\}\) such that \(v_{k+1}\ne v_{k-1}\). Since the path is maximal, \(v_{k+1}\) has to agree with one a vertex \(v_i\in\left\{ v_0, \dots, v_{k-2}\right\}\), because otherwise we could add \(v_{k+1}\) to the path which is a contradiction to the maximality. Now \(v_iv_{i+1}\cdots v_kv_i\) corresponds to a simple cycle \(C_1\) and \(C_2\coloneqq C\setminus C_1\) is again a cycle. Thus, we can write \(C\) as the disjoint union \(C = C_1\cup C_2\) where \(C_1\) is a simple cycle. By repeating this procedure we get the desired expression for \(C\) in terms of simple cycles.
 
-To prove that already the simple chordless cycles generate the cycle space we have to prove that we can write every simple cycle \(x(C)\) as a sum of simple chordless cycles \(x(C_1), \dots, x(C_k)\). Let \(\left\{ \left\{ v_0, v_1\right\}, \dots, \left\{ v_k, v_0\right\}\right\}\) be the edge set of \(C\) and assume that \(C\) is not chordless like in Figure \ref{makechordless}, otherwise the statement would be trivial.
+To prove that the simple chordless cycles generate the cycle space we have to prove that we can write every simple cycle \(x(C)\) as a sum of simple chordless cycles \(x(C_1), \dots, x(C_k)\). Let \(\left\{ \left\{ v_0, v_1\right\}, \dots, \left\{ v_k, v_0\right\}\right\}\) be the edge set of \(C\) and assume that \(C\) is not chordless like in Figure \ref{makechordless}, otherwise the statement would be trivial.
 \begin{figure}[h!]\label{makechordless}
 	\centering
 \begin{tikzpicture}%[shorten >=1pt,->]
@@ -247,22 +249,24 @@ Now we have all the graph theoretical prerequisites to show how one can reconstr
 %the principal minor assignment problem can be solved. However, this is only possible 
 
 \begin{defi}[Determinantal equivalence]
-Two symmetric matrices \(A, B\in\mathbb R^{N\times N}\) are called \emph{determinantally equivalent} if the have the same principal minors and we write \(A\sim B\).
+Two symmetric matrices \(A, B\in\mathbb R^{N\times N}\) are called \emph{determinantally equivalent} if they have the same principal minors and we write \(A\sim B\).
 \end{defi}
 
-It is obvious that we can only hope to reconstruct a symmetric matrix up to determinantal equivalence. However, this would be satisfactory, because determinantally equivalent matrices are exactly those that give rise to the same DPP. Let us in the following denote the principal minor \(\det(K_S)\) by \(\Delta_S\) for \(S\subseteq\left\{ 1, \dots, N\right\}\). To come back to our original problem, we notice that the principal minors up to size two immediately determine the diagonal and the absolute values of the off diagonal of \(K\) since we have
+It is obvious that we can only hope to reconstruct a symmetric matrix up to determinantal equivalence. However, this would be satisfactory, because determinantally equivalent matrices are exactly those that give rise to the same DPP.
+%Let us in the following denote the principal minor \(\det(K_S)\) by \(\Delta_S\) for \(S\subseteq\left\{ 1, \dots, N\right\}\). To come back to our original problem, w
+We notice -- just like in the case of the \(3\times 3\) matrix -- that the principal minors up to size two immediately determine the diagonal and the absolute values of the off diagonal of \(K\) since we have
 \begin{equation*}\label{e3.0}
 K_{ii} = \Delta_{\left\{ i\right\}} \quad \text{and } K_{ij}^2 = K_{ii}K_{jj} - \Delta_{\left\{ i, j\right\}}.
 \end{equation*}
 Thus it only remains to regain the signs \(\operatorname{sgn}(K_{ij})\) of the off diagonal entries. For this we use the following object.
 
 \begin{emp}[The adjacency graph and sign function]
-The adjacency graph \(G_K = (V_K, E_K)\) associated with \(K\) consists of the vertex set \(\left\{ 1, \dots, N\right\}\) and \(\left\{ i, j\right\}\) form an edge if and only if \(K_{ij}\ne0\). Further, we introduce some \emph{weights} on the edges. This means we consider a mapping \(w\colon E_K\to\mathbb R\) and we set
+The adjacency graph \(G_K = (V_K, E_K)\) associated with \(K\) consists of the vertex set \(\left\{ 1, \dots, N\right\}\) and \(\left\{ i, j\right\}\) form an edge if and only if \(K_{ij}\ne0\). Further, we introduce \emph{weights} on the edges. This means we consider a mapping \(w\colon E_K\to\mathbb R\) and set
 \[w_{ij} \coloneqq w(\left\{ i, j\right\}) \coloneqq \operatorname{sgn}(K_{ij})\]
-where we call \(w_{ij}\) the weight of the edge \(\left\{ i, j\right\}\). This graph together with the weights determines the signs of the off diagonal elements, so we are interested in reconstruction the weights from the principal minors.
-Finally we define the sign of a cycle and for a cycle \(C = (S, \tilde E)\) we set \(\operatorname{sgn}(C) \coloneqq\prod_{e\in \tilde E}w_e\). It will become important later to consider this sign function on the cycle space and thus we note that this definition corresponds to
+where we call \(w_{ij}\) the weight of the edge \(\left\{ i, j\right\}\). This graph together with the weights determines the signs of the off diagonal elements, and so we are interested in how we can reconstruct the weights from the principal minors.
+Finally we define the \emph{sign} \(\operatorname{sgn}(C)\) of a cycle \(C = (S, \tilde E)\) to be \[\operatorname{sgn}(C) \coloneqq\prod_{e\in \tilde E}w_e.\] It will become important later to consider this sign function on the cycle space and thus we note that this definition corresponds to
 \[\operatorname{sgn}(x(C)) \coloneqq \prod_{e\in E} w_e^{x(C)_e}.\]
-Note that this is a group homomorphism from the cycle space \(\mathcal C\) to \(\left\{ \pm1\right\}\) and therefore it is uniquely determined by its value on a generator, for example on a shortest maximal cycle basis.
+Note that this is a group homomorphism from the cycle space \(\mathcal C\) to \(\left\{ \pm1\right\}\) and therefore it is uniquely determined by its values on a generator, for example on a shortest maximal cycle basis.
 \end{emp}
 
 \begin{prop}[Principal minors of simple chordless cycles]
@@ -272,8 +276,11 @@ Let \(C = (S, E(S))\) be a simple and chordless cycle. Then the principal minor 
 \end{equation}
 \end{prop}
 \begin{proof}
-Let \(k\coloneqq \left\lvert S \right\rvert\). Then by Leibniz formula we have
-\[\Delta_S = \sum_{\sigma\in S_k} \operatorname{sgn}(\sigma) \prod_{i\in S} K_{i\sigma(i)} \]
+Let \(k\coloneqq \left\lvert S \right\rvert\). Then by the Leibniz formula we have
+\begin{equation}\label{leib}
+\Delta_S = \sum_{\sigma\in S_k} \operatorname{sgn}(\sigma) \prod_{i\in S} K_{i\sigma(i)}
+\end{equation}
+
 where \(S_k\) is the set of permutations of \(S\). Note that since the cycle is chordless, the product is only non trivial if \(\left\{ i, \sigma(i)\right\}\in E(S)\) for all \(i\in S\). Since \(C\) is a simple cycle, those permutations consist exactly of the pairing of \(S\) or the two shifts of the set \(S\) along the cycle in both directions. Those correspond exactly to the summands in \eqref{pmcl}.
 
 To see this, we fix a permutation \(\sigma\) such that \(\left\{ i, \sigma(i)\right\}\) always forms an edge in \((S, E(S))\). We note that every vertex \(i\in S\) has two possible images which are exactly the endpoint of its two edges, cf. Figure \ref{pm}.
@@ -304,17 +311,17 @@ To see this, we fix a permutation \(\sigma\) such that \(\left\{ i, \sigma(i)\ri
 \end{tikzpicture}
 \caption{An easy example for the two kinds of permutations of a chordless simple cycle that maps vertices to neighbors.}
 \end{figure}
-Lets assume it is mapped to \(j\in S\), then \(j\) has again two possible images under \(\sigma\) namely \(i\) and a second vertex \(k\in\mathcal Y\). If \(j\mapsto i\), no other vertex can be mapped to \(i\) or \(j\), however some other items can be swapped in the same way. The permutations of this form correspond exactly to the pairings of \(S\) and are represented in the first sum in \eqref{pmcl}. If however \(j\) is not mapped back to \(i\) but rather to its other neighbor \(k\), then \(k\) can’t get mapped back to \(j\) since \(\sigma\) is injective. Thus, it has to be mapped to its other neighbor \(l\in\mathcal Y\). Through a repetition of this argument shows that this induces until \(i\) is reached again. Since the cycle is simple this path exhausts the entire cycle. The factor \(2\) is due to the fact that this shift of the indices can be done into either direction.
+Lets assume it is mapped to \(j\in S\), then \(j\) has again two possible images under \(\sigma\) namely \(i\) and a second vertex \(k\in\mathcal Y\). If \(j\mapsto i\), no other vertex can be mapped to \(i\) or \(j\), however some other items can be swapped in the same way. The permutations of this form correspond exactly to the pairings of \(S\) and are represented in the first sum in \eqref{pmcl}. If however \(j\) is not mapped back to \(i\) but rather to its other neighbor \(k\), then \(k\) can’t get mapped back to \(j\) since \(\sigma\) is injective. Thus, it has to be mapped to its other neighbor \(l\in\mathcal Y\). A repetition of this argument shows that this induces a cascade of mappings from vertices to their neighbor until \(i\) is reached again. Since the cycle is simple this path exhausts the entire cycle. The factor \(2\) is due to the fact that this shift of the indices can be done into either direction.
 %A repetition of this argument shows that this chain of mappings has to continue until \(i\) is reached again. Since the cycle is chordless 
 \end{proof}
 
-\begin{prop}[Sign determines principals minors]
+\begin{prop}[Sign determines principal minors]
 The knowledge of all principal minors up to size two and the sign function
 \[\operatorname{sgn}\colon\mathcal C\to\left\{ \pm1\right\}\]
 completely determines all principal minors of \(K\).
 \end{prop}
 \begin{proof}
-Let \(S\subseteq\left\{ 1, \dots, N\right\}\) be arbitrary. We will again work with the expression \eqref{pmcl} of the principal minor \(\Delta_S\) and fix one permutation \(\sigma\). We can assume without loss of generality that \(\left\{ i, \sigma(i)\right\}\in E_K\) because the product it trivial otherwise. Since we know the absolute values of the off diagonal elements and the diagonal elements from the principal minors up to size two, it suffices to express the sign
+Let \(S\subseteq\left\{ 1, \dots, N\right\}\) be arbitrary. We will again work with the expression \eqref{leib} of the principal minor \(\Delta_S\) and fix one permutation \(\sigma\). We can assume without loss of generality that \(\left\{ i, \sigma(i)\right\}\in E_K\) because the product it trivial otherwise. Since we know the absolute values of the off diagonal elements and the diagonal elements from the principal minors up to size two, it suffices to express the sign
 \begin{equation}\label{e3.2}
 \prod_{i\in S} \operatorname{sgn}(K_{i\sigma(i)})
 \end{equation}

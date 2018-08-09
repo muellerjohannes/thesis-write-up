@@ -58,10 +58,12 @@
 \setlength{\cftchapnumwidth}{10mm}
 \tableofcontents
 \cleardoublepage
-\pagenumbering{arabic}
 
 \include{nomenclature}
-\printnomenclature[2.5cm]{}
+%\printnomenclature[2.5cm]{}
+
+\pagenumbering{arabic}
+%\setcounter{page}{2}
 
 \input{introduction}
 
@@ -80,6 +82,8 @@
 \input{summary}
 
 \input{appendix}
+
+\printnomenclature[2.5cm]{}
 
 \clearpage
 \nocite{*}

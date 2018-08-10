@@ -12,7 +12,7 @@ where \(f(x| \theta)\) is the density with respect to \(\mu\) of the \(X_i\). In
 \[\mathcal L(\theta) = \log\!\big(f(x_1, \dots, x_n| \theta)\big) = \sum_{i=1}^n \log\!\big(f(x_i| \theta)\big) \]
  since this transforms the product over functions into a sum. However, this is clearly equivalent to maximising the density since the logarithm is strictly monotone.
 
-\begin{emp}[Definition of the MLE]
+\begin{defi}[Maximum likelihood estimator]
 Let \(\Theta\) be a set, which we call the \emph{parameter set} and let
 \[\mathcal F = \Big\{ f(\cdot| \theta) \colon X\to [0, \infty) \;\big\lvert\; \theta\in\Theta \Big\}\]
 be a family of probability densities with respect to some measure \(\mu\) on some measurable space \(X\). We call the function \[\mathcal L\colon\Theta\to[-\infty, 0]\] the \emph{log likelihood function} and its maximiser
@@ -20,7 +20,7 @@ be a family of probability densities with respect to some measure \(\mu\) on som
  \hat \theta_n\coloneqq \underset{\theta\in\Theta}{\arg\max} \mathcal L(\theta) 
  \end{equation}
 the \emph{maximum likelihood estimator} or short MLE.
-\end{emp}
+\end{defi}
  
  
 %We call the function \(\mathcal L\) the \emph{log likelihood function} and we denote its domain which is just the set of all parameters we wish to consider by \(\Theta\). Further, we call its maximiser

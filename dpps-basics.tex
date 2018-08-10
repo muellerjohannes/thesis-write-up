@@ -267,6 +267,8 @@ Because we will neglect sDPPs in the following, we should quickly mention the re
 One of the greatest challenges in the application of discrete point processes is that they are probability measures over an exponentially large set, namely the powerset \(2^{\mathcal Y}\) which has cardinality \(2^N\). Determinantal point processes have the benefit that they describe this distribution through the matrix \(K\) which consists of only \(N^2\) parameters. This reduction of the number of parameters plays a central role in making a lot of operations possible in an computationally efficient way. However, it is not only the relatively small amount of parameters that lead to this, but also the structure of the determinant itself that leads to analytical expressions for a lot of quantities like the normalisation constant in \eqref{e2.3}.
 In this section we will focus on the simulation of DPPs and see how the special properties of the determinant play a central role here as well. In the end we will give a short overview of further techniques that can improve the performance of this algorithm.
 
+It should be mentioned that this section can be skipped if one is solely interested in the estimation of the parameters of DPPs.
+
 %But before we can do this we will present a famous identity for integrals -- or sums -- of the product of determinants.
 
 \subsection{Cauchy-Binet type identities}

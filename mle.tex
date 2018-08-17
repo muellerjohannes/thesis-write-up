@@ -26,7 +26,7 @@ the \emph{log likelihood function} associated with the observations \(x_1, \dots
  \begin{equation}\label{mledef}
  \hat \theta_n\coloneqq \underset{\theta\in\Theta}{\arg\max} \mathcal L(\theta)
  \end{equation}
-the \emph{maximum likelihood estimator} or short MLE.
+the \emph{maximum likelihood estimator} or short \emph{MLE}.
 \end{defi}
  
  
@@ -102,9 +102,9 @@ The log likelihood function is now given by
 \end{emp}
 Using \eqref{e2.3} we get the expression
 \begin{equation}\label{e3.1}
-\mathcal L(L) = \sum\limits_{i=1}^n\log\left( \det(L_{\mathbf Y_i})\right) - n \log\left( \det(L+I)\right).
+\mathcal L(L) = \sum\limits_{i=1}^n\log\left( \det(L_{\mathbf Y_i})\right) - n \log\left( \det(L+I)\right)
 \end{equation}
-Although the parametric family that arises from the elementary kernels \(L\) gives a high variety of different associated \(L\)-ensembles, it will also make the computation of the MLE more complex. Therefore, we will also consider smaller classes of \(L\)-ensembles, which will decrease the flexibility of the model, but make computation more efficient.
+which is upper semi-continuous in \(L\). Although the parametric family that arises from the elementary kernels \(L\) gives a high variety of different associated \(L\)-ensembles, we will see that it makes the computation of the MLE more complex. Therefore, we introduce smaller classes of \(L\)-ensembles, which will decrease the flexibility of the model, but make computation more efficient.
 
 \subsubsection*{MLE of the qualities}
 
@@ -163,7 +163,7 @@ where we regard \(\mathcal L\) again as function of \(\theta\). We will assume t
 It shall be noted that although this log linear model seems to be a harsh restriction, it isnÕt a restriction at all, at least theoretically. If we take \(M=N\) and choose \(f_i\) to be the unit vectors in \(\mathbb R^N\), then this is just a logarithmic transformation of the parameters and thus the maximal likelihood that can be achieved with this model does not change. In practice it will be of interest to work with rather low dimensional parameters \(\theta\), because if the ground set \(\mathcal Y\) gets large, optimisation in \(\mathbb R^N\) can be inefficient. In this case of course the maximal likelihood under the optimal parameter may decrease, however, the approximation of the optimal parameter might become possible again which justifies this sacrifice.
 \end{rem}
 
-Under the assumption of a log linear model for the qualities the individual terms of the log likelihood function take the form
+Again, we can express the log likelihood function explicitely and note that it is upper semi-continuous. In fact, it takes the form % Under the assumption of a log linear model for the qualities the individual terms of the log likelihood function take the form
 \begin{equation}\label{e3.31}
 2\cdot\theta^T\sum\limits_{i\in Y}f_{i} + \det(\hat{S}_{Y}) - \log\left( \sum_{A\subseteq\mathcal Y} \exp\left(2\cdot \theta^T\sum_{i\in A}f_{i}\right)\det(\hat{S}_A) \right).
 \end{equation}
@@ -282,6 +282,29 @@ and we have seen in the proof of \ref{PosMLE} that the log likelihood function t
 %\subsubsection*{MLE for the repulsiveness parameter}
 
 \subsubsection*{MLE with regularisation}
+
+We have seen that the probability that the MLE exists tends to one if the sample size goes to infinity. However, it might not be possible in practice to obtain larger data sets and therefore we introduce a variation of maximum likelihood estimation which forces the existence of a maximiser. The idea is to add a coercive function to the log likelihood function such that the sum is coercive and to optimise this sum.
+We will work with one of the three parametric models for DPPs.  %and denote the 
+
+\begin{defi}[Regularised MLE]
+Let the setting be the same as for the normal maximum likelihood estimation. Further we assume that we have given a function \(F\colon\Theta\to[-\infty, 0]\) which we call the \emph{regulariser}. The \emph{regularised maximum likelihood estimator} is the maximiser
+\[ \hat \theta_n\coloneqq \underset{\theta\in\Theta}{\arg\max} \big( \mathcal L(\theta) + F(\theta)\big).\]
+%We call \(F\) the \emph{regulariser}.
+\end{defi}
+
+\begin{rem}
+\begin{enumerate}
+\item The regularised maximum likelihood approach is clearly an extension of the classical approach since one can simply set \(F=0\).
+\item If the regulariser is upper semi-continuous and coercive, then the regularised MLE always exists. In fact, \(\mathcal L\le0\) implies that \(\mathcal L + F\) is coercive and also upper semi-continuous since the log likelihood functions are upper semi-continuous for all parametric models and \ref{dirmet} yields the assertion. %In the case of  
+\item The regularised MLE and the MLE can agree but donÕt necessarily agree. 
+\item The regulariser can be used to encode any prior conceptions one hase. For example one can use the regulariser to change the parameter set. Indeed, if we want to consider all matrices \(\mathbb R^{N\times N}\) as a parameter space instead of only the symmetric positive semi-definite matrices, we can simply set
+\[F(L)\coloneqq\begin{cases} \;0 \quad&\text{if } L \text{ symmetric and positive semi-definite} \\ -\infty &\text{otherwise}\end{cases}\]
+which is equivalent to the MLE on the smaller parameter space.
+The advantage of \(\mathbb R^{N\times N}\) as a parameter space is that one can make use of pre-implemented optimisation algorithms, since they are usually defined over real vector spaces.
+\item Choice of the regulariser.
+\item Regularisation of noise.
+\end{enumerate}
+\end{rem}
 
 \subsection{Consistency of the maximum likelihood estimators}
 
@@ -414,6 +437,10 @@ for \(\varepsilon\) small enough.
 
 %Frequently the first assumption of the previous theorem is replaced by the stronger postulation that \(L_n\) should converge towards \(L\) uniformly in probability, namely
 %\[\mathbb P\Big( \left\lVert L_n - L \right\rVert_\infty\le\varepsilon\Big) \xlongrightarrow{n\to\infty} 1 \quad\text{for all } \varepsilon>0. \]
+
+\begin{rem}
+The theorem above might seem artificially general at first, but one has a high interest in consistency results at least for extremal estimators in metric spaces. Those can be used to deduce the consistency for the estimation of a function in a function space.
+\end{rem}
 
 If we want to apply the previous result to the case of maximum likelihood estimation we need to set
 \[F_n(\theta) \coloneqq \frac1n\sum_{i=1}^n\log(f(X_i| \theta)).\]
@@ -633,7 +660,11 @@ Obviously in the proof of the consistency of the whole elementary kernel \(L\) o
 
 \subsubsection*{Regularised MLE}
 
-\todo{should not be consistent?}
+One can not make a general statement about the consistency of regularised MLE. On the one hand they can agree with the classical MLE, if for example \(F=0\) or if \(F\) is zero on an open set containing the actual parameter \(\theta_0\) and \(-\infty\) everywhere else. In this case the arguments above show the consistency of the regularised version of the MLE.
+
+However, it is straight forward to construct examples where the regularised MLE is not consistent. For example if the regulariser \(F\) is equal to \(-\infty\) on a neighborhood of \(\theta_0\), then none of the regularised estimators will lie in this neighborhood and hence the estimations will not converge towards \(\theta_0\).
+
+%\todo{should not be consistent?}
 
 \subsection{Approximation of the MLE}
 
@@ -660,11 +691,11 @@ To see that the log linear likelihood function is not concave, we may consider t
 \[\mathcal L(q I) = \sum\limits_{i = 1}^n \log(q^{\left\lvert Y_i \right\rvert}) - n \log((1 + q)^N) = \sum\limits_{i = 1}^n \left\lvert Y_i \right\rvert \log(q) - n N \log(1 + q) \] %= \log(q) \cdot \left( \sum\limits_{i = 1}^n \left\lvert Y_i \right\rvert - n\cdot N\right)\]
 which is not concave in general. Unfortunately there are no algorithms that can approximate the global maximum of a non concave function \cite{vavasis1995complexity} and it also has been conjectured in \cite{kulesza2012learning} that no such algorithm exists for the log likelihood of the elementary kernel. Nevertheless one can still use optimisation techniques to obtain local maximisers of the log likelihood and indeed \cite{mariet2015fixed} proposes a fixed point iteration to do this.
 
-In fact the non concavity can be seen without any computations at all. If we have a maximiser \(L\) of the log likelihood function and take another matrix \(\tilde L\) that is determinantally equivalent, then obviously the log likelihood of the two kernels agree. Hence, we can never expect to get a unique maximiser of the log likelihood function. 
+In fact the non concavity can be seen without any computations at all. If we have a maximiser \(L\) of the log likelihood function and take another matrix \(\tilde L\) that is determinantally equivalent, then obviously the log likelihood of the two kernels agree. Hence, we can never expect to get a unique maximiser of the log likelihood function. However it is not straight forward whether there are some critical points that are different to the global maximisers. If this is not the case, common optimisation techniques can be exploit since they will converge to a critical point.
 %Hence, a direct maximisation is a slightly missleading approach and it could be more sensible to work with equivalence classes of kernels that have the same principle minors that appear in \eqref{loglikagain}. However, it is not clear how this quotient space would look like and what structural properties it has, let alone whether one can efficiently maximise a function over it.
 %recent\todo{does this make any sense at all?}
 %\todo{comment on the argmax function}
-\todo{Comment on the question whether critical points are global maximisers}
+%\todo{Comment on the question whether critical points are global maximisers}
 
 Similar arguments show that the log likelihood function for the qualities is non concave and therefore hard to maximise.
 
@@ -843,46 +874,46 @@ where \(K(\theta)\) is the marginal kernel arising from the parameter \(\theta\)
 
 %\subsection{Learning the repulsiveness}
 
-\subsection{A toy example: Learning the log linearity constant of a spatial DPP}
+%\subsection{A toy example: Learning the log linearity constant of a spatial DPP}
 
-We will continue the example of the DPP on a two dimensional grid in the unit square from the previous chapter. For this we note that for a \(100\times100\) grid the evaluation of the elementary probabilities 
-\[ f(A|\theta) = \frac{\det(L(\theta)_A)}{\det(L(\theta) + I)} \]
-would involve the calculation of a determinant of a \(10^4\times 10^4\) matrix and even the storage of such a matrix would pose a problem since it consists of \(10^8\) numbers. If the storage of a real number is done in the double-precision floating-point format, it takes \(64\) per number and the space required to store the entire matrix is \(64\times 10^8\si{bit} = 800\si{MB}\), so almost one Gigabyte.\footnote{One byte is defined to be \(8\) bits. The units of Megabytes and Gigabytes are defined in the familiar way and denoted by \(\si{MB}\) and \(\si{GB}\) respectively.} This would make just the computation of the log likelihood function very time consuming, let alone its maximisation. We will decrease the size %of the grid to \(30\times30\)
-for computational reasons, but the ideas remain exactly the same.
+%We will continue the example of the DPP on a two dimensional grid in the unit square from the previous chapter. For this we note that for a \(100\times100\) grid the evaluation of the elementary probabilities 
+%\[ f(A|\theta) = \frac{\det(L(\theta)_A)}{\det(L(\theta) + I)} \]
+%would involve the calculation of a determinant of a \(10^4\times 10^4\) matrix and even the storage of such a matrix would pose a problem since it consists of \(10^8\) numbers. If the storage of a real number is done in the double-precision floating-point format, it takes \(64\) per number and the space required to store the entire matrix is \(64\times 10^8\si{bit} = 800\si{MB}\), so almost one Gigabyte.\footnote{One byte is defined to be \(8\) bits. The units of Megabytes and Gigabytes are defined in the familiar way and denoted by \(\si{MB}\) and \(\si{GB}\) respectively.} This would make just the computation of the log likelihood function very time consuming, let alone its maximisation. We will decrease the size %of the grid to \(30\times30\)
+%for computational reasons, but the ideas remain exactly the same.
 %We will recall the definition of the model and also give the exact values of the parameters chosen.
 
-\begin{emp}[Setting]
-We set
-\[\mathcal Y \coloneqq 29^{-1} \left\{ 0, \dots, 29\right\}^2 \]%\left\{ (i, j) \mid 39\cdot  \right\} \]
-and obtain a \(30\times 30\) grid in the unit square. We again choose \(\mathcal R \coloneqq \mathcal Y \) and \(f\) to be %the normal density with mean \(0\) and variance \(10>0\). Then we choose the similarity feature vectors to be 
-\[f(x) \coloneqq \exp( - 8\cdot x^2) \]
-and set
-\[(\phi_i)_j\propto f(\left\lVert i - j \right\rVert) \quad \text{for } i, j\in\mathcal Y.\]
-Further we choose the qualities to be be decreasing with the distance from the centre \(m\) of the and set
-\[q_i\coloneqq e^6 \cdot \exp\big(-10 \left\lVert i - m \right\rVert\big) = \exp\big( - 10\left\lVert i - m \right\rVert + 6\big). \]
-\end{emp}
+%\begin{emp}[Setting]
+%We set
+%\[\mathcal Y \coloneqq 29^{-1} \left\{ 0, \dots, 29\right\}^2 \]%\left\{ (i, j) \mid 39\cdot  \right\} \]
+%and obtain a \(30\times 30\) grid in the unit square. We again choose \(\mathcal R \coloneqq \mathcal Y \) and \(f\) to be %the normal density with mean \(0\) and variance \(10>0\). Then we choose the similarity feature vectors to be 
+%\[f(x) \coloneqq \exp( - 8\cdot x^2) \]
+%and set
+%\[(\phi_i)_j\propto f(\left\lVert i - j \right\rVert) \quad \text{for } i, j\in\mathcal Y.\]
+%Further we choose the qualities to be be decreasing with the distance from the centre \(m\) of the and set
+%\[q_i\coloneqq e^6 \cdot \exp\big(-10 \left\lVert i - m \right\rVert\big) = \exp\big( - 10\left\lVert i - m \right\rVert + 6\big). \]
+%\end{emp}
 
 %The exact constants in the function \(f\) and the qualities \(q_i\) where adjusted so that the repellent property of the DPP is visible, a drop off of the qualities towards the corners is visible and a reasonable cardinality of the DPP is obtained. 
-The goal is to estimate the two parameters that characterise the qualities, which are \(e^6\) and \(-10\). In order to do this we note that the qualities are given by a log linear model since we have
-\[q_i = \exp(\theta_0^Tf_i) \quad \text{where } f_i = \begin{pmatrix}
-\left\lVert i - m \right\rVert \\ 1
-\end{pmatrix} \text{ and } \theta_0 = \begin{pmatrix}
--10 \\ 6
-\end{pmatrix}.\]
-Hence we should be able to estimate this log linearity constant \(\theta\in\mathbb R^2\) based on some data that is distributed according to this DPP. In fact we generate \(n=8\) samples from the DPP by the sampling algorithm introduced in the second chapter and define the log likelihood function associated with those observations and the actual similarity kernel \(S_{ij} = \phi_i^T\phi_j\). Then we maximise it over \(\mathbb R^2\) using a pre-implemented optimisation algorithm in R. The resulting estimate was
-\begin{equation}\label{mletheta}
-\hat\theta = \begin{pmatrix}
--10.32045 \\   6.07648
-\end{pmatrix}
-\end{equation}
-but from the consistency results we already knew that it should get close to the actual parameter for large sample sizes. Although this is just a controlled toy example, this procedure can easily be generalised to real world settings. However, one has to face the following two major challenges:
-\begin{enumerate}
-\item In practice one will not know the feature vectors \(f_i\) like we did, so one will have to model those. Usually one would put all quantitative properties into this vector that one would believe could have an effect on the quality of an item. For example if the DPP should model the picnic positions of people in a park one could argue that the quality, i.e. the popularity of a picnic spot depends amongst other things on the distance to the next trash bin, the next toilet and overall noise level. Although one thinks that those parameters can play a role, we could not argue a priori whether they have a positive or a negative impact. For example if the toilets are nice and clean it might be favourable to be closer to them, if they are dirty it might be better to be far away from them in order to avoid their unpleasant odour. However, one does not have to know this straight away as this effect is determined by the according log linearity constant and hence can be estimated in the above manner.
-\item Secondly and maybe even more importantly the actual similarity kernel is also unknown and hence one also has to come up with a reasonable model for it. Either this can be done by purely relying on models created by people familiar with the real world phenomenon that is being investigated, or one could also try to estimated the similarity kernel itself. However, estimating the whole similarity kernel is equivalent to a maximum likelihood estimation of the whole elementary kernel \(L\) and we have seen in the previous discussion about computability that this results in an optimisation problem that can not be solved efficiently. However, we will propose a different, possibly more practical approach in the next section, but it still remains to be seen whether this will actually give any benefits.
+%The goal is to estimate the two parameters that characterise the qualities, which are \(e^6\) and \(-10\). In order to do this we note that the qualities are given by a log linear model since we have
+%\[q_i = \exp(\theta_0^Tf_i) \quad \text{where } f_i = \begin{pmatrix}
+%\left\lVert i - m \right\rVert \\ 1
+%\end{pmatrix} \text{ and } \theta_0 = \begin{pmatrix}
+%-10 \\ 6
+%\end{pmatrix}.\]
+%Hence we should be able to estimate this log linearity constant \(\theta\in\mathbb R^2\) based on some data that is distributed according to this DPP. In fact we generate \(n=8\) samples from the DPP by the sampling algorithm introduced in the second chapter and define the log likelihood function associated with those observations and the actual similarity kernel \(S_{ij} = \phi_i^T\phi_j\). Then we maximise it over \(\mathbb R^2\) using a pre-implemented optimisation algorithm in R. The resulting estimate was
+%\begin{equation}\label{mletheta}
+%\hat\theta = \begin{pmatrix}
+%-10.32045 \\   6.07648
+%\end{pmatrix}
+%\end{equation}
+%but from the consistency results we already knew that it should get close to the actual parameter for large sample sizes. Although this is just a controlled toy example, this procedure can easily be generalised to real world settings. However, one has to face the following two major challenges:
+%\begin{enumerate}
+%\item In practice one will not know the feature vectors \(f_i\) like we did, so one will have to model those. Usually one would put all quantitative properties into this vector that one would believe could have an effect on the quality of an item. For example if the DPP should model the picnic positions of people in a park one could argue that the quality, i.e. the popularity of a picnic spot depends amongst other things on the distance to the next trash bin, the next toilet and overall noise level. Although one thinks that those parameters can play a role, we could not argue a priori whether they have a positive or a negative impact. For example if the toilets are nice and clean it might be favourable to be closer to them, if they are dirty it might be better to be far away from them in order to avoid their unpleasant odour. However, one does not have to know this straight away as this effect is determined by the according log linearity constant and hence can be estimated in the above manner.
+%\item Secondly and maybe even more importantly the actual similarity kernel is also unknown and hence one also has to come up with a reasonable model for it. Either this can be done by purely relying on models created by people familiar with the real world phenomenon that is being investigated, or one could also try to estimated the similarity kernel itself. However, estimating the whole similarity kernel is equivalent to a maximum likelihood estimation of the whole elementary kernel \(L\) and we have seen in the previous discussion about computability that this results in an optimisation problem that can not be solved efficiently. However, we will propose a different, possibly more practical approach in the next section, but it still remains to be seen whether this will actually give any benefits.
 % a more subtle approach would be to assume that the diversity feature vectors \(\phi_i\) have the form 
 %\[(\phi_i)_j\propto f( \sigma \left\lVert i - j \right\rVert) \quad \text{for } i, j\in\mathcal Y\]
 %and then try to estimate the parameter \(\sigma\). With this approach one would only have to estimate one additional parameter instead of the \(N^2 = 900\) parameters of the similarity kernel \(S\). However, with this approach the log likelihood function is likely to be non concave and hence it remains to investigate whether there are any other efficient optimisation techniques for it. \todo{think more towards this direction}
-\end{enumerate}
+%\end{enumerate}
 
 \subsection{Further learning approaches}
 

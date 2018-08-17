@@ -17,7 +17,7 @@ of \(\mathcal Y\), i.e. a random variable with values in the powerset \(2^{\math
 \end{emp}
 
 \begin{defi}[Determinantal point process]
-We call \(\mathbb P\) a \emph{determinantal point process}, or in short a DPP, if we have
+We call \(\mathbb P\) a \emph{determinantal point process}, or in short a \emph{DPP}, if we have
 \begin{equation}\label{e2.1}
 \mathbb P(A\subseteq \mathbf Y) = \det(K_A) \quad \text{for all } A\subseteq \mathcal Y
 \end{equation}
@@ -26,7 +26,7 @@ where \(K\) is a symmetric matrix indexed by the elements in \(\mathcal Y\) and 
 of \(K\) indexed by the elements of \(A\). We call \(K\) the \emph{marginal kernel} of the DPP. If the marginal kernel \(K\) is diagonal, we call \(\mathbb P\) a \emph{Poisson point process}.
 \end{defi}
 
-We note that all principal minors\footnote{The \emph{principle minors} of \(K\) are the determinants of the submatrices \(K_A\) for \(A\subseteq \mathcal Y\).} of \(K\) are necessarily non negative and Sylvester’s criterion implies that \(K\) is positive semi-definite.\footnote{\(K\) is called \emph{positive semi-definite} if \(x^TKx\ge0\) for all \(x\in\mathbb R^{\mathcal Y}\). The Sylvester criterion states that a matrix is positive semi-definite if and only if all principle minors are non negative.} Further it can be shown (cf. \cite{borodin2009determinantal}) that also the complement of a DPP is a DPP with marginal kernel \(I-K\) where \(I\) is the identity matrix, i.e.
+We note that all principal minors\footnote{The \emph{principle minors} of \(K\) are the determinants of the submatrices \(K_A\) for \(A\subseteq \mathcal Y\).} of \(K\) are necessarily non negative and Sylvester’s criterion implies that \(K\) is positive semi-definite.\footnote{\(K\) is called \emph{positive semi-definite} if \(x^TKx\ge0\) for all \(x\in\mathbb R^{\mathcal Y}\). The Sylvester criterion states that a matrix is positive semi-definite if and only if all principle minors are non negative.} Further it can be shown \footnote{This follows from equation (2.3) in \cite{borodin2009determinantal}.} that also the complement of a DPP is a DPP with marginal kernel \(I-K\) where \(I\) is the identity matrix, i.e.
 \[\mathbb P(A\subseteq\mathbf Y^c) = \det(I_A-K_A).\]
 Thus, we can conclude \(I-K\ge0\) and obtain \(0\le K\le I\). This actually turns out to be sufficient for \(K\) to define a DPP through \eqref{e2.1} which we will see in the fourth section of this chapter.%(cf. \cite{kulesza2012determinantal}).\todo{why? explain!}{ }
 
@@ -64,7 +64,7 @@ Let us now introduce an important subclass of DPPs, namely the ones where not on
 \begin{equation}\label{e2.2.1}
 L\coloneqq K(I-K)^{-1}
 \end{equation}
-which specifies the elementary probabilities since one can check \todo{make reference to appendix}
+which specifies the elementary probabilities since one can check \footnote{This is done in full detail in \cite{kulesza2012learning} and we will not repeat those arguments here.}% \todo{make reference to appendix}
 \begin{equation}\label{e2.3}
 \mathbb P(A=\mathbf Y) = \frac{\det(L_A)}{\det(I+L)} \quad\text{for all } A\subseteq\mathcal Y.
 \end{equation}
@@ -230,7 +230,7 @@ The straight forward procedure to obtain a probability distribution over all sub
 \begin{emp}[Structured DPPs]
 %\todo{Say something about number of parameters}
 We call a DPP \emph{structured DPP} or short sDPP if the ground set is the cartesian product of some other set \(\mathcal M\), which we will call the \emph{set of parts}, i.e. if we have
-\[\mathcal Y = \mathcal M^R = \Big\{ y_i = (y_i^r)_{r = 1, \dots, R} \;\big\lvert\; i = 1, \dots, N\Big\}\]
+\[\mathcal Y = \mathcal M^R = \Big\{ y_i = (y_i^r)_{r = 1, \dots, R} \in\mathcal M^R\;\big\lvert\; i = 1, \dots, N\Big\}\]
 where \(R\) is a natural number, \(M = \left\lvert \mathcal M \right\rvert\) and \(N = M^R\). The quality diversity decomposition of \(L\) take the form 
 \[L_{ij} = q(y_i) \phi(y_i)^T \phi(y_j) q(y_j)\]
 and since \(N = M^R\) is typically very big, it is impractical to define or store the quality and diversity features for every item \(y_i\in\mathcal Y\). To deal with this problem we will assume that they admit factorisations and are thus a combination of only a few qualities and diversities.

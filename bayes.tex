@@ -67,6 +67,20 @@ A further advantage over the MLE is that it might be possible to computationally
 This can often not be performed efficiently but the Markov chain Monte Carlo methods introduced later will yield an approximation of the posterior without the need to compute the normalisation constant.
 \end{emp}
 
+\begin{emp}[Regularisation through the prior]
+The prior density is very closely related to the regulariser introduced in the section about maximum likelihood estimation. In fact the mode of the posterior \(f_{\Theta|X}\) is nothing else but the maximiser of 
+\[\log(f_{\Theta|X}) = \mathcal L + F\]
+where \(F = \log(f_\theta)\) and hence nothing else but a regularised MLE. In fact if \(F\) is a regularisation and \(\exp(F)\) is integrable with respect to \(\mu\), then one can choose \(f_\Theta\propto \exp(F)\) as a prior density. Hence the proposition of a prior and a regulariser are equivalent in a wide variety of cases, but again, the posterior density encodes much more information than just the location of its mode which is the regularised MLE.
+
+\todo{regularisation of noise}
+
+%We will assume that we are in the setting of the estimation of the log linearity constant \(\theta\in\mathbb R^M\) and we will define the prior density to be the standard normal density on \(\mathbb R^M\). Further let \(Y_1, \dots, Y_n\) be some data such that the MLE \(\hat\theta_n\) does not consist. Recall that if this is the case, one of the items \(i\in\mathcal Y\) is either present in none or in all of the observations and hence the quality estimation would (formally) be \(0\) or \(\infty\). Therefore, the respective log linearity constant might not exist in \(\mathbb R^M\).
+
+%Of course we have seen in the section about coercivity of the log likelihood functions that the probability for this to happen tends to zero with increasing sample size, however in practice it might not be possible to obtain more samples. In this scenario the maximum likelihood approach fails but the posterior density \eqref{post2} still exists. One way of explaining this is that the prior assigns small values to parameters far away from zero. Hence, the prior can be seen as a kind of regularisation since it penalises parameters that lead to very irregular models. In our case irregular means that the log linearity constant is big which implies that one quality is either very high or close to zero. Having a high quality corresponds to the model almost not being a \(L\)-ensemble any more and having quality zero means that the model can not be expressed any more through log linear qualities.
+
+%In similar fashion a suitable prior distribution might be used to make the parameter estimation more stable in the case that the data is perturbed by some noise. However, this would need some further investigation. %\todo{work on this.}
+\end{emp}
+
 %\begin{enumerate}
 %\item explain general procedure and say something about intuition
 %\item explain the benefits, namely:
@@ -101,13 +115,15 @@ Unfortunately the normalisation constant
 \end{equation}
 can neither be computed analytically nor numerically in an efficient way since the evaluation of this density involves the computation of the determinant of \(N\times N\) matrices. This problem can be solved through the powerful method of Markov chain Monte Carlo simulation that allow to approximate a distribution with only the knowledge of its unnormalised density. But before we introduce those methods, we quickly explain how the Bayesian approach offers a possibility of regularisation and hence can be used to increase the noise sensitivity of the parameter estimation.
 
-\begin{emp}[Regularisation through the prior]
-We will assume that we are in the setting of the estimation of the log linearity constant \(\theta\in\mathbb R^M\) and we will define the prior density to be the standard normal density on \(\mathbb R^M\). Further let \(Y_1, \dots, Y_n\) be some data such that the MLE \(\hat\theta_n\) does not consist. Recall that if this is the case, one of the items \(i\in\mathcal Y\) is either present in none or in all of the observations and hence the quality estimation would (formally) be \(0\) or \(\infty\). Therefore, the respective log linearity constant might not exist in \(\mathbb R^M\).
+%\begin{emp}[Regularisation through the prior]
+%The prior density is very closely related to the regulariser introduced in the section about maximum likelihood estimation. In fact 
 
-Of course we have seen in the section about coercivity of the log likelihood functions that the probability for this to happen tends to zero with increasing sample size, however in practice it might not be possible to obtain more samples. In this scenario the maximum likelihood approach fails but the posterior density \eqref{post2} still exists. One way of explaining this is that the prior assigns small values to parameters far away from zero. Hence, the prior can be seen as a kind of regularisation since it penalises parameters that lead to very irregular models. In our case irregular means that the log linearity constant is big which implies that one quality is either very high or close to zero. Having a high quality corresponds to the model almost not being a \(L\)-ensemble any more and having quality zero means that the model can not be expressed any more through log linear qualities.
+%We will assume that we are in the setting of the estimation of the log linearity constant \(\theta\in\mathbb R^M\) and we will define the prior density to be the standard normal density on \(\mathbb R^M\). Further let \(Y_1, \dots, Y_n\) be some data such that the MLE \(\hat\theta_n\) does not consist. Recall that if this is the case, one of the items \(i\in\mathcal Y\) is either present in none or in all of the observations and hence the quality estimation would (formally) be \(0\) or \(\infty\). Therefore, the respective log linearity constant might not exist in \(\mathbb R^M\).
 
-In similar fashion a suitable prior distribution might be used to make the parameter estimation more stable in the case that the data is perturbed by some noise. However, this would need some further investigation. %\todo{work on this.}
-\end{emp}
+%Of course we have seen in the section about coercivity of the log likelihood functions that the probability for this to happen tends to zero with increasing sample size, however in practice it might not be possible to obtain more samples. In this scenario the maximum likelihood approach fails but the posterior density \eqref{post2} still exists. One way of explaining this is that the prior assigns small values to parameters far away from zero. Hence, the prior can be seen as a kind of regularisation since it penalises parameters that lead to very irregular models. In our case irregular means that the log linearity constant is big which implies that one quality is either very high or close to zero. Having a high quality corresponds to the model almost not being a \(L\)-ensemble any more and having quality zero means that the model can not be expressed any more through log linear qualities.
+
+%In similar fashion a suitable prior distribution might be used to make the parameter estimation more stable in the case that the data is perturbed by some noise. However, this would need some further investigation. %\todo{work on this.}
+%\end{emp}
 
 \section{Markov chain Monte Carlo methods}
 
@@ -673,53 +689,110 @@ In the slice sampling we use the unnormalised density twice. The first time by s
 In conclusion we can express both MCMC methods exactly through those bounds as long as the bounds converge. This enables a fast simulation of the Markov chains if the unnormalised density is slow the bounds \(f_n^\pm\) are easy to compute. In the case that \(f\) is the posterior \eqref{post3} of a DPP such bounds are given in \cite{affandi2014learning} and \cite{bardenet2015inference}.
 %this decision algorithm in combination with Algorithm \ref{alg:slice-sample} gives an expression of the slice sampling Markov chain completely through the bounds \(f_n^\pm\).
 
-\section{Toy example: Estimation for the log linear model}
+\chapter{Toy example: Learning the log linearity constant of a spatial DPP}
 
-We will continue the example of the estimation of the log linearity constant from the section about maximum likelihood estimation and will see how two different priors influence the posterior of the parameter, but first we quickly recall the example.
+We will apply the MLE and the Bayesian estimation for one log linear model in a controlled environment, i.e. where the data is generated by ourselves. This will clearly show how the Bayesian approach allow to encode more information. Further we will see how the regulariser or prior affects the estimation and will quickly discuss how this impacts the noise sensitivity of the estimation.
+
+We continue the example of the DPP on a two dimensional grid in the unit square from the first chapter. For this we note that for a \(100\times100\) grid the evaluation of the elementary probabilities 
+\[ f(A|\theta) = \frac{\det(L(\theta)_A)}{\det(L(\theta) + I)} \]
+would involve the calculation of a determinant of a \(10^4\times 10^4\) matrix and even the storage of such a matrix would pose a problem since it consists of \(10^8\) numbers. If the storage of a real number is done in the double-precision floating-point format, it takes \(64\) per number and the space required to store the entire matrix is \(64\times 10^8\si{bit} = 800\si{MB}\), so almost one Gigabyte.\footnote{One byte is defined to be \(8\) bits. The units of Megabytes and Gigabytes are defined in the familiar way and denoted by \(\si{MB}\) and \(\si{GB}\) respectively.} This makes even the computation of the log likelihood function very time consuming, let alone its maximisation. Because of those computational hindrances we will decrease the size %of the grid to \(30\times30\)
+%for computational reasons,
+ but the ideas remain exactly the same.
+%We will recall the definition of the model and also give the exact values of the parameters chosen.
 
 \begin{emp}[Setting]
-We work with the \(30\times30\) grid
-\[\mathcal Y \coloneqq 29^{-1} \left\{ 0, \dots, 29\right\}^2 .\]%\left\{ (i, j) \mid 39\cdot  \right\} \]
-Further we set %\(\mathcal R \coloneqq \mathcal Y \) and
-% \(f\) to be %the normal density with mean \(0\) and variance \(10>0\). Then we choose the similarity feature vectors to be 
-%\(f(x) \coloneqq \exp( - 8\cdot x^2) \) 
-%and set
+We set
+\[\mathcal Y \coloneqq 39^{-1} \left\{ 0, \dots, 39\right\}^2 \]%\left\{ (i, j) \mid 39\cdot  \right\} \]
+and obtain a \(40\times 40\) grid in the unit square. We again choose \(\mathcal R \coloneqq \mathcal Y \) and \(f\) to be %the normal density with mean \(0\) and variance \(10>0\). Then we choose the similarity feature vectors to be 
+\[f(x) \coloneqq \exp( - 8\cdot x^2) \]
+and set
 \[(\phi_i)_j\propto f(\left\lVert i - j \right\rVert) \quad \text{for } i, j\in\mathcal Y.\]
-Finally we choose the qualities to be be decreasing with the distance from the centre \(m\) of the and set
+Further we choose the qualities to be be decreasing with the distance from the centre \(m\) of the and set
 \[q_i\coloneqq e^6 \cdot \exp\big(-10 \left\lVert i - m \right\rVert\big) = \exp\big( - 10\left\lVert i - m \right\rVert + 6\big). \]
 \end{emp}
 
-We will use the same data set consisting of \(8\) samples from this DPP like in the maximum likelihood estimation that lead to the estimation
-\[\hat\theta = \begin{pmatrix}
--10.32045 \\   6.07648
+%The exact constants in the function \(f\) and the qualities \(q_i\) where adjusted so that the repellent property of the DPP is visible, a drop off of the qualities towards the corners is visible and a reasonable cardinality of the DPP is obtained. 
+The goal is to estimate the two parameters that characterise the qualities, which are \(e^6\) and \(-10\). In order to do this we note that the qualities are given by a log linear model since we have
+\[q_i = \exp(\theta_0^Tf_i) \quad \text{where } f_i = \begin{pmatrix}
+\left\lVert i - m \right\rVert \\ 1
+\end{pmatrix} \text{ and } \theta_0 = \begin{pmatrix}
+-10 \\ 6
 \end{pmatrix}.\]
-However this time we will use the Bayesian approach and hence the posterior is given by
-\[f(\theta|A_1, \dots, A_n) \propto f_\Theta(\theta) \prod_{i=1}^n \frac{\det(L(\theta)_{A_i})}{\det(L(\theta) + I)}\]
-and will use the MH random walk presented above, although the same approach with similar considerations can be taken for the slice sampling method. In fact this is even easier in practice since one does not have to tune the proposals distributions.
 
-To do this we will impose a very conservative prior in the sense that we assume to not know the rough size of the parameter theta. Therefore, we define the prior to be a very flat normal distribution centered at the origin and with covariance \(2^{19}\cdot I\). This amounts to almost choosing a uniform distribution on the space and hence we expect to get a similar picture to Figure \ref{fig:4.1}. In order to obtain this we proceed in the following steps.
+Hence we should be able to estimate this log linearity constant \(\theta\in\mathbb R^2\) based on some data that is distributed according to this DPP. To do this we generate \(n=8\) samples \(A_1, \dots, A_n\) from the DPP using the sampling algorithm introduced in the first chapter. % and define the log likelihood function associated with those observations and the actual similarity kernel \(S_{ij} = \phi_i^T\phi_j\).
+
+\section{MLE and regularised MLE}
+
+In order to perform the maximum likelihood estimation for the log linearity constant, we need to fix a similarity kernel \(\hat S\), but since we know the exact kernel, we can simply set \(\hat S_{ij} \coloneqq \phi_i^T\phi_j\). Then we maximise the log likelihood over \(\mathbb R^2\) using a pre-implemented optimisation algorithm in R. The resulting estimate was
+\begin{equation}\label{mletheta}
+\hat\theta = \begin{pmatrix}
+-9.589945  \\ 5.725451
+\end{pmatrix}
+\end{equation}
+but from the consistency results we already knew that it should get close to the actual parameter for large sample sizes. Since we also want to investigate the effect of a regulariser, we set
+\[F(\theta)\coloneqq -\frac{\left\lVert \theta \right\rVert^2}{2^4} \]
+as a regulariser. Note that this corresponds to the prior 
+\begin{equation}\label{toyprior}
+f_\Theta(\theta) = \exp\left(-\frac{\left\lVert \theta \right\rVert^2}{2^4}\right),
+\end{equation}
+i.e. a centered Gaussian prior. Under this regularisation, the MLE was
+\[\hat\theta_r = \begin{pmatrix}
+-9.283270 \\ 5.593745
+\end{pmatrix}.\]
+It is not surprising that the entries of the regularised MLE are closer to zero, since the regulariser is built to penalise large parameter values.
+
+\section{Bayesian estimation using MCMC methods}
+
+%We will continue the example of the estimation of the log linearity constant from the section about maximum likelihood estimation and will see how two different priors influence the posterior of the parameter, but first we quickly recall the example.
+
+%\begin{emp}[Setting]
+%We work with the \(30\times30\) grid
+%\[\mathcal Y \coloneqq 29^{-1} \left\{ 0, \dots, 29\right\}^2 .\]%\left\{ (i, j) \mid 39\cdot  \right\} \]
+%Further we set %\(\mathcal R \coloneqq \mathcal Y \) and
+% \(f\) to be %the normal density with mean \(0\) and variance \(10>0\). Then we choose the similarity feature vectors to be 
+%\(f(x) \coloneqq \exp( - 8\cdot x^2) \) 
+%and set
+%\[(\phi_i)_j\propto f(\left\lVert i - j \right\rVert) \quad \text{for } i, j\in\mathcal Y.\]
+%Finally we choose the qualities to be be decreasing with the distance from the centre \(m\) of the and set
+%\[q_i\coloneqq e^6 \cdot \exp\big(-10 \left\lVert i - m \right\rVert\big) = \exp\big( - 10\left\lVert i - m \right\rVert + 6\big). \]
+%\end{emp}
+
+We will use the same data set consisting of \(8\) samples from this DPP like in the maximum likelihood estimation and will use the prior \eqref{toyprior}, since it corresponds to the regularised MLE. %that lead to the estimation
+%\[\hat\theta = \begin{pmatrix}
+%-10.32045 \\   6.07648
+%\end{pmatrix}.\]
+The posterior of the log linearity parameter is given by
+\[f(\theta|A_1, \dots, A_n) \propto f_\Theta(\theta) \prod_{i=1}^n \frac{\det(L(\theta)_{A_i})}{\det(L(\theta) + I)}\]
+and we will use the MH random walk to approximate it. % In fact this is even easier in practice since one does not have to tune the proposals distributions.
+%To do this we will impose a very conservative prior in the sense that we assume to not know the rough size of the parameter theta. Therefore, we define the prior to be a very flat normal distribution centered at the origin and with covariance \(2^{19}\cdot I\). This amounts to almost choosing a uniform distribution on the space and hence we expect to get a similar picture to Figure \ref{fig:4.1}. 
+We proceed in the following steps.
 
 \begin{emp}[Step 1: First burn in to find a starting point]
 %In the first phase we pick the origin as a starting point and choose the proposal \(f(\cdot| \theta)\) to be a Gaussian centered at \(\theta\) and with variance adjust so that an acceptance rate of roughly \(25\%-75\%\) is obtained. Usually if one is starting of at a point in a region with very low density, the variance one has to choose will be rather high.
 
 %This amounts to saying one is very coarsely exploring the parameter space by taking proposing rather large steps. 
-In the first phase we want to get a first impression of where the areas of high density might be located and hence of the rough shape of the probability distribution we try to approximate. In order to do this we simulate MH random walks with different starting positions and try to identify the regions where they get stuck since this will typically happen in areas of at least locally highest probability. We have already seen that in order to obtain a reasonable MH random walk one has to choose a suitable proposal family. We use Gaussian proposals \(f(\cdot| \theta)\) that are centered at \(\theta\) and adjust the variance via trial and error such that we obtain an acceptance rate of roughly \(25\%-75\%\).  %the proposal plays a crucial role
+In the first phase we want to find an area of high density %might be located and hence of the rough shape of the probability distribution we try to approximate. I
+and in order to do this we simulate MH random walks with different starting positions and try to identify the regions where they get stuck in. This will typically happen in areas of at least locally highest probability. We have already seen that in order to obtain a reasonable MH random walk one has to choose a suitable proposal family. We use Gaussian proposals \(f(\cdot| \theta)\) that are centered at \(\theta\) and adjust the variance such that we obtain an acceptance rate of roughly \(25\%-75\%\).  %the proposal plays a crucial role
 
 Although there is no rigorous method to choose the variance of the proposal distribution at this point we make to general observations. A very high acceptance rate hints to the fact that every proposed step is within a region of almost equal density and hence one probably has to increase the variance and hence the proposed steps. On the other hand if the acceptance rate is close to zero is usually due to the fact that one proposes mostly steps into areas of very low density and hence it is reasonable in the most cases to decrease the variance.
 
-Once the variance is adjusted to obtain a reasonable acceptance rate, one can run a first simulation, in our case of length \(10^2\) in order to see where the MH random walk is going to focus on. %We will expect this to be a region of at least locally highest density and this can be determined by 
+Once the variance is adjusted we run a first simulation of length \(2\cdot10^2\) in order to see where the MH random walk is going to focus. %We will expect this to be a region of at least locally highest density and this can be determined by 
 We take the mean value of the second half of the samples as a measure of the area where the MH random walk spends most of its time. 
-Here we neglect the first half since it is very highly dependent on the starting point and it shall be noted that if a state of the Markov chain has high density, the chances are rather high that it will stay there for a few more steps and hence this point is weighted more heavily in the mean of the random walk. Those positions are shown in Figure \ref{fig:findingstart} for different starting positions of the MH random walk.%recent\todo{do a second starting value}
+Here, we neglect the first half since it is very highly dependent on the starting point and it shall be noted that if a state of the Markov chain has high density, the chances are rather high that it will stay there for a few more steps and hence this point is weighted more heavily in the mean of the random walk. Those positions are shown in Figure \ref{fig:findingstart} for different starting positions of the MH random walk and we notice that they do not depend on the initial state of the Markov chain.\todo{do a second starting value}
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.6\textwidth]{figures/first-burn-in}
+	\includegraphics[width=0.45\textwidth]{figures/first-burn-in}
 %	\tag{1}
 	\caption{A plot of the samples of the MH random walk starting in zero. The MLE for the log linearity constant is marked by the green cross and the mean or centre of mass of the second half of the random walk by the red cross.}
 	\label{fig:findingstart}
 \end{figure}
 
-Once we have run this first phase of burn in we see that the MH random walks all centered around a similar region independent from their starting point. Hence, we can choose one point in this region as the starting point of all further MCMC simulations. One could argue that it would be reasonable to choose the MLE as a starting point since for a very flat prior distribution it should also be approximately the mode of the posterior distribution. However, since we partly motivated the Bayesian approach to be an alternative to the infeasible maximum likelihood estimation for the elementary kernel \(L\), we presented the procedure above that can also be used for the estimation of \(L\).
+Further the plots in Figure \ref{fig:MCplot} of the states of the Markov chain show that the acceptance rate drops significantly. This is a sign that we were successful in the process of finding an area with high density, since a lot of rejections imply, that the proposed points had all lower density. 
+
+%In our case, the MH random walk focuses on the same region for all starting points and hence we will use this as a %Once we have run this first phase of burn in we see that the MH random walks all centered around a similar region independent from their starting point. Hence, we can choose one point in this region as the starting point of all further MCMC simulations.
+
+One could argue that it would be reasonable to choose the MLE as a starting point since for a very flat prior distribution it should also be approximately the mode of the posterior distribution. However, since we partly motivated the Bayesian approach to be an alternative to the infeasible maximum likelihood estimation for the elementary kernel \(L\), we presented the procedure above that can also be used for the estimation of \(L\).
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.45\textwidth]{figures/first-parameter}
@@ -731,14 +804,24 @@ Once we have run this first phase of burn in we see that the MH random walks all
 \end{emp}
 
 \begin{emp}[Step 2: Second burn in to tune the proposal]
-We use the second burn in method to tune the proposal according to \ref{tuning} for the final simulation. To do this we first select a starting point according to the result of the first burn in period. Then we adjust the variance of the Gaussian proposals such that we obtain a reasonable acceptance rate. Note that this will typically be much lower than the one of the first burn in. The reason for this is, that if one uses a proposal with big variance and starts at a point with high density, then the proposal will mostly propose points far away from this point which will mostly have low denstities and therefore are likely to be declined. In a heuristic way it can be said that one now works ‚locally‘ and tries to explore the finer structure of the distribution and has to take smaller steps in order to do so.
-We run this MH random walk for \(10^3\) samples and calculate their empirical covariance \(\Sigma\in\mathbb R^{2\times 2}\) and obtain the Markov chain depicted in \ref{fig:tuning}
+We use the second burn in method to tune the proposal according to \ref{tuning} for the final simulation. To do this we first select a starting point according to the result of the first burn in period. Then we adjust the variance of the Gaussian proposals such that we obtain a reasonable acceptance rate. This will be much lower than the one of the first burn in since we have seen in the state plots of the first burn in period that the acceptance rate decreased heavily. %The reason for this is, that if one uses a proposal with big variance and starts at a point with high density, then the proposal will mostly propose points far away from this point which will mostly have low denstities and therefore are likely to be declined. 
+In a heuristic way it can be said that one now works ‚locally‘ and tries to explore the finer structure of the distribution and has to take smaller steps in order to do so.
+We run this MH random walk for \(10^3\) samples and calculate their empirical covariance \(\Sigma\in\mathbb R^{2\times 2}\) and obtain the Markov chain depicted in \ref{fig:tuning}. We see that the points are located around the regularised MLE and we can get a first idea along which direction the parameter is more uncertain.
+
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.6\textwidth]{figures/second-burn-in}
 %	\tag{1}
 	\caption{A plot of the samples of the MH of the second burn in period. One can see how the points are distributed around the MLE which is marked green. Their empirical covariance will be used to tune the proposal.}
 	\label{fig:tuning}
+\end{figure}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.45\textwidth]{figures/bayes-second-burn-in-first-parameter}
+	\includegraphics[width=0.45\textwidth]{figures/bayes-second-burn-in-second-parameter}
+%	\tag{1}
+	\caption{A plot of the samples of the MH of the second burn in period. One can see how the points are distributed around the MLE which is marked green. Their empirical covariance will be used to tune the proposal.}
+	\label{fig:mixim-tuning}
 \end{figure}
 \end{emp}
 
@@ -747,13 +830,34 @@ In this final step we will run a MH random walk with length \(10^4\) and the sam
  The resulting heat map can be seen in Figure \ref{fig:MHrw}.%recent\todo{say something about intuition}
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.6\textwidth]{figures/bayes-heat-map}
+	\includegraphics[width=0.6\textwidth]{figures/bayes-mle-and-regmle}
 %	\tag{1}
 	\caption{Heat map of the MH random walks with \(10^4\) iterations. The MLE estimator is shown as a green and the actual parameter as a white cross.}
 	\label{fig:MHrw}
 \end{figure}
-
+\begin{figure}%[h!]
+	\centering
+	\includegraphics[width=0.45\textwidth]{figures/bayes-final-MH-first-parameter}
+	\includegraphics[width=0.45\textwidth]{figures/bayes-final-MH-second-parameter}
+%	\tag{1}
+	\caption{A plot of the samples of the MH of the second burn in period. One can see how the points are distributed around the MLE which is marked green. Their empirical covariance will be used to tune the proposal.}
+	\label{fig:mixing-final}
+\end{figure}
 \end{emp}
+
+
+
+Although this is just a controlled toy example, this procedure can easily be generalised to real world settings. However, one has to face the following two major challenges:
+\begin{enumerate}
+\item In practice one will not know the feature vectors \(f_i\) like we did, so one will have to model those. Usually one would put all quantitative properties into this vector that one would believe could have an effect on the quality of an item. For example if the DPP should model the picnic positions of people in a park one could argue that the quality, i.e. the popularity of a picnic spot depends amongst other things on the distance to the next trash bin, the next toilet and overall noise level. Although one thinks that those parameters can play a role, we could not argue a priori whether they have a positive or a negative impact. For example if the toilets are nice and clean it might be favourable to be closer to them, if they are dirty it might be better to be far away from them in order to avoid their unpleasant odour. However, one does not have to know this straight away as this effect is determined by the according log linearity constant and hence can be estimated in the above manner.
+\item Secondly and maybe even more importantly the actual similarity kernel is also unknown and hence one also has to come up with a reasonable model for it. Either this can be done by purely relying on models created by people familiar with the real world phenomenon that is being investigated, or one could also try to estimated the similarity kernel itself. However, estimating the whole similarity kernel is equivalent to a maximum likelihood estimation of the whole elementary kernel \(L\) and we have seen in the previous discussion about computability that this results in an optimisation problem that can not be solved efficiently. However, we will propose a different, possibly more practical approach in the next section, but it still remains to be seen whether this will actually give any benefits.
+% a more subtle approach would be to assume that the diversity feature vectors \(\phi_i\) have the form 
+%\[(\phi_i)_j\propto f( \sigma \left\lVert i - j \right\rVert) \quad \text{for } i, j\in\mathcal Y\]
+%and then try to estimate the parameter \(\sigma\). With this approach one would only have to estimate one additional parameter instead of the \(N^2 = 900\) parameters of the similarity kernel \(S\). However, with this approach the log likelihood function is likely to be non concave and hence it remains to investigate whether there are any other efficient optimisation techniques for it. \todo{think more towards this direction}
+\end{enumerate}
+
+
+\section{Stability analysis under noise}
 
 %\section{Towards deep DPPs}
 

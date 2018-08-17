@@ -252,6 +252,10 @@ Now we have all the graph theoretical prerequisites to show how one can reconstr
 Two symmetric matrices \(A, B\in\mathbb R^{N\times N}\) are called \emph{determinantally equivalent} if they have the same principal minors and we write \(A\sim B\).
 \end{defi}
 
+\begin{rem}
+It can be shown that two matrices \(A, B\in\mathbb R^{N\times N}\) are determinantally equivalent if and only if there is a diagonal matrix \(D\) with diagonal entries \(\pm1\) such that \(A = DBD\). This is equivalent to the change of basis that one obtains by changing the signs of some basis elements. Since we will not need this result, we refer to Theorem 4.1 in \cite{kulesza2012learning} for a proof.
+\end{rem}
+
 It is obvious that we can only hope to reconstruct a symmetric matrix up to determinantal equivalence. However, this would be satisfactory, because determinantally equivalent matrices are exactly those that give rise to the same DPP.
 %Let us in the following denote the principal minor \(\det(K_S)\) by \(\Delta_S\) for \(S\subseteq\left\{ 1, \dots, N\right\}\). To come back to our original problem, w
 We notice -- just like in the case of the \(3\times 3\) matrix -- that the principal minors up to size two immediately determine the diagonal and the absolute values of the off diagonal of \(K\) since we have
@@ -326,11 +330,12 @@ Let \(S\subseteq\left\{ 1, \dots, N\right\}\) be arbitrary. We will again work w
 \prod_{i\in S} \operatorname{sgn}(K_{i\sigma(i)})
 \end{equation}
 through the sign function. For this we %fix one permutation \(\sigma\) and 
-write \(\sigma\) as the product of disjoint cycles\footnote{A permutation \(\sigma\in S_n\) is called a \emph{cycle} if it maps some elements \(i_1, \dots, i_k\) to each other in cyclic fashion, i.e. \(i_l\mapsto i_{l+1}, i_k\mapsto i_1\) while fixing the other elements.}
+write \(\sigma\) as the product of disjoint cycles\footnote{A permutation \(\sigma\in S_n\) is called a \emph{cycle} if it maps some elements \(i_1, \dots, i_k\) to each other in cyclic fashion, i.e. \(i_l\mapsto i_{l+1}, i_k\mapsto i_1\) while fixing the other elements. Two cycles are called disjoint if the sets of elements that are not fixed are disjoint. Elementary considerations show that any permutation is the composition of disjoint cycles.}
 \begin{equation*}
 \sigma = \sigma_1\circ \dots \circ \sigma_m
 \end{equation*}
-where \(\sigma_k\colon D_k\to D_k\) for \(k = 1, \dots, m\) and the domains \(D_k\) are pairwise disjoint. The sign \eqref{e3.2} is equal to the product of
+%where \(\sigma_k\colon D_k\to D_k\) for \(k = 1, \dots, m\) and the domains \(D_k\) are pairwise disjoint. 
+The sign \eqref{e3.2} is equal to the product of
 \begin{equation}\label{e3.3}
 \prod_{i\in D_k} \operatorname{sgn}(K_{i\sigma_k(i)})
 \end{equation}

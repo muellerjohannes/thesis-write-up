@@ -72,7 +72,7 @@ The prior density is very closely related to the regulariser introduced in the s
 \[\log(f_{\Theta|X}) = \mathcal L + F\]
 where \(F = \log(f_\theta)\) and hence nothing else but a regularised MLE. In fact if \(F\) is a regularisation and \(\exp(F)\) is integrable with respect to \(\mu\), then one can choose \(f_\Theta\propto \exp(F)\) as a prior density. Hence the proposition of a prior and a regulariser are equivalent in a wide variety of cases, but again, the posterior density encodes much more information than just the location of its mode which is the regularised MLE.
 
-\todo{regularisation of noise}
+%\todo{regularisation of noise}
 
 %We will assume that we are in the setting of the estimation of the log linearity constant \(\theta\in\mathbb R^M\) and we will define the prior density to be the standard normal density on \(\mathbb R^M\). Further let \(Y_1, \dots, Y_n\) be some data such that the MLE \(\hat\theta_n\) does not consist. Recall that if this is the case, one of the items \(i\in\mathcal Y\) is either present in none or in all of the observations and hence the quality estimation would (formally) be \(0\) or \(\infty\). Therefore, the respective log linearity constant might not exist in \(\mathbb R^M\).
 
@@ -92,6 +92,17 @@ where \(F = \log(f_\theta)\) and hence nothing else but a regularised MLE. In fa
 %\end{enumerate}
 %\item 
 %\end{enumerate}
+
+\begin{emp}[Bayesian approach without prior]
+We have seen that the prior is nothing else but a regularisation of the likelihood and since MLE can be carried out without regularisation it is natural to ask whether the Bayesian approach works without a prior. We have seen that if there is a uniform distribution on the parameter space, the unregularised MLE corresponds to the uniform distribution as a prior. So the question is what changes if we propose \(f_\Theta = 1\) as a prior if there is no uniform distribution, or more generally what happens if the prior \(f_\Theta\) has infinite integral.
+
+In this case, the unnormalised posterior distribution 
+\begin{equation}\label{genpost}
+\mathfrak{f}(\theta) = f_{X|\Theta}(x| \theta) f_\Theta(\theta)
+\end{equation}
+might not have finite integral and can therefore not be normalised. Hence the posterior can not be seen as a probability density, but the generalised form \eqref{genpost} still exists. If we use the constant prior \(f_\Theta=1\), the generalised posterior \(\mathfrak{f}(\theta)\) is just the observation probability (or density if \(\mathcal X\) is continuous) of the data \(x\) under the parameter \(\theta\).
+%We will use this approach later to remove the effect of a prior that influences the posterior and also the MLE.
+\end{emp}
 
 \subsubsection*{Expression of the posterior for DPPs}
 
@@ -380,7 +391,7 @@ the MH random walk will only take very small steps and hence \(x_{l+k}\) will st
 
 \begin{ex}[One dimensional MH]\label{example}
 We follow an examples for a one dimensional MH random walk given in \cite{robert1999metropolis}, namely we set
-\[f(x)\coloneqq \sin(x)^2\cdot\sin(2x)^2\cdot\exp\Big(-\frac{x^2}{2}\Big). \]
+\[f(x)\coloneqq \sin(x)^2\cdot\sin(2x)^2\cdot\exp\left(-\frac{x^2}{2}\right). \]
 The goal of this example is to see how different proposal distributions lead to different acceptance rates, a different exploration of the state space \(\mathcal X = \mathbb R\) and different effective sample sizes. In order to achieve this, we run \(2\cdot10^4\) samples of the MH random walk with starting point \(x_0=1\) and three different values \(\alpha = 0.01, 3, 100\) for the variance of the proposal distributions. Then we plot a histogram including the actual density and the autocorrelation function for all different values. The acceptance rates where approximately \(88\%\) for \(\alpha=0.01\), \(34\%\) for \(\alpha=3\) and \(9\%\) for \(\alpha=100\). The orders of the effective sample sizes for the different values for \(\alpha\) are given by
 \[\frac{2\cdot10^4}{50} = 4\cdot10^2, \quad \frac{2\cdot10^4}{8} = 2.5\cdot10^3 \quad \text{and } \frac{2\cdot10^4}{30} \approx 7\cdot10^2 \]
 in the usual ordering.
@@ -615,6 +626,7 @@ Those effects of \(\alpha\) on the auto correlation and therefore effective samp
 \end{emp}
 
 %\subsection{Tuning the algorithm}
+\todo{add remark what happens if the integral is not finite}
 
 \subsection{Variational MCMC methods}
 
@@ -767,7 +779,7 @@ and we will use the MH random walk to approximate it. % In fact this is even eas
 %To do this we will impose a very conservative prior in the sense that we assume to not know the rough size of the parameter theta. Therefore, we define the prior to be a very flat normal distribution centered at the origin and with covariance \(2^{19}\cdot I\). This amounts to almost choosing a uniform distribution on the space and hence we expect to get a similar picture to Figure \ref{fig:4.1}. 
 We proceed in the following steps.
 
-\begin{emp}[Step 1: First burn in to find a starting point]
+\begin{emp}[First burn in to find a starting point]
 %In the first phase we pick the origin as a starting point and choose the proposal \(f(\cdot| \theta)\) to be a Gaussian centered at \(\theta\) and with variance adjust so that an acceptance rate of roughly \(25\%-75\%\) is obtained. Usually if one is starting of at a point in a region with very low density, the variance one has to choose will be rather high.
 
 %This amounts to saying one is very coarsely exploring the parameter space by taking proposing rather large steps. 
@@ -778,13 +790,14 @@ Although there is no rigorous method to choose the variance of the proposal dist
 
 Once the variance is adjusted we run a first simulation of length \(2\cdot10^2\) in order to see where the MH random walk is going to focus. %We will expect this to be a region of at least locally highest density and this can be determined by 
 We take the mean value of the second half of the samples as a measure of the area where the MH random walk spends most of its time. 
-Here, we neglect the first half since it is very highly dependent on the starting point and it shall be noted that if a state of the Markov chain has high density, the chances are rather high that it will stay there for a few more steps and hence this point is weighted more heavily in the mean of the random walk. Those positions are shown in Figure \ref{fig:findingstart} for different starting positions of the MH random walk and we notice that they do not depend on the initial state of the Markov chain.\todo{do a second starting value}
+Here, we neglect the first half since it is very highly dependent on the starting point and it shall be noted that if a state of the Markov chain has high density, the chances are rather high that it will stay there for a few more steps and hence this point is weighted more heavily in the mean of the random walk. Those positions are shown in Figure \ref{fig:findingstart} for different starting positions of the MH random walk and we notice that they do not depend on the initial state of the Markov chain.%\todo{do a second starting value}
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.45\textwidth]{figures/first-burn-in}
+	\includegraphics[width=0.49\textwidth]{figures/first-burn-in}
+	\includegraphics[width=0.49\textwidth]{figures/first-burn-in-second-start}
 %	\tag{1}
-	\caption{A plot of the samples of the MH random walk starting in zero. The MLE for the log linearity constant is marked by the green cross and the mean or centre of mass of the second half of the random walk by the red cross.}
+	\caption{A plot of the first burn in period with two different starting points -- the first one being the origin, the second one \((10, -10)\). The regularised MLE for the log linearity constant is marked by the green cross and the mean or centre of mass of the second half of the random walk by the red cross.}
 	\label{fig:findingstart}
 \end{figure}
 
@@ -795,15 +808,15 @@ Further the plots in Figure \ref{fig:MCplot} of the states of the Markov chain s
 One could argue that it would be reasonable to choose the MLE as a starting point since for a very flat prior distribution it should also be approximately the mode of the posterior distribution. However, since we partly motivated the Bayesian approach to be an alternative to the infeasible maximum likelihood estimation for the elementary kernel \(L\), we presented the procedure above that can also be used for the estimation of \(L\).
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.45\textwidth]{figures/first-parameter}
-	\includegraphics[width=0.45\textwidth]{figures/second-parameter}
+	\includegraphics[width=0.49\textwidth]{figures/first-parameter}
+	\includegraphics[width=0.49\textwidth]{figures/second-parameter}
 %	\tag{1}
-	\caption{Plots of the two state parameters of the MH random walk. It is clearly visible that the acceptance rate drops significantly and hardly any proposals are accepted.}
+	\caption{Plots of the two state parameters of the MH random walk starting at the origin. The acceptance rate drops significantly and hardly any proposals are accepted.}
 	\label{fig:MCplot}
 \end{figure}
 \end{emp}
 
-\begin{emp}[Step 2: Second burn in to tune the proposal]
+\begin{emp}[Second burn in to tune the proposal]
 We use the second burn in method to tune the proposal according to \ref{tuning} for the final simulation. To do this we first select a starting point according to the result of the first burn in period. Then we adjust the variance of the Gaussian proposals such that we obtain a reasonable acceptance rate. This will be much lower than the one of the first burn in since we have seen in the state plots of the first burn in period that the acceptance rate decreased heavily. %The reason for this is, that if one uses a proposal with big variance and starts at a point with high density, then the proposal will mostly propose points far away from this point which will mostly have low denstities and therefore are likely to be declined. 
 In a heuristic way it can be said that one now works ‚locally‘ and tries to explore the finer structure of the distribution and has to take smaller steps in order to do so.
 We run this MH random walk for \(10^3\) samples and calculate their empirical covariance \(\Sigma\in\mathbb R^{2\times 2}\) and obtain the Markov chain depicted in \ref{fig:tuning}. We see that the points are located around the regularised MLE and we can get a first idea along which direction the parameter is more uncertain.
@@ -817,35 +830,53 @@ We run this MH random walk for \(10^3\) samples and calculate their empirical co
 \end{figure}
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.45\textwidth]{figures/bayes-second-burn-in-first-parameter}
-	\includegraphics[width=0.45\textwidth]{figures/bayes-second-burn-in-second-parameter}
+	\includegraphics[width=0.49\textwidth]{figures/bayes-second-burn-in-first-parameter}
+	\includegraphics[width=0.49\textwidth]{figures/bayes-second-burn-in-second-parameter}
+	\includegraphics[width=0.49\textwidth]{figures/bayes-final-MH-first-parameter}
+	\includegraphics[width=0.49\textwidth]{figures/bayes-final-MH-second-parameter}
 %	\tag{1}
-	\caption{A plot of the samples of the MH of the second burn in period. One can see how the points are distributed around the MLE which is marked green. Their empirical covariance will be used to tune the proposal.}
+	\caption{State plots of the second burn in period on the top and the final MH random walk on the bottom. One can see how the tuned proposal gives a higher acceptance rate in the final simulation.}
 	\label{fig:mixim-tuning}
 \end{figure}
 \end{emp}
 
-\begin{emp}[Step3: The actual MCMC simulation]
-In this final step we will run a MH random walk with length \(10^4\) and the same starting point as in the second step. Now we use adjust the priors to have the covariance that was empirically determined from the second burn in period. This means we choose \(f(\cdot|\theta)\) to be the density of a normal distribution centered at \(\theta\) and with covariance \(\Sigma\). % This procedure adjusts the proposed steps into the diffrernt directions on the 
- The resulting heat map can be seen in Figure \ref{fig:MHrw}.%recent\todo{say something about intuition}
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=0.6\textwidth]{figures/bayes-mle-and-regmle}
-%	\tag{1}
-	\caption{Heat map of the MH random walks with \(10^4\) iterations. The MLE estimator is shown as a green and the actual parameter as a white cross.}
-	\label{fig:MHrw}
-\end{figure}
+\begin{emp}[The actual MCMC simulation]
+In this final step we run a MH random walk with length \(10^4\) and with the same starting point as in the second step. Now we use the prior adjusted according the second burn in period. This means we choose \(f(\cdot|\theta)\) to be the density of a normal distribution centered at \(\theta\) and with covariance \(\Sigma\). % This procedure adjusts the proposed steps into the diffrernt directions on the 
+This leads to a higher acceptance rate of \(59\%\) compared to \(30\%\) in the second burn in period which can also be seen in the according state plots Figure \ref{fig:mixim-tuning}. Further we see in Figure \ref{fig:acf-sbi-final} that the auto correlation function decreases faster with this tuned proposal.
 \begin{figure}%[h!]
 	\centering
-	\includegraphics[width=0.45\textwidth]{figures/bayes-final-MH-first-parameter}
-	\includegraphics[width=0.45\textwidth]{figures/bayes-final-MH-second-parameter}
+	\includegraphics[width=0.49\textwidth]{figures/bayes-acf-second-burn-in}
+	\includegraphics[width=0.49\textwidth]{figures/bayes-acf-final-MH}
 %	\tag{1}
-	\caption{A plot of the samples of the MH of the second burn in period. One can see how the points are distributed around the MLE which is marked green. Their empirical covariance will be used to tune the proposal.}
-	\label{fig:mixing-final}
+	\caption{A plot of the autocorrelation functions of the second burn in period and the final MH random walk. The latter one decreases faster which hints to a faster convergence due to the tuned proposal distributions.}
+	\label{fig:acf-sbi-final}
+\end{figure}
+Finally we use a pre-implemented interpolation method to obtain a smoothed twodimensional histogram -- also called a heat plot -- which is shown in Figure \ref{fig:MHrw}. \todo{does this make sense}% ....? %The resulting heat map can be seen in Figure \ref{fig:MHrw}.%recent\todo{say something about intuition}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.5\textwidth]{figures/bayes-mle-and-regmle}
+%	\tag{1}
+	\caption{Heat map of the MH random walks with \(10^4\) iterations. The regularised MLE estimator is shown as a white, the MLE as a green and the actual parameter as a red cross. The regularised MLE is the maximum of the (approximated) posterior.}
+	\label{fig:MHrw}
 \end{figure}
 \end{emp}
 
+\subsubsection*{Bayesian approach without prior}
 
+We have seen that the prior or regulariser influences the estimator and will often lead to worse estimates. Further in the case of MLE it destroys the consistency of the estimation procedure. Where the MLE can easily be carried out without a regulariser, we have only seen how the Bayesian approach
+%the Bayesian approach needs a prior. Unfortunately the uniform distribution, which corresponds to MLE without regularisation, does not exist on the parameter space \(\mathbb R^2\). If we use the uniform distribution on a sufficiently large -- meaning that it contains the MLE -- ball \(B_R(0)\subseteq\mathbb R^2\) as a prior, the mode of the posterior will be the MLE again.
+
+We choose such a uniform distribution and approximate the posterior just like before using a MH random walk. 
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.5\textwidth]{figures/bayes-mle-withou-prior}
+%	\tag{1}
+	\caption{Heat map of the MH random walks with \(10^4\) iterations. The regularised MLE estimator is shown as a white, the MLE as a green and the actual parameter as a red cross. The regularised MLE is the maximum of the (approximated) posterior.}
+	\label{fig:MHrwwup}
+\end{figure}
+
+\subsubsection*{Comments on real world applications}
 
 Although this is just a controlled toy example, this procedure can easily be generalised to real world settings. However, one has to face the following two major challenges:
 \begin{enumerate}

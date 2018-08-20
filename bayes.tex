@@ -229,7 +229,7 @@ where the supremum is taken over all finite families of disjoint measurable sets
 \end{theo}
 
 \begin{theo}[Ergodic theorem]\label{ergTheo}
-Let \((X_n)_{n\in\mathbb N}\) be a Harris recurrent Markov chain with \(\sigma\)-finite stationary distribution \(\pi\), then \((X_n)_{n\in\mathbb N}\) is \emph{ergodic}. This means that if %\(\gamma_n\) be the distribution of \(X_n\), then we have
+Let \((X_n)_{n\in\mathbb N}\) be a Harris recurrent Markov chain with stationary probability distribution \(\pi\), then \((X_n)_{n\in\mathbb N}\) is \emph{ergodic}. This means that if %\(\gamma_n\) be the distribution of \(X_n\), then we have
 \[\hat{\mathbb P}_n \coloneqq \frac1n \sum_{i=1}^n \delta_{X_i} \]
 is the empirical measure, we have almost surely have
 \begin{equation}\label{ergo}
@@ -868,8 +868,29 @@ Finally we use a pre-implemented interpolation method to obtain a smoothed twodi
 We have seen that the prior or regulariser influences the estimator and will often lead to worse estimates. However we have discussed shortly how we can follow a generalised Bayesian approach without a prior which results in having the likelihood function as a posterior,
 \[f_{\Theta|X}(\theta|x) = f_{X|\Theta}(x|\theta).\]
 In order to see that the MCMC approximation still works for this function, we note that
-\[\mathrm{d}\phi \coloneqq f_{\Theta|X}\cdot\mathrm{d}\mu \]
-is a \(\sigma\)-finite measure on the parameter space \(\Theta\). Obviously we can not normalise it in general since it does not need to be finite. However the ergodic theorem \ref{ergTheo} still holds for sigma finite measures and yields that the restrictions of \(\hat{\mathbb P}_n\) onto sets of finite measure \(\mu(A)<\infty\) converge weakly towards \(\mu\) up to normalisation. The argument for the stationarity of the \(\sigma\)-finite measure \(\pi\) stays exactly the same as before. 
+\[\mathrm{d}\pi \coloneqq f_{\Theta|X}\cdot\mathrm{d}\mu \]
+is a \(\sigma\)-finite measure on the parameter space \(\Theta\). To approximate this measure, one can use the following more general version of the ergodic theorem.
+
+\begin{theo}[Ergodic theorem]\label{ergTheo2}
+Let \((X_n)_{n\in\mathbb N}\) be a Markov chain with \(\sigma\)-finite stationary distribution \(\pi\) and let 
+\[\hat{\mathbb P}_n \coloneqq \frac1n \sum_{i=1}^n \delta_{X_i} \]
+be the empirical measures associated with the Markov chain. Then the following two statements are equivalent:
+\begin{enumerate}
+\item For any \(\pi\)-integrable functions \(f, g\) with \(\int g(x)\pi(\mathrm{d} x)\ne0\) we have
+\[\frac{\int f(x) \hat{\mathbb P}_n(\mathrm{d} x)}{\int g(x)\hat{\mathbb P}_n(\mathrm{d} x)} \xlongrightarrow{n\to\infty} \frac{\int f(x)\pi(\mathrm{d} x)}{\int g(x)\pi(\mathrm{d} x)}. \]
+\item The Markov chain \((X_n)_{n\in\mathbb N}\) is  Harris recurrent.
+\end{enumerate}
+%, then \((X_n)_{n\in\mathbb N}\) is \emph{ergodic}. This means that if %\(\gamma_n\) be the distribution of \(X_n\), then we have
+%\[\hat{\mathbb P}_n \coloneqq \frac1n \sum_{i=1}^n \delta_{X_i} \]
+%is the empirical measure, we have almost surely have
+%\begin{equation}\label{ergo}
+%\int\limits_{\mathcal X} f(x) \hat{\mathbb P}_n(\mathrm dx) \xlongrightarrow{n\to\infty} \int\limits_{\mathcal X} f(x)\pi(\mathrm dx)
+%\end{equation}
+%for every \(\pi\) integrable function \(f\).
+\end{theo}
+
+%Obviously we can not normalise it in general since it does not need to be finite. However the ergodic theorem \ref{ergTheo} still holds for sigma finite measures and
+This implies directly that the restrictions of \(\hat{\mathbb P}_n\) onto sets of finite measure \(\pi(A)<\infty\) converge weakly towards \(\pi\) up to normalisation. The argument for the stationarity of the \(\sigma\)-finite measure \(\pi\) stays exactly the same as before. 
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.6\textwidth]{figures/bayes-mle-withou-prior}
@@ -877,15 +898,13 @@ is a \(\sigma\)-finite measure on the parameter space \(\Theta\). Obviously we c
 	\caption{Heat map of the MH random walks with \(10^4\) iterations. The regularised MLE estimator is shown as a white, the MLE as a green and the actual parameter as a red cross. The regularised MLE is the maximum of the (approximated) posterior.}
 	\label{fig:MHrwwup}
 \end{figure}
-
 Hence, we can take a completely analogue approach to the approximation of the likelihood function, but we only present the result of the third and final MCMC simulation in Figure \ref{fig:MHrwwup}.
-
 %Further in the case of MLE it destroys the consistency of the estimation procedure. Where the MLE can easily be carried out without a regulariser, we have only seen how the Bayesian approach
 %the Bayesian approach needs a prior. Unfortunately the uniform distribution, which corresponds to MLE without regularisation, does not exist on the parameter space \(\mathbb R^2\). If we use the uniform distribution on a sufficiently large -- meaning that it contains the MLE -- ball \(B_R(0)\subseteq\mathbb R^2\) as a prior, the mode of the posterior will be the MLE again.
 
 %We choose such a uniform distribution and approximate the posterior just like before using a MH random walk. 
 
-\subsubsection*{A naive approximation of posterior}
+\subsubsection*{A naive approximation of the posterior}
 
 The motivation for the use of MCMC methods was that one wants to obtain an approximation of the posterior. We present here a different and naive approach, which works a lot faster and with higher accuracy. However we will see later that this approach suffers from what is known as the \emph{curse of dimensionality},\footnote{This name is used for pretty much all phenomena that grow exponentially with the dimension of the problem.} i.e. the time needed to perform it will grow exponentially with the dimension of the parameter that should be estimated.
 
@@ -920,7 +939,7 @@ In the final step of the MH random walk, we set \(T=10^5\) as the length and thi
 \[10^5 \cdot 2\cdot 1.5\si{s} = 3\cdot10^5 \si{s} \approx 8\si{h}.\]
 The strength of the naive approximation based on the interpolation between breakpoints is that one only has to evaluate the unnormalised posterior \(40^2 = 1.6\cdot10^3\ll 10^5\) times. The time needed for this is approximately
 \[1.6\cdot10^3 \cdot 1.5\si{s} = 2.4\cdot 10^3 \si{s} = 40\si{min}. \]
-Also the results shown in the Figures \ref{fig:MHrw}, \ref{fig:MHrwwup} and \ref{fig:directHeatMaps} suggest that the approximation gained by this direct approach are more accurate\todo{find an argument for this}, not everything is perfect. In fact, if we denote the dimension of the parameter by \(M\), then the size of the grid of breakpoints needed for the interpolation grows exponentially in \(M\). If we denote the number of grid lines along each coordinate by \(R\), then one needs to evaluate the posterior \(R^M\) times and the times for this behaves like
+Although the results shown in the Figures \ref{fig:MHrw}, \ref{fig:MHrwwup} and \ref{fig:directHeatMaps} suggest that the approximation gained by this direct approach are more accurate\todo{find an argument for this}, not everything is perfect. In fact, if we denote the dimension of the parameter by \(M\), then the size of the grid of breakpoints needed for the interpolation grows exponentially in \(M\). Let \(R\) denote the number of grid lines along each coordinate, then one needs to evaluate the posterior \(R^M\) times and the times for this behaves like
 \begin{equation}\label{complexityDirect}
 O\left( R^M\cdot N^3\right).
 \end{equation}
@@ -942,6 +961,37 @@ Although this is just a controlled toy example, this procedure can easily be gen
 
 
 \section{Stability under noise -- does the regularisation help?}
+
+In a lot of scenarios a regulariser or prior can help to lower the effect that random perturbations of the data has on the estimation, cf. \cite{buhlmann2011statistics}. Thus, we want to investigate whether this is the case for  the parameter estimation of discrete DPPs. First we have to specify what noise means in the case of discrete DPPs. If one works with continuous DPPs one could assume a perturbation of the exact positions of the observed points, however in the discrete setting this does only make limited sense. Therefore we will only randomly add points to the observed DPP or delete them, which we will specify now.
+
+\begin{emp}[Setting]
+
+\end{emp}
+
+%For example we could suppose that we want to estimate the coefficients of a polynomial based on some evaluations that are pertubed by random noise. LetÕs say \(p_0 = 2x + 3\) is the polynomial we want to estimate based on \(n=9\) observations of the form \(p_0(x_i) + \varepsilon_i\) where \(x_i\) are real numbers and \(\varepsilon_i\) is a pertubation. We work with the following dataset:
+%\begin{center}
+%\begin{tabular}{ |c|c|c|c|c|c|c|c|c|c| } 
+% \hline
+% \(x\) & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\ \hline
+% \(y\) & 5 & 7 & 9 & 11 & 13.3 & 15 & 17 & 19 & 21 \\
+% \hline
+%\end{tabular}
+%\end{center}
+
+%Obviously the data is described the best way through the interpolating Lagrange polynomial -- this corresponds for example to the extremal estimator that minimises the distance of the function evaluated at the \(x\) values to the data. However it can be seen in Figure \ref{fig:instability} that this is a rather bad description of the actual underlying principle behind the data. 
+
+%\begin{figure}[h!]
+%	\centering
+%	\includegraphics[width=0.6\textwidth]{figures/instability}
+%	\tag{1}
+%	\caption{Approximations of the posterior (on the left) and of the likelihood function (on the right) obtained by the interpolation between breakpoints. Just like in the approximations using MCMC methods, the reguralised MLE is marked white, the MLE green and the actual parameter red.}
+%	\label{fig:instability}
+%\end{figure}
+
+%The problem is -- heuristically speaking -- that the interpolation is so irregular that it not only describes the underlying function, but also the noise. In this case a regulariser can be used to penalise irregular models, in this case the polynomials with high degree.
+
+
+
 
 %\section{Towards deep DPPs}
 

@@ -887,7 +887,7 @@ Hence, we can take a completely analogue approach to the approximation of the li
 
 \subsubsection*{A naive approximation of posterior}
 
-The motivation for the use of MCMC methods was that one wants to obtain an approximation of the posterior. We present here a different and naive approach, which works a lot faster and with higher accuracy. However we will see later that this approach suffers from what is known as the \emph{course of dimensionality}, i.e. the time needed to perform it will grow exponentially with the dimension of the parameter that should be estimated.
+The motivation for the use of MCMC methods was that one wants to obtain an approximation of the posterior. We present here a different and naive approach, which works a lot faster and with higher accuracy. However we will see later that this approach suffers from what is known as the \emph{curse of dimensionality},\footnote{This name is used for pretty much all phenomena that grow exponentially with the dimension of the problem.} i.e. the time needed to perform it will grow exponentially with the dimension of the parameter that should be estimated.
 
 Let us assume that we have performed the two burn in periods of the MH random walk presented above. Then we roughly know the location of the high density from the first burn in period and also the approximate shape of it from the second one. Now we place a \(40\times 40\) grid above this box and evaluate the unnormalised posterior at those grid points. Then we use an interpolation algorithm to obtain an approximation of the unnormalised posterior density. This interpolation usually comes in a quite simply form -- for example piecewise linear -- and can therefore by explicitely expressed and integrated in order to normalise the approximate posterior. The results for this approach can be seen in Figure \ref{fig:directHeatMaps} and we will discuss the advantages and hindrances in the next paragraph.
 
@@ -904,7 +904,7 @@ Let us assume that we have performed the two burn in periods of the MH random wa
 
 In large examples the evaluation of the likelihood function
 \[f_{X|\Theta}(x|\theta) \propto \prod_{i=1}^n \frac{\det(L(\theta)_{A_i})}{\det(L(\theta) + I)} \]
-involves the computation of a \(N\times N\) matrix. This can be done explicitly using Gauss elimination which does not change the determinant -- at least up to a sign -- and can be performed in at most \(N^3\) steps\todo{is this true?}. Hence, the time neede for the computation of the likelihood function can be bounded -- up to a constant -- by
+involves the computation of a \(N\times N\) matrix. This can be done explicitly using Gauss elimination\todo{find a reference}{ } which does not change the determinant -- at least up to a sign -- and can be performed in at most \(N^3\) steps\todo{is this true?}. Hence, the time neede for the computation of the likelihood function can be bounded -- up to a constant -- by
 \[N^3 + \sum_{i=1}^n \left\lvert A_i \right\rvert^3 \le (n+1) \cdot N^3\]
 and we say it can be performed in \(O(N^3)\) 
 %\[O\left( N^3 + \sum_{i=1}^n \left\lvert A_i \right\rvert^3\right)\]
@@ -924,7 +924,7 @@ Also the results shown in the Figures \ref{fig:MHrw}, \ref{fig:MHrwwup} and \ref
 \begin{equation}\label{complexityDirect}
 O\left( R^M\cdot N^3\right).
 \end{equation}
-This exponential increase in necessary evaluations leads to the effect that this direct approach is only possible if the parameter one wishes to estimate is very low dimensional.\todo{How does \(T\) grow with \(M\)?}\todo{comment on complexity for silce sampling?}
+In \(10\) dimension and with \(40\) grid lines along all dimensions, this corresponds to \(40^{10}> 10^{16}\) evaluations which can not be performed in reasonable time. This exponential increase makes this direct approach only impossible if the parameter one wishes to estimate is not very low dimensional.\todo{How does \(T\) grow with \(M\)?}\todo{comment on complexity for silce sampling?}
  %The comparison to \eqref{complexityMCMC} shows that the direct approach is only 
  
 
@@ -941,7 +941,7 @@ Although this is just a controlled toy example, this procedure can easily be gen
 \end{enumerate}
 
 
-\section{Stability analysis under noise}
+\section{Stability under noise -- does the regularisation help?}
 
 %\section{Towards deep DPPs}
 

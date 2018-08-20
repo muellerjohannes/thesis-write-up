@@ -898,7 +898,7 @@ This implies directly that the restrictions of \(\hat{\mathbb P}_n\) onto sets o
 	\caption{Heat map of the MH random walks with \(10^4\) iterations. The regularised MLE estimator is shown as a white, the MLE as a green and the actual parameter as a red cross. The regularised MLE is the maximum of the (approximated) posterior.}
 	\label{fig:MHrwwup}
 \end{figure}
-Hence, we can take a completely analogue approach to the approximation of the likelihood function, but we only present the result of the third and final MCMC simulation in Figure \ref{fig:MHrwwup}.
+Hence, we can take a completely analogue approach for the approximation of the likelihood function, but we only present the result of the third and final MCMC simulation in Figure \ref{fig:MHrwwup}.
 %Further in the case of MLE it destroys the consistency of the estimation procedure. Where the MLE can easily be carried out without a regulariser, we have only seen how the Bayesian approach
 %the Bayesian approach needs a prior. Unfortunately the uniform distribution, which corresponds to MLE without regularisation, does not exist on the parameter space \(\mathbb R^2\). If we use the uniform distribution on a sufficiently large -- meaning that it contains the MLE -- ball \(B_R(0)\subseteq\mathbb R^2\) as a prior, the mode of the posterior will be the MLE again.
 
@@ -965,6 +965,18 @@ Although this is just a controlled toy example, this procedure can easily be gen
 In a lot of scenarios a regulariser or prior can help to lower the effect that random perturbations of the data has on the estimation, cf. \cite{buhlmann2011statistics}. Thus, we want to investigate whether this is the case for  the parameter estimation of discrete DPPs. First we have to specify what noise means in the case of discrete DPPs. If one works with continuous DPPs one could assume a perturbation of the exact positions of the observed points, however in the discrete setting this does only make limited sense. Therefore we will only randomly add points to the observed DPP or delete them, which we will specify now.
 
 \begin{emp}[Setting]
+
+\end{emp}
+
+\begin{emp}[Regularisation of the quality]
+
+\end{emp}
+
+\begin{emp}[Regularisation of the kernel]
+
+\end{emp}
+
+\begin{emp}[Experiments]
 
 \end{emp}
 

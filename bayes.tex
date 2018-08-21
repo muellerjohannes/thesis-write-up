@@ -962,11 +962,33 @@ Although this is just a controlled toy example, this procedure can easily be gen
 
 \section{Stability under noise -- does the regularisation help?}
 
-In a lot of scenarios a regulariser or prior can help to lower the effect that random perturbations of the data has on the estimation, cf. \cite{buhlmann2011statistics}. Thus, we want to investigate whether this is the case for  the parameter estimation of discrete DPPs. First we have to specify what noise means in the case of discrete DPPs. If one works with continuous DPPs one could assume a perturbation of the exact positions of the observed points, however in the discrete setting this does only make limited sense. Therefore we will only randomly add points to the observed DPP or delete them, which we will specify now.
+In real world applications the observed data will almost never be free from noise and outer influences. Therefore one wants to establish stable estimation techniques in the sense that small changes in the data should only lead to small changes in the estimation. This is nothing but the question of continuity of the estimation rule and in a lot of scenarios a regulariser or prior can help to lower the effect that random perturbations of the data has on the estimation, cf. \cite{buhlmann2011statistics}. %This is typically necessary if the estimation is very instable, i.e. if small changes in the observation lead to big changes in the estimated parameter. 
+Thus, we want to investigate whether this is the case for  the parameter estimation of discrete DPPs. First we have to specify what noise we are going to cover in the case of discrete DPPs. If one works with continuous DPPs one could assume a perturbation of the exact positions of the observed points, however in the discrete setting this does only make limited sense. Therefore we will only randomly add points to the observed DPP or delete them, which we will specify now.
 
 \begin{emp}[Setting]
-
+Let \(B_1, \dots, B_n\) be independent realisations of a DPP \(\mathbb P\). Let further \(C_1, \dots, C_n\) be independent  realisations of an independent Poisson point process. We assume that we have given the data
+\[A_i \coloneqq B_i\setminus C_i\cap C_i\setminus B_i \quad \text{for } i = 1, \dots, n. \]
 \end{emp}
+
+The observations \(A_i\) correspond exactly to the observation of a DPP where points were randomly deleted and added.
+
+Before we investigate the stability properties of the estimation in the specific setup for DPPs, we should make a general statement. The estimation can be seen as the following two stage process
+\[\text{data } x\; \xlongrightarrow{\text{evaluation of } f_{X|\Theta}}\; \text{posterior } f_{X|\Theta}(x|\cdot) f_\Theta(\cdot)\; \xlongrightarrow{\text{maximisation}}\; \text{MLE } \hat \theta. \]
+%\[\text{data}\; \xlongrightarrow{\text{evaluation of } f_{X|\Theta}}\; \text{posterior}\; \xlongrightarrow{\text{maximisation}}\; \text{MLE}. \]
+If one wants to investigate the stability properties of the estimation which is nothing but the continuity, then it is reasonable to do this for both steps separately. The second step is in general discontinuous since the maximisation of a function is not a continuous operation under the usual topologies on functions like uniform or pointwise convergence or integral norms. 
+%Because of this factorisation, it is immediate that the if the % posterior density has a better stability property that the MLE, since 
+
+Usually the first step will be continuous in some notion, for example if all densities \(f_{X|\Theta}(x|\theta)\) are continuous in \(x\), then the posterior depends continuously on the data \(x\) in terms of pointswise convergence or equivalently the product topology. The choice of the prior can possibly strengthen this continuity property and lead to a uniform convergence. If additionally all posterior densities have a unique maximiser, then the maximisation is continuous on this subclass of functions with respect to the uniform topology. In summary we have seen that the prior comes into play at two points, the first one to strengthen the continuity of the first step and then two possibly lead to a more well behaved class of posterior densities. %The continuity properties of the first step are influenced by the prior and 
+
+%\begin{emp}[The trouble with discrete data]
+In the case of discrete DPPs, our space of observations \(2^\mathcal Y\) is discrete and hence the only reasonable topology on it is the discrete topology, i.e. the powerset itself. Every mapping is continuous with respect to this topology and hence the is not needed for this qualitative property.
+%\end{emp}
+
+
+
+%\begin{emp}[General comment on ]
+
+%\end{emp}
 
 \begin{emp}[Regularisation of the quality]
 

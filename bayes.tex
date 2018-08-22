@@ -718,7 +718,7 @@ would involve the calculation of a determinant of a \(10^4\times 10^4\) matrix a
 We set
 \[\mathcal Y \coloneqq 39^{-1} \left\{ 0, \dots, 39\right\}^2 \]%\left\{ (i, j) \mid 39\cdot  \right\} \]
 and obtain a \(40\times 40\) grid in the unit square. We again choose \(\mathcal R \coloneqq \mathcal Y \) and \(f\) to be %the normal density with mean \(0\) and variance \(10>0\). Then we choose the similarity feature vectors to be 
-\[f(x) \coloneqq \exp( - 8\cdot x^2) \]
+\[f(x) \coloneqq \exp\left( - 8\cdot x^2\right) \]
 and set
 \[(\phi_i)_j\propto f(\left\lVert i - j \right\rVert) \quad \text{for } i, j\in\mathcal Y.\]
 Further we choose the qualities to be be decreasing with the distance from the centre \(m\) of the and set
@@ -943,7 +943,10 @@ Although the results shown in the Figures \ref{fig:MHrw}, \ref{fig:MHrwwup} and 
 \begin{equation}\label{complexityDirect}
 O\left( R^M\cdot N^3\right).
 \end{equation}
-In \(10\) dimension and with \(40\) grid lines along all dimensions, this corresponds to \(40^{10}> 10^{16}\) evaluations which can not be performed in reasonable time. This exponential increase makes this direct approach only impossible if the parameter one wishes to estimate is not very low dimensional.\todo{How does \(T\) grow with \(M\)?}\todo{comment on complexity for silce sampling?}
+In \(10\) dimension and with \(40\) grid lines along all dimensions, this corresponds to \(40^{10} > 10^{16}\) evaluations which can not be performed in reasonable time. This exponential increase makes this direct approach only impossible if the parameter one wishes to estimate is not very low dimensional.
+
+It shall be noted that also the method of numerical integration suffers from the course of dimensionality since numerical integration relies on the evaluation of the function on an exponentially increasing number of points.
+\todo{How does \(T\) grow with \(M\)?}\todo{comment on complexity for silce sampling?}
  %The comparison to \eqref{complexityMCMC} shows that the direct approach is only 
  
 
@@ -963,14 +966,7 @@ Although this is just a controlled toy example, this procedure can easily be gen
 \section{Stability under noise -- does the regularisation help?}
 
 In real world applications the observed data will almost never be free from noise and outer influences. Therefore one wants to establish stable estimation techniques in the sense that small changes in the data should only lead to small changes in the estimation. This is nothing but the question of continuity of the estimation rule and in a lot of scenarios a regulariser or prior can help to lower the effect that random perturbations of the data has on the estimation, cf. \cite{buhlmann2011statistics}. %This is typically necessary if the estimation is very instable, i.e. if small changes in the observation lead to big changes in the estimated parameter. 
-Thus, we want to investigate whether this is the case for  the parameter estimation of discrete DPPs. First we have to specify what noise we are going to cover in the case of discrete DPPs. If one works with continuous DPPs one could assume a perturbation of the exact positions of the observed points, however in the discrete setting this does only make limited sense. Therefore we will only randomly add points to the observed DPP or delete them, which we will specify now.
-
-\begin{emp}[Setting]
-Let \(B_1, \dots, B_n\) be independent realisations of a DPP \(\mathbb P\). Let further \(C_1, \dots, C_n\) be independent  realisations of an independent Poisson point process. We assume that we have given the data
-\[A_i \coloneqq B_i\setminus C_i\cap C_i\setminus B_i \quad \text{for } i = 1, \dots, n. \]
-\end{emp}
-
-The observations \(A_i\) correspond exactly to the observation of a DPP where points were randomly deleted and added.
+Thus, we want to investigate whether this is the case for  the parameter estimation of discrete DPPs. First we have to specify what noise we are going to cover in the case of discrete DPPs. If one works with continuous DPPs one could assume a perturbation of the exact positions of the observed points, however in the discrete setting this does only make limited sense. Therefore we will only randomly add points to the observed DPP or delete them, which we will specify later.
 
 Before we investigate the stability properties of the estimation in the specific setup for DPPs, we should make a general statement. The estimation can be seen as the following two stage process
 \[\text{data } x\; \xlongrightarrow{\text{evaluation of } f_{X|\Theta}}\; \text{posterior } f_{X|\Theta}(x|\cdot) f_\Theta(\cdot)\; \xlongrightarrow{\text{maximisation}}\; \text{MLE } \hat \theta. \]
@@ -981,7 +977,7 @@ If one wants to investigate the stability properties of the estimation which is 
 Usually the first step will be continuous in some notion, for example if all densities \(f_{X|\Theta}(x|\theta)\) are continuous in \(x\), then the posterior depends continuously on the data \(x\) in terms of pointswise convergence or equivalently the product topology. The choice of the prior can possibly strengthen this continuity property and lead to a uniform convergence. If additionally all posterior densities have a unique maximiser, then the maximisation is continuous on this subclass of functions with respect to the uniform topology. In summary we have seen that the prior comes into play at two points, the first one to strengthen the continuity of the first step and then two possibly lead to a more well behaved class of posterior densities. %The continuity properties of the first step are influenced by the prior and 
 
 %\begin{emp}[The trouble with discrete data]
-In the case of discrete DPPs, our space of observations \(2^\mathcal Y\) is discrete and hence the only reasonable topology on it is the discrete topology, i.e. the powerset itself. Every mapping is continuous with respect to this topology and hence the is not needed for this qualitative property.
+In the case of discrete DPPs, our space of observations \(2^\mathcal Y\) is discrete and hence the only reasonable topology on it is the discrete topology, i.e. the powerset itself. Every mapping is continuous with respect to this topology and hence the is not needed for this qualitative property. Hence, there is no apparent reason why the regularisation or the prior should  bring any benefit and also from the previous examples we have seen that it -- with no presence of noise -- pushes the estimator towards the center of the prior distribution which is the origin in our toy example. We will additionally run experiments with noisy data to confirm our claim that the regularisation or prior introduces a bias\todo{explain this term}{ } for one parameter and can be used for the regularisation of the second parameter since the noise affects the cardinality of the DPP. % of the estimation without making the estimation more stable unless in the presence of extreme noise.
 %\end{emp}
 
 
@@ -990,17 +986,72 @@ In the case of discrete DPPs, our space of observations \(2^\mathcal Y\) is disc
 
 %\end{emp}
 
-\begin{emp}[Regularisation of the quality]
+%\begin{emp}[Regularisation of the quality]
 
+%\end{emp}
+
+%\begin{emp}[Regularisation of the kernel]
+
+%\end{emp}
+
+\subsubsection{Experiments}
+
+First we explain which kind of noise we will consider.
+
+\begin{emp}[Setting]
+Let \(B_1, \dots, B_n\) be independent realisations of a DPP \(\mathbb P\). Let further \(C_1, \dots, C_n\) be independent  realisations of an independent Poisson point process. We assume that we have given the data
+\[A_i \coloneqq B_i\setminus C_i\cap C_i\setminus B_i \quad \text{for } i = 1, \dots, n. \]
+The observations \(A_i\) correspond exactly to the observation of a DPP where points were randomly deleted and added.
 \end{emp}
 
-\begin{emp}[Regularisation of the kernel]
+We will generate noisy data perturbed by Poisson point processes with different cardinalities and calculate the MLE and regularised MLE corresponding to the regularisation given by the prior \eqref{toyprior}. More precisely we will work with Poisson point processes with different marginal kernel \(\rho\cdot I\) where we call \(\rho\in(0, 1)\) the \emph{intensity} of the point process. The intensity corresponds to how likely points are dropped from and added to the DPP. We use an intensity of \(\frac1{400}\) and obtain the following results that are fixed in Table \ref{tab:MLEvsRegMLE}.
 
-\end{emp}
+\begin{table}
+\centering
+\begin{tabular}{ |c|c|c| } 
+ \hline
+  & MLE %with intensity \(\rho=\frac1{400}\) 
+  & regularised MLE %with intensity \(\rho=\frac1{400}\) 
+  \\ \hline
+ 1 & (-10.05, 7.22) &  (-9.76, 7.09) \\ \hline
+ 2 & (-9.44, 6.67) & (-9.16, 6.55) \\ \hline
+ 3 & (-10.51, 7.05) & (-10.20, 6.91) \\ \hline
+ 4 & (-9.79, 6.45) & (-9.49, 6.32) \\ \hline
+ 5 & (-11.03, 7.06) & (-10.70, 6.92) \\ \hline
+ 6 & (-10.07, 6.97) & (-9.78, 6.85) \\ \hline
+ 7 & (-10.04, 6.53) & (-9.74, 6.40) \\ \hline
+ 8 & (-9.76, 6.83) & (-9.47, 6.70) \\ \hline
+\end{tabular}
+\caption{Table with the MLE and regularised MLE for noisy data perturbed by a Poisson point process with intensity \(\rho = \frac1{400}\).} \label{tab:MLEvsRegMLE}
+\end{table}
 
-\begin{emp}[Experiments]
+Like in the estimation in the case without noise the regularised MLE is closer to the origin than the MLE. In the first component, this leads to worse estimates and in the second one to better ones. The reason that the estimation of the second parameter benefits from the regularisation is the following. If the cardinality of the DPP is smaller than \(N/2\), then the presence of noise -- at least how we introduced it -- leads to a higher expected cardinality in the data since more points are added than deleted since we expect
+\[\left\lvert A_i\cap B_i  \right\rvert \le \left\lvert B_i \setminus A_i \right\rvert.\]
+This leads to an estimation of higher qualities and the magnitude is controlled of the qualities is given through the second parameter. Hence, the regulariser forces the second component MLE into the right direction\todo{make this more scientific}. However, this is only due to the fact that the cardinality of the DPP is much smaller than \(N/2\) in our case and if it was bigger, the estimation would be forced into the opposite way. In summary the prior can be used to regularise the second parameter which controls the cardinality of the DPP, but this must be done with a certain amount of care and under consideration whether the observed data is definitely smaller or bigger than \(N/2\).
 
-\end{emp}
+
+
+%\begin{center}
+%\begin{table}
+%\centering
+%\begin{tabular}{ |c|c|c| } 
+% \hline
+%  & MLE %with intensity \(\rho=\frac1{400}\) 
+%  & regularised MLE %with intensity \(\rho=\frac1{400}\) 
+%  \\ \hline
+% 1 & () &  () \\ \hline
+% 2 & () & () \\ \hline
+% 3 & () & () \\ \hline
+% 4 & () & () \\ \hline
+% 5 & () & () \\ \hline
+% 6 & () & () \\ \hline
+% 7 & () & () \\ \hline
+% 8 & () & () \\ \hline
+%\end{tabular}
+%\caption{This is my one big table} \label{tab:sometab}
+%\end{table}
+%\end{center}
+
 
 %For example we could suppose that we want to estimate the coefficients of a polynomial based on some evaluations that are pertubed by random noise. Let’s say \(p_0 = 2x + 3\) is the polynomial we want to estimate based on \(n=9\) observations of the form \(p_0(x_i) + \varepsilon_i\) where \(x_i\) are real numbers and \(\varepsilon_i\) is a pertubation. We work with the following dataset:
 %\begin{center}

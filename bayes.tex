@@ -35,12 +35,14 @@ In order to obtain this, we will work with the joint density
 and condition this onto \(x\). This yields
 \begin{equation}\label{post}
 \begin{split}
-f_{\Theta| X}(\theta|x) = \frac{f_{X, \Theta}(x, \theta)}{\int_{\Theta} f_{X, \Theta}(x, \theta)\nu(\mathrm{d}\theta)} = \frac{f_{X|\Theta}(x| \theta) f_\Theta(\theta)}{\int_{\Theta} f_{X, \Theta}(x, \theta)\nu(\mathrm{d}\theta)}
+f_{\Theta| X}(\theta|x) = \frac{f_{X, \Theta}(x, \theta)}{\int_{\Theta} f_{X, \Theta}(x, \theta)\nu(\mathrm{d}\theta)} = \frac{f_{X|\Theta}(x| \theta) f_\Theta(\theta)}{\int_{\Theta} f_{X, \Theta}(x, \theta)\nu(\mathrm{d}\theta)}.
 \end{split}
 \end{equation}
 
 \begin{defi}[Posterior distribution]
-The density \(f_{\Theta|X}\) is called the \emph{posterior distribution} of the parameter \(\theta\) given the data \(x\).
+The density \(f_{\Theta|X}\) is called the \emph{posterior distribution} of the parameter \(\theta\) given the data \(x\). Further we call the normalisation constant
+\[f(x|\mathcal F) \coloneqq \int_{\Theta} f_{X, \Theta}(x, \theta)\nu(\mathrm{d}\theta) \]
+the total probability of the data \(x\) under the model \(\mathcal F\).
 \end{defi}
 
 %From now on we will assume -- just like in the case of MLE -- that our observations are independent and identically distributed and hence their joint distribution factorises and we obtain
@@ -125,6 +127,36 @@ Unfortunately the normalisation constant
 \int\limits_{\Theta} f(\theta|A_1, \dots, A_n)\nu(\mathrm{d}\theta) = \int\limits_{\Theta} f_\Theta(\theta) \prod_{i=1}^n \frac{\det(L(\theta)_{A_i})}{\det(L(\theta) + I)}\nu(\mathrm{d}\theta)
 \end{equation}
 can neither be computed analytically nor numerically in an efficient way since the evaluation of this density involves the computation of the determinant of \(N\times N\) matrices. This problem can be solved through the powerful method of Markov chain Monte Carlo simulation that allow to approximate a distribution with only the knowledge of its unnormalised density. But before we introduce those methods, we quickly explain how the Bayesian approach offers a possibility of regularisation and hence can be used to increase the noise sensitivity of the parameter estimation.
+
+\subsubsection{Model selection using the Bayes factor}
+
+In this paragraph we will quickly touch on how the Bayesian approach can be used to compare two different models, i.e. two different parametric families \(\mathcal F_1\) and \(\mathcal F_2\) including two different priors \(f_{\Theta_1}\) and \(f_{\Theta_2}\). For this we will work in the following setup.
+
+\begin{emp}[Setting]
+Let \(\Theta_1, \Theta_2\) be measurable spaces and \(\nu_i\)  measures on \(\Theta_i\) for \(i=1, 2\). Let \(f_{\Theta_i}\colon \Theta_i\to[0, \infty]\) be probability densities with respect to \(\nu_i\), i.e.
+\[\int\limits_{\Theta_i} f_{\Theta_i}(\theta)\nu_i(\mathrm{d}\theta) = 1 \quad \text{for } i = 1, 2.\]
+Further let
+\[\mathcal F_i = \Big\{ f_{X| \Theta_i}(\cdot |\theta) \;\big\lvert\; \theta\in\Theta_i\Big\}\]
+by a family of probability densities with respect to \(\mu^n\coloneqq\prod_{i=1}^n\mu(\mathrm d x_i)\).
+\end{emp}
+
+The goal is now two compare which model \(\mathcal F_i\) in combination with the corresponding prior describes the phenomenon better given some data \(x\). For this we follow \cite{kass1995bayes} and introduce the \emph{Bayes factor} of the two models given the data \(x\) through
+\[K \coloneqq K(\mathcal F_1, \mathcal F_2| x) \coloneqq\frac{f(x|\mathcal F_1)}{f(x|\mathcal F_2)} = \frac{\int_{\Theta_1} f_{X| \Theta_1}(x| \theta) f_{\Theta_1}(\theta)\nu_1(\mathrm{d}\theta)}{\int_{\Theta_2} f_{X| \Theta_2}(x| \theta) f_{\Theta_2}(\theta)\nu_2(\mathrm{d}\theta)}. \]
+This is nothing but the ratio of the total probabilities of the data \(x\) under the respective models. If this ratio is big, the model \(\mathcal F_1\) including its prior can be seen as a better description of the data compared to the second model. There is no clear definition on when the ratio can be seen as big enough to say this, but the following guidelines in Table \ref{tab:BayesFactor} were proposed in \cite{kass1995bayes}.
+
+\begin{table}
+\centering
+\begin{tabular}{ |c|c| } 
+ \hline
+  Value for \(K\) & Interpretation \\ \hline
+ \(1 - 3.2\) & Only worth a bare mention \\ \hline
+ \(3.2 - 10\) & Substantial \\ \hline
+ \(10 - 100\) & Strong \\ \hline
+ \(>100\) & Decisive \\ \hline
+\end{tabular}
+\caption{Interpretation of how strongly different values of \(K\) imply that the first model is a better description of the data than the second one.} \label{tab:BayesFactor}
+\end{table}
+
 
 %\begin{emp}[Regularisation through the prior]
 %The prior density is very closely related to the regulariser introduced in the section about maximum likelihood estimation. In fact 
@@ -419,8 +451,9 @@ This simulation illustrates the problem of to aggressive -- \(\alpha = 100\) -- 
 \end{ex}
 
 \begin{emp}[Tuning the proposal]\label{tuning}
-In order to obtain a higher acceptance rate without the loss of generally choosing the variance of the proposal distribution small one can do tune the proposal distribution. This means one adjusts the proposal distribution after a while, lets say after the first \(10^3\) samples in such a way that one replaces the original covariance matrix \(\Sigma\) by the empirical covariance of the first \(10^3\) samples%recent\todo{is this true?}
-. Then one forgets about all the samples so far -- they are called usually the \emph{burn in period} -- and starts a new MH random walk usually at one of the data points of the burn in period, since they should already indicate where an area of high density is. The reason why this increases the acceptance rate is, that the proposal now only is aggressive in those directions where the density is widely spread. %recent\todo{find a reference for this}%This effect can be seen in Figure \todo{make this figure}.
+In order to obtain a higher acceptance rate without simply choosing the variance of the proposal distribution small one can \emph{tune} or \emph{adapt} the proposal distribution. This means one adjusts the proposal distribution after a while, lets say after the first \(10^3\) samples in such a way that one replaces the original covariance matrix \(\Sigma\) by the empirical covariance of the first \(10^3\) samples%recent\todo{is this true?}
+. Then one forgets about all the samples so far -- they are called usually the \emph{burn in period} -- and starts a new MH random walk usually at one of the data points of the burn in period, since they should already indicate where an area of high density is. It is essential to drop the first samples since otherwise the Markov property would break as all further samples now rely on the coveriance of the first burn in period and hence on those points. 
+The reason why this increases the acceptance rate is, that the proposal now only is aggressive in those directions where the density is widely spread. For a further discussion we refer to \cite{roberts2009examples}. %recent\todo{find a reference for this}%This effect can be seen in Figure \todo{make this figure}.
 \end{emp}
 
 \subsection{Slice sampling}
@@ -628,7 +661,7 @@ Those effects of \(\alpha\) on the auto correlation and therefore effective samp
 \end{emp}
 
 %\subsection{Tuning the algorithm}
-\todo{add remark what happens if the integral is not finite}
+%\todo{add remark what happens if the integral is not finite}
 
 \subsection{Variational MCMC methods}
 
@@ -853,7 +886,7 @@ This leads to a higher acceptance rate of \(59\%\) compared to \(30\%\) in the s
 	\caption{A plot of the autocorrelation functions of the second burn in period and the final MH random walk. The latter one decreases faster which hints to a faster convergence due to the tuned proposal distributions.}
 	\label{fig:acf-sbi-final}
 \end{figure}
-Finally we use a pre-implemented interpolation method to obtain a smoothed twodimensional histogram -- also called a heat plot -- which is shown in Figure \ref{fig:MHrw}. \todo{does this make sense}% ....? %The resulting heat map can be seen in Figure \ref{fig:MHrw}.%recent\todo{say something about intuition}
+Finally we use a pre-implemented interpolation method to obtain a smoothed twodimensional histogram -- also called a heat plot -- which is shown in Figure \ref{fig:MHrw}.% \todo{does this make sense}% ....? %The resulting heat map can be seen in Figure \ref{fig:MHrw}.%recent\todo{say something about intuition}
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.5\textwidth]{figures/bayes-mle-and-regmle}
@@ -904,6 +937,8 @@ Hence, we can take a completely analogue approach for the approximation of the l
 
 %We choose such a uniform distribution and approximate the posterior just like before using a MH random walk. 
 
+It is evident from both, theoretical considerations and the experimental results of the maximum likelihood estimations and the approximations of the posterior that the regulariser or prior always forces the estimation to get closer to the origin. Obviously this can make the estimation better, if for example the unregularised MLE is larger than the actual parameter, but then it makes the estimation better by pure luck. We will see later that the influence of the prior is a little bit more positive if the data is perturbed by random noise.
+
 \subsubsection*{A naive approximation of the posterior}
 
 The motivation for the use of MCMC methods was that one wants to obtain an approximation of the posterior. We present here a different and naive approach, which works a lot faster and with higher accuracy. However we will see later that this approach suffers from what is known as the \emph{curse of dimensionality},\footnote{This name is used for pretty much all phenomena that grow exponentially with the dimension of the problem.} i.e. the time needed to perform it will grow exponentially with the dimension of the parameter that should be estimated.
@@ -939,11 +974,12 @@ In the final step of the MH random walk, we set \(T=10^5\) as the length and thi
 \[10^5 \cdot 2\cdot 1.5\si{s} = 3\cdot10^5 \si{s} \approx 8\si{h}.\]
 The strength of the naive approximation based on the interpolation between breakpoints is that one only has to evaluate the unnormalised posterior \(40^2 = 1.6\cdot10^3\ll 10^5\) times. The time needed for this is approximately
 \[1.6\cdot10^3 \cdot 1.5\si{s} = 2.4\cdot 10^3 \si{s} = 40\si{min}. \]
-Although the results shown in the Figures \ref{fig:MHrw}, \ref{fig:MHrwwup} and \ref{fig:directHeatMaps} suggest that the approximation gained by this direct approach are more accurate\todo{find an argument for this}, not everything is perfect. In fact, if we denote the dimension of the parameter by \(M\), then the size of the grid of breakpoints needed for the interpolation grows exponentially in \(M\). Let \(R\) denote the number of grid lines along each coordinate, then one needs to evaluate the posterior \(R^M\) times and the times for this behaves like
+However, % the results shown in the Figures \ref{fig:MHrw}, \ref{fig:MHrwwup} and \ref{fig:directHeatMaps} suggest that the approximation gained by this direct approach are more accurate\todo{find an argument for this}, not everything is perfect. In fact, 
+if we denote the dimension of the parameter by \(M\), then the size of the grid of breakpoints needed for the interpolation grows exponentially in \(M\). Let \(R\) denote the number of grid lines along each coordinate, then one needs to evaluate the posterior \(R^M\) times and the times for this behaves like
 \begin{equation}\label{complexityDirect}
 O\left( R^M\cdot N^3\right).
 \end{equation}
-In \(10\) dimension and with \(40\) grid lines along all dimensions, this corresponds to \(40^{10} > 10^{16}\) evaluations which can not be performed in reasonable time. This exponential increase makes this direct approach only impossible if the parameter one wishes to estimate is not very low dimensional.
+In \(10\) dimension and with \(40\) grid lines along all dimensions, this corresponds to \(40^{10} > 10^{16}\) evaluations which can not be performed in reasonable time. This exponential increase makes this direct approach only impossible if the parameter one wishes to estimate is not very low dimensional. Nevertheless it might be possible to modify this approach in a suitable way to make it more promising in higher dimension. For example one could try to iteratively raise the resolution of the grid on the places where one expects a high value of the function or high changes of the function. Alternatively it might be worth to investigate how different approximation algorithms of high dimensional functions could help in this approach.
 
 It shall be noted that also the method of numerical integration suffers from the course of dimensionality since numerical integration relies on the evaluation of the function on an exponentially increasing number of points.
 \todo{How does \(T\) grow with \(M\)?}\todo{comment on complexity for silce sampling?}
@@ -965,19 +1001,20 @@ Although this is just a controlled toy example, this procedure can easily be gen
 
 \section{Stability under noise -- does the regularisation help?}
 
-In real world applications the observed data will almost never be free from noise and outer influences. Therefore one wants to establish stable estimation techniques in the sense that small changes in the data should only lead to small changes in the estimation. This is nothing but the question of continuity of the estimation rule and in a lot of scenarios a regulariser or prior can help to lower the effect that random perturbations of the data has on the estimation, cf. \cite{buhlmann2011statistics}. %This is typically necessary if the estimation is very instable, i.e. if small changes in the observation lead to big changes in the estimated parameter. 
-Thus, we want to investigate whether this is the case for  the parameter estimation of discrete DPPs. First we have to specify what noise we are going to cover in the case of discrete DPPs. If one works with continuous DPPs one could assume a perturbation of the exact positions of the observed points, however in the discrete setting this does only make limited sense. Therefore we will only randomly add points to the observed DPP or delete them, which we will specify later.
+In real world applications the observed data will almost never be free from noise and outer influences. Therefore one wants to establish stable estimation techniques in the sense that small changes in the data should only lead to small changes in the estimation. This is nothing but the question of continuity of the estimation rule and in a lot of scenarios a regulariser or prior can help to lower the effect that random perturbations of the data have on the estimation, cf. \cite{buhlmann2011statistics}. %This is typically necessary if the estimation is very instable, i.e. if small changes in the observation lead to big changes in the estimated parameter. 
+Thus, we want to investigate whether this is the case for  the parameter estimation of discrete DPPs. First we have to specify what noise we are going to consider in the case of discrete DPPs. If one works with continuous DPPs one could assume a perturbation of the exact positions of the observed points, however in the discrete setting this does only make limited sense. Therefore we will work with the observations of a DPP where points are randomly added or deleted and will specify this later.
 
 Before we investigate the stability properties of the estimation in the specific setup for DPPs, we should make a general statement. The estimation can be seen as the following two stage process
 \[\text{data } x\; \xlongrightarrow{\text{evaluation of } f_{X|\Theta}}\; \text{posterior } f_{X|\Theta}(x|\cdot) f_\Theta(\cdot)\; \xlongrightarrow{\text{maximisation}}\; \text{MLE } \hat \theta. \]
 %\[\text{data}\; \xlongrightarrow{\text{evaluation of } f_{X|\Theta}}\; \text{posterior}\; \xlongrightarrow{\text{maximisation}}\; \text{MLE}. \]
-If one wants to investigate the stability properties of the estimation which is nothing but the continuity, then it is reasonable to do this for both steps separately. The second step is in general discontinuous since the maximisation of a function is not a continuous operation under the usual topologies on functions like uniform or pointwise convergence or integral norms. 
+If one wants to investigate the stability properties of the estimation which is nothing but the continuity, then it is reasonable to do this for both steps separately. The second step is in general discontinuous since the maximisation of a function is not a continuous operation under the usual topologies on functions corresponding to uniform or pointwise convergence or integral norms. 
 %Because of this factorisation, it is immediate that the if the % posterior density has a better stability property that the MLE, since 
 
 Usually the first step will be continuous in some notion, for example if all densities \(f_{X|\Theta}(x|\theta)\) are continuous in \(x\), then the posterior depends continuously on the data \(x\) in terms of pointswise convergence or equivalently the product topology. The choice of the prior can possibly strengthen this continuity property and lead to a uniform convergence. If additionally all posterior densities have a unique maximiser, then the maximisation is continuous on this subclass of functions with respect to the uniform topology. In summary we have seen that the prior comes into play at two points, the first one to strengthen the continuity of the first step and then two possibly lead to a more well behaved class of posterior densities. %The continuity properties of the first step are influenced by the prior and 
 
 %\begin{emp}[The trouble with discrete data]
-In the case of discrete DPPs, our space of observations \(2^\mathcal Y\) is discrete and hence the only reasonable topology on it is the discrete topology, i.e. the powerset itself. Every mapping is continuous with respect to this topology and hence the is not needed for this qualitative property. Hence, there is no apparent reason why the regularisation or the prior should  bring any benefit and also from the previous examples we have seen that it -- with no presence of noise -- pushes the estimator towards the center of the prior distribution which is the origin in our toy example. We will additionally run experiments with noisy data to confirm our claim that the regularisation or prior introduces a bias\todo{explain this term}{ } for one parameter and can be used for the regularisation of the second parameter since the noise affects the cardinality of the DPP. % of the estimation without making the estimation more stable unless in the presence of extreme noise.
+In the case of discrete DPPs, our space of observations \(2^\mathcal Y\) is discrete and hence the only reasonable topology on it is the discrete topology, i.e. the powerset itself. Every mapping is continuous with respect to this topology and hence the prior is not needed for this qualitative property. Thus, there is no apparent reason why the regularisation or the prior should bring any benefit. % it -- with no presence of noise -- pushes the estimator towards the center of the prior distribution which is the origin in our toy example.
+We will see in our examples that it can actually be used to regularise certain parameters of the DPP but only if one has a very clear understanding who those parameters are influenced by the noise. %We will additionally run experiments with noisy data to confirm our claim that the regularisation or prior introduces a bias\todo{explain this term}{ } for one parameter and can be used for the regularisation of the second parameter since the noise affects the cardinality of the DPP. % of the estimation without making the estimation more stable unless in the presence of extreme noise.
 %\end{emp}
 
 
@@ -1004,7 +1041,11 @@ Let \(B_1, \dots, B_n\) be independent realisations of a DPP \(\mathbb P\). Let 
 The observations \(A_i\) correspond exactly to the observation of a DPP where points were randomly deleted and added.
 \end{emp}
 
-We will generate noisy data perturbed by Poisson point processes with different cardinalities and calculate the MLE and regularised MLE corresponding to the regularisation given by the prior \eqref{toyprior}. More precisely we will work with Poisson point processes with different marginal kernel \(\rho\cdot I\) where we call \(\rho\in(0, 1)\) the \emph{intensity} of the point process. The intensity corresponds to how likely points are dropped from and added to the DPP. We use an intensity of \(\frac1{400}\) and obtain the following results that are fixed in Table \ref{tab:MLEvsRegMLE}.
+We will generate noisy data perturbed by a Poisson point processes marginal kernel \(\rho\cdot I\) where we call \(\rho\in(0, 1)\) the \emph{intensity} of the point process.
+%with different cardinalities and
+We will calculate the MLE and regularised MLE corresponding to the regularisation given by the prior \eqref{toyprior}. 
+%More precisely we will work with Poisson point processes with different marginal kernel \(\rho\cdot I\) where we call \(\rho\in(0, 1)\) the \emph{intensity} of the point process. The intensity corresponds to how likely points are dropped from and added to the DPP.
+We use an intensity of \(\rho=\frac1{400}\) and obtain the following results that are fixed in Table \ref{tab:MLEvsRegMLE}.
 
 \begin{table}
 \centering
@@ -1025,9 +1066,11 @@ We will generate noisy data perturbed by Poisson point processes with different 
 \caption{Table with the MLE and regularised MLE for noisy data perturbed by a Poisson point process with intensity \(\rho = \frac1{400}\).} \label{tab:MLEvsRegMLE}
 \end{table}
 
-Like in the estimation in the case without noise the regularised MLE is closer to the origin than the MLE. In the first component, this leads to worse estimates and in the second one to better ones. The reason that the estimation of the second parameter benefits from the regularisation is the following. If the cardinality of the DPP is smaller than \(N/2\), then the presence of noise -- at least how we introduced it -- leads to a higher expected cardinality in the data since more points are added than deleted since we expect
+Like in the case of estimation without noise, the regularised MLE is closer to the origin than the unregularised one. In the first component, this leads to worse estimates and in the second one to better ones. The reason that the estimation of the second parameter benefits from the regularisation is the following. If the cardinality of the DPP is smaller than \(N/2\), then the presence of noise -- at least the one we are considering -- leads to a higher expected cardinality in the data since more points are added than deleted because we expect
 \[\left\lvert A_i\cap B_i  \right\rvert \le \left\lvert B_i \setminus A_i \right\rvert.\]
-This leads to an estimation of higher qualities and the magnitude is controlled of the qualities is given through the second parameter. Hence, the regulariser forces the second component MLE into the right direction\todo{make this more scientific}. However, this is only due to the fact that the cardinality of the DPP is much smaller than \(N/2\) in our case and if it was bigger, the estimation would be forced into the opposite way. In summary the prior can be used to regularise the second parameter which controls the cardinality of the DPP, but this must be done with a certain amount of care and under consideration whether the observed data is definitely smaller or bigger than \(N/2\).
+This leads to an estimation of higher qualities and the magnitude of the qualities is controlled through the second parameter. Hence, the regulariser forces the second component MLE into the right direction\todo{make this more scientific}. However this kind of regularisation can only be successful, if one has a clear understanding into which direction the noise will perturb the estimates. If for example the cardinality of the DPP is larger than \(N/2\) the Poisson noise will lower the cardinality of the data and the regulariser could increase this effect instead of weakening it. To decide whether the DPP has cardinality smaller or bigger than \(N/2\) one can use the observed data since the noise will only shift the cardinality closer towards
+
+%However, this is only due to the fact that the cardinality of the DPP is much smaller than \(N/2\) in our case and if it was bigger, the estimation would be forced into the opposite way. In summary the prior can be used to regularise the second parameter which controls the cardinality of the DPP, but this must be done with a certain amount of care and under consideration whether the observed data is definitely smaller or bigger than \(N/2\).
 
 
 

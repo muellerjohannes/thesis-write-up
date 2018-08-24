@@ -1,0 +1,50 @@
+\select@language {english}
+\contentsline {chapter}{Introduction}{1}{chapter*.1}
+\contentsline {subsubsection}{Outline of the thesis}{2}{subsubsection*.2}
+\contentsline {subsubsection}{Contributions}{2}{subsubsection*.3}
+\contentsline {chapter}{\numberline {\textup {I}}Determinantal point processes: Basic notions and properties}{3}{chapter.1}
+\contentsline {section}{\numberline {\textup {I}.1}Definitions and properties}{3}{section.1.1}
+\contentsline {section}{\numberline {\textup {I}.2}Variations of DPPs}{10}{section.1.2}
+\contentsline {section}{\numberline {\textup {I}.3}Simulation and Existence of DPPs}{12}{section.1.3}
+\contentsline {subsection}{\numberline {\textup {I}.3.1}Cauchy-Binet type identities}{12}{subsection.1.3.1}
+\contentsline {subsection}{\numberline {\textup {I}.3.2}Sampling and Existence}{15}{subsection.1.3.2}
+\contentsline {subsubsection}{Possible improvements}{19}{subsubsection*.4}
+\contentsline {section}{\numberline {\textup {I}.4}Simulation of toy examples}{20}{section.1.4}
+\contentsline {subsubsection}{Points on a line}{20}{subsubsection*.5}
+\contentsline {subsubsection}{Points in a square}{23}{subsubsection*.6}
+\contentsline {chapter}{\numberline {\textup {II}}Point estimators and parametric models}{25}{chapter.2}
+\contentsline {section}{\numberline {\textup {II}.1}Kernel reconstruction from the empirical measures}{26}{section.2.1}
+\contentsline {subsection}{\numberline {\textup {II}.1.1}Graph theoretical concepts}{28}{subsection.2.1.1}
+\contentsline {subsection}{\numberline {\textup {II}.1.2}The solution of the principal minor assignment problem}{31}{subsection.2.1.2}
+\contentsline {subsection}{\numberline {\textup {II}.1.3}Definition of the estimator and consistency}{35}{subsection.2.1.3}
+\contentsline {section}{\numberline {\textup {II}.2}Maximum likelihood estimation}{38}{section.2.2}
+\contentsline {subsection}{\numberline {\textup {II}.2.1}Presentation of different models}{40}{subsection.2.2.1}
+\contentsline {subsection}{\numberline {\textup {II}.2.2}Coercivity and existence of the maximum likelihood estimators}{43}{subsection.2.2.2}
+\contentsline {subsection}{\numberline {\textup {II}.2.3}Consistency of the maximum likelihood estimators}{48}{subsection.2.2.3}
+\contentsline {subsection}{\numberline {\textup {II}.2.4}Approximation of the MLE}{56}{subsection.2.2.4}
+\contentsline {subsection}{\numberline {\textup {II}.2.5}Further learning approaches}{58}{subsection.2.2.5}
+\contentsline {subsubsection}{Learning for conditional DPPs}{59}{subsubsection*.7}
+\contentsline {subsubsection}{Estimating the mixture coefficients of \(k\)-DPPs}{59}{subsubsection*.8}
+\contentsline {subsubsection}{Learning the repulsiveness of a DPP}{60}{subsubsection*.9}
+\contentsline {chapter}{\numberline {\textup {III}}Bayesian learning for DPPs}{61}{chapter.3}
+\contentsline {section}{\numberline {\textup {III}.1}Bayesian approach to parameter estimation}{61}{section.3.1}
+\contentsline {subsubsection}{Model selection using the Bayes factor}{65}{subsubsection*.10}
+\contentsline {section}{\numberline {\textup {III}.2}Markov chain Monte Carlo methods}{66}{section.3.2}
+\contentsline {subsection}{\numberline {\textup {III}.2.1}Reminder on Markov chains}{66}{subsection.3.2.1}
+\contentsline {subsection}{\numberline {\textup {III}.2.2}Metropolis-Hastings random walk}{69}{subsection.3.2.2}
+\contentsline {subsection}{\numberline {\textup {III}.2.3}Slice sampling}{74}{subsection.3.2.3}
+\contentsline {subsection}{\numberline {\textup {III}.2.4}Variational MCMC methods}{81}{subsection.3.2.4}
+\contentsline {chapter}{\numberline {\textup {IV}}Toy example: Learning the log linearity constant of a spatial DPP}{85}{chapter.4}
+\contentsline {section}{\numberline {\textup {IV}.1}MLE and regularised MLE}{86}{section.4.1}
+\contentsline {section}{\numberline {\textup {IV}.2}Bayesian estimation using MCMC methods}{87}{section.4.2}
+\contentsline {section}{\numberline {\textup {IV}.3}Stability under noise -- does the regularisation help?}{96}{section.4.3}
+\contentsline {subsubsection}{Experiments}{97}{subsubsection*.15}
+\contentsline {chapter}{\numberline {\textup {V}}Summary and conclusion}{99}{chapter.5}
+\contentsline {subsubsection}{Further work}{100}{subsubsection*.17}
+\contentsline {chapter}{\numberline {A}Auxiliary results}{101}{appendix.A}
+\contentsline {chapter}{\numberline {B}Generated code}{102}{appendix.B}
+\contentsline {section}{\numberline {B.1}Sampling algorithm}{102}{section.B.1}
+\contentsline {section}{\numberline {B.2}Implementation of the MCMC methods and toy examples}{103}{section.B.2}
+\contentsline {section}{\numberline {B.3}MLE and Bayesian estimation of the log linearity constant}{105}{section.B.3}
+\contentsline {chapter}{Nomenclature}{108}{chapter*.18}
+\contentsline {chapter}{Bibliography}{113}{chapter*.19}

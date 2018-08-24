@@ -1,0 +1,36 @@
+\begin{thenomenclature} 
+
+ \nomgroup{A}
+
+  \item [{\(\arg\max\)}]\begingroup The \(\arg\max\) function selects one arbitrary maximiser given it exists.\nomeqref {0.0}
+		\nompageref{1}
+  \item [{\(\mathbb F_2\)}]\begingroup The finite field \(\left\{ 0, 1 \right\}\) with the addition and multiplication modulo \(2\).\nomeqref {0.0}
+		\nompageref{1}
+  \item [{\(\mathbb N\)}]\begingroup The natural numbers.\nomeqref {0.0}
+		\nompageref{1}
+  \item [{\(\mathbb R\)}]\begingroup The real numbers.\nomeqref {0.0}
+		\nompageref{1}
+  \item [{\(\mathbb R^d\)}]\begingroup The Euclidean \(d\)-dimensional space with Euclidean norm \(\left\lVert \cdot \right\rVert\).\nomeqref {0.0}
+		\nompageref{1}
+  \item [{\(\mathbb R^{N\times N}_{\text{sym}, +}\)}]\begingroup The set of non negative definite symmetric \(N\times N\) matrices.\nomeqref {0.0}
+		\nompageref{1}
+  \item [{\(\mathbb R_+\)}]\begingroup The set of non negative real numbers \([0, \infty)\).\nomeqref {0.0}
+		\nompageref{1}
+  \item [{\(\mathbb Z_2\)}]\begingroup The cyclic group consisting of \(\left\{ 0, 1\right\}\) with the addition modulo \(2\).\nomeqref {0.0}
+		\nompageref{1}
+  \item [{\(\operatorname{sgn}\)}]\begingroup Either the sign of a number or the parity of a permutation.\nomeqref {0.0}
+		\nompageref{1}
+  \item [{\(\operatorname{span}\)}]\begingroup This denotes the span of a collection of vectors.\nomeqref {0.0}
+		\nompageref{1}
+  \item [{\(A\ge B\)}]\begingroup We write \(A\ge0\) if \(A\) is non negative definite and \(A\ge B\) if \(A-B\ge 0\) where \(A\) and \(B\) are symmetric matrices.\nomeqref {0.0}
+		\nompageref{1}
+  \item [{\(D^2f\)}]\begingroup Hessian matrix, i.e. second derivative of a function \(f\colon\mathbb R^d\to \mathbb R\).\nomeqref {0.0}
+		\nompageref{1}
+  \item [{\(L^2(\mu)\)}]\begingroup The space of square integrable functions with scalar product \[(\phi, \psi)_{L^2(\mu)} = \int\phi(x)\psi(x)\mu(\mathrm dx).\]\nomeqref {0.0}
+		\nompageref{1}
+  \item [{\(O(g(x))\)}]\begingroup We write \(f(x) = O(g(x))\) if \(f(x) \le M g(x)\) for all \(x\ge x_0\) and one \(M>0\).\nomeqref {0.0}
+		\nompageref{1}
+  \item [{\(S_n\)}]\begingroup The permutation group of \(\left\{ 1, \dots, n\right\}\).\nomeqref {0.0}
+		\nompageref{1}
+
+\end{thenomenclature}

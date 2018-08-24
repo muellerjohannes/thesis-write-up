@@ -1,0 +1,333 @@
+\newcommand{\etalchar}[1]{$^{#1}$}
+\begin{thebibliography}{MRR{\etalchar{+}}53}
+
+\bibitem[AFAT14]{affandi2014learning}
+Raja~Hafiz Affandi, Emily Fox, Ryan Adams, and Ben Taskar.
+\newblock Learning the parameters of determinantal point process kernels.
+\newblock In {\em International Conference on Machine Learning}, pages
+  1224--1232, 2014.
+
+\bibitem[AIR10]{amaldi2010efficient}
+Edoardo Amaldi, Claudio Iuliano, and Romeo Rizzi.
+\newblock Efficient deterministic algorithms for finding a minimum cycle basis
+  in undirected graphs.
+\newblock In {\em International Conference on Integer Programming and
+  Combinatorial Optimization}, pages 397--410. Springer, 2010.
+
+\bibitem[BA15]{bardenet2015inference}
+R{\'e}mi Bardenet and Michalis Titsias~RC AUEB.
+\newblock Inference for determinantal point processes without spectral
+  knowledge.
+\newblock In {\em Advances in Neural Information Processing Systems}, pages
+  3393--3401, 2015.
+
+\bibitem[BDF10]{borodin2010adding}
+Alexei Borodin, Persi Diaconis, and Jason Fulman.
+\newblock On adding a list of numbers (and other one-dependent determinantal
+  processes).
+\newblock {\em Bulletin of the American Mathematical Society}, 47(4):639--670,
+  2010.
+
+\bibitem[Bil13]{billingsley2013convergence}
+Patrick Billingsley.
+\newblock {\em Convergence of probability measures}.
+\newblock John Wiley \& Sons, 2013.
+
+\bibitem[BK13]{bourgade2013quantum}
+Paul Bourgade and Jonathan~P Keating.
+\newblock Quantum chaos, random matrix theory, and the {Riemann}
+  \(\zeta\)-function.
+\newblock In {\em Chaos}, pages 125--168. Springer, 2013.
+
+\bibitem[BM73]{benard1973detection}
+Christine Benard and Odile Macchi.
+\newblock Detection and``emission''processes of quantum particles in a``chaotic
+  state''.
+\newblock {\em Journal of Mathematical Physics}, 14(2):155--167, 1973.
+
+\bibitem[BM11]{bondy2011graph}
+A.~Bondy and U.S.R. Murty.
+\newblock {\em Graph Theory}.
+\newblock Graduate Texts in Mathematics. Springer London, 2011.
+
+\bibitem[Bor09]{borodin2009determinantal}
+Alexei Borodin.
+\newblock Determinantal point processes.
+\newblock {\em arXiv preprint arXiv:0911.1153}, 2009.
+
+\bibitem[BV04]{boyd2004convex}
+Stephen Boyd and Lieven Vandenberghe.
+\newblock {\em Convex optimization}.
+\newblock Cambridge university press, 2004.
+
+\bibitem[BVDG11]{buhlmann2011statistics}
+Peter B{\"u}hlmann and Sara Van De~Geer.
+\newblock {\em Statistics for high-dimensional data: methods, theory and
+  applications}.
+\newblock Springer Science \& Business Media, 2011.
+
+\bibitem[DK14]{djolonga2014map}
+Josip Djolonga and Andreas Krause.
+\newblock From {MAP} to marginals: Variational inference in bayesian submodular
+  models.
+\newblock In {\em Advances in Neural Information Processing Systems}, pages
+  244--252, 2014.
+
+\bibitem[Dud10]{dudley2010distances}
+Richard~M Dudley.
+\newblock Distances of probability measures and random variables.
+\newblock In {\em Selected Works of RM Dudley}, pages 28--37. Springer, 2010.
+
+\bibitem[EP05]{emiris2005improved}
+Ioannis~Z Emiris and Victor~Y Pan.
+\newblock Improved algorithms for computing determinants and resultants.
+\newblock {\em Journal of Complexity}, 21(1):43--71, 2005.
+
+\bibitem[GKT12]{gillenwater2012near}
+Jennifer Gillenwater, Alex Kulesza, and Ben Taskar.
+\newblock Near-optimal map inference for determinantal point processes.
+\newblock In {\em Advances in Neural Information Processing Systems}, pages
+  2735--2743, 2012.
+
+\bibitem[Gra90]{gray1990entropy}
+Robert~M Gray.
+\newblock Entropy and information theory.
+\newblock Springer, 1990.
+
+\bibitem[GT06]{griffin2006principal}
+Kent Griffin and Michael~J Tsatsomeros.
+\newblock Principal minors, {Part II}: The principal minor assignment problem.
+\newblock {\em Linear Algebra and its applications}, 419(1):125--171, 2006.
+
+\bibitem[Has70]{hastings1970monte}
+W~Keith Hastings.
+\newblock Monte carlo sampling methods using markov chains and their
+  applications.
+\newblock {\em Biometrika}, 57(1):97--109, 1970.
+
+\bibitem[Hig90]{higham1990exploiting}
+Nicholas~J Higham.
+\newblock Exploiting fast matrix multiplication within the level 3 {BLAS}.
+\newblock {\em ACM Transactions on Mathematical Software (TOMS)},
+  16(4):352--368, 1990.
+
+\bibitem[HKP{\etalchar{+}}06]{hough2006determinantal}
+J~Ben Hough, Manjunath Krishnapur, Yuval Peres, B{\'a}lint Vir{\'a}g, et~al.
+\newblock Determinantal processes and independence.
+\newblock {\em Probability surveys}, 3:206--229, 2006.
+
+\bibitem[Hor87]{horton1987polynomial}
+Joseph~Douglas Horton.
+\newblock A polynomial-time algorithm to find the shortest cycle basis of a
+  graph.
+\newblock {\em SIAM Journal on Computing}, 16(2):358--366, 1987.
+
+\bibitem[Joh04]{johansson2004determinantal}
+Kurt Johansson.
+\newblock Determinantal processes with number variance saturation.
+\newblock {\em Communications in mathematical physics}, 252(1-3):111--148,
+  2004.
+
+\bibitem[KR95]{kass1995bayes}
+Robert~E Kass and Adrian~E Raftery.
+\newblock Bayes factors.
+\newblock {\em Journal of the american statistical association},
+  90(430):773--795, 1995.
+
+\bibitem[KT10]{kulesza2010structured}
+Alex Kulesza and Ben Taskar.
+\newblock Structured determinantal point processes.
+\newblock In {\em Advances in neural information processing systems}, pages
+  1171--1179, 2010.
+
+\bibitem[KT11]{kulesza2011k}
+Alex Kulesza and Ben Taskar.
+\newblock \(k\)-{DPP}s: Fixed-size determinantal point processes.
+\newblock In {\em Proceedings of the 28th International Conference on Machine
+  Learning (ICML-11)}, pages 1193--1200, 2011.
+
+\bibitem[KT12a]{kulesza2012learning1}
+Alex Kulesza and Ben Taskar.
+\newblock Learning determinantal point processes.
+\newblock {\em arXiv preprint arXiv:1202.3738}, 2012.
+
+\bibitem[KT{\etalchar{+}}12b]{kulesza2012determinantal}
+Alex Kulesza, Ben Taskar, et~al.
+\newblock Determinantal point processes for machine learning.
+\newblock {\em Foundations and Trends{\textregistered} in Machine Learning},
+  5(2--3):123--286, 2012.
+
+\bibitem[Kul12]{kulesza2012learning}
+Alex Kulesza.
+\newblock {\em Learning with Determinantal Point Processes}.
+\newblock PhD thesis, University of Pennsylvania, 2012.
+
+\bibitem[LC06]{lehmann2006theory}
+Erich~L Lehmann and George Casella.
+\newblock {\em Theory of point estimation}.
+\newblock Springer Science \& Business Media, 2006.
+
+\bibitem[LCYO]{leeindividualness}
+Donghoon Lee, Geonho Cha, Ming-Hsuan Yang, and Songhwai Oh.
+\newblock Individualness and determinantal point processes for pedestrian
+  detection: Supplementary material.
+
+\bibitem[LG{\etalchar{+}}16]{le2016brownian}
+Jean-Fran{\c{c}}ois Le~Gall et~al.
+\newblock {\em Brownian motion, martingales, and stochastic calculus}, volume
+  274.
+\newblock Springer, 2016.
+
+\bibitem[Lyo03]{lyons2003determinantal}
+Russell Lyons.
+\newblock Determinantal probability measures.
+\newblock {\em Publications Math{\'e}matiques de l'Institut des Hautes
+  {\'E}tudes Scientifiques}, 98(1):167--212, 2003.
+
+\bibitem[Mac03]{mackay2003information}
+David~JC MacKay.
+\newblock {\em Information theory, inference and learning algorithms}.
+\newblock Cambridge university press, 2003.
+
+\bibitem[ME11]{martin2011mathematical}
+Nathaniel~FG Martin and James~W England.
+\newblock {\em Mathematical theory of entropy}, volume~12.
+\newblock Cambridge university press, 2011.
+
+\bibitem[MG60]{mehta1960density}
+Madan~Lal Mehta and Michel Gaudin.
+\newblock On the density of eigenvalues of a random matrix.
+\newblock {\em Nuclear Physics}, 18:420--427, 1960.
+
+\bibitem[MRR{\etalchar{+}}53]{metropolis1953equation}
+Nicholas Metropolis, Arianna~W Rosenbluth, Marshall~N Rosenbluth, Augusta~H
+  Teller, and Edward Teller.
+\newblock Equation of state calculations by fast computing machines.
+\newblock {\em The journal of chemical physics}, 21(6):1087--1092, 1953.
+
+\bibitem[MS15]{mariet2015fixed}
+Zelda Mariet and Suvrit Sra.
+\newblock Fixed-point algorithms for learning determinantal point processes.
+\newblock In {\em International Conference on Machine Learning}, pages
+  2389--2397, 2015.
+
+\bibitem[MT02]{mira2002efficiency}
+Antonietta Mira and Luke Tierney.
+\newblock Efficiency and convergence properties of slice samplers.
+\newblock {\em Scandinavian Journal of Statistics}, 29(1):1--12, 2002.
+
+\bibitem[MT12]{meyn2012markov}
+Sean~P Meyn and Richard~L Tweedie.
+\newblock {\em Markov chains and stochastic stability}.
+\newblock Springer Science \& Business Media, 2012.
+
+\bibitem[MZ08]{magen2008near}
+Avner Magen and Anastasios Zouzias.
+\newblock Near optimal dimensionality reductions that preserve volumes.
+\newblock In {\em Approximation, Randomization and Combinatorial Optimization.
+  Algorithms and Techniques}, pages 523--534. Springer, 2008.
+
+\bibitem[Nea03]{neal2003slice}
+Radford~M Neal.
+\newblock Slice sampling.
+\newblock {\em Annals of statistics}, pages 705--741, 2003.
+
+\bibitem[NH44]{newton1744philosophiae}
+Isaac Newton and Edmund Halley.
+\newblock {\em Philosophiæ naturalis principia mathematica}, volume~62.
+\newblock Jussu Societatis Regiae ac typis Josephi Streater, prostant venales
+  apud Sam. Smith, 1744.
+
+\bibitem[NM94]{newey1994large}
+Whitney~K Newey and Daniel McFadden.
+\newblock Large sample estimation and hypothesis testing.
+\newblock {\em Handbook of econometrics}, 4:2111--2245, 1994.
+
+\bibitem[RC13]{robert2013monte}
+Christian Robert and George Casella.
+\newblock {\em Monte Carlo statistical methods}.
+\newblock Springer Science \& Business Media, 2013.
+
+\bibitem[Rez12]{rezakhanlou2012lectures}
+Fraydoun Rezakhanlou.
+\newblock {Lectures on Random Matrices}.
+\newblock {\em Notes for a UC Berkeley topics course}, 2012.
+
+\bibitem[RGG{\etalchar{+}}97]{roberts1997weak}
+Gareth~O Roberts, Andrew Gelman, Walter~R Gilks, et~al.
+\newblock Weak convergence and optimal scaling of random walk {Metropolis}
+  algorithms.
+\newblock {\em The annals of applied probability}, 7(1):110--120, 1997.
+
+\bibitem[Ric06]{rice2006mathematical}
+John Rice.
+\newblock {\em Mathematical statistics and data analysis}.
+\newblock Nelson Education, 2006.
+
+\bibitem[RKT15]{rising2015efficient}
+Justin Rising, Alex Kulesza, and Ben Taskar.
+\newblock An efficient algorithm for the symmetric principal minor assignment
+  problem.
+\newblock {\em Linear Algebra and its Applications}, 473:126--144, 2015.
+
+\bibitem[Rob99]{robert1999metropolis}
+Christian~P Robert.
+\newblock {The Metropolis—Hastings Algorithm}.
+\newblock In {\em Monte Carlo Statistical Methods}, pages 231--283. Springer,
+  1999.
+
+\bibitem[RR09]{roberts2009examples}
+Gareth~O Roberts and Jeffrey~S Rosenthal.
+\newblock Examples of adaptive mcmc.
+\newblock {\em Journal of Computational and Graphical Statistics},
+  18(2):349--367, 2009.
+
+\bibitem[R{\"u}s14]{ruschendorf2014mathematische}
+Ludger R{\"u}schendorf.
+\newblock {\em Mathematische Statistik}.
+\newblock Springer, 2014.
+
+\bibitem[Sam59]{samuel1959some}
+Arthur~L Samuel.
+\newblock Some studies in machine learning using the game of checkers.
+\newblock {\em IBM Journal of research and development}, 3(3):210--229, 1959.
+
+\bibitem[Tao10]{tao2010universality}
+Terence Tao.
+\newblock A second draft of a non-technical article on universality.
+\newblock
+  \url{https://terrytao.wordpress.com/2010/09/14/a-second-draft-of-a-non-technical-article-on-universality/},
+  2010.
+
+\bibitem[Tau85]{tauchen1985diagnostic}
+George Tauchen.
+\newblock Diagnostic testing and evaluation of maximum likelihood models.
+\newblock {\em Journal of Econometrics}, 30(1-2):415--443, 1985.
+
+\bibitem[UBMR17]{urschel2017learning}
+John Urschel, Victor-Emmanuel Brunel, Ankur Moitra, and Philippe Rigollet.
+\newblock Learning determinantal point processes with moments and cycles.
+\newblock {\em arXiv preprint arXiv:1703.00539}, 2017.
+
+\bibitem[Vav91]{vavasis1991nonlinear}
+Stephen~A Vavasis.
+\newblock {\em Nonlinear optimization: complexity issues}.
+\newblock Oxford University Press, Inc., 1991.
+
+\bibitem[Vav95]{vavasis1995complexity}
+Stephen~A Vavasis.
+\newblock Complexity issues in global optimization: a survey.
+\newblock In {\em Handbook of global optimization}, pages 27--41. Springer,
+  1995.
+
+\bibitem[Veb12]{10.2307/1967604}
+Oswald Veblen.
+\newblock An application of modular equations in analysis situs.
+\newblock {\em Annals of Mathematics}, 14(1/4):86--94, 1912.
+
+\bibitem[Vol09]{volkenstein2009entropy}
+Mikhail~V Volkenstein.
+\newblock {\em Entropy and information}, volume~57.
+\newblock Springer Science \& Business Media, 2009.
+
+\end{thebibliography}

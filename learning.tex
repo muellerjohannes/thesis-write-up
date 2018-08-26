@@ -253,10 +253,14 @@ Two symmetric matrices \(A, B\in\mathbb R^{N\times N}\) are called \emph{determi
 \end{defi}
 
 \begin{rem}
-It can be shown that two matrices \(A, B\in\mathbb R^{N\times N}\) are determinantally equivalent if and only if there is a diagonal matrix \(D\) with diagonal entries \(\pm1\) such that \(A = DBD\). This is equivalent to the change of basis that one obtains by changing the signs of some basis elements. Since we will not need this result, we refer to Theorem 4.1 in \cite{kulesza2012learning} for a proof.
+%\begin{enumerate}
+%\item
+ It can be shown that two matrices \(A, B\in\mathbb R^{N\times N}\) are determinantally equivalent if and only if there is a diagonal matrix \(D\) with diagonal entries \(\pm1\) such that \(A = DBD\). This is equivalent to the change of basis obtained by changing the signs of some basis elements. Since we will not need this result, we refer to Theorem 4.1 in \cite{kulesza2012learning} for a proof. 
+%\end{enumerate}
 \end{rem}
 
-It is obvious that we can only hope to reconstruct a symmetric matrix up to determinantal equivalence. However, this would be satisfactory, because determinantally equivalent matrices are exactly those that give rise to the same DPP.
+It is obvious that --given its principal minors -- we can only hope to reconstruct a symmetric matrix up to determinantal equivalence. However, this would be satisfactory, because determinantally equivalent matrices are exactly those that give rise to the same DPP. On the other hand it is obvious that the solution of the principle minor assignment problem will be unique up to determinantal equivalence. Thus, the main work will be in showing that already the principal minors up to a certain size uniquely specify this equivalence class and further we  obtain a method of reconstruction of this equivalence class.
+
 %Let us in the following denote the principal minor \(\det(K_S)\) by \(\Delta_S\) for \(S\subseteq\left\{ 1, \dots, N\right\}\). To come back to our original problem, w
 We notice -- just like in the case of the \(3\times 3\) matrix -- that the principal minors up to size two immediately determine the diagonal and the absolute values of the off diagonal of \(K\) since we have
 \begin{equation*}\label{e3.0}

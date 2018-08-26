@@ -156,7 +156,7 @@ where \(F\colon2^{\mathcal Y}\to\mathbb R\) is called the \emph{energy function}
 
 Although some of those different classes of point processes with negative correlation posses nice theoretical properties they share one major drawback. In fact a lot computations and also the simulation of those point processes can not be performed efficiently. For example in the case of Gibbs point processes even the time needed for the computation of the normalisation constant%not even the normalisation constant
 \[\sum_{A\subseteq\mathcal Y} \exp(-F(A)) \]
-grows exponentially with \(N\) since it is the sum over an exponentially large set. However, the special structure of the determinant itself leads to the explicit expression in \eqref{e2.3} of the normalisation constant for DPPs and the computation time for the algebraic computation of it only grows like \(N^3\) or even slower for numerical approximations (cf. \cite{emiris2005improved})%recent\todo{cite}
+grows exponentially with \(N\) since it is the sum over an exponentially large set. However, the special structure of the determinant itself leads to the explicit expression in \eqref{e2.3} of the normalisation constant for DPPs and the computation time for the exact computation of it via Gauss elimination only grows like \(N^3\) or even slower for numerical approximations (cf. \cite{valiant1979complexity} and \cite{emiris2005improved})%recent\todo{cite}
 . A more in depth comparison of different point processes including their descriptive power can be found in \cite{kulesza2012determinantal}.
 %In most cases even the computation of the normalisation constant 
 \end{emp}
@@ -727,7 +727,7 @@ We will choose \(\sigma = 20\) first and then \(\sigma = 5\) to see how this par
 Finally we set the qualities to be constant and scale them so that the expected cardinality of the DPP is approximately \(15\). Further, we define a Poisson point process with the same expected cardinality. This means the Poisson point process includes every point independently with probability \(\frac{15}{100}\). A comparison of a sample from those three point processes is depicted in Figure \ref{pointsonaline} and the -- in this case spatially -- repulsive structure of the DPP is apparent.
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.60\textwidth]{figures/comparison-different-DPPs-Poisson-4}
+	\includegraphics[width=0.60\textwidth]{figures/comparison-different-DPPs-Poisson-7}
 %	\includegraphics[width=0.49\textwidth]{Poisson-in-square}
 %	\tag{1}
 	\caption{Two DPPs with a different strength of repulsion on the left and a Poisson point process on a (discretised) line with same expected cardinality. The spatial repulsion of the DPPs is clearly visible.}

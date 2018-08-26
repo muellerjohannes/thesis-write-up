@@ -281,13 +281,13 @@ and we have seen in the proof of \ref{PosMLE} that the log likelihood function t
 
 %\subsubsection*{MLE for the repulsiveness parameter}
 
-\subsubsection*{MLE with regularisation}
+\subsubsection*{MLE with regularisation or MAP estimation}
 
 We have seen that the probability that the MLE exists tends to one if the sample size goes to infinity. However, it might not be possible in practice to obtain larger data sets and therefore we introduce a variation of maximum likelihood estimation which forces the existence of a maximiser. The idea is to add a coercive function to the log likelihood function such that the sum is coercive and to optimise this sum.
-We will work with one of the three parametric models for DPPs.  %and denote the 
+%We will work with one of the three parametric models for DPPs.  %and denote the 
 
-\begin{defi}[Regularised MLE]
-Let the setting be the same as for the normal maximum likelihood estimation. Further we assume that we have given a function \(F\colon\Theta\to[-\infty, 0]\) which we call the \emph{regulariser}. The \emph{regularised maximum likelihood estimator} is the maximiser
+\begin{defi}[MAP estimation]
+Let the setting be the same as for the normal maximum likelihood estimation. Further we assume that we have given a function \(F\colon\Theta\to[-\infty, 0]\) which we call the \emph{regulariser}. The \emph{regularised MLE}, \emph{maximum a posteriori probability} or shortly \emph{MAP estimator}\footnote{The term maximum posteriori probability will only properly make sense once we introduce the Bayesian setting in the next chapter. We will see there that the regularised MLE is nothing but the mode of the posterior density.} is the maximiser
 \[ \hat \theta_n\coloneqq \underset{\theta\in\Theta}{\arg\max} \big( \mathcal L(\theta) + F(\theta)\big).\]
 %We call \(F\) the \emph{regulariser}.
 \end{defi}
@@ -295,14 +295,15 @@ Let the setting be the same as for the normal maximum likelihood estimation. Fur
 \begin{rem}
 \begin{enumerate}
 \item The regularised maximum likelihood approach is clearly an extension of the classical approach since one can simply set \(F=0\).
-\item If the regulariser is upper semi-continuous and coercive, then the regularised MLE always exists. In fact, \(\mathcal L\le0\) implies that \(\mathcal L + F\) is coercive and also upper semi-continuous since the log likelihood functions are upper semi-continuous for all parametric models and \ref{dirmet} yields the assertion. %In the case of  
+\item If the regulariser is upper semi-continuous and coercive, then the MAP estimator always exists. In fact, \(\mathcal L\le0\) implies that \(\mathcal L + F\) is coercive and also upper semi-continuous since the log likelihood functions are upper semi-continuous for all parametric models and \ref{dirmet} yields the assertion. %In the case of  
 \item The regularised MLE and the MLE can agree but don’t necessarily agree. 
-\item The regulariser can be used to encode any prior conceptions one hase. For example one can use the regulariser to change the parameter set. Indeed, if we want to consider all matrices \(\mathbb R^{N\times N}\) as a parameter space instead of only the symmetric positive semi-definite matrices, we can simply set
+\item The regulariser can be used to encode any prior conceptions one has. For example one can use the regulariser to change the parameter set. Indeed, if we want to consider all matrices \(\mathbb R^{N\times N}\) as a parameter space instead of only the symmetric positive semi-definite matrices, we can simply set
 \[F(L)\coloneqq\begin{cases} \;0 \quad&\text{if } L \text{ symmetric and positive semi-definite} \\ -\infty &\text{otherwise}\end{cases}\]
 which is equivalent to the MLE on the smaller parameter space.
 The advantage of \(\mathbb R^{N\times N}\) as a parameter space is that one can make use of pre-implemented optimisation algorithms, since they are usually defined over real vector spaces.
-\item Choice of the regulariser.
-\item Regularisation of noise.
+\item We will see in the fifth chapter how the choice of the regulariser can be used to reduce the effect random perturbations of the data have on the estimation. %The heuristical explanation for this effect is that the regulariser -- if used appropriately -- can be used to ‚penalise‘ parameters that lead to very irregular probability distributions.
+%Choice of the regulariser.
+%\item Regularisation of noise.
 \end{enumerate}
 \end{rem}
 

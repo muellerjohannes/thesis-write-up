@@ -792,6 +792,18 @@ i.e. a centered Gaussian prior. Under this regularisation, the MLE was
 \end{pmatrix}.\]
 It is not surprising that the entries of the regularised MLE are closer to zero, since the regulariser is built to penalise large parameter values.
 
+We chose the sample size of \(n=8\) relatively small and want to show the effect the sample size has on the estimation. Obviously, we know from the second chapter that the MLE will converge to the actual parameter. To show this convergence in our case, we iteratively raised the sample size from \(1\) to \(20\) and obtained the maximum likelihood estimators that are shown in Figure \ref{fig:learningcurve}. We can see that the MLE converges towards the actual parameter where the regularised MLE seems to converge to a -- only at the second sight -- slightly different value. % \todo{does this mean the effect of the regularisation vanishes?}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.49\textwidth]{figures/Learning-curve-first-coordinate}
+	\includegraphics[width=0.49\textwidth]{figures/Learning-curve-second-coordinate}
+%	\tag{1}
+	\caption{Plot of the progression of the maximum likelihood estimator towards the real parameter -- marked by the red lines -- with increased sample size for the first coordinate on the right and the second one on the left.}
+	\label{fig:learningcurve}
+\end{figure}
+
+
+
 \section{Bayesian estimation using MCMC methods}
 
 %We will continue the example of the estimation of the log linearity constant from the section about maximum likelihood estimation and will see how two different priors influence the posterior of the parameter, but first we quickly recall the example.
@@ -943,6 +955,11 @@ Hence, we can take a completely analogue approach for the approximation of the l
 
 It is evident from both, theoretical considerations and the experimental results of the maximum likelihood estimations and the approximations of the posterior that the regulariser or prior always forces the estimation to get closer to the origin. Obviously this can make the estimation better, if for example the unregularised MLE is larger than the actual parameter, but then it makes the estimation better by pure luck. We will see later that the influence of the prior is a little bit more positive if the data is perturbed by random noise.
 
+\subsubsection{Comparing the models via the Bayes factor}
+
+We have introduced the Bayes factor as the ratio of the total observation probabilities under two models. In order to compare the regularised and unregularised model, we need to approximate the total observation probability
+\[f(x|\mathcal F) \coloneqq \int_{\Theta} f_{X, \Theta}(x, \theta)\nu(\mathrm{d}\theta).\]
+
 \subsubsection*{A naive approximation of the posterior}
 
 The motivation for the use of MCMC methods was that one wants to obtain an approximation of the posterior. We present here a different and naive approach, which works a lot faster and with higher accuracy. However we will see later that this approach suffers from what is known as the \emph{curse of dimensionality},\footnote{This name is used for pretty much all phenomena that grow exponentially with the dimension of the problem.} i.e. the time needed to perform it will grow exponentially with the dimension of the parameter that should be estimated.
@@ -962,14 +979,14 @@ Let us assume that we have performed the two burn in periods of the MH random wa
 
 In large examples the evaluation of the likelihood function
 \[f_{X|\Theta}(x|\theta) \propto \prod_{i=1}^n \frac{\det(L(\theta)_{A_i})}{\det(L(\theta) + I)} \]
-involves the computation of a \(N\times N\) matrix. This can be done explicitly using Gauss elimination\todo{find a reference}{ } which does not change the determinant -- at least up to a sign -- and can be performed in at most \(N^3\) steps\todo{is this true?}. Hence, the time neede for the computation of the likelihood function can be bounded -- up to a constant -- by
+involves the computation of a \(N\times N\) matrix. This can be done explicitly using Gauss elimination which does not change the determinant -- at least up to a sign -- and can be performed in at most \(N^3\) steps, cf. \cite{valiant1979complexity}.\footnote{Actually one can even do better, but those algorithms come with greater implementation challenges.} Hence, the time neede for the computation of the likelihood function can be bounded -- up to a constant -- by
 \[N^3 + \sum_{i=1}^n \left\lvert A_i \right\rvert^3 \le (n+1) \cdot N^3\]
 and we say it can be performed in \(O(N^3)\) 
 %\[O\left( N^3 + \sum_{i=1}^n \left\lvert A_i \right\rvert^3\right)\]
 time.\footnote{See also the Landau or âbig \(O\)Ô notation in the nomenclature.} 
 In practice this will take a significant amount of time and this was also the motivation for the variational MCMC methods. For example in our toy example the computation took between one and two seconds on a six year old \(1.8\si{GHz}\) Intel Core i5 using the determinant algorithm in R.
 
-For a single step of the MH random walk the unnormalised posterior needs to be evaluated twice for the computation of the acceptance threshold \(\rho(x, y)\), cf. \eqref{threshold}. Usually one will work with a prior that is easy to compute and hence we will neglect its contribution and hence one step of the performance of one MH random walk can be carried out in \(O(N^3)\) time. If \(T\) denotes the length of the MCMC method, the time needed for its simulation is 
+For a single step of the MH random walk the unnormalised posterior needs to be evaluated twice for the computation of the acceptance threshold \(\rho(x, y)\), cf. \eqref{threshold}. Usually one will work with a prior that is easy to compute and with a proposal that can be simulated fast and hence we will neglect its contribution and hence one step of the performance of one MH random walk can be carried out in \(O(N^3)\) time. If \(T\) denotes the length of the MCMC method, the time needed for its simulation is 
 \begin{equation}\label{complexityMCMC}
 O\left( T\cdot N^3\right).
 \end{equation}
@@ -986,7 +1003,10 @@ O\left( R^M\cdot N^3\right).
 In \(10\) dimension and with \(40\) grid lines along all dimensions, this corresponds to \(40^{10} > 10^{16}\) evaluations which can not be performed in reasonable time. This exponential increase makes this direct approach only impossible if the parameter one wishes to estimate is not very low dimensional. Nevertheless it might be possible to modify this approach in a suitable way to make it more promising in higher dimension. For example one could try to iteratively raise the resolution of the grid on the places where one expects a high value of the function or high changes of the function. Alternatively it might be worth to investigate how different approximation algorithms of high dimensional functions could help in this approach.
 
 It shall be noted that also the method of numerical integration suffers from the course of dimensionality since numerical integration relies on the evaluation of the function on an exponentially increasing number of points.
-\todo{How does \(T\) grow with \(M\)?}\todo{comment on complexity for silce sampling?}
+\todo{How does \(T\) grow with \(M\)?}
+
+It shall be noted that the complexity of the slice sampling algorithm can not be given this easily, at least for the version presented above. This is because the approximate sampling from the uniform distribution on the slice proposed in Algorithm \ref{alg:slice-sampling-implementation} can need arbitrarily many samples from the uniform distribution on the proposed cuboid. Although those uniform samples can be generated efficiently one has to evaluate the unnormalised posterior each time to check whether the proposed sample is actually contained in the slice.
+%\todo{comment on complexity for silce sampling?}
  %The comparison to \eqref{complexityMCMC} shows that the direct approach is only 
  
 
@@ -1009,7 +1029,7 @@ In real world applications the observed data will almost never be free from nois
 Thus, we want to investigate whether this is the case for  the parameter estimation of discrete DPPs. First we have to specify what noise we are going to consider in the case of discrete DPPs. If one works with continuous DPPs one could assume a perturbation of the exact positions of the observed points, however in the discrete setting this does only make limited sense. Therefore we will work with the observations of a DPP where points are randomly added or deleted and will specify this later.
 
 Before we investigate the stability properties of the estimation in the specific setup for DPPs, we should make a general statement. The estimation can be seen as the following two stage process
-\[\text{data } x\; \xlongrightarrow{\text{evaluation of } f_{X|\Theta}}\; \text{posterior } f_{X|\Theta}(x|\cdot) f_\Theta(\cdot)\; \xlongrightarrow{\text{maximisation}}\; \text{MLE } \hat \theta. \]
+\[\text{data } x\; \xlongrightarrow{\text{evaluation of } f_{X|\Theta}}\; \text{posterior } f_{X|\Theta}(x|\cdot) f_\Theta(\cdot)\; \xlongrightarrow{\text{maximisation}}\; \text{MAP estimator } \hat \theta. \]
 %\[\text{data}\; \xlongrightarrow{\text{evaluation of } f_{X|\Theta}}\; \text{posterior}\; \xlongrightarrow{\text{maximisation}}\; \text{MLE}. \]
 If one wants to investigate the stability properties of the estimation which is nothing but the continuity, then it is reasonable to do this for both steps separately. The second step is in general discontinuous since the maximisation of a function is not a continuous operation under the usual topologies on functions corresponding to uniform or pointwise convergence or integral norms. 
 %Because of this factorisation, it is immediate that the if the % posterior density has a better stability property that the MLE, since 

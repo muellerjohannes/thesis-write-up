@@ -2,7 +2,15 @@
 {\LARGE\textsc{Acknowledgements}\\[.9cm]}
 % \normalsize
 \begin{minipage}{11cm}
-% \begin{otherlanguage}{greek} Gwg\'{w} \end{otherlanguage}
+%\begin{enumerate}
+%\item supervisors
+%\item dreamteam
+%\item family, grandma
+%\item friends in Freiburg
+%\item EgoFM, especially EgoFM Flash
+%\item Villigst
+%\item  \begin{otherlanguage}{greek} Gwg\'{w} \end{otherlanguage}
+%\end{enumerate}
 %I would like to thank the dreamteam for being such an eggcelent friendgroup and for all the pun we had during the last year.
 \end{minipage}
 \end{center}
@@ -14,7 +22,7 @@
 {\LARGE\textsc{Abstract}\\[.9cm]}
 \begin{minipage}{11cm}
 %Determinantal point processes are random subsets that exhibit a diversifying behaviour in the sense that the randomly selected points tend to be not similar in some way. This repellent structure first arrose in theortical physics and pure mathematics, but they have recently been used to model a variety of many real world scenarios in a machine learning setup. We aim to give an overview over the main ideas of this approach which is easily accessible even without prior knowledge in the area of machine learning and sometimes omit technical calculations in order to keep the focus on the concepts.
-Determinantal point processes (DPPs) are a probabilistic model of diverse subsets that exhibits desirable computational properties in terms of its simulation, marginalisation and other operations. That is why they have recently been used in an increasing amount of real world applications like text summarisation and the selection of a diverse subset of pictures returned by an image search (cf. \cite{kulesza2012learning}). A crucial step in all of those applications is the estimation of different parameters and therefore this will be the focus of this dissertation. We will give an overview over two different point estimators and their benefits and hindrances and provide proofs for their consistency. We will see that the main drawback of the maximum likelihood estimation is that it results in the maximisation of the log likelihood function which is not concave in the case of DPPs and therefore not possible in an efficient way. This motivates the Bayesian approach to the estimation of those parameters and we will see how the posterior density can be approximated using different Markov chain Monte Carlo (MCMC) methods.
+Determinantal point processes (DPPs) are a probabilistic model of diverse subsets that exhibits desirable computational properties in terms of its simulation, marginalisation and other operations. That is why they have recently been used in an increasing amount of real world applications like text summarisation, the selection of a diverse subset of pictures returned by an image search or the selection of human poses in a picture (cf. \cite{kulesza2012learning}). A crucial step in all of those applications is the estimation of different parameters and this will be the focus of this dissertation. We will give an overview over two different types of point estimators and their benefits and hindrances and provide proofs for their consistency. The first one will be based on a reconstruction of a symmetric matrix from its principal minors and will allow to obtain an estimate for the marginal kernel based on the empirical measures. The second kind of estimation will be maximum likelihood estimation (MLE). We will see that this approach results in the maximisation of the log likelihood function which is not concave in the case of DPPs and therefore not possible in an efficient way. This motivates the Bayesian approach to the estimation of those parameters and we will see how the posterior density can be approximated using different Markov chain Monte Carlo (MCMC) methods. Further we will provide toy examples some of the presented estimation procedures. We will use those to investigate how the prior, or equivalently the regularisation of the MLE can be used to lower the effect random perturbations of the observations have on the estimation but will see that this requires a certain degree of care.
 \end{minipage}
 \end{center}
 

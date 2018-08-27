@@ -793,7 +793,7 @@ i.e. a centered Gaussian prior. Under this regularisation, the MLE was
 \end{pmatrix}.\]
 It is not surprising that the entries of the regularised MLE are closer to zero, since the regulariser is built to penalise large parameter values.
 
-We chose the sample size of \(n=8\) relatively small and want to show the effect the sample size has on the estimation. Obviously, we know from the second chapter that the MLE will converge to the actual parameter. To show this convergence in our case, we iteratively raised the sample size from \(1\) to \(30\) and obtained the maximum likelihood estimators that are shown in Figure \ref{fig:learningcurve}. We can see that the MLE converges towards the actual parameter where the regularised MLE seems to converge to a very similar value where the difference of the limits is smaller than the fluctuations. This is because the regularisation is not very strong in this case and we will see later that the models are actually quite close together meaning that the Bayes factor is not very high. \todo{check this} % \todo{does this mean the effect of the regularisation vanishes?}
+We chose the sample size of \(n=8\) relatively small and want to show the effect the sample size has on the estimation. Obviously, we know from the second chapter that the MLE will converge to the actual parameter. To show this convergence in our case, we iteratively raised the sample size from \(1\) to \(30\) and obtained the maximum likelihood estimators that are shown in Figure \ref{fig:learningcurve}. We can see that the MLE converges towards the actual parameter where the regularised MLE seems to converge to a very similar value where the difference of the limits is smaller than the fluctuations. Nevertheless we will see in the comments on the model selection that the Bayes factor between the two models is very high and hence the unregularised model is favourable. \todo{check this}%This is because the regularisation is not very strong in this case and we will see later that the models are actually quite close together meaning that the Bayes factor is not very high.% \todo{check this} % \todo{does this mean the effect of the regularisation vanishes?}
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.49\textwidth]{figures/Learning-curve-comparison-first-parameter}
@@ -975,8 +975,11 @@ It is evident from both, theoretical considerations and the experimental results
 \subsubsection{Comparing the models via the Bayes factor}
 
 We have introduced the Bayes factor as the ratio of the total observation probabilities under two models. In order to compare the regularised and unregularised model, we need to approximate the total observation probability
-\[f(x|\mathcal F) \coloneqq \int_{\Theta} f_{X, \Theta}(x, \theta)\nu(\mathrm{d}\theta).\]
-
+\[f(x|\mathcal F) \coloneqq \int_{\Theta} f_{X, \Theta}(x, \theta)\nu(\mathrm{d}\theta)\]
+which we will do numerically. Also we have to use normalised priors which means we can not use the generalised constant prior, we have used in the discussion for the Bayesian approach without a prior. Therefore we will work with a uniform distribution on a cuboid and choose it so large that it contains the whole Markov chain by far\todo{What does this mean?}{ }, in our case we choose it to be \([-11, -9]\times[5, 7]\). The Bayes factor obtained by this numerical integration is
+\[24584.31 \approx 2.5\cdot10^4. \]
+This strongly suggests that the model arising from the prior \(f_\Theta\propto \mathds{1}_{[-11, -9]\times[5, 7]}\) is far better suited than the one with the Gaussian prior \eqref{toyprior}.
+\todo{Is this not very arbitrary?}
 
 \subsubsection*{A naive approximation of the posterior}
 
@@ -1087,7 +1090,7 @@ We will generate noisy data consisting of \(n=8\) samples of a DPP perturbed by 
 %with different cardinalities and
 We calculate the MLE and regularised MLE corresponding to the regularisation given by the prior \eqref{toyprior}. 
 %More precisely we will work with Poisson point processes with different marginal kernel \(\rho\cdot I\) where we call \(\rho\in(0, 1)\) the \emph{intensity} of the point process. The intensity corresponds to how likely points are dropped from and added to the DPP.
-We use an intensity of \(\rho=\frac1{400}\) and obtain the following results that are fixed in Table \ref{tab:MLEvsRegMLE}.
+We use an intensity of \(\rho=\frac1{400}\) and run repeat this procedure eight times and the results of this are fixed in Table \ref{tab:MLEvsRegMLE}.
 
 \begin{table}[h!]
 \centering

@@ -479,7 +479,14 @@ where we used Proposition \ref{CB-type}.
 %\end{equation*}¥
 \end{proof}
 
-Now we can turn towards the simulation of elementary DPPs where we will make use of the previous result.
+\begin{cor}[Existence of DPPs]
+Let \(K\) be a symmetric \(N\times N\) matrix. Then \(K\) is the marginal kernel of a DPP if and only if \(0\le K\le I\).
+\end{cor}
+%\begin{proof}
+%We have already seen in the beginning that this condition is necessary. To see that it is sufficient, let \(0\le K\le I\) hold. Then the point process \(\tilde{\mathbb P}\) from Theorem \ref{mixDPPs} clearly exists, for example it is given by the explicit construction in Algorithm \ref{alg:DPP-sampling} and is a DPP with marginal kernel \(K\).
+%\end{proof}
+
+Now we can turn towards the simulation of elementary DPPs where we will make use of the previous result. In order to present the algorithms in a compact form we will usually denote them in pseudocode. Here, symbol \(\gets\) stands for the assignment of a value, i.e. \(x\gets y\) means that the variable \(x\) should now have the value \(y\).
 
 \begin{algorithm}
 \caption{Sampling from an elementary DPP \label{alg:elementary-DPP-sampling}}
@@ -520,7 +527,21 @@ where \(B\in\mathbb R^{N\times N}\) is the matrix which columns %\todo{rows or c
 are equal to \(b_k\). Therefore, it remains to show \(B^TB = K\). However, by definition \(B\) is the projection onto the span of \(\left\{ v_k\right\}_{k=1, \dots, m}\) and thus \(B=K\). Because \(K\) is symmetric like every projection, we have \(B^T = B\) and hence can conclude \(B^TB = B^2 = B = K\) where we used that \(B\) is a projection.
 \end{proof}%\todo{add span to nomenclature}
 
-Now we can apply Theorem \ref{mixDPPs} to transfer the results above to arbitrary DPPs. % proves that the following algorithm samples from a DPP. This will also show the existence of DPPs to a given marginal kernel since it gives an explicit construction.
+\begin{cor}[Cardinality of DPPs]\label{carDPP}
+Let \(\mathbb P\) be a DPP with kernel \[K = \sum_{k=1}^N \lambda_kv_kv_k^T.\] Then the cardinality of the DPP is distributed like the sum of the Bernoulli variables \(\left\{ \xi_k\right\}_{k =1, \dots, N}\) with expectations \(\left\{ \lambda_k\right\}_{k=1, \dots, m}\).
+\end{cor}
+\begin{proof}%[Proof of Theorem]
+To proof this, we only have to convince ourselves that after the Bernoulli experiments the cardinality of a DPP with kernel \eqref{BerKer} has size \(m\coloneqq\sum_{k=1}^N\xi_k\) almost surely. However, this is obvious from the construction of elementary DPPs in Proposition \ref{eeDPPs}.
+%Since \(K_\xi\) has rank at most \(m\), the cardinality is almost surely smaller than \(m\). On the other hand we have
+%\begin{equation}
+%\begin{split}
+%\mathbb E\big[\!\left\lvert \mathbf Y \right\rvert\!\big] = \sum\limits_{i\in\mathcal Y} \mathbb P(i\in\mathbf Y) = \sum\limits_{i\in\mathcal Y} (K_\xi)_{ii} = \operatorname{Tr}(K_\xi) = m.
+%\end{split}
+%\end{equation}
+%In the last step we used that the trace of a symmetric matrix is the sum over its eigenvalues, which are \(\xi_k\) in our case. This computation lets us conclude \(\left\lvert \mathbf Y \right\rvert = m\) almost surely.
+\end{proof}
+
+Now we can apply Theorem \ref{mixDPPs} to extend the sampling algorithm to general DPPs. % proves that the following algorithm samples from a DPP. This will also show the existence of DPPs to a given marginal kernel since it gives an explicit construction.
 
 \begin{algorithm}
 \caption{Sampling from a DPP \label{alg:DPP-sampling}}
@@ -611,27 +632,6 @@ Theorem \ref{mixDPPs} states that an arbitrary DPP is the mixture of elementary 
 \end{proof}
 %recent\todo{comment on the intuition one can get from this?}
 
-\begin{cor}[Existence of DPPs]
-Let \(K\) be a symmetric \(N\times N\) matrix. Then \(K\) is the marginal kernel of a DPP if and only if \(0\le K\le I\).
-\end{cor}
-%\begin{proof}
-%We have already seen in the beginning that this condition is necessary. To see that it is sufficient, let \(0\le K\le I\) hold. Then the point process \(\tilde{\mathbb P}\) from Theorem \ref{mixDPPs} clearly exists, for example it is given by the explicit construction in Algorithm \ref{alg:DPP-sampling} and is a DPP with marginal kernel \(K\).
-%\end{proof}
-
-\begin{cor}[Cardinality of DPPs]\label{carDPP}
-Let \(\mathbb P\) be a DPP with kernel \[K = \sum_{k=1}^N \lambda_kv_kv_k^T.\] Then the cardinality of the DPP is distributed like the sum of the Bernoulli variables \(\left\{ \xi_k\right\}_{k =1, \dots, N}\) with expectations \(\left\{ \lambda_k\right\}_{k=1, \dots, m}\).
-\end{cor}
-\begin{proof}%[Proof of Theorem]
-To proof this, we only have to convince ourselves that after the Bernoulli experiments the cardinality of a DPP with kernel \eqref{BerKer} has size \(m\coloneqq\sum_{k=1}^N\xi_k\) almost surely. However, this is obvious from the construction of elementary DPPs in Proposition \ref{eeDPPs}.
-%Since \(K_\xi\) has rank at most \(m\), the cardinality is almost surely smaller than \(m\). On the other hand we have
-%\begin{equation}
-%\begin{split}
-%\mathbb E\big[\!\left\lvert \mathbf Y \right\rvert\!\big] = \sum\limits_{i\in\mathcal Y} \mathbb P(i\in\mathbf Y) = \sum\limits_{i\in\mathcal Y} (K_\xi)_{ii} = \operatorname{Tr}(K_\xi) = m.
-%\end{split}
-%\end{equation}
-%In the last step we used that the trace of a symmetric matrix is the sum over its eigenvalues, which are \(\xi_k\) in our case. This computation lets us conclude \(\left\lvert \mathbf Y \right\rvert = m\) almost surely.
-\end{proof}
-
 \begin{rem}
 Later on it will usually be more convenient to model or estimate the elementary kernel \(L\) instead of the marginal kernel \(K\). Thus, we should explain how the sampling algorithm would work in this case. Since the two kernels are related by
 \[ K = L(L+I)^{-1} \]
@@ -682,11 +682,10 @@ Let \(\big((W_{k_1})_1(W_{k_2})_2\cdots (W_{k_m})_m\big)\) denote the \(m\times 
 %\begin{emp}[Sampling from DPPs]
 %\end{emp}
 
-\subsubsection{Possible improvements}
+\subsubsection{The dual representation} %{Possible improvements}
 
 We will shortly discuss one method how the simulation of DPPs can be made more efficient.
-
-\begin{emp}[Dual representation]
+%\begin{emp}[Dual representation]
 %By far t
 The step in the sampling algorithm that takes the longest in practice is the computation of the eigendecomposition of the matrix \(K\) or \(L\). Hence, we will quickly show how this can be reduced to the computation of the eigendecomposition of a smaller matrix.
 
@@ -707,7 +706,7 @@ is an orthonormal set of eigenvectors to the non trivial eigenvalues of \(A\). %
 Hence, if \(K\) or \(L\) are given as a gram matrix \(B^TB\), it suffices to compute the eigendecomposition of \(BB^T\in\mathbb R^{D\times D}_{\text{sym}, +}\), which could be significantly faster if \(D<N\). Since the sampling algorithm relies only on the eigendecomposition it can be performed based on the dual representation presented above. It should be mentioned that typically \(L\) will modelled as a gram matrix via the quality diversity decomposition and hence this dual representation will mostly be used for \(L\). Further, it comes with even greater benefits here, since the normalisation constant 
 \[\det(L + I) = \prod_{k=1}^N (1 + \lambda_k) = \det\left(BB^T + I\right) \]
 reduces to the computation of the determinant of a \(D\times D\) matrix.
-\end{emp}
+%\end{emp}
 
 The dual representation can make the computations involved with DPPs efficient, but in some cases it might not be effective enough. Therefore, different techniques have been proposed in order to achieve faster computation times, like random projections. This relies on the result from \cite{magen2008near} that points in an \(N\)-dimensional space can be randomly projected into a space with dimension \(O(\log(N))\) in such a way, that the volume spanned by those points is almost preserved with a high probability. For a discussion of this approach we refer to \cite{kulesza2012learning}.
 

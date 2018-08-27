@@ -111,7 +111,7 @@ Let \(G = (V, E)\) be a finite graph, i.e. \(V\) is a finite set, called the \em
 \item \emph{Cycle space:} Each cycle \(C\) can be identified with a vector \(x = x(C)\in\mathbb F_2^{E}\) such that
 \[x_e\coloneqq \begin{cases} \; 1 \quad & \text{if } e\in C \\ \; 0 \quad & \text{if } e\notin C\end{cases}\]
 indicates whether the edge \(e\in E\) belongs to the cycle \(C\). The \emph{cycle space} \(\mathcal C\) is the span of \(\left\{ x(C)\mid C\text{ is a cycle}\right\}\) in \(\mathbb F_2^{E}\). Note that the sum of two cycles in the cycle space corresponds to the symmetric difference of the edges.
-%\item \emph{Simple cycle:} A cycle is called \emph{simple} if every vertex of \(C\) has even degree in \(C\).
+\item \emph{Simple cycle:} A cycle is called \emph{simple} if every vertex of \(C\) has degree \(2\) in \(C\).
 %\item \emph{Cycle basis:} A basis of the cycle space is called \emph{cycle basis} if it consists of simple cycles.
 \item \emph{Chordless cycle:} A cycle \(C\) is called \emph{chordless} if two verteces \(v, w\in C\) form an edge in \(G\) if and only they form an edge in \(C\). This is equivalent to the statement that \(C\) is an induced subgraph that is a cycle.
 \item \emph{Cycle sparsity:} The cycle sparsity is the minimal number \(l\) such that a basis of the cycle space consisting of chordless simple cycles of length at most \(l\) exists. Such a basis is called \emph{shortest maximal cycle basis} or short \emph{SMCB}. If the cycle space is trivial we define the cycle sparsity to be \(2\).

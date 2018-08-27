@@ -550,7 +550,7 @@ target <- function(theta) {
 x <- MCMC(target, c(0, 0), MH=TRUE, 10^2, alpha=10)
 plot(t(x), pch=16, col='black', cex=0.5, xlab="theta1", ylab="theta2")
 points(mle[1], mle[2], pch=4, lwd=3, col="green")
-points(mean(x[1, 20:100]), mean(x[2, 20:100]), pch=4, lwd=3, col="red")
+points(mean(x[1, 100:200]), mean(x[2, 100:200]), pch=4, lwd=3, col="red")
 # Calculating the acceptence rate for the MH algorithm; 25-75% is desired.
 sum(x[, -1] != x[, 1:(length(x)/2 - 1)])/(length(x) - 2)
 # Plot the autocorrelation function.
@@ -559,7 +559,7 @@ acf(x[1, 1:100], 40)
 # Second burn in period consisting of 10^3 samples which will be used to tune
 # the proposal. The parameter alpha is adjusted such that a reasonable
 # acceptance rate is obtained.
-x2 <- MCMC(target, c(mean(x[1, 20:100]), mean(x[2, 20:100])), MH=TRUE, 10^3,
+x2 <- MCMC(target, c(mean(x[1, 100:200]), mean(x[2, 100:200])), MH=TRUE, 10^3,
            alpha=2)
 plot(t(x2[,250:10^3]), pch=16, col='black', cex=0.5, xlab="theta1",
      ylab="theta2")

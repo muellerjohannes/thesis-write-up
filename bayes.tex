@@ -1,5 +1,6 @@
 \chapter{Bayesian learning for DPPs}
 
+
 So far we have seen two different estimation techniques for the parameters of DPPs. Although we proved that they provide reasonable estimators in the sense that they are consistent, they have some drawbacks. For example we have seen that the MLEs for the different parameters do not exist in general, let alone that they are impossible to compute in reality. Further
 %Firstly, we saw that the maximum likelihood estimator does not exist in general and in some cases one needs a fairly high amount of samples to ensure that it does. Secondly 
 all of the estimators presented so far are point estimators, i.e. they return a single value for the desired parameter. Obviously this does not allow to capture any uncertainties that the estimation of the parameter has. % and we have already seen in that the selection of the most possible outcome -- in this case the MLE -- might not yield a very typical one for a given random variable.
@@ -457,7 +458,7 @@ The reason why this increases the acceptance rate is, that the proposal now only
 \end{emp}
 
 \begin{emp}[The Gelman-Rubin diagnostic]
-
+\todo{!}
 \end{emp}
 
 \subsection{Slice sampling}
@@ -792,7 +793,7 @@ i.e. a centered Gaussian prior. Under this regularisation, the MLE was
 \end{pmatrix}.\]
 It is not surprising that the entries of the regularised MLE are closer to zero, since the regulariser is built to penalise large parameter values.
 
-We chose the sample size of \(n=8\) relatively small and want to show the effect the sample size has on the estimation. Obviously, we know from the second chapter that the MLE will converge to the actual parameter. To show this convergence in our case, we iteratively raised the sample size from \(1\) to \(20\) and obtained the maximum likelihood estimators that are shown in Figure \ref{fig:learningcurve}. We can see that the MLE converges towards the actual parameter where the regularised MLE seems to converge to a very similar value where the difference of the limits is smaller than the fluctuations. This is because the regularisation is not very strong in this case and we will see later that the models are actually quite close together meaning that the Bayes factor is not very high. \todo{check this} % \todo{does this mean the effect of the regularisation vanishes?}
+We chose the sample size of \(n=8\) relatively small and want to show the effect the sample size has on the estimation. Obviously, we know from the second chapter that the MLE will converge to the actual parameter. To show this convergence in our case, we iteratively raised the sample size from \(1\) to \(30\) and obtained the maximum likelihood estimators that are shown in Figure \ref{fig:learningcurve}. We can see that the MLE converges towards the actual parameter where the regularised MLE seems to converge to a very similar value where the difference of the limits is smaller than the fluctuations. This is because the regularisation is not very strong in this case and we will see later that the models are actually quite close together meaning that the Bayes factor is not very high. \todo{check this} % \todo{does this mean the effect of the regularisation vanishes?}
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.49\textwidth]{figures/Learning-curve-comparison-first-parameter}
@@ -825,7 +826,8 @@ We will use the same data set consisting of \(8\) samples from this DPP like in 
 %-10.32045 \\   6.07648
 %\end{pmatrix}.\]
 The posterior of the log linearity parameter is given by
-\[f(\theta|A_1, \dots, A_n) \propto f_\Theta(\theta) \prod_{i=1}^n \frac{\det(L(\theta)_{A_i})}{\det(L(\theta) + I)}\]
+\[f(\theta|A_1, \dots, A_n) \propto f_\Theta(\theta) \prod_{i=1}^n \frac{\det(L(\theta)_{A_i})}{\det(L(\theta) + I)}.\]
+%Before we will use the MCMC methods presented
 and we will use the MH random walk to approximate it. % In fact this is even easier in practice since one does not have to tune the proposals distributions.
 %To do this we will impose a very conservative prior in the sense that we assume to not know the rough size of the parameter theta. Therefore, we define the prior to be a very flat normal distribution centered at the origin and with covariance \(2^{19}\cdot I\). This amounts to almost choosing a uniform distribution on the space and hence we expect to get a similar picture to Figure \ref{fig:4.1}. 
 We proceed in the following steps.
@@ -848,7 +850,7 @@ Here, we neglect the first half since it is very highly dependent on the startin
 	\includegraphics[width=0.49\textwidth]{figures/first-burn-in}
 	\includegraphics[width=0.49\textwidth]{figures/first-burn-in-second-start}
 %	\tag{1}
-	\caption{A plot of the first burn in period with two different starting points -- the first one being the origin, the second one \((10, -10)\). The regularised MLE for the log linearity constant is marked by the green cross and the mean or centre of mass of the second half of the random walk by the red cross.}
+	\caption{A plot of the first burn in period with two different starting points -- the origin and \((10, -10)\). The regularised MLE for the log linearity constant is marked by the green cross and the mean of the second half of the random walk by the red cross.}
 	\label{fig:findingstart}
 \end{figure}
 
@@ -856,7 +858,6 @@ Further the plots in Figure \ref{fig:MCplot} of the states of the Markov chain s
 
 %In our case, the MH random walk focuses on the same region for all starting points and hence we will use this as a %Once we have run this first phase of burn in we see that the MH random walks all centered around a similar region independent from their starting point. Hence, we can choose one point in this region as the starting point of all further MCMC simulations.
 
-One could argue that it would be reasonable to choose the MLE as a starting point since for a very flat prior distribution it should also be approximately the mode of the posterior distribution. However, since we partly motivated the Bayesian approach to be an alternative to the infeasible maximum likelihood estimation for the elementary kernel \(L\), we presented the procedure above that can also be used for the estimation of \(L\).
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.49\textwidth]{figures/first-parameter}
@@ -865,6 +866,8 @@ One could argue that it would be reasonable to choose the MLE as a starting poin
 	\caption{Plots of the two state parameters of the MH random walk starting at the origin. The acceptance rate drops significantly and hardly any proposals are accepted.}
 	\label{fig:MCplot}
 \end{figure}
+
+One could argue that it would be reasonable to choose the MLE as a starting point since for a very flat prior distribution it should also be approximately the mode of the posterior distribution. However, since we partly motivated the Bayesian approach to be an alternative to the infeasible maximum likelihood estimation for the elementary kernel \(L\), we presented the procedure above that can also be used for the estimation of \(L\).
 \end{emp}
 
 \begin{emp}[Second burn in to tune the proposal]
@@ -872,28 +875,41 @@ We use the second burn in method to tune the proposal according to \ref{tuning} 
 In a heuristic way it can be said that one now works ‚locally‘ and tries to explore the finer structure of the distribution and has to take smaller steps in order to do so.
 We run this MH random walk for \(10^3\) samples and calculate their empirical covariance \(\Sigma\in\mathbb R^{2\times 2}\) and obtain the Markov chain depicted in \ref{fig:tuning}. We see that the points are located around the regularised MLE and we can get a first idea along which direction the parameter is more uncertain.
 
-\begin{figure}[h!]
+
+\begin{figure}%[h!]
 	\centering
-	\includegraphics[width=0.6\textwidth]{figures/second-burn-in}
+	\includegraphics[width=0.55\textwidth]{figures/second-burn-in}
 %	\tag{1}
 	\caption{A plot of the samples of the MH of the second burn in period. One can see how the points are distributed around the MLE which is marked green. Their empirical covariance will be used to tune the proposal.}
 	\label{fig:tuning}
 \end{figure}
+%\enlargethispage{1.5cm}
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.49\textwidth]{figures/bayes-second-burn-in-first-parameter}
 	\includegraphics[width=0.49\textwidth]{figures/bayes-second-burn-in-second-parameter}
-	\includegraphics[width=0.49\textwidth]{figures/bayes-final-MH-first-parameter}
-	\includegraphics[width=0.49\textwidth]{figures/bayes-final-MH-second-parameter}
+	%\includegraphics[width=0.49\textwidth]{figures/bayes-final-MH-first-parameter}
+	%\includegraphics[width=0.49\textwidth]{figures/bayes-final-MH-second-parameter}
 %	\tag{1}
-	\caption{State plots of the second burn in period on the top and the final MH random walk on the bottom. One can see how the tuned proposal gives a higher acceptance rate in the final simulation.}
+	\caption{State plots of the second burn in period. One can see that the acceptance rate is a lot higher than in the first burn in.}
 	\label{fig:mixim-tuning}
 \end{figure}
 \end{emp}
 
 \begin{emp}[The actual MCMC simulation]
 In this final step we run a MH random walk with length \(10^4\) and with the same starting point as in the second step. Now we use the prior adjusted according the second burn in period. This means we choose \(f(\cdot|\theta)\) to be the density of a normal distribution centered at \(\theta\) and with covariance \(\Sigma\). % This procedure adjusts the proposed steps into the diffrernt directions on the 
-This leads to a higher acceptance rate of \(59\%\) compared to \(30\%\) in the second burn in period which can also be seen in the according state plots Figure \ref{fig:mixim-tuning}. Further we see in Figure \ref{fig:acf-sbi-final} that the auto correlation function decreases faster with this tuned proposal.
+This leads to a higher acceptance rate of \(59\%\) compared to \(30\%\) in the second burn in period which can also be seen in the according state plots in Figure \ref{fig:mixim-tuning} and \ref{fig:mixim-tuning-final}. Further we see in Figure \ref{fig:acf-sbi-final} that the auto correlation function decreases faster with this tuned proposal.
+\begin{figure}%[h!]
+	\centering
+	%\includegraphics[width=0.49\textwidth]{figures/bayes-second-burn-in-first-parameter}
+	%\includegraphics[width=0.49\textwidth]{figures/bayes-second-burn-in-second-parameter}
+	\includegraphics[width=0.49\textwidth]{figures/bayes-final-MH-first-parameter}
+	\includegraphics[width=0.49\textwidth]{figures/bayes-final-MH-second-parameter}
+%	\tag{1}
+	\caption{State plots of the %second burn in period on the top and the 
+	final MH random walk on the bottom. One can see how the tuned proposal gives a higher acceptance rate than in the second burn in period.}
+	\label{fig:mixim-tuning-final}
+\end{figure}
 \begin{figure}%[h!]
 	\centering
 	\includegraphics[width=0.49\textwidth]{figures/bayes-acf-second-burn-in}
@@ -903,9 +919,9 @@ This leads to a higher acceptance rate of \(59\%\) compared to \(30\%\) in the s
 	\label{fig:acf-sbi-final}
 \end{figure}
 Finally we use a pre-implemented interpolation method to obtain a smoothed twodimensional histogram -- also called a heat plot -- which is shown in Figure \ref{fig:MHrw}.% \todo{does this make sense}% ....? %The resulting heat map can be seen in Figure \ref{fig:MHrw}.%recent\todo{say something about intuition}
-\begin{figure}[h!]
+\begin{figure}%[h!]
 	\centering
-	\includegraphics[width=0.5\textwidth]{figures/bayes-mle-and-regmle}
+	\includegraphics[width=0.55\textwidth]{figures/bayes-mle-and-regmle}
 %	\tag{1}
 	\caption{Heat map of the MH random walks with \(10^4\) iterations. The regularised MLE estimator is shown as a white, the MLE as a green and the actual parameter as a red cross. The regularised MLE is the maximum of the (approximated) posterior.}
 	\label{fig:MHrw}
@@ -955,10 +971,12 @@ Hence, we can take a completely analogue approach for the approximation of the l
 
 It is evident from both, theoretical considerations and the experimental results of the maximum likelihood estimations and the approximations of the posterior that the regulariser or prior always forces the estimation to get closer to the origin. Obviously this can make the estimation better, if for example the unregularised MLE is larger than the actual parameter, but then it makes the estimation better by pure luck. We will see later that the influence of the prior is a little bit more positive if the data is perturbed by random noise.
 
+
 \subsubsection{Comparing the models via the Bayes factor}
 
 We have introduced the Bayes factor as the ratio of the total observation probabilities under two models. In order to compare the regularised and unregularised model, we need to approximate the total observation probability
 \[f(x|\mathcal F) \coloneqq \int_{\Theta} f_{X, \Theta}(x, \theta)\nu(\mathrm{d}\theta).\]
+
 
 \subsubsection*{A naive approximation of the posterior}
 
@@ -1005,7 +1023,7 @@ In \(10\) dimension and with \(40\) grid lines along all dimensions, this corres
 It shall be noted that also the method of numerical integration suffers from the course of dimensionality since numerical integration relies on the evaluation of the function on an exponentially increasing number of points.
 \todo{How does \(T\) grow with \(M\)?}
 
-It shall be noted that the complexity of the slice sampling algorithm can not be given this easily, at least for the version presented above. This is because the approximate sampling from the uniform distribution on the slice proposed in Algorithm \ref{alg:slice-sampling-implementation} can need arbitrarily many samples from the uniform distribution on the proposed cuboid. Although those uniform samples can be generated efficiently one has to evaluate the unnormalised posterior each time to check whether the proposed sample is actually contained in the slice.
+The complexity of the slice sampling algorithm can not be given this easily, at least for the version we presented. This is because the approximate sampling from the uniform distribution on the slice proposed in Algorithm \ref{alg:slice-sampling-implementation} can need arbitrarily many samples from the uniform distribution on the proposed cuboid. Although those uniform samples can be generated efficiently one has to evaluate the unnormalised posterior each time to check whether the proposed sample is actually contained in the slice.
 %\todo{comment on complexity for silce sampling?}
  %The comparison to \eqref{complexityMCMC} shows that the direct approach is only 
  
@@ -1034,11 +1052,11 @@ Before we investigate the stability properties of the estimation in the specific
 If one wants to investigate the stability properties of the estimation which is nothing but the continuity, then it is reasonable to do this for both steps separately. The second step is in general discontinuous since the maximisation of a function is not a continuous operation under the usual topologies on functions corresponding to uniform or pointwise convergence or integral norms. 
 %Because of this factorisation, it is immediate that the if the % posterior density has a better stability property that the MLE, since 
 
-Usually the first step will be continuous in some notion, for example if all densities \(f_{X|\Theta}(x|\theta)\) are continuous in \(x\), then the posterior depends continuously on the data \(x\) in terms of pointswise convergence or equivalently the product topology. The choice of the prior can possibly strengthen this continuity property and lead to a uniform convergence. If additionally all posterior densities have a unique maximiser, then the maximisation is continuous on this subclass of functions with respect to the uniform topology. In summary we have seen that the prior comes into play at two points, the first one to strengthen the continuity of the first step and then two possibly lead to a more well behaved class of posterior densities. %The continuity properties of the first step are influenced by the prior and 
+Usually the first step will be continuous in some notion, for example if all densities \(f_{X|\Theta}(x|\theta)\) are continuous in \(x\), then the posterior depends continuously on the data \(x\) in terms of pointswise convergence which corresponds to the product topology. The choice of the prior can possibly strengthen this continuity property and lead to a uniform convergence. If additionally all posterior densities have a unique maximiser, then the maximisation is continuous on this subclass of functions with respect to the uniform topology. In summary we have seen that the prior comes into play at two points, the first one to strengthen the continuity of the first step and then to lead to a possibly more well behaved class of posterior densities. %The continuity properties of the first step are influenced by the prior and 
 
 %\begin{emp}[The trouble with discrete data]
 In the case of discrete DPPs, our space of observations \(2^\mathcal Y\) is discrete and hence the only reasonable topology on it is the discrete topology, i.e. the powerset itself. Every mapping is continuous with respect to this topology and hence the prior is not needed for this qualitative property. Thus, there is no apparent reason why the regularisation or the prior should bring any benefit. % it -- with no presence of noise -- pushes the estimator towards the center of the prior distribution which is the origin in our toy example.
-We will see in our examples that it can actually be used to regularise certain parameters of the DPP but only if one has a very clear understanding who those parameters are influenced by the noise. %We will additionally run experiments with noisy data to confirm our claim that the regularisation or prior introduces a bias\todo{explain this term}{ } for one parameter and can be used for the regularisation of the second parameter since the noise affects the cardinality of the DPP. % of the estimation without making the estimation more stable unless in the presence of extreme noise.
+We will see in our examples that it can actually be used to regularise certain parameters of the DPP but only if one has a very clear understanding of how those parameters are influenced by the noise. %We will additionally run experiments with noisy data to confirm our claim that the regularisation or prior introduces a bias\todo{explain this term}{ } for one parameter and can be used for the regularisation of the second parameter since the noise affects the cardinality of the DPP. % of the estimation without making the estimation more stable unless in the presence of extreme noise.
 %\end{emp}
 
 
@@ -1065,34 +1083,42 @@ Let \(B_1, \dots, B_n\) be independent realisations of a DPP \(\mathbb P\). Let 
 The observations \(A_i\) correspond exactly to the observation of a DPP where points were randomly deleted and added.
 \end{emp}
 
-We will generate noisy data perturbed by a Poisson point processes marginal kernel \(\rho\cdot I\) where we call \(\rho\in(0, 1)\) the \emph{intensity} of the point process.
+We will generate noisy data consisting of \(n=8\) samples of a DPP perturbed by a Poisson point processes with marginal kernel \(\rho\cdot I\) where we call \(\rho\in(0, 1)\) the \emph{intensity} of the point process.
 %with different cardinalities and
-We will calculate the MLE and regularised MLE corresponding to the regularisation given by the prior \eqref{toyprior}. 
+We calculate the MLE and regularised MLE corresponding to the regularisation given by the prior \eqref{toyprior}. 
 %More precisely we will work with Poisson point processes with different marginal kernel \(\rho\cdot I\) where we call \(\rho\in(0, 1)\) the \emph{intensity} of the point process. The intensity corresponds to how likely points are dropped from and added to the DPP.
 We use an intensity of \(\rho=\frac1{400}\) and obtain the following results that are fixed in Table \ref{tab:MLEvsRegMLE}.
 
-\begin{table}
+\begin{table}[h!]
 \centering
-\begin{tabular}{ |c|c|c| } 
+\begin{tabular}{ |c|c|c|c| } 
  \hline
   & MLE %with intensity \(\rho=\frac1{400}\) 
-  & regularised MLE %with intensity \(\rho=\frac1{400}\) 
+  & regularised MLE & %with intensity \(\rho=\frac1{400}\) 
   \\ \hline
- 1 & (-10.05, 7.22) &  (-9.76, 7.09) \\ \hline
- 2 & (-9.44, 6.67) & (-9.16, 6.55) \\ \hline
- 3 & (-10.51, 7.05) & (-10.20, 6.91) \\ \hline
- 4 & (-9.79, 6.45) & (-9.49, 6.32) \\ \hline
- 5 & (-11.03, 7.06) & (-10.70, 6.92) \\ \hline
- 6 & (-10.07, 6.97) & (-9.78, 6.85) \\ \hline
- 7 & (-10.04, 6.53) & (-9.74, 6.40) \\ \hline
- 8 & (-9.76, 6.83) & (-9.47, 6.70) \\ \hline
+ 1 & (-10.05, 7.22) &  (-9.76, 7.09) & \\ \hline
+ 2 & (-9.44, 6.67) & (-9.16, 6.55) & \\ \hline
+ 3 & (-10.51, 7.05) & (-10.20, 6.91) & \\ \hline
+ 4 & (-9.79, 6.45) & (-9.49, 6.32) & \\ \hline
+ 5 & (-11.03, 7.06) & (-10.70, 6.92) & \\ \hline
+ 6 & (-10.07, 6.97) & (-9.78, 6.85) & \\ \hline
+ 7 & (-10.04, 6.53) & (-9.74, 6.40) & \\ \hline
+ 8 & (-9.76, 6.83) & (-9.47, 6.70) & \\ \hline
 \end{tabular}
 \caption{Table with the MLE and regularised MLE for noisy data perturbed by a Poisson point process with intensity \(\rho = \frac1{400}\).} \label{tab:MLEvsRegMLE}
 \end{table}
 
 Like in the case of estimation without noise, the regularised MLE is closer to the origin than the unregularised one. In the first component, this leads to worse estimates and in the second one to better ones. The reason that the estimation of the second parameter benefits from the regularisation is the following. If the cardinality of the DPP is smaller than \(N/2\), then the presence of noise -- at least the one we are considering -- leads to a higher expected cardinality in the data since more points are added than deleted because we expect
 \[\left\lvert A_i\cap B_i  \right\rvert \le \left\lvert B_i \setminus A_i \right\rvert.\]
-This leads to an estimation of higher qualities and the magnitude of the qualities is controlled through the second parameter. Hence, the regulariser forces the second component MLE into the right direction\todo{make this more scientific}. However this kind of regularisation can only be successful, if one has a clear understanding into which direction the noise will perturb the estimates. If for example the cardinality of the DPP is larger than \(N/2\) the Poisson noise will lower the cardinality of the data and the regulariser could increase this effect instead of weakening it. To decide whether the DPP has cardinality smaller or bigger than \(N/2\) one can use the observed data since the noise will only shift the cardinality closer towards
+This leads to an estimation of higher qualities and the magnitude of the qualities is controlled through the second parameter. Hence, the regulariser forces the second component MLE into the right direction\todo{make this more scientific}. However this kind of regularisation can only be successful, if one has a clear understanding into which direction the noise will perturb the estimates. If for example the cardinality of the DPP is larger than \(N/2\) the Poisson noise will lower the cardinality of the data and the regulariser could increase this effect instead of weakening it. To decide whether the DPP has cardinality smaller or bigger than \(N/2\) one can use the observed data because if the intensity of the noise is lower than \(0.5\), then the expected cardinality of the observations remain smaller or larger than \(N/2\). To see this, assume the sample from the actual DPP satisfies \todo{?}%\(\)
+%This is because of
+%\[\]
+
+Now that we have understood how the noise influences the two parameters, we can actually propose a different prior that is adapted to this. 
+%Namely, it should be more appropriate to use a prior that only relies on the second parameter and regularises the estimation for this to become smaller. 
+Hence, we use the adjusted prior
+\[\tilde f_\Theta(\theta) \coloneqq \exp\left(-\frac{\theta_2^2}{2^4}\right) \]
+which should only regularise the second the parameter. The improved results of this regularisation can be found in the Table \ref{tab:MLEvsRegMLE} on the very right. \todo{do this}
 
 %However, this is only due to the fact that the cardinality of the DPP is much smaller than \(N/2\) in our case and if it was bigger, the estimation would be forced into the opposite way. In summary the prior can be used to regularise the second parameter which controls the cardinality of the DPP, but this must be done with a certain amount of care and under consideration whether the observed data is definitely smaller or bigger than \(N/2\).
 
@@ -1140,7 +1166,7 @@ This leads to an estimation of higher qualities and the magnitude of the qualiti
 %	\label{fig:instability}
 %\end{figure}
 
-%The problem is -- heuristically speaking -- that the interpolation is so irregular that it not only describes the underlying function, but also the noise. In this case a regulariser can be used to penalise irregular models, in this case the polynomials with high degree.
+%The problem is -- heuristically speaking -- that the interpolation is so irregular that it not only describesCalculus of Variations the underlying function, but also the noise. In this case a regulariser can be used to penalise irregular models, in this case the polynomials with high degree.
 
 
 

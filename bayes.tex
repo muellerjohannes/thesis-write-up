@@ -771,29 +771,32 @@ The goal is to estimate the two parameters that characterise the qualities, whic
 -10 \\ 6
 \end{pmatrix}.\]
 
-Hence we should be able to estimate this log linearity constant \(\theta\in\mathbb R^2\) based on some data that is distributed according to this DPP. To do this we generate \(n=8\) samples \(A_1, \dots, A_n\) from the DPP using the sampling algorithm introduced in the first chapter. % and define the log likelihood function associated with those observations and the actual similarity kernel \(S_{ij} = \phi_i^T\phi_j\).
+Hence we should be able to estimate this log linearity constant \(\theta\in\mathbb R^2\) based on some data that is distributed according to this DPP. To do this we generate \(n=20\) samples \(A_1, \dots, A_n\) from the DPP using the sampling algorithm introduced in the first chapter. % and define the log likelihood function associated with those observations and the actual similarity kernel \(S_{ij} = \phi_i^T\phi_j\).
 
 \section{MLE and regularised MLE}
 
 In order to perform the maximum likelihood estimation for the log linearity constant, we need to fix a similarity kernel \(\hat S\), but since we know the exact kernel, we can simply set \(\hat S_{ij} \coloneqq \phi_i^T\phi_j\). Then we maximise the log likelihood over \(\mathbb R^2\) using a pre-implemented optimisation algorithm in R. The resulting estimate was
 \begin{equation}\label{mletheta}
 \hat\theta = \begin{pmatrix}
--9.589945  \\ 5.725451
+-10.000250 \\ 6.007382
 \end{pmatrix}
 \end{equation}
-but from the consistency results we already knew that it should get close to the actual parameter for large sample sizes. Since we also want to investigate the effect of a regulariser, we set
-\[F(\theta)\coloneqq -\frac{\left\lVert \theta \right\rVert^2}{2^4} \]
-as a regulariser. Note that this corresponds to the prior 
+but from the consistency results we already knew that it should get close to the actual parameter for large sample sizes. Since we also want to investigate the effect of a regulariser, we define two different regularisers
+\[F_1(\theta)\coloneqq -\frac{\left\lVert \theta \right\rVert^2}{2^4} \quad \text{and } F_1(\theta)\coloneqq -\frac{\left\lVert \theta \right\rVert^2}{2} \]
+as a regulariser. Note that those corresponds to the priors
 \begin{equation}\label{toyprior}
-f_\Theta(\theta) = \exp\left(-\frac{\left\lVert \theta \right\rVert^2}{2^4}\right),
+f_{\Theta_1}(\theta) = \exp\left(-\frac{\left\lVert \theta \right\rVert^2}{2^4}\right) \quad \text{and } f_{\Theta_2}(\theta) = \exp\left(-\frac{\left\lVert \theta \right\rVert^2}{2}\right)
 \end{equation}
-i.e. a centered Gaussian prior. Under this regularisation, the MLE was
-\[\hat\theta_r = \begin{pmatrix}
--9.283270 \\ 5.593745
+which are Gaussian priors with different variance. Under those regularisations, the respective MAPs obtained were
+\[\hat\theta_1 = \begin{pmatrix}
+-9.870850 \\ 5.952101
+\end{pmatrix} \quad \text{and } \hat\theta_1 = \begin{pmatrix}
+-9.050763 \\ 5.597739
 \end{pmatrix}.\]
-It is not surprising that the entries of the regularised MLE are closer to zero, since the regulariser is built to penalise large parameter values.
+It is not surprising that regularised MLEs are closer to zero, since the regulariser is built to penalise large parameter values. Further the effect of the Gaussian prior with smaller variance -- which is the second one -- is larger, which is consistent with the heuristic explanation that it cooperates a stronger prior believe, since it predicts that the parameter is more likely to be close to zero.
 
-We chose the sample size of \(n=8\) relatively small and want to show the effect the sample size has on the estimation. Obviously, we know from the second chapter that the MLE will converge to the actual parameter. To show this convergence in our case, we iteratively raised the sample size from \(1\) to \(30\) and obtained the maximum likelihood estimators that are shown in Figure \ref{fig:learningcurve}. We can see that the MLE converges towards the actual parameter where the regularised MLE seems to converge to a very similar value where the difference of the limits is smaller than the fluctuations. Nevertheless we will see in the comments on the model selection that the Bayes factor between the two models is very high and hence the unregularised model is favourable. \todo{check this}%This is because the regularisation is not very strong in this case and we will see later that the models are actually quite close together meaning that the Bayes factor is not very high.% \todo{check this} % \todo{does this mean the effect of the regularisation vanishes?}
+We chose the sample size of \(n=20\) relatively small and want to show the effect the sample size has on the estimation. Obviously, we know from the second chapter that the MLE will converge to the actual parameter. To show this convergence in our case, we iteratively raised the sample size from \(1\) to \(30\) and obtained the maximum likelihood estimators that are shown in Figure \ref{fig:learningcurve}. We can see that the MLE converges towards the actual parameter \todo{rewrite this!}
+where the regularised MLE seems to converge to a very similar value where the difference of the limits is smaller than the fluctuations. Nevertheless we will see in the comments on the model selection that the Bayes factor between the two models is very high and hence the unregularised model is favourable. \todo{check this}%This is because the regularisation is not very strong in this case and we will see later that the models are actually quite close together meaning that the Bayes factor is not very high.% \todo{check this} % \todo{does this mean the effect of the regularisation vanishes?}
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.49\textwidth]{figures/Learning-curve-comparison-first-parameter}
@@ -830,6 +833,21 @@ The posterior of the log linearity parameter is given by
 %Before we will use the MCMC methods presented
 and we will use the MH random walk to approximate it. % In fact this is even easier in practice since one does not have to tune the proposals distributions.
 %To do this we will impose a very conservative prior in the sense that we assume to not know the rough size of the parameter theta. Therefore, we define the prior to be a very flat normal distribution centered at the origin and with covariance \(2^{19}\cdot I\). This amounts to almost choosing a uniform distribution on the space and hence we expect to get a similar picture to Figure \ref{fig:4.1}. 
+But before we do this, we will shortly discuss how the Bayes factor can be used to decide between two different priors if one has not access to the unregularised and regularised MLE like we did before.
+
+\subsubsection{Comparing different priors via the Bayes factor}
+
+We have introduced the Bayes factor as the ratio of the total observation probabilities under two models. In order to compare 
+%the regularised and unregularised model, we need to approximate the total observation probability
+\[f(x|\mathcal F) \coloneqq \int_{\Theta} f_{X, \Theta}(x, \theta)\nu(\mathrm{d}\theta)\]
+which we will do numerically. 
+%Also we have to use normalised priors which means we can not use the generalised constant prior, we have used in the discussion for the Bayesian approach without a prior. Therefore we will work with a uniform distribution on a cuboid and choose it so large that it contains the whole Markov chain by far\todo{What does this mean?}{ }, in our case we choose it to be \([-11, -9]\times[5, 7]\). The Bayes factor obtained by this numerical integration is
+%\[24584.31 \approx 2.5\cdot10^4. \]
+%This strongly suggests that the model arising from the prior \(f_\Theta\propto \mathds{1}_{[-11, -9]\times[5, 7]}\) is far better suited than the one with the Gaussian prior \eqref{toyprior}.
+\todo{Is this not very arbitrary?}
+
+\subsubsection{MCMC simulations}
+
 We proceed in the following steps.
 
 \begin{emp}[First burn in to find a starting point]
@@ -970,16 +988,6 @@ Hence, we can take a completely analogue approach for the approximation of the l
 %We choose such a uniform distribution and approximate the posterior just like before using a MH random walk. 
 
 It is evident from both, theoretical considerations and the experimental results of the maximum likelihood estimations and the approximations of the posterior that the regulariser or prior always forces the estimation to get closer to the origin. Obviously this can make the estimation better, if for example the unregularised MLE is larger than the actual parameter, but then it makes the estimation better by pure luck. We will see later that the influence of the prior is a little bit more positive if the data is perturbed by random noise.
-
-
-\subsubsection{Comparing the models via the Bayes factor}
-
-We have introduced the Bayes factor as the ratio of the total observation probabilities under two models. In order to compare the regularised and unregularised model, we need to approximate the total observation probability
-\[f(x|\mathcal F) \coloneqq \int_{\Theta} f_{X, \Theta}(x, \theta)\nu(\mathrm{d}\theta)\]
-which we will do numerically. Also we have to use normalised priors which means we can not use the generalised constant prior, we have used in the discussion for the Bayesian approach without a prior. Therefore we will work with a uniform distribution on a cuboid and choose it so large that it contains the whole Markov chain by far\todo{What does this mean?}{ }, in our case we choose it to be \([-11, -9]\times[5, 7]\). The Bayes factor obtained by this numerical integration is
-\[24584.31 \approx 2.5\cdot10^4. \]
-This strongly suggests that the model arising from the prior \(f_\Theta\propto \mathds{1}_{[-11, -9]\times[5, 7]}\) is far better suited than the one with the Gaussian prior \eqref{toyprior}.
-\todo{Is this not very arbitrary?}
 
 \subsubsection*{A naive approximation of the posterior}
 

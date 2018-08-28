@@ -661,9 +661,31 @@ Obviously in the proof of the consistency of the whole elementary kernel \(L\) o
 
 \subsubsection*{Regularised MLE}
 
-One can not make a general statement about the consistency of regularised MLE. On the one hand they can agree with the classical MLE, if for example \(F=0\) or if \(F\) is zero on an open set containing the actual parameter \(\theta_0\) and \(-\infty\) everywhere else. In this case the arguments above show the consistency of the regularised version of the MLE.
-
+One can not make a general statement about the consistency of regularised MLE. 
+%On the one hand they can agree with the classical MLE, if for example \(F=0\) or if \(F\) is zero on an open set containing the actual parameter \(\theta_0\) and \(-\infty\) everywhere else. In this case the arguments above show the consistency of the regularised version of the MLE.
 However, it is straight forward to construct examples where the regularised MLE is not consistent. For example if the regulariser \(F\) is equal to \(-\infty\) on a neighborhood of \(\theta_0\), then none of the regularised estimators will lie in this neighborhood and hence the estimations will not converge towards \(\theta_0\).
+
+Nevertheless, this scenario can be avoided with one property of the regulariser. If we recall that the proof of the consistency of the MLE relied on the observation
+\[\frac1n\cdot\mathcal L_n(\theta)\xlongrightarrow{\left\lvert \theta \right\rvert\to\infty} \mathbb E\big[\log(f(X|\theta))\big]. \]
+Then an application of the consistency result for extremal estimators yielded the consistency. In the case of the regularised MLE, we no longer maximise the functions \(\mathcal L_n\) but the sum \(\mathcal L_n + F\) and in order to obtain a consistent estimator we need to ensure that the convergence
+\[\frac1n\cdot\mathcal L_n(\theta) + \frac1n \cdot F(\theta) \xlongrightarrow{\left\lvert \theta \right\rvert\to\infty} \mathbb E\big[\log(f(X|\theta))\big] \]
+holds with the same uniformity which we will do now.
+
+\begin{emp}[Setting]
+We work with one of the three parametric models for DPPs presented above but will the parameter space denote by \(\Theta\) and the elementary kernel arising from \(\theta\in\Theta\) by \(L(\theta)\). Further we will assume that we have a regulariser \(F\colon\Theta\to[-\infty, 0]\) that is upper semicontinuous.
+%Let \(\Theta\) be one of the  space and \(L(\theta)\in\mathbb R^{N\times N}_{\text{sym}, +}\) be an elementary kernel for every \(\theta\in\Theta\). Further we assume that we have independent realisations \(A_1, \dots, A_n\) of a  \(L\)-ensemble.
+\end{emp}
+
+\begin{theo}[Consistency of MAP estimation]
+Assume that the sequence of observations \((\mathbf Y_n)_{n\in\mathbb N}\) are distributed according to a \(L\)-ensemble with elementary kernel \(L(\theta_0)\). Let further \(K\subseteq\Theta\) be a compact set containing \(\theta_0\) such that \(F\) is bounded on \(K\). Then the maximum a posteriori estimator arising from the regulariser \(F\) is consistent.
+\end{theo}
+\begin{proof}
+We only have to check how the regulariser \(F\) influences the requirements (\emph{i})-(\emph{v}) of Theorem \ref{conext}. In fact it doesn’t have any influence on the assumptions (\emph{iii}) and (\emph{iv}). Further (\emph{i}) stays valid since the regulariser is non positive and (\emph{v}) since it is non negative and upper semicontinuous. Hence it remains to validate (\emph{ii}). For this we reduce the compact set \(K_0\) to \(K\cap K_0\) which is compact again. On this set the contribution \(\frac1n \cdot F\) goes uniformly to zero which yields the assertion.
+\end{proof}
+
+\begin{rem}
+The consistency result above is stated for a rather broad class of regularisers. For instance, all quadratic regulariser -- which correspond exactly to Gaussian priors as we will see later -- fall into this class. Further it covers every regulariser that is equal \(-\infty\) on a set of impossible parameters. This can be used to exclude non symmetric or non positive semidefinite matrices from the estimation process if one wants to work with the easier parameter set \(\mathbb R^{N\times N}\) instead of \(\mathbb R^{N\times N}_{\text{sym}, +}\).
+\end{rem}
 
 %\todo{should not be consistent?}
 

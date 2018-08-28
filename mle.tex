@@ -78,7 +78,7 @@ This implies
 
 \subsection{Presentation of different models}\label{models}
 
-Let \((\mathbf Y_n)_{n\in\mathbb N}\) be a sequence of independent random variables distributed according to a DPP. In order to follow the MLE approach, we need to express the density of the point process with respect to some measure and we will do this by giving the elementary probabilities which are nothing but the densities with respect to the counting measure. 
+Let in the following \((\mathbf Y_n)_{n\in\mathbb N}\) be a sequence of independent random variables distributed according to a DPP. In order to follow the MLE approach, we need to express the density of the point process with respect to some measure and we will do this by giving the elementary probabilities which are nothing but the densities with respect to the counting measure. 
 %Assume again that we have a set of observations \((\mathbf Y_n)_{n\in\mathbb N}\subseteq\mathcal Y\) drawn independently and according to the DPP. This time we want to find the maximum likelihood estimator for the elementary kernel and in order to do this we need to be able to express the density of the DPP which is nothing but the values of the elementary probabilities.
 Thus, we will assume that we are dealing with \(L\)-ensembles in this section. Since the observations \((\mathbf Y_n)_{n\in\mathbb N}\) are defined on some common probability space which we will denote by \((\Omega, \mathbb P)\), we will write %change the notation in this section and write
 \[%f(A, L) \quad \text{or } 
@@ -677,10 +677,10 @@ We work with one of the three parametric models for DPPs presented above but wil
 \end{emp}
 
 \begin{theo}[Consistency of MAP estimation]
-Assume that the sequence of observations \((\mathbf Y_n)_{n\in\mathbb N}\) are distributed according to a \(L\)-ensemble with elementary kernel \(L(\theta_0)\). Let further \(K\subseteq\Theta\) be a compact set containing \(\theta_0\) such that \(F\) is bounded on \(K\). Then the maximum a posteriori estimator arising from the regulariser \(F\) is consistent.
+Assume that the sequence of observations \((\mathbf Y_n)_{n\in\mathbb N}\) are independent and distributed according to a \(L\)-ensemble with elementary kernel \(L(\theta_0)\). Let further \(K\subseteq\Theta\) be a compact set containing \(\theta_0\) such that \(F\) is bounded on \(K\). Then the maximum a posteriori estimator arising from the regulariser \(F\) is consistent.
 \end{theo}
 \begin{proof}
-We only have to check how the regulariser \(F\) influences the requirements (\emph{i})-(\emph{v}) of Theorem \ref{conext}. In fact it doesn’t have any influence on the assumptions (\emph{iii}) and (\emph{iv}). Further (\emph{i}) stays valid since the regulariser is non positive and (\emph{v}) since it is non negative and upper semicontinuous. Hence it remains to validate (\emph{ii}). For this we reduce the compact set \(K_0\) to \(K\cap K_0\) which is compact again. On this set the contribution \(\frac1n \cdot F\) goes uniformly to zero which yields the assertion.
+We only have to check how the regulariser \(F\) influences the requirements (\emph{i})-(\emph{v}) of Theorem \ref{conext}. In fact it doesn’t have any influence on the assumptions (\emph{iii}) and (\emph{iv}). Further (\emph{i}) stays valid since the regulariser is non positive and (\emph{v}) since it is non negative and upper semicontinuous. Hence it remains to validate (\emph{ii}). For this we reduce the compact set \(K_0\) to \(K\cap K_0\) which is compact again. On this set the contribution \(\frac1n\cdot \cdot F\) goes uniformly to zero which yields the assertion.
 \end{proof}
 
 \begin{rem}

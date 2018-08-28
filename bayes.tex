@@ -795,12 +795,13 @@ which are Gaussian priors with different variance. Under those regularisations, 
 \end{pmatrix}.\]
 It is not surprising that regularised MLEs are closer to zero, since the regulariser is built to penalise large parameter values. Further the effect of the Gaussian prior with smaller variance -- which is the second one -- is larger, which is consistent with the heuristic explanation that it cooperates a stronger prior believe, since it predicts that the parameter is more likely to be close to zero.
 
-We chose the sample size of \(n=20\) relatively small and want to show the effect the sample size has on the estimation. Obviously, we know from the second chapter that the MLE will converge to the actual parameter. To show this convergence in our case, we iteratively raised the sample size from \(1\) to \(30\) and obtained the maximum likelihood estimators that are shown in Figure \ref{fig:learningcurve}. We can see that the MLE converges towards the actual parameter \todo{rewrite this!}
-where the regularised MLE seems to converge to a very similar value where the difference of the limits is smaller than the fluctuations. Nevertheless we will see in the comments on the model selection that the Bayes factor between the two models is very high and hence the unregularised model is favourable. \todo{check this}%This is because the regularisation is not very strong in this case and we will see later that the models are actually quite close together meaning that the Bayes factor is not very high.% \todo{check this} % \todo{does this mean the effect of the regularisation vanishes?}
+We chose the sample size of \(n=20\) relatively small and want to show the effect the sample size has on the estimation. Obviously, we know from the second chapter that the different MLE will converge to the actual parameter. To show this convergence in our case, we iteratively raised the sample size from \(1\) to \(30\) and obtained the maximum likelihood estimators that are shown in Figure \ref{fig:learningcurve}. We can see that a stronger regularisation leads to a slower convergence, which is to be expected since it takes longer for the contribution \(\frac1n F\) takes longer to decrease. 
+%We can see that the MLE converges towards the actual parameter \todo{rewrite this!}
+%where the regularised MLE seems to converge to a very similar value where the difference of the limits is smaller than the fluctuations. Nevertheless we will see in the comments on the model selection that the Bayes factor between the two models is very high and hence the unregularised model is favourable. \todo{check this}%This is because the regularisation is not very strong in this case and we will see later that the models are actually quite close together meaning that the Bayes factor is not very high.% \todo{check this} % \todo{does this mean the effect of the regularisation vanishes?}
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.49\textwidth]{figures/Learning-curve-comparison-first-parameter}
-	\includegraphics[width=0.49\textwidth]{figures/Learning-curve-comparison-second-parameter}
+	\includegraphics[width=0.49\textwidth]{figures/Learning-curve-comparison-first-parameter-final}
+	\includegraphics[width=0.49\textwidth]{figures/Learning-curve-comparison-second-parameter-final}
 %	\tag{1}
 	\caption{Plot of the progression of the MLE and regularised MLE. The real parameter is marked by the red lines and with increased sample size they both estimators are within a reasonably small margin.}
 	\label{fig:learningcurve}

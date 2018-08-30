@@ -402,7 +402,7 @@ We refer to Lemma 7.3 in \cite{robert2013monte} for the proof of Harris recurren
 
 \subsubsection*{Implementation of the MH random walk}
 
-So far we have presented the theoretical foundations of the MH random walk and now we want to touch on a few aspect of the simulation process. For this part we shall point the reader towards the very gentle introduction \cite{robert1999metropolis} to the implementation of the MH random walk which also provides coding examples. 
+So far we have presented the theoretical foundations of the MH random walk and now we want to touch on a few aspect of the simulation process. For this part we shall point the reader towards the example based introductions \cite{robert1999metropolis} and \cite{robert2010introducing} to the implementation of the MH random walk which also provides coding examples. 
 %Further it shall be noted that we will not provide any rigorous results in this section and sometimes use terminology -- like empirical correlation -- without defining them mathematically. However, this is only done if the term is very well established an can easily be found in the literature.
 %but will give general statements about considerations one should make when implementing the MH random walk. 
 We have seen that the empirical measures associated with the MH random walk converge to \(\pi\) under fairly mild assumptions, meaning for a wide class of proposal distributions. Nevertheless it is mostly the choice of the proposal that determines the speed of this convergence. 
@@ -458,7 +458,15 @@ The reason why this increases the acceptance rate is, that the proposal now only
 \end{emp}
 
 \begin{emp}[The Gelman-Rubin diagnostic]
-\todo{!}
+So far we have seen guidelines as what properties of the MCMC simulation can be seen as favourable or not. However those comments can not replace quantitative measures on the convergence of the simulated Markov chains one of them being the Gelman-Rubin diagnostics which is also called the \(\hat R\) value of a simulation. We will not be able to rigorously introduce this quantity, but will make a few comments since we will use it later and refer to \cite{robert2012discretization} for a thorough introduction to convergence diagnostics for MCMC methods and to \cite{gelman1992inference} and \cite{brooks1998general} for the orinigal work by Gelman and Rubin. In a nutshell the \(\hat R\) value is an estimate of how much longer a MCMC simulation would have to run to be a good approximation of the stationary distribution. It is generally accepted that a \(\hat R\) value of at most \(1.05\) can be taken as a sign of convergence although this might be misleading in certain cases, cf. \cite{brooks1998general}.
+
+Although we don’t introduce the statistics itself, we shall present the requirements to compute it. The procedure one has to take is the following:
+\begin{enumerate}
+\item Find the possibly multiple modes of the distribution that should be approximated. This can be done either by exploiting optimisation algorithms or running short MCMC simulations, which we will do later in our toy example.
+\item Run \(m\) MCMC simulations of length \(n\) starting at random points with variance greater than the estimated variance of the target distribution \(\pi\). This variance is typically estimated through a first, shorter MCMC simulation which can also be used to tune the proposal.
+%\item 
+\end{enumerate}
+Now the \(\hat R\) value can be computed from the entirety of those \(m\) chains of length \(n\) and we will rely on a pre-implemented tool in R to do this.
 \end{emp}
 
 \subsection{Slice sampling}
@@ -795,7 +803,7 @@ which are Gaussian priors with different variance. Under those regularisations, 
 \end{pmatrix}.\]
 It is not surprising that regularised MLEs are closer to zero, since the regulariser is built to penalise large parameter values. Further the effect of the Gaussian prior with smaller variance -- which is the second one -- is larger, which is consistent with the heuristic explanation that it cooperates a stronger prior believe, since it predicts that the parameter is more likely to be close to zero.
 
-We chose the sample size of \(n=20\) relatively small and want to show the effect the sample size has on the estimation. Obviously, we know from the second chapter that the different MLE will converge to the actual parameter. To show this convergence in our case, we iteratively raised the sample size from \(1\) to \(30\) and obtained the maximum likelihood estimators that are shown in Figure \ref{fig:learningcurve}. We can see that a stronger regularisation leads to a slower convergence, which is to be expected since it takes longer for the contribution \(\frac1n F\) takes longer to decrease. 
+We chose the sample size of \(n=20\) relatively small and want to show the effect the sample size has on the estimation. Obviously, we know from the second chapter that the different MLE will converge to the actual parameter. To show this convergence in our case, we iteratively raised the sample size from \(1\) to \(30\) and obtained the maximum likelihood estimators that are shown in Figure \ref{fig:learningcurve}. We can see that a stronger regularisation leads to a slower convergence, which is to be expected since it takes longer for the contribution \(\frac1n \cdot F\) takes longer to decrease.s
 %We can see that the MLE converges towards the actual parameter \todo{rewrite this!}
 %where the regularised MLE seems to converge to a very similar value where the difference of the limits is smaller than the fluctuations. Nevertheless we will see in the comments on the model selection that the Bayes factor between the two models is very high and hence the unregularised model is favourable. \todo{check this}%This is because the regularisation is not very strong in this case and we will see later that the models are actually quite close together meaning that the Bayes factor is not very high.% \todo{check this} % \todo{does this mean the effect of the regularisation vanishes?}
 \begin{figure}[h!]
@@ -807,7 +815,7 @@ We chose the sample size of \(n=20\) relatively small and want to show the effec
 	\label{fig:learningcurve}
 \end{figure}
 
-
+In the light of the comparison of the different regularisers to the unregularised MLE and also the true parameter values, it is evident that the first regularisation \(F_1\) is more suitable. We will also explain how one can compare those two regularisers without knowing the true parameter values or even without solving the maximisation problem assiciated with the MAP estimation.
 
 \section{Bayesian estimation using MCMC methods}
 
@@ -825,7 +833,7 @@ We chose the sample size of \(n=20\) relatively small and want to show the effec
 %\[q_i\coloneqq e^6 \cdot \exp\big(-10 \left\lVert i - m \right\rVert\big) = \exp\big( - 10\left\lVert i - m \right\rVert + 6\big). \]
 %\end{emp}
 
-We will use the same data set consisting of \(8\) samples from this DPP like in the maximum likelihood estimation and will use the prior \eqref{toyprior}, since it corresponds to the regularised MLE. %that lead to the estimation
+We will use the same data set consisting of \(n=20\) samples from this DPP like in the maximum likelihood estimation and will use the first prior in \eqref{toyprior} since we have seen that it is more appropriate and will see that also the Bayes factor strongly supports this choice. %that lead to the estimation
 %\[\hat\theta = \begin{pmatrix}
 %-10.32045 \\   6.07648
 %\end{pmatrix}.\]
@@ -836,20 +844,24 @@ and we will use the MH random walk to approximate it. % In fact this is even eas
 %To do this we will impose a very conservative prior in the sense that we assume to not know the rough size of the parameter theta. Therefore, we define the prior to be a very flat normal distribution centered at the origin and with covariance \(2^{19}\cdot I\). This amounts to almost choosing a uniform distribution on the space and hence we expect to get a similar picture to Figure \ref{fig:4.1}. 
 But before we do this, we will shortly discuss how the Bayes factor can be used to decide between two different priors if one has not access to the unregularised and regularised MLE like we did before.
 
-\subsubsection{Comparing different priors via the Bayes factor}
+\subsubsection{Comparing the different priors via the Bayes factor}
 
-We have introduced the Bayes factor as the ratio of the total observation probabilities under two models. In order to compare 
+We have introduced the Bayes factor as the ratio of the total observation probabilities under two models. In order to compare the two different priors \eqref{toyprior}, we need to integrate the observation probabilities over the parameter space, i.e. compute the integrals
 %the regularised and unregularised model, we need to approximate the total observation probability
-\[f(x|\mathcal F) \coloneqq \int_{\Theta} f_{X, \Theta}(x, \theta)\nu(\mathrm{d}\theta)\]
-which we will do numerically. 
+\[%f(x|\mathcal F_i) \coloneqq %\int_{\Theta} f_{X, \Theta}(x, \theta)\nu(\mathrm{d}\theta) =
+ \int_{\Theta} f_{X| \Theta}(x| \theta)f_{\Theta_i}(\theta)\nu(\mathrm{d}\theta) \]
+which we will do numerically. The order of magnitude of the approximated Bayes factor between the two models arising from the priors \eqref{toyprior} was \(10^22\) which strongly supports the claim that the first prior is the more sensible choice. Therefore we will only work with this one in the remainder.
+
+It shall be noted that the numerical integration carried out above can only be performed in an efficient way if the parameter space \(\Theta\) is rather low dimensional. If this is not the case one can exploit probabilistic approaches based Monte Carlo simulations to calculate this normalisation constant. Details on such approaches can be found in the section on Monte Carlo integration in \cite{robert2013monte}.
 %Also we have to use normalised priors which means we can not use the generalised constant prior, we have used in the discussion for the Bayesian approach without a prior. Therefore we will work with a uniform distribution on a cuboid and choose it so large that it contains the whole Markov chain by far\todo{What does this mean?}{ }, in our case we choose it to be \([-11, -9]\times[5, 7]\). The Bayes factor obtained by this numerical integration is
 %\[24584.31 \approx 2.5\cdot10^4. \]
 %This strongly suggests that the model arising from the prior \(f_\Theta\propto \mathds{1}_{[-11, -9]\times[5, 7]}\) is far better suited than the one with the Gaussian prior \eqref{toyprior}.
-\todo{Is this not very arbitrary?}
+%\todo{Is this not very arbitrary?}
 
-\subsubsection{MCMC simulations}
+\subsubsection{Approximation of the posterior using MCMC simulations}
 
-We proceed in the following steps.
+In order to approximate the posterior density %using MCMC methods, 
+we proceed in the following steps.
 
 \begin{emp}[First burn in to find a starting point]
 %In the first phase we pick the origin as a starting point and choose the proposal \(f(\cdot| \theta)\) to be a Gaussian centered at \(\theta\) and with variance adjust so that an acceptance rate of roughly \(25\%-75\%\) is obtained. Usually if one is starting of at a point in a region with very low density, the variance one has to choose will be rather high.
@@ -866,8 +878,8 @@ Here, we neglect the first half since it is very highly dependent on the startin
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.49\textwidth]{figures/first-burn-in}
-	\includegraphics[width=0.49\textwidth]{figures/first-burn-in-second-start}
+	\includegraphics[width=0.49\textwidth]{figures/first-burn-in-new}
+	\includegraphics[width=0.49\textwidth]{figures/first-burn-in-second-start-new}
 %	\tag{1}
 	\caption{A plot of the first burn in period with two different starting points -- the origin and \((10, -10)\). The regularised MLE for the log linearity constant is marked by the green cross and the mean of the second half of the random walk by the red cross.}
 	\label{fig:findingstart}
@@ -879,8 +891,8 @@ Further the plots in Figure \ref{fig:MCplot} of the states of the Markov chain s
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.49\textwidth]{figures/first-parameter}
-	\includegraphics[width=0.49\textwidth]{figures/second-parameter}
+	\includegraphics[width=0.49\textwidth]{figures/first-parameter-new}
+	\includegraphics[width=0.49\textwidth]{figures/second-parameter-new}
 %	\tag{1}
 	\caption{Plots of the two state parameters of the MH random walk starting at the origin. The acceptance rate drops significantly and hardly any proposals are accepted.}
 	\label{fig:MCplot}
@@ -897,7 +909,7 @@ We run this MH random walk for \(10^3\) samples and calculate their empirical co
 
 \begin{figure}%[h!]
 	\centering
-	\includegraphics[width=0.55\textwidth]{figures/second-burn-in}
+	\includegraphics[width=0.55\textwidth]{figures/second-burn-in-new}
 %	\tag{1}
 	\caption{A plot of the samples of the MH of the second burn in period. One can see how the points are distributed around the MLE which is marked green. Their empirical covariance will be used to tune the proposal.}
 	\label{fig:tuning}
@@ -905,8 +917,8 @@ We run this MH random walk for \(10^3\) samples and calculate their empirical co
 %\enlargethispage{1.5cm}
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.49\textwidth]{figures/bayes-second-burn-in-first-parameter}
-	\includegraphics[width=0.49\textwidth]{figures/bayes-second-burn-in-second-parameter}
+	\includegraphics[width=0.49\textwidth]{figures/bayes-second-burn-in-first-parameter-new}
+	\includegraphics[width=0.49\textwidth]{figures/bayes-second-burn-in-second-parameter-new}
 	%\includegraphics[width=0.49\textwidth]{figures/bayes-final-MH-first-parameter}
 	%\includegraphics[width=0.49\textwidth]{figures/bayes-final-MH-second-parameter}
 %	\tag{1}
@@ -922,8 +934,8 @@ This leads to a higher acceptance rate of \(59\%\) compared to \(30\%\) in the s
 	\centering
 	%\includegraphics[width=0.49\textwidth]{figures/bayes-second-burn-in-first-parameter}
 	%\includegraphics[width=0.49\textwidth]{figures/bayes-second-burn-in-second-parameter}
-	\includegraphics[width=0.49\textwidth]{figures/bayes-final-MH-first-parameter}
-	\includegraphics[width=0.49\textwidth]{figures/bayes-final-MH-second-parameter}
+	\includegraphics[width=0.49\textwidth]{figures/bayes-final-MH-first-parameter-new}
+	\includegraphics[width=0.49\textwidth]{figures/bayes-final-MH-second-parameter-new}
 %	\tag{1}
 	\caption{State plots of the %second burn in period on the top and the 
 	final MH random walk on the bottom. One can see how the tuned proposal gives a higher acceptance rate than in the second burn in period.}
@@ -931,8 +943,8 @@ This leads to a higher acceptance rate of \(59\%\) compared to \(30\%\) in the s
 \end{figure}
 \begin{figure}%[h!]
 	\centering
-	\includegraphics[width=0.49\textwidth]{figures/bayes-acf-second-burn-in}
-	\includegraphics[width=0.49\textwidth]{figures/bayes-acf-final-MH}
+	\includegraphics[width=0.49\textwidth]{figures/bayes-acf-second-burn-in-new}
+	\includegraphics[width=0.49\textwidth]{figures/bayes-acf-final-MH-new}
 %	\tag{1}
 	\caption{A plot of the autocorrelation functions of the second burn in period and the final MH random walk. The latter one decreases faster which hints to a faster convergence due to the tuned proposal distributions.}
 	\label{fig:acf-sbi-final}
@@ -940,11 +952,15 @@ This leads to a higher acceptance rate of \(59\%\) compared to \(30\%\) in the s
 Finally we use a pre-implemented interpolation method to obtain a smoothed twodimensional histogram -- also called a heat plot -- which is shown in Figure \ref{fig:MHrw}.% \todo{does this make sense}% ....? %The resulting heat map can be seen in Figure \ref{fig:MHrw}.%recent\todo{say something about intuition}
 \begin{figure}%[h!]
 	\centering
-	\includegraphics[width=0.55\textwidth]{figures/bayes-mle-and-regmle}
+	\includegraphics[width=0.55\textwidth]{figures/bayes-mle-and-regmle-new}
 %	\tag{1}
 	\caption{Heat map of the MH random walks with \(10^4\) iterations. The regularised MLE estimator is shown as a white, the MLE as a green and the actual parameter as a red cross. The regularised MLE is the maximum of the (approximated) posterior.}
 	\label{fig:MHrw}
 \end{figure}
+\end{emp}
+
+\begin{emp}[Gelman-Rubin diagnostic]
+In order to justify the length of \(10^4\) of our final MCMC simulation for the approximation of the posterior we use the Gelman-Rubin diagnostic. Therefore we run a second chain with a random starting value sampled from a Gaussian distribution centered around the mean of the second half of the first burn in period and twice the variance of the second burn in period. Then we use the pre-implemented function {\tt gelman.diag} that computes the \(\hat R\) value. \todo{finish this}
 \end{emp}
 
 \subsubsection*{Bayesian approach without prior}
@@ -1014,7 +1030,7 @@ involves the computation of a \(N\times N\) matrix. This can be done explicitly 
 and we say it can be performed in \(O(N^3)\) 
 %\[O\left( N^3 + \sum_{i=1}^n \left\lvert A_i \right\rvert^3\right)\]
 time.\footnote{See also the Landau or ‚big \(O\)‘ notation in the nomenclature.} 
-In practice this will take a significant amount of time and this was also the motivation for the variational MCMC methods. For example in our toy example the computation took between one and two seconds on a six year old \(1.8\si{GHz}\) Intel Core i5 using the determinant algorithm in R.
+In practice this will take a significant amount of time and this was also the motivation for the variational MCMC methods. For example in our toy example the computation took roughly \(1.5\) seconds on a six year old \(1.8\si{GHz}\) Intel Core i5 using the determinant algorithm in R.
 
 For a single step of the MH random walk the unnormalised posterior needs to be evaluated twice for the computation of the acceptance threshold \(\rho(x, y)\), cf. \eqref{threshold}. Usually one will work with a prior that is easy to compute and with a proposal that can be simulated fast and hence we will neglect its contribution and hence one step of the performance of one MH random walk can be carried out in \(O(N^3)\) time. If \(T\) denotes the length of the MCMC method, the time needed for its simulation is 
 \begin{equation}\label{complexityMCMC}
@@ -1103,34 +1119,36 @@ We use an intensity of \(\rho=\frac1{400}\) and run repeat this procedure eight 
 
 \begin{table}[h!]
 \centering
-\begin{tabular}{ |c|c|c|c| } 
+\begin{tabular}{ |c|c|c| } 
  \hline
   & MLE %with intensity \(\rho=\frac1{400}\) 
-  & regularised MLE & %with intensity \(\rho=\frac1{400}\) 
+  & regularised MLE %& %with intensity \(\rho=\frac1{400}\) 
   \\ \hline
- 1 & (-10.05, 7.22) &  (-9.76, 7.09) & \\ \hline
- 2 & (-9.44, 6.67) & (-9.16, 6.55) & \\ \hline
- 3 & (-10.51, 7.05) & (-10.20, 6.91) & \\ \hline
- 4 & (-9.79, 6.45) & (-9.49, 6.32) & \\ \hline
- 5 & (-11.03, 7.06) & (-10.70, 6.92) & \\ \hline
- 6 & (-10.07, 6.97) & (-9.78, 6.85) & \\ \hline
- 7 & (-10.04, 6.53) & (-9.74, 6.40) & \\ \hline
- 8 & (-9.76, 6.83) & (-9.47, 6.70) & \\ \hline
+ 1 & (-10.05, 7.22) &  (-9.76, 7.09)  \\ \hline
+ 2 & (-9.44, 6.67) & (-9.16, 6.55)  \\ \hline
+ 3 & (-10.51, 7.05) & (-10.20, 6.91)  \\ \hline
+ 4 & (-9.79, 6.45) & (-9.49, 6.32)  \\ \hline
+ 5 & (-11.03, 7.06) & (-10.70, 6.92)  \\ \hline
+ 6 & (-10.07, 6.97) & (-9.78, 6.85)  \\ \hline
+ 7 & (-10.04, 6.53) & (-9.74, 6.40)  \\ \hline
+ 8 & (-9.76, 6.83) & (-9.47, 6.70)  \\ \hline
 \end{tabular}
 \caption{Table with the MLE and regularised MLE for noisy data perturbed by a Poisson point process with intensity \(\rho = \frac1{400}\).} \label{tab:MLEvsRegMLE}
 \end{table}
 
 Like in the case of estimation without noise, the regularised MLE is closer to the origin than the unregularised one. In the first component, this leads to worse estimates and in the second one to better ones. The reason that the estimation of the second parameter benefits from the regularisation is the following. If the cardinality of the DPP is smaller than \(N/2\), then the presence of noise -- at least the one we are considering -- leads to a higher expected cardinality in the data since more points are added than deleted because we expect
 \[\left\lvert A_i\cap B_i  \right\rvert \le \left\lvert B_i \setminus A_i \right\rvert.\]
-This leads to an estimation of higher qualities and the magnitude of the qualities is controlled through the second parameter. Hence, the regulariser forces the second component MLE into the right direction\todo{make this more scientific}. However this kind of regularisation can only be successful, if one has a clear understanding into which direction the noise will perturb the estimates. If for example the cardinality of the DPP is larger than \(N/2\) the Poisson noise will lower the cardinality of the data and the regulariser could increase this effect instead of weakening it. To decide whether the DPP has cardinality smaller or bigger than \(N/2\) one can use the observed data because if the intensity of the noise is lower than \(0.5\), then the expected cardinality of the observations remain smaller or larger than \(N/2\). To see this, assume the sample from the actual DPP satisfies \todo{?}%\(\)
+This leads to an estimation of higher qualities and the magnitude of the qualities is controlled through the second parameter. Hence, the regulariser forces the second component MLE into the right direction\todo{make this more scientific}. However this kind of regularisation can only be successful, if one has a clear understanding into which direction the noise will perturb the estimates. If for example the cardinality of the DPP is larger than \(N/2\) the Poisson noise will lower the cardinality of the data and the regulariser could increase this effect instead of weakening it. %To decide whether the DPP has cardinality smaller or bigger than \(N/2\) one can use the observed data because if the intensity of the noise is lower than \(0.5\), then the expected cardinality of the observations remain smaller or larger than \(N/2\). To see this, assume the sample from the actual DPP satisfies \todo{?}%\(\)
+
+To conclude, we found that a regulariser can be used to lower the effect random perturbations have on the estimation, but only if the qualitative effect of the noise on the certain parameters is understood from theoretical considerations. In this case, however, it might be enough to note this effect or to correct it directly and not through a regulariser.
 %This is because of
 %\[\]
 
-Now that we have understood how the noise influences the two parameters, we can actually propose a different prior that is adapted to this. 
+%Now that we have understood how the noise influences the two parameters, we can actually propose a different prior that is adapted to this. 
 %Namely, it should be more appropriate to use a prior that only relies on the second parameter and regularises the estimation for this to become smaller. 
-Hence, we use the adjusted prior
-\[\tilde f_\Theta(\theta) \coloneqq \exp\left(-\frac{\theta_2^2}{2^4}\right) \]
-which should only regularise the second the parameter. The improved results of this regularisation can be found in the Table \ref{tab:MLEvsRegMLE} on the very right. \todo{do this}
+%Hence, we use the adjusted prior
+%\[\tilde f_\Theta(\theta) \coloneqq \exp\left(-\frac{\theta_2^2}{2^4}\right) \]
+%which should only regularise the second the parameter. The improved results of this regularisation can be found in the Table \ref{tab:MLEvsRegMLE} on the very right. \todo{do this}
 
 %However, this is only due to the fact that the cardinality of the DPP is much smaller than \(N/2\) in our case and if it was bigger, the estimation would be forced into the opposite way. In summary the prior can be used to regularise the second parameter which controls the cardinality of the DPP, but this must be done with a certain amount of care and under consideration whether the observed data is definitely smaller or bigger than \(N/2\).
 

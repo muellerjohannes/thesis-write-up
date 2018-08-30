@@ -878,7 +878,7 @@ Here, we neglect the first half since it is very highly dependent on the startin
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.49\textwidth]{figures/first-burn-in-new}
+	\includegraphics[width=0.49\textwidth]{figures/first-burn-in-new-2}
 	\includegraphics[width=0.49\textwidth]{figures/first-burn-in-second-start-new}
 %	\tag{1}
 	\caption{A plot of the first burn in period with two different starting points -- the origin and \((10, -10)\). The regularised MLE for the log linearity constant is marked by the green cross and the mean of the second half of the random walk by the red cross.}
@@ -891,8 +891,8 @@ Further the plots in Figure \ref{fig:MCplot} of the states of the Markov chain s
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.49\textwidth]{figures/first-parameter-new}
-	\includegraphics[width=0.49\textwidth]{figures/second-parameter-new}
+	\includegraphics[width=0.49\textwidth]{figures/first-parameter-new-2}
+	\includegraphics[width=0.49\textwidth]{figures/second-parameter-new-2}
 %	\tag{1}
 	\caption{Plots of the two state parameters of the MH random walk starting at the origin. The acceptance rate drops significantly and hardly any proposals are accepted.}
 	\label{fig:MCplot}
@@ -904,12 +904,12 @@ One could argue that it would be reasonable to choose the MLE as a starting poin
 \begin{emp}[Second burn in to tune the proposal]
 We use the second burn in method to tune the proposal according to \ref{tuning} for the final simulation. To do this we first select a starting point according to the result of the first burn in period. Then we adjust the variance of the Gaussian proposals such that we obtain a reasonable acceptance rate. This will be much lower than the one of the first burn in since we have seen in the state plots of the first burn in period that the acceptance rate decreased heavily. %The reason for this is, that if one uses a proposal with big variance and starts at a point with high density, then the proposal will mostly propose points far away from this point which will mostly have low denstities and therefore are likely to be declined. 
 In a heuristic way it can be said that one now works ‚locally‘ and tries to explore the finer structure of the distribution and has to take smaller steps in order to do so.
-We run this MH random walk for \(10^3\) samples and calculate their empirical covariance \(\Sigma\in\mathbb R^{2\times 2}\) and obtain the Markov chain depicted in \ref{fig:tuning}. We see that the points are located around the regularised MLE and we can get a first idea along which direction the parameter is more uncertain.
+We run this MH random walk for \(5\cdot10^2\) samples and calculate their empirical covariance \(\Sigma\in\mathbb R^{2\times 2}\) and obtain the Markov chain depicted in \ref{fig:tuning}. We see that the points are located around the regularised MLE and we can get a first idea along which direction the parameter is more uncertain.
 
 
 \begin{figure}%[h!]
 	\centering
-	\includegraphics[width=0.55\textwidth]{figures/second-burn-in-new}
+	\includegraphics[width=0.55\textwidth]{figures/second-burn-in-new-2}
 %	\tag{1}
 	\caption{A plot of the samples of the MH of the second burn in period. One can see how the points are distributed around the MLE which is marked green. Their empirical covariance will be used to tune the proposal.}
 	\label{fig:tuning}
@@ -917,8 +917,8 @@ We run this MH random walk for \(10^3\) samples and calculate their empirical co
 %\enlargethispage{1.5cm}
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.49\textwidth]{figures/bayes-second-burn-in-first-parameter-new}
-	\includegraphics[width=0.49\textwidth]{figures/bayes-second-burn-in-second-parameter-new}
+	\includegraphics[width=0.49\textwidth]{figures/bayes-second-burn-in-first-parameter-new-2}
+	\includegraphics[width=0.49\textwidth]{figures/bayes-second-burn-in-second-parameter-new-2}
 	%\includegraphics[width=0.49\textwidth]{figures/bayes-final-MH-first-parameter}
 	%\includegraphics[width=0.49\textwidth]{figures/bayes-final-MH-second-parameter}
 %	\tag{1}
@@ -928,8 +928,8 @@ We run this MH random walk for \(10^3\) samples and calculate their empirical co
 \end{emp}
 
 \begin{emp}[The actual MCMC simulation]
-In this final step we run a MH random walk with length \(10^4\) and with the same starting point as in the second step. Now we use the prior adjusted according the second burn in period. This means we choose \(f(\cdot|\theta)\) to be the density of a normal distribution centered at \(\theta\) and with covariance \(\Sigma\). % This procedure adjusts the proposed steps into the diffrernt directions on the 
-This leads to a higher acceptance rate of \(59\%\) compared to \(30\%\) in the second burn in period which can also be seen in the according state plots in Figure \ref{fig:mixim-tuning} and \ref{fig:mixim-tuning-final}. Further we see in Figure \ref{fig:acf-sbi-final} that the auto correlation function decreases faster with this tuned proposal.
+In this final step we run a MH random walk with length \(2\cdot10^3\) and with the same starting point as in the second step. Now we use the prior adjusted according the second burn in period. This means we choose \(f(\cdot|\theta)\) to be the density of a normal distribution centered at \(\theta\) and with covariance \(\Sigma\). % This procedure adjusts the proposed steps into the diffrernt directions on the 
+This leads to a higher acceptance rate of \(60\%\) compared to \(21\%\) in the second burn in period which can also be seen in the according state plots in Figure \ref{fig:mixim-tuning} and \ref{fig:mixim-tuning-final}. Further we see in Figure \ref{fig:acf-sbi-final} that the auto correlation function decreases faster with this tuned proposal.
 \begin{figure}%[h!]
 	\centering
 	%\includegraphics[width=0.49\textwidth]{figures/bayes-second-burn-in-first-parameter}
@@ -943,7 +943,7 @@ This leads to a higher acceptance rate of \(59\%\) compared to \(30\%\) in the s
 \end{figure}
 \begin{figure}%[h!]
 	\centering
-	\includegraphics[width=0.49\textwidth]{figures/bayes-acf-second-burn-in-new}
+	\includegraphics[width=0.49\textwidth]{figures/bayes-acf-second-burn-in-new-2}
 	\includegraphics[width=0.49\textwidth]{figures/bayes-acf-final-MH-new}
 %	\tag{1}
 	\caption{A plot of the autocorrelation functions of the second burn in period and the final MH random walk. The latter one decreases faster which hints to a faster convergence due to the tuned proposal distributions.}
@@ -960,7 +960,7 @@ Finally we use a pre-implemented interpolation method to obtain a smoothed twodi
 \end{emp}
 
 \begin{emp}[Gelman-Rubin diagnostic]
-In order to justify the length of \(10^4\) of our final MCMC simulation for the approximation of the posterior we use the Gelman-Rubin diagnostic. Therefore we run a second chain with a random starting value sampled from a Gaussian distribution centered around the mean of the second half of the first burn in period and twice the variance of the second burn in period. Then we use the pre-implemented function {\tt gelman.diag} that computes the \(\hat R\) value. \todo{finish this}
+In order to justify the length of \(2\cdot 10^3\) of our final MCMC simulation for the approximation of the posterior we use the Gelman-Rubin diagnostic. Therefore we run a second chain with a random starting value sampled from a Gaussian distribution centered around the mean of the second half of the first burn in period and twice the variance of the second burn in period. Then we use the pre-implemented function {\tt gelman.diag} that computes the \(\hat R\) value. \todo{finish this}
 \end{emp}
 
 \subsubsection*{Bayesian approach without prior}

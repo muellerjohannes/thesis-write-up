@@ -850,7 +850,7 @@ We have introduced the Bayes factor as the ratio of the total observation probab
 %the regularised and unregularised model, we need to approximate the total observation probability
 \[%f(x|\mathcal F_i) \coloneqq %\int_{\Theta} f_{X, \Theta}(x, \theta)\nu(\mathrm{d}\theta) =
  \int_{\Theta} f_{X| \Theta}(x| \theta)f_{\Theta_i}(\theta)\nu(\mathrm{d}\theta) \]
-which we will do numerically. The order of magnitude of the approximated Bayes factor between the two models arising from the priors \eqref{toyprior} was \(10^22\) which strongly supports the claim that the first prior is the more sensible choice. Therefore we will only work with this one in the remainder.
+which we will do numerically. The order of magnitude of the approximated Bayes factor between the two models arising from the priors \eqref{toyprior} was \(10^{22}\) which strongly supports the claim that the first prior is the more sensible choice. Therefore we will only work with this one in the remainder.
 
 It shall be noted that the numerical integration carried out above can only be performed in an efficient way if the parameter space \(\Theta\) is rather low dimensional. If this is not the case one can exploit probabilistic approaches based Monte Carlo simulations to calculate this normalisation constant. Details on such approaches can be found in the section on Monte Carlo integration in \cite{robert2013monte}.
 %Also we have to use normalised priors which means we can not use the generalised constant prior, we have used in the discussion for the Bayesian approach without a prior. Therefore we will work with a uniform distribution on a cuboid and choose it so large that it contains the whole Markov chain by far\todo{What does this mean?}{ }, in our case we choose it to be \([-11, -9]\times[5, 7]\). The Bayes factor obtained by this numerical integration is
@@ -943,7 +943,7 @@ This leads to a higher acceptance rate of \(60\%\) compared to \(21\%\) in the s
 \end{figure}
 \begin{figure}%[h!]
 	\centering
-	\includegraphics[width=0.49\textwidth]{figures/bayes-acf-second-burn-in-new-2}
+	\includegraphics[width=0.46\textwidth]{figures/bayes-acf-second-burn-in-new-2}
 	\includegraphics[width=0.49\textwidth]{figures/bayes-acf-final-MH-new}
 %	\tag{1}
 	\caption{A plot of the autocorrelation functions of the second burn in period and the final MH random walk. The latter one decreases faster which hints to a faster convergence due to the tuned proposal distributions.}
@@ -960,7 +960,7 @@ Finally we use a pre-implemented interpolation method to obtain a smoothed twodi
 \end{emp}
 
 \begin{emp}[Gelman-Rubin diagnostic]
-In order to justify the length of \(10^4\) of our final MCMC simulation for the approximation of the posterior we use the Gelman-Rubin diagnostic. Therefore we run a second chain with a random starting value sampled from a Gaussian distribution centered around the mean of the second half of the first burn in period and twice the variance of the second burn in period. Then we use the pre-implemented function {\tt gelman.diag} that computes the \(\hat R\) value and an upper estimate for it and obtain the following results. \todo{finish this}
+In order to justify the length of \(10^4\) of our final MCMC simulation for the approximation of the posterior we use the Gelman-Rubin diagnostic. Hence, we run a second chain with a random starting value sampled from a Gaussian distribution centered around the mean of the second half of the first burn in period and twice the variance of the second burn in period. Then we use the pre-implemented R function {\tt gelman.diag} that computes the \(\hat R\) value and an upper estimate for it and obtain the following results. %\todo{finish this}
 
 \begin{table}[h!]
 \centering
@@ -976,7 +976,7 @@ In order to justify the length of \(10^4\) of our final MCMC simulation for the 
 \end{table}
 
 %This shows that the chain was run for a reasonable length since t
-The small \(\hat R\) values imply that the length of the MH random walk was not too short. Figure \ref{} shows a plot of the evolution of the \(\hat R\) value with increasing length of the chain and it suggests that the length of the chain was not unreasonably long. % since it only c
+The small \(\hat R\) values imply that the length of the MH random walk was not too short. On the other hand Figure \ref{fig:R-hat} shows a plot of the evolution of the \(\hat R\) value with increasing length of the chain and it suggests that the length of the chain was not unreasonably long. % since it only c
 
 \begin{figure}[h!]
 	\centering
@@ -1073,8 +1073,8 @@ O\left( R^M\cdot N^3\right).
 \end{equation}
 In \(10\) dimension and with \(40\) grid lines along all dimensions, this corresponds to \(40^{10} > 10^{16}\) evaluations which can not be performed in reasonable time. This exponential increase makes this direct approach only impossible if the parameter one wishes to estimate is not very low dimensional. Nevertheless it might be possible to modify this approach in a suitable way to make it more promising in higher dimension. For example one could try to iteratively raise the resolution of the grid on the places where one expects a high value of the function or high changes of the function. Alternatively it might be worth to investigate how different approximation algorithms of high dimensional functions could help in this approach.
 
-It shall be noted that also the method of numerical integration suffers from the course of dimensionality since numerical integration relies on the evaluation of the function on an exponentially increasing number of points.
-\todo{How does \(T\) grow with \(M\)?}
+It shall be noted that also the method of numerical integration suffers from the course of dimensionality since numerical integration relies on the evaluation of the function on an exponentially increasing number of points. Obviously the desirable length \(T\) of the Markov chain will increase with the dimension of the parameter space, however this will typically not be the case exponentially in \(M\), cf. \cite{kunsch2017high}.
+%\todo{How does \(T\) grow with \(M\)?}
 
 The complexity of the slice sampling algorithm can not be given this easily, at least for the version we presented. This is because the approximate sampling from the uniform distribution on the slice proposed in Algorithm \ref{alg:slice-sampling-implementation} can need arbitrarily many samples from the uniform distribution on the proposed cuboid. Although those uniform samples can be generated efficiently one has to evaluate the unnormalised posterior each time to check whether the proposed sample is actually contained in the slice.
 %\todo{comment on complexity for silce sampling?}
@@ -1163,7 +1163,7 @@ We use an intensity of \(\rho=\frac1{400}\) and run repeat this procedure eight 
 
 Like in the case of estimation without noise, the regularised MLE is closer to the origin than the unregularised one. In the first component, this leads to worse estimates and in the second one to better ones. The reason that the estimation of the second parameter benefits from the regularisation is the following. If the cardinality of the DPP is smaller than \(N/2\), then the presence of noise -- at least the one we are considering -- leads to a higher expected cardinality in the data since more points are added than deleted because we expect
 \[\left\lvert A_i\cap B_i  \right\rvert \le \left\lvert B_i \setminus A_i \right\rvert.\]
-This leads to an estimation of higher qualities and the magnitude of the qualities is controlled through the second parameter. Hence, the regulariser forces the second component MLE into the right direction\todo{make this more scientific}. However this kind of regularisation can only be successful, if one has a clear understanding into which direction the noise will perturb the estimates. If for example the cardinality of the DPP is larger than \(N/2\) the Poisson noise will lower the cardinality of the data and the regulariser could increase this effect instead of weakening it. %To decide whether the DPP has cardinality smaller or bigger than \(N/2\) one can use the observed data because if the intensity of the noise is lower than \(0.5\), then the expected cardinality of the observations remain smaller or larger than \(N/2\). To see this, assume the sample from the actual DPP satisfies \todo{?}%\(\)
+This leads to an estimation of higher qualities and the magnitude of the qualities is controlled through the second parameter. Hence, the regulariser forces the second component MLE into the right direction. However this kind of regularisation can only be successful, if one has a clear understanding into which direction the noise will perturb the estimates. If for example the cardinality of the DPP is larger than \(N/2\) the Poisson noise will lower the cardinality of the data and the regulariser could increase this effect instead of weakening it. %To decide whether the DPP has cardinality smaller or bigger than \(N/2\) one can use the observed data because if the intensity of the noise is lower than \(0.5\), then the expected cardinality of the observations remain smaller or larger than \(N/2\). To see this, assume the sample from the actual DPP satisfies \todo{?}%\(\)
 
 To conclude, we found that a regulariser can be used to lower the effect random perturbations have on the estimation, but only if the qualitative effect of the noise on the certain parameters is understood from theoretical considerations. In this case, however, it might be enough to note this effect or to correct it directly and not through a regulariser.
 %This is because of

@@ -2,18 +2,18 @@
 %\chapter{Introduction to discrete determinantal point processes}
 
 In this chapter we provide %a short motivation for the topic itself and 
-an overview over the basic notions and results for discrete determinantal point processes. Those will be necessary to study the problem of parameter estimation later on. First we rigorously introduce the concept of discrete determinantal point processes and define the most important subclass that we will work with a lot later. This is exactly the subclass where one can express the elementary probabilities of the point process nicely. This will be crucial later on if one wants to perform the parameter estimation based on elementary probabilities, like for example maximum likelihood estimation or Bayesian parameter estimation.
+an overview over the basic notions and results for discrete determinantal point processes. Those will be necessary to study the problem of parameter estimation later on. First we rigorously introduce the concept of discrete determinantal point processes and define the most important subclass that we will work with later. This is exactly the subclass where one can express the elementary probabilities of the point process nicely. This will be crucial later on if one wants to perform the parameter estimation based on elementary probabilities, like for example maximum likelihood estimation or Bayesian parameter estimation.
 
-Then we will turn towards the question of existence and simulation of determinantal point processes. This will lead to an algorithm that samples from a DPP which we will use to built some toy examples and also to generate the data sets we will perform parameter estimation for in the following chapters.
+Then we will turn towards the question of existence and simulation of determinantal point processes. This will lead to an algorithm that samples from a DPP which we will use to simulate toy examples and also to generate the data sets we will perform parameter estimation for in the following chapters.
 
 \section{Definitions and properties}
 
-We begin by presenting the general frame we will work in. This means that we will keep the notation introduced here and will use those objects throughout the thesis without further explanation. We will present all the important properties of determinantal point processes that we will need but omit some calculations that have been presented somewhere else and don’t contribute to a better understanding of the topic. A much more in depth survey of properties of determinantal point processes including extensive comparisons to several other point processes can be found in the report \cite{kulesza2012determinantal}.%\todo{comment on continuous DPPs at one point!}
+We begin by presenting the general frame we will work in. This means that we will keep the notation introduced here and will use those objects throughout the thesis without further explanation. We present all the important properties of determinantal point processes that we will need but omit some calculations that have been presented somewhere else and don’t contribute to a better understanding of the topic. A much more in depth survey of properties of determinantal point processes including an extensive comparisons to several other point processes can be found in the report \cite{kulesza2012determinantal}.%\todo{comment on continuous DPPs at one point!}
 
 \begin{emp}[Setting]
-Let \(\mathcal Y\) be a finite set, which we call the \emph{ground set} and \(N\coloneqq \left\lvert \mathcal Y \right\rvert\) its cardinality. We call the elements of \(\mathcal Y\) \emph{items } and assume for the sake of easy notation \(\mathcal Y = \left\{ 1, \dots, N\right\}\) unless otherwise specified. %\coloneqq\left\{ 1,\dots, N\right\}\). 
+Let \(\mathcal Y\) be a finite set, which we call the \emph{ground set} and \(N\coloneqq \left\lvert \mathcal Y \right\rvert\) its cardinality. We call the elements of \(\mathcal Y\) \emph{items } and assume for the sake of easy notation \(\mathcal Y = \left\{ 1, \dots, N\right\}\) unless specified differently. %\coloneqq\left\{ 1,\dots, N\right\}\). 
 A \emph{point process} on \(\mathcal Y\) is a random subset %\(\mathbf Y\) 
-of \(\mathcal Y\), i.e. a random variable with values in the powerset \(2^{\mathcal Y}\). We will identify this random variable with its law\footnote{The law of a random variable is just the push forward measure of the probability measure of the probability space the random variable is defined on.} \(\mathbb P\) and thus refer to probability measures \(\mathbb P\) on \(2^{\mathcal Y}\) as point processes and will not distinguish between those objects. Further, \(\mathbf Y\) will always denote a random subset distributed according to \(\mathbb P\).
+of \(\mathcal Y\), i.e. a random variable with values in the powerset \(2^{\mathcal Y}\). We will identify this random variable with its law\footnote{The law of a random variable is the push forward measure of the probability measure of the probability space the random variable is defined on.} \(\mathbb P\) and thus refer to probability measures \(\mathbb P\) on \(2^{\mathcal Y}\) as point processes and will not distinguish between those objects. Further, \(\mathbf Y\) will always denote a random subset distributed according to \(\mathbb P\).
 \end{emp}
 
 \begin{defi}[Determinantal point process]
@@ -26,7 +26,7 @@ where \(K\) is a symmetric matrix indexed by the elements in \(\mathcal Y\) and 
 of \(K\) indexed by the elements of \(A\). We call \(K\) the \emph{marginal kernel} of the DPP. If the marginal kernel \(K\) is diagonal, we call \(\mathbb P\) a \emph{Poisson point process}.
 \end{defi}
 
-We note that all principal minors\footnote{The \emph{principle minors} of \(K\) are the determinants of the submatrices \(K_A\) for \(A\subseteq \mathcal Y\).} of \(K\) are necessarily non negative and Sylvester’s criterion implies that \(K\) is positive semi-definite.\footnote{\(K\) is called \emph{positive semi-definite} if \(x^TKx\ge0\) for all \(x\in\mathbb R^{\mathcal Y}\). The Sylvester criterion states that a matrix is positive semi-definite if and only if all principle minors are non negative.} Further it can be shown \footnote{This follows from equation (2.3) in \cite{borodin2009determinantal}.} that also the complement of a DPP is a DPP with marginal kernel \(I-K\) where \(I\) is the identity matrix, i.e.
+We note that all principal minors\footnote{The \emph{principal minors} of \(K\) are the determinants of the submatrices \(K_A\) for \(A\subseteq \mathcal Y\).} of \(K\) are necessarily non negative and Sylvester’s criterion implies that \(K\) is positive semi-definite.\footnote{\(K\) is called \emph{positive semi-definite} if \(x^TKx\ge0\) for all \(x\in\mathbb R^{\mathcal Y}\). The Sylvester criterion states that a matrix is positive semi-definite if and only if all principal minors are non negative.} Further it can be shown \footnote{This follows from equation (2.3) in \cite{borodin2009determinantal}.} that also the complement of a DPP is a DPP with marginal kernel \(I-K\) where \(I\) is the identity matrix, i.e.
 \[\mathbb P(A\subseteq\mathbf Y^c) = \det(I_A-K_A).\]
 Thus, we can conclude \(I-K\ge0\) and obtain \(0\le K\le I\). This actually turns out to be sufficient for \(K\) to define a DPP through \eqref{e2.1} which we will see in the fourth section of this chapter.%(cf. \cite{kulesza2012determinantal}).\todo{why? explain!}{ }
 
@@ -40,8 +40,9 @@ If we choose \(A=\left\{ i\right\}\) and \(A=\left\{ i,j\right\}\) for \(i,j\in 
 \mathbb P(i,j\in\mathbf Y) & = K_{ii}K_{jj}-K_{ij}^2 = \mathbb P(i\in\mathbf Y)\cdot\mathbb P(j\in\mathbf Y)-K_{ij}^2.
 \end{split}
 \end{equation}
-Thus, the appearances of the two items \(i\) and \(j\) are always negatively correlated. This negative correlation is exactly what causes the diversifying behaviour of determinantal point processes. %In practice one usually models the negative correlations to be high between items that are similar in some notion. For example in a spatial setting being similar could mean being close together and in this case the selected items would tend to be not very close together.
-This repulsive behaviour can be seen in Figure \ref{fig:1}. %\todo{insert picture!}{ }
+Thus, the appearances of the two items \(i\) and \(j\) are always negatively correlated. This negative correlation is exactly what causes the diversifying behaviour of determinantal point processes and leads to a %. %In practice one usually models the negative correlations to be high between items that are similar in some notion. For example in a spatial setting being similar could mean being close together and in this case the selected items would tend to be not very close together.
+%This 
+repulsive behaviour that can be seen in Figure \ref{fig:1}. %\todo{insert picture!}{ }
 Note that Poisson point processes are exactly the DPPs without correlations of the points.
 
 \begin{figure}[h!]
@@ -51,7 +52,7 @@ Note that Poisson point processes are exactly the DPPs without correlations of t
 	\includegraphics[width=0.444\textwidth]{figures/DPP-in-square-large-3}
 	\includegraphics[width=0.44\textwidth]{figures/Poisson-in-square-large-2}
 %	\tag{1}
-	\caption{A DPP with negative correlations of close points on a \(100\times100\) grid in the unit square on the left and a Poisson point process on the same grid on the right with the same expected cardinality. The -- in this case spatially -- repellent structure of the DPP is clearly visible.}
+	\caption{A DPP with negative correlations of close points on a \(100\times100\) grid in the unit square on the left and a Poisson point process on the same grid and with the same expected cardinality on the right. The -- in this case spatially -- repellent structure of the DPP is clearly visible.}
 	\label{fig:1}
 \end{figure}
 
@@ -60,7 +61,7 @@ In this light the fact that also \(\mathbf Y^c\) exhibits negative correlations 
 
 % \subsection*{\(L\)-ensembles}
 \begin{emp}[\(L\)-ensembles]
-Let us now introduce an important subclass of DPPs, namely the ones where not only the marginal probabilities can be expressed through a suitable kernel, but also the elementary probabilities. This will be convenient for us later when we will need expressions for the elementary probability in order to take a maximum likelihood approach\footnote{This will thoroughly be introduced in the next chapter.} to the estimation of certain parameters. If we have even \(K<I\), then we define the \emph{elementary kernel}
+Let us now introduce an important subclass of DPPs, namely the ones where not only the marginal but also the elementary probabilities can be expressed through a suitable kernel. This will be convenient for us later when we will need expressions for the elementary probability in order to take a maximum likelihood approach\footnote{This will thoroughly be introduced in the next chapter.} to the estimation of certain parameters. If we have \(K<I\), then we define the \emph{elementary kernel}
 \begin{equation}\label{e2.2.1}
 L\coloneqq K(I-K)^{-1}
 \end{equation}
@@ -77,9 +78,9 @@ We will see in \ref{carDPP} that the cardinality of a DPP is distributed like th
 
 \subsection*{The quality diversity decomposition}
 
-We note that any symmetric, positive semi-definite matrix \(L\) can be written as a Gram matrix%\todo{explain this decomposition?}
+We note that any symmetric positive semi-definite matrix \(L\) can be written as a Gram matrix%\todo{explain this decomposition?}
 \[L=B^TB\]
-where \(B\in\mathbb R^{D\times N}\) whenever \(D\) is larger than the rank \(\operatorname{rk}(L)\) of \(L\). For example one could take the spectral decomposition \(L = U^TCU\) of \(L\) and set \(B\coloneqq \sqrt{C} U\) and eventually drop some zero rows from \(\sqrt{C}\). Let \(B_i\) denote the \(i\)-th column of \(B\) and we can write this as the product \(B_i = q_i\cdot \phi_i\) where \(q_i\ge0\) and \(\phi_i\in\mathbb R^D\) such that \(\left\lVert \phi_i \right\rVert=1\). This yields the representation
+where \(B\in\mathbb R^{D\times N}\) and \(D\) is larger than the rank \(\operatorname{rk}(L)\) of \(L\). For example one could take the spectral decomposition \(L = U^TCU\) of \(L\) and set \(B\coloneqq \sqrt{C} U\) and eventually drop some zero rows from \(\sqrt{C}\). Let \(B_i\) denote the \(i\)-th column of \(B\) and write this as a product \(B_i = q_i\cdot \phi_i\) where \(q_i\ge0\) and \(\phi_i\in\mathbb R^D\) such that \(\left\lVert \phi_i \right\rVert=1\). This yields the representation
 \[L_{ij} = q_i \phi_i^T\phi_j q_j \eqqcolon q_i S_{ij}q_j\]
 and we call \(q_i\) the \emph{quality} of the item \(i\in \mathcal Y\) and \(\phi_i\) the \emph{diversity feature vector} of \(i\) and \(S\) the \emph{similarity matrix} or \emph{similarity kernel}. Since we will use this decomposition multiple times, we fix its properties. % and \(S_{ij}\coloneqq\phi_i^T\phi_j\in[-1,1]\) the \emph{similarity} of the two items \(i\) and \(j\). %Further we call \(\phi_i\) the \emph{diversity feature vector} of the element \(i\).\todo{comment on \(L\) ensembles} %, which will be further explained by the later examples.
 
@@ -102,7 +103,7 @@ The quality diversity parametrisation is a continuous and surjective mapping %bi
 \end{rem}
 
 
-Not only will the quality diversity decomposition play a central role when it comes to the actual modelling of real world phenomena with DPPs. It will also provide some useful expressions like the following one for the elementary probabilies% will provide some useful expressions. For example the elementary probabilities take the form
+Not only will the quality diversity decomposition play a central role when it comes to the modelling of real world phenomena with DPPs. It will also provide some useful expressions like the following one for the elementary probabilies% will provide some useful expressions. For example the elementary probabilities take the form
 \begin{equation}\label{e2.4}
 \mathbb P(A=\mathbf Y) \propto \det\!\big((B^TB)_A\big) % = \det\!\big(\Psi(q, \phi)_A\big) 
 = \left(\prod_{i\in A} q_i^2\right) \cdot \det(S_A) \quad \text{for all } A\subseteq\mathcal Y.
@@ -112,9 +113,9 @@ Not only will the quality diversity decomposition play a central role when it co
 %An intuitive understanding of the quality diversity decomposition will play a central role in the modelling process of real world phenomena through DPPs.
 %later on if one wants to model real world phenomena as DPPs.
 % To get this %, we can identify an item \(i\in\mathcal Y\) with the vector \(B_i=q_i\phi_i\in\mathbb R^D\) and
-In order to get an intuitive understanding of the quality diversity decomposition we can think of \(q_i\ge0\) as a measure of how important or high in quality the item is and the diversity feature vector \(\phi_i\in\mathbb R^D\) can be thought of as some kind of state vector that consists of internal quantities that describe the item \(i\) in some way. Further, we interpret the scalar product \(\phi_i^T\phi_j\in[0,1]\) as a measure of similarity between the items \(i\) and \(j\) which justifies the name similarity matrix for \(S\). Note that if \(i\) and \(j\) are perfectly similar or antisimilar, i.e. \(\phi_i^T\phi_j=\pm1\), then they can not occur at the same time, since
+In order to get an intuitive understanding of the quality diversity decomposition we can think of \(q_i\ge0\) as a measure of how important or high in quality the item \(i\) is and the diversity feature vector \(\phi_i\in\mathbb R^D\) can be thought of as some kind of state vector that consists of internal quantities that describe the item \(i\) in some way. Further, we interpret the scalar product \(\phi_i^T\phi_j\in[0,1]\) as a measure of similarity between the items \(i\) and \(j\) which justifies the name similarity matrix for \(S\). Note that if \(i\) and \(j\) are perfectly similar or antisimilar, i.e. \(\phi_i^T\phi_j=\pm1\), then they can not occur at the same time, since
 \[\mathbb P(i,j\in\mathbf Y) = \det\begin{pmatrix} 1 & \pm1 \\ \pm1 & 1 \end{pmatrix} = 0. \]
-If we identify \(i\) with the vector \(B_i=q_i\phi_i\in\mathbb R^D\), we can obtain a geometric interpretation of \eqref{e2.4} since \(\det\!\big((B^TB)_A\big)\) is the squared volume that is spanned by the columns \(B_i, i\in A\), which is visualised in \ref{fig:2}. This volume increases if the lengths of the edges that correspond to the quality increase and decrease when the similarity feature vectors point into more similar directions.
+If we identify \(i\) with the vector \(B_i=q_i\phi_i\in\mathbb R^D\), we can obtain a geometric interpretation of \eqref{e2.4} since \(\det\!\big((B^TB)_A\big)\) is the squared volume that is spanned by the columns \(B_i, i\in A\), which is visualised in \ref{fig:2}. This volume increases if the lengths of the edges which correspond to the quality increase and decrease when the similarity feature vectors point into more similar directions.
 
 %\vspace{2cm}
 \begin{figure}[h!]
@@ -128,16 +129,16 @@ If we identify \(i\) with the vector \(B_i=q_i\phi_i\in\mathbb R^D\), we can obt
 \begin{emp}[Modelling diversity over distance]\label{moddiv}
 Since we will use one approach for the diversity features multiple times, we will now give a short general formulation of it. Let \(\mathcal R = \left\{ r_1, \dots, r_D\right\}\) be a finite set which we will call the \emph{reference set} and its elements the \emph{reference points}. Further, let
 \[d\colon \mathcal Y\times \mathcal R\to\mathbb R_+, \quad f\colon\mathbb R_+\to \mathbb R\]
-be mappings. Usually \(d(i, r)\) will be interpreted as a measure of distance between an item \(i\in\mathcal Y\) and a reference point \(r\in\mathcal R\) and will typically be given by a metric on a larger space that contains \(\mathcal Y\) and \(\mathcal R\).
+be mappings. Usually \(d(i, r)\) will be some measure of distance between an item \(i\in\mathcal Y\) and a reference point \(r\in\mathcal R\) and will typically be given by a metric on a larger space that contains \(\mathcal Y\) and \(\mathcal R\).
 One can now model \(\phi_i\in\mathbb R^{\mathcal R}\) via
 \[(\phi_i)_r \propto f\!\big(d(i, r)\big) \quad \text{for } r\in\mathcal R.\] % j = 1, \dots, D. \]
-The function \(f\) will typically be decreasing and thus \((\phi_i)_r\) can be seen as a measure of how similar item \(i\) is to the reference point \(r\in\mathcal R\). Thus, the diversity feature vector \(\phi_i\) stores how similar the item \(i\) is to all reference points and the scalar product \(\phi_i^T\phi_j\) will be close to one, if the items \(i\) and \(j\) have approximately the same degrees of similarity to the reference points. It shall be noted that the choice of the number \(D\) of reference points bounds the rank of the kernel \(L\) and therefore also the largest subset that occurs with positive probability. Indeed we have \(\operatorname{rk}(L)\le D\) and for \(A\subseteq\mathcal Y\) with more than \(D\) elements \(\det(L_A) = 0\) and therefore \(\mathbb P(A) = 0\).
+The function \(f\) will typically be decreasing and thus \((\phi_i)_r\) can be seen as a measure of how similar item \(i\) is to the reference point \(r\in\mathcal R\). Thus, the diversity feature vector \(\phi_i\) encodes how similar the item \(i\) is to all reference points and the scalar product \(\phi_i^T\phi_j\) will be close to one, if the items \(i\) and \(j\) have approximately the same degrees of similarity to the reference points. It shall be noted that the choice of the number of reference points bounds the rank of the kernel \(L\) and therefore also the largest subset that occurs with positive probability. Indeed we have \(\operatorname{rk}(L)\le D\) and for \(A\subseteq\mathcal Y\) with more than \(D\) elements \(\det(L_A) = 0\) and therefore \(\mathbb P(A) = 0\).
 In the last section of this chapter we will give examples where \(d\) is quite naturally a metric % in most cases, at least in the ones where \(\mathcal Y\) consists of %spatial positions or 
 %points in a metric space. On the other hand 
 and will see how
 the choice of \(f\) is crucial for the strength of the repulsion.
 
-Similar approaches for the modelling of the diversity feature vector have been taken in \cite{leeindividualness} and \cite{kulesza2010structured} and further the method of reference points has been used in \cite{bardenet2015inference} to obtain bounds for the elementary probabilities of a DPP.
+Similar approaches for the modelling of the diversity feature vectors have been taken in \cite{leeindividualness} and \cite{kulesza2010structured} and further the method of reference points has been used in \cite{bardenet2015inference} to obtain bounds for the elementary probabilities of a DPP.
 \end{emp}
 %\begin{emp}[Transitivity of repulsion]
 %One last property of DPPs that we shall mention is the fact that the negative correlations of the DPP posses a transient property in the sense, that if \(i\) and \(j\) and \(j\) and \(k\) are %similar, then \(i\) and \(k\) are also similar. This is due to the fact
@@ -148,13 +149,13 @@ Similar approaches for the modelling of the diversity feature vector have been t
 %recent\todo{say something about the transitivity of repulsion?}
 
 \begin{emp}[Comparison to other point processes]
-A wide variety of point processes has been studied and used in different applications and determinantal point processes are by far not the only point processes with negative correlations. For example every Poisson point process can be turned into a process with negative correlations by removing %some points of the selected subset. For example one could delete
+A wide variety of point processes has been studied and used in different applications and determinantal point processes are by far not the only diversifying point processes. For example every Poisson point process can be turned into a process with negative correlations by removing %some points of the selected subset. For example one could delete
  all points that lie within a certain distance of another point of the subset. Another well studied class of point processes are the so called \emph{Gibbs} or \emph{Markov point proccesses}. The elementary probabilities are given by 
 \[\mathbb P(A) \propto \exp(-F(A))\]
 where \(F\colon2^{\mathcal Y}\to\mathbb R\) is called the \emph{energy function} is interpreted as a measure of how unfavourable a subset \(A\subseteq\mathcal Y\) is.
 %Those are defined through an energy function
 
-Although some of those different classes of point processes with negative correlation posses nice theoretical properties they share one major drawback. In fact a lot computations and also the simulation of those point processes can not be performed efficiently. For example in the case of Gibbs point processes even the time needed for the computation of the normalisation constant%not even the normalisation constant
+Although some of those classes of point processes posses nice theoretical properties they share one major drawback. In fact, a lot computations and also the simulation of those point processes can not be performed efficiently. For example, in the case of Gibbs point processes even the time needed for the computation of the normalisation constant%not even the normalisation constant
 \[\sum_{A\subseteq\mathcal Y} \exp(-F(A)) \]
 grows exponentially with \(N\) since it is the sum over an exponentially large set. However, the special structure of the determinant itself leads to the explicit expression in \eqref{e2.3} of the normalisation constant for DPPs and the computation time for the exact computation of it via Gauss elimination only grows like \(N^3\) or even slower for numerical approximations (cf. \cite{valiant1979complexity} and \cite{emiris2005improved})%recent\todo{cite}
 . A more in depth comparison of different point processes including their descriptive power can be found in \cite{kulesza2012determinantal}.
@@ -186,7 +187,7 @@ Although \(20\) is the most likely elementary event, it is not a very typical ou
 %\[0.1\cdot X + 0.9\cdot Y\] % \quad \text{where } X\sim N(0, 10), Y\sim N()\]
 %where \(X\) is centered with variance \(10\) and \(Y\) has mean \(5\) with variance \(1\), the densities are shown in Figure ....\todo{check whether this gives the desired effect and plot the density!}{ } 
 
-The mode problem can often be solved explicitely or at least numerically if the density \(f\) is a smooth function defined on a subset of \(\mathbb R^d\). However, in the case of DPPs we have to deal with the probability measure on a finite set and thus the mode problem is a discrete optimisation problem over the powerset \(2^{\mathcal Y}\). The exponential size of the powerset turns this into a very hard computational task and it has been shown that the time to compute the mode -- or even an event with more than \(\frac89\) its probability -- grows exponentially with the cardinality \(N\) of \(\mathcal Y\) (cf. \cite{kulesza2012determinantal}). However, some algorithms for the approximation of the mode have been proposed for certain classes of DPPs or for the goal to find a subset of at least \(\frac14\) of the probability of the mode. For more information on those approaches we refer to \cite{djolonga2014map} and \cite{gillenwater2012near}. % \todo{refer to other papers that do approximations?}
+The mode problem can often be solved explicitely or at least numerically if the density \(f\) is a smooth function defined on a subset of \(\mathbb R^d\). However, in the case of DPPs we have to deal with the probability measure on a finite set and thus the mode problem is a discrete optimisation problem over the powerset \(2^{\mathcal Y}\). The exponential size of the powerset turns this into a hard computational task and it has been shown that the time to compute the mode -- or even an event with more than \(\frac89\) its probability -- grows exponentially with the cardinality \(N\) of \(\mathcal Y\) (cf. \cite{kulesza2012determinantal}). However, some algorithms for the approximation of the mode have been proposed for certain classes of DPPs or for the goal to find a subset of at least \(\frac14\) of the probability of the mode. For further reading we refer to \cite{djolonga2014map} and \cite{gillenwater2012near}. % \todo{refer to other papers that do approximations?}
 %This is in general very hard to solve and it has been shown in \todo{cite} that it is NP hard to do so or even approximate it upto a factor of \(\frac89\). However, there were still different strategies proposed and we will present some of them including their main ideas. \todo{do this!}
 
 
@@ -197,7 +198,8 @@ In this section we will present some useful variations of determinantal point pr
 %\subsection*{Conditional DPPs}
 
 \begin{emp}[Conditional DPPs]
-A \emph{conditional DPP} is a collection of \(L\)-ensembles indexed by \(X\in\mathcal X\), where \(X\) is called the \emph{input} of the conditional DPP. Thus, for every \(X\in\mathcal X\) we get a finite set \(\mathcal Y(X)\) and a determinantal point process \(\mathbb P(\cdot| X)\) on \(\mathcal Y(X)\) which is given by the elementary kernel \(L(X)\), i.e.
+A \emph{conditional DPP} is a collection of DPPs %\(L\)-ensembles 
+ indexed by \(X\in\mathcal X\), where \(X\) is called the \emph{input} of the conditional DPP. Thus, for every \(X\in\mathcal X\) we get a finite set \(\mathcal Y(X)\) and a determinantal point process \(\mathbb P(\cdot| X)\) on \(\mathcal Y(X)\). We will usually assume that the single DPPs are \(L\)-ensembles and hence they are given by elementary kernels \(L(X)\), i.e.
 \[\mathbb P(A\lvert X) \propto \det\left(L_A(X)\right) \quad \text{for all } A\subseteq\mathcal Y(X). \]
 Further we denote the quality and diversity features of the conditional DPP by \(q_i(X)\) and \(\phi_i(X)\) respectively.
 
@@ -216,26 +218,26 @@ separate DPPs. The reason for this is that one wants to estimate the kernels \(L
 %  based on some training set. 
 Of course this can only work if we assume some regularity or a certain structure of the function \(L\) and we will see one approach how this can be done in the next chapter.%which we will do in the third chapter where we put those consideration into a precise framework.
 
-In conclusion conditional DPPs are suitable for the extrapolation of parameter estimation between from observed to similar DPPs.
+In conclusion conditional DPPs are suitable for the extrapolation of parameter estimation from observed to similar DPPs.
 \end{emp}
 
 %\subsection*{Fixed size or \(k\)-DPPs}
 \begin{emp}[Fixed size or \(k\)-DPPs]
 We have introduced DPPs as a model of random diverse subsets of a finite set. However, there are a lot of cases where the size of this subset is already known, like for example if the DPP models the position of football players on the field, we already know how many points we have to select, namely 11 -- at least if no player was sent off or got injured.
 
-The straight forward procedure to obtain a probability distribution over all subsets of a fixed size that still propagates diversity is to condition a DPP on the event that it has this exact size. If we conditioned on the event that the point process has \(k\le N\) elements, we call this new point process \(k\)-DPP. Luckily \(k\)-DPPs possess similarly attractive properties like normal DPPs, in the sense that there is an analytical form of the normalisation constant as well as an effective sampling algorithm (cf. \cite{kulesza2011k}). Hence, \(k\)-DPPs allow to describe random diverse subsets of fixed size and one application for this will be discussed at the end of the next chapter.
+The straight forward procedure to obtain a probability distribution over all subsets of a fixed size that still propagates diversity is to condition a DPP on the event that it has this exact size. If we conditioned on the event that the point process has \(k\le N\) elements, we call this new point process \emph{\(k\)-DPP}. Luckily \(k\)-DPPs possess similarly attractive properties like normal DPPs, in the sense that there is an analytical form of the normalisation constant as well as an effective sampling algorithm (cf. \cite{kulesza2011k}). Hence, \(k\)-DPPs allow to describe random diverse subsets of fixed size. % and one application for this will be discussed at the end of the next chapter.
 \end{emp}
 
 %\subsection*{Structured DPPs}
 \begin{emp}[Structured DPPs]
 %\todo{Say something about number of parameters}
-We call a DPP \emph{structured DPP} or short sDPP if the ground set is the cartesian product of some other set \(\mathcal M\), which we will call the \emph{set of parts}, i.e. if we have
+We call a DPP \emph{structured DPP} or short \emph{sDPP} if the ground set is the cartesian product of some other set \(\mathcal M\), which we will call the \emph{set of parts}, i.e. if we have
 \[\mathcal Y = \mathcal M^R = \Big\{ y_i = (y_i^r)_{r = 1, \dots, R} \in\mathcal M^R\;\big\lvert\; i = 1, \dots, N\Big\}\]
 where \(R\) is a natural number, \(M = \left\lvert \mathcal M \right\rvert\) and \(N = M^R\). The quality diversity decomposition of \(L\) take the form 
 \[L_{ij} = q(y_i) \phi(y_i)^T \phi(y_j) q(y_j)\]
 and since \(N = M^R\) is typically very big, it is impractical to define or store the quality and diversity features for every item \(y_i\in\mathcal Y\). To deal with this problem we will assume that they admit factorisations and are thus a combination of only a few qualities and diversities.
 
-More precisely we call \(F\subseteq 2^{\left\{ 1, \dots, R\right\}}\) a \emph{set of factorisations} and for a \emph{factor} \(\alpha\in F\), \(y_\alpha\) denotes the subtupel of \(y\in\mathcal Y\) that is indexed by \(\alpha\). Further, we will work with the decompositions
+More precisely, we call \(F\subseteq 2^{\left\{ 1, \dots, R\right\}}\) a \emph{set of factorisations} and for a \emph{factor} \(\alpha\in F\), \(y_\alpha\) denotes the subtupel of \(y\in\mathcal Y\) that is indexed by \(\alpha\). Further, we will work with the decompositions
 \begin{equation}
 \begin{split}
 q(y) = & \prod_{\alpha\in F}q_\alpha(y_\alpha) \\

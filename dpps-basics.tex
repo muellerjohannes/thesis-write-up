@@ -352,7 +352,7 @@ The multiple integrals over the product can be evaluated individually and hence 
 = &\; (n-m)!\cdot \det\left( \sum_{k=1, \dots, n} \phi_k(x_i)\phi_k(x_j)\right)_{1\le i, j\le m}
 \end{split}
 \end{equation*}
-where we used Cauchy-Binet and the notation \(I = \left\{ i_1, \dots, i_m\right\}\).
+where we used Cauchy-Binet and the notation \(I = \left\{ i_1, \dots, i_m\right\}\). The combinatorial factor of \((n-m)!\) arises since for a fixed image \(I = \sigma(\left\{ 1, \dots, m\right\})\), the two permutations \(\sigma\) and \(\tau\) still have \((n-m)!\) possibilities for their values on \(\left\{ m+1, \dots, n\right\}\).
 \end{proof}
 
 Just like in the case of the Cauchy-Binet identity we will give a discrete version of the previous result in which the normalisation factor does not appear.
@@ -778,7 +778,7 @@ The resulting samples are depicted in Figure \ref{pointsinthesquare}.
 	\label{pointsinthesquare}
 \end{figure}
 
-It should be noted at this stage, that the simulation of the DPP can still be performed in relatively short time, even without making use the dual sampling or the random projections. In fact one sample could be produced on a six year old MacBook air with only one processor in about two minutes. This is actually quite astonishing given that the DPP is a discrete probability distribution over \(2^{10^4} \approx 10^{3000}\) elements. This is roughly the estimated number of elementary particles in the universe to the power of 35.
+It should be noted at this stage, that the simulation of the DPP can still be performed in relatively short time, even without making use the dual sampling or the random projections. In fact one sample could be produced on a six year old \(1.8\si{GHz}\) Intel Core i5 in about two minutes. This is actually quite astonishing given that the DPP is a discrete probability distribution over \(2^{10^4} \approx 10^{3000}\) elements. This is roughly the estimated number of elementary particles in the universe to the power of 35.
 
 Assume now that we have some reason to believe that the qualities of the individual points on the grid are not equal. Maybe there might be a road just around the park and hence people prefer to sit in the middle of the park and we can implement this into our model by letting the qualities of the items decrease depending on their distance to the centre \(m \coloneqq(0.5, 0.5)\) of the grid. More precisely we choose
 \[q_i\coloneqq a \cdot \exp\big(-b \left\lVert i - m \right\rVert\big) \]

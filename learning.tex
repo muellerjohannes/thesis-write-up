@@ -200,7 +200,7 @@ We show that every cycle \(x(C)\) can be written as the sum of simple cycles \(x
 Since \(v_k\) has degree at least \(2\), there is an edge \(\{ v_k, v_{k+1}\}\) such that \(v_{k+1}\ne v_{k-1}\). Since the path is maximal, \(v_{k+1}\) has to agree with one vertex \(v_i\in\left\{ v_0, \dots, v_{k-2}\right\}\), because otherwise we could add \(v_{k+1}\) to the path which is a contradiction to the maximality. Now \(v_iv_{i+1}\cdots v_kv_i\) corresponds to a simple cycle \(C_1\) and \(C_2\coloneqq C\setminus C_1\) is again a cycle. Thus, we can write \(C\) as the disjoint union \(C = C_1\cup C_2\) where \(C_1\) is a simple cycle. By repeating this procedure we get the desired expression for \(C\) in terms of simple cycles.
 
 To prove that the simple chordless cycles generate the cycle space we have to prove that we can write every simple cycle \(x(C)\) as a sum of simple chordless cycles \(x(C_1), \dots, x(C_k)\). Let \(\left\{ \left\{ v_0, v_1\right\}, \dots, \left\{ v_k, v_0\right\}\right\}\) be the edge set of \(C\) and assume that \(C\) is not chordless like in Figure \ref{makechordless}, otherwise the statement would be trivial.
-\begin{figure}[h!]\label{makechordless}
+\begin{figure}[h!]
 	\centering
 \begin{tikzpicture}%[shorten >=1pt,->]
 
@@ -232,7 +232,7 @@ To prove that the simple chordless cycles generate the cycle space we have to pr
 \foreach \from/\to in {1/3,3/4,4/5,5/1}
 \draw (C-\from) -- (C-\to);
 \end{tikzpicture}
-\caption{The simple cycle \(123451\) on the left is not chordless but the symmetric difference of the two simple chordless cycles \(1231\) and \(13451\) on the right.}
+\caption{The simple cycle \(123451\) on the left is not chordless but the symmetric difference of the two simple chordless cycles \(1231\) and \(13451\) on the right.}\label{makechordless}
 \end{figure}
 Thus there is are indices \(i,j\in\left\{ 1, \dots, k\right\}\) such that \(\{ v_i, v_j\}\in E\) but \(\{ v_i, v_j\}\notin C\). Let now \(C_1\) and \(C_2\) be the two cycles associated with the paths
 \[v_0v_1 \cdots v_iv_jv_{j+1}\cdots v_kv_0\quad \text{and } v_iv_{i+1}\cdots v_{j-1}v_jv_i.\]
@@ -424,7 +424,7 @@ The resulting estimates for the diagonal elements and the squares of the off dia
 Next we will introduce an estimate \(\hat G = (\hat E, \hat V)\) for the adjacency graph and we choose %will then choose the signs of the estimated matrix \(\hat K\) such that the its principal minors are the estimates for the principal minors. For this let 
 the edge set \(\hat E\) to consist of all sets \(\left\{ i, j\right\}\) such that \(\hat B_{ij}\ge\frac12\alpha^2\). We will see that this truncation leads to the almost surely convergence of the graph \(\hat G\) towards \(G\). 
 %effect that by the strong law of large numbers the estimator for the graph will converge to the actual adjacency graph almost surely.
-In analogy to the previous paragraph we define \(\{ \hat C_1, \dots, \hat C_{\hat m}\}, \hat H_1, \dots, \hat H_{\hat m}, \hat A\) and \(\hat b\) exactly the same way. If there is a solution \(\hat x\in\mathbb F_2^{E}\) to the linear equation
+In analogy to the previous paragraph \ref{cec} we define \(\{ \hat C_1, \dots, \hat C_{\hat m}\}, \hat H_1, \dots, \hat H_{\hat m}, \hat A\) and \(\hat b\) exactly the same way. If there is a solution \(\hat x\in\mathbb F_2^{E}\) to the linear equation
 \begin{equation}\label{LinEqu2}
 \hat A\hat x = \hat b,
 \end{equation}

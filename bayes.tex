@@ -119,7 +119,7 @@ Typically the parametrisations \(\theta\mapsto L(\theta)\) will be one of the th
 
 The independence relation leads to a factorisation of the density and we obtain the following expression for the posterior density
 \begin{equation}\label{post2}
-f_{\Theta|\mathbf Y}(\theta|A_1, \dots, A_n) \propto f_\Theta(\theta) \prod_{i=1}^n f_{\mathbf Y|\Theta}(A_i|\theta) = f_\Theta(\theta) \prod_{i=1}^n \frac{\det(L(\theta)_{A_i})}{\det(L(\theta) + I)}.
+f_{\Theta|\mathbf Y^n}(\theta|A_1, \dots, A_n) \propto f_\Theta(\theta) \prod_{i=1}^n f_{\mathbf Y|\Theta}(A_i|\theta) = f_\Theta(\theta) \prod_{i=1}^n \frac{\det(L(\theta)_{A_i})}{\det(L(\theta) + I)}.
 \end{equation}
 %where we dropped some indices of the density functions. % in slight abuse of notation.
 
@@ -185,7 +185,7 @@ This Markov chain can then be simulated using Monte Carlo methods and the associ
 
 We will provide an extremely short presentation of only those results that we will use to explain the core of MCMC methods. However, this will not contain any proofs and hence it can not replace the study of the already mentioned text books. %Further it will be of great benefit for the reader to be familiar with the basic notions and  of stochastic processes and Markov chains.
 
-Let in the following \((\mathcal X, \mathcal B(\mathcal X))\) be a measurable space.
+Let in the following \((\mathcal X, \mathcal B(\mathcal X))\) be a measurable space. This will typically be a topological space with its Borel algebra later.
 
 
 \begin{defi}[Markov chain]
@@ -997,7 +997,7 @@ We have seen that the prior or regulariser influences the estimation and will of
 \[f_{\Theta|X}(\theta|x) = f_{X|\Theta}(x|\theta).\]
 In order to see that the MCMC approximation still works for this function, we note that
 \[\mathrm{d}\pi \coloneqq f_{\Theta|X}\cdot\mathrm{d}\mu \]
-is a \(\sigma\)-finite measure on the parameter space \(\Theta\). To approximate this measure, one can use the following more general version of the ergodic theorem.
+is a \(\sigma\)-finite measure on the parameter space \(\Theta\). To approximate this measure, one can use the following more general version of the ergodic theorem (cf. Theorem 17.3.2  \cite{meyn2012markov}).
 
 \begin{theo}[Ergodic theorem]\label{ergTheo2}
 Let \((X_n)_{n\in\mathbb N}\) be a Markov chain with \(\sigma\)-finite stationary distribution \(\pi\) and let 

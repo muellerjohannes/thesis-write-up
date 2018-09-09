@@ -864,10 +864,9 @@ It shall be noted that the numerical integration carried out above can only be p
 
 In order to approximate the posterior density through a MH random walk %using MCMC methods, 
 we proceed in the following steps.
-
+\enlargethispage{.6cm}
 \begin{emp}[First burn in to find a starting point]
 %In the first phase we pick the origin as a starting point and choose the proposal \(f(\cdot| \theta)\) to be a Gaussian centered at \(\theta\) and with variance adjust so that an acceptance rate of roughly \(25\%-75\%\) is obtained. Usually if one is starting of at a point in a region with very low density, the variance one has to choose will be rather high.
-
 %This amounts to saying one is very coarsely exploring the parameter space by taking proposing rather large steps. 
 In the first phase we want to find an area of high density %might be located and hence of the rough shape of the probability distribution we try to approximate. I
 and in order to do this we simulate MH random walks with different starting positions and try to identify the regions where they get stuck in. This will typically happen in areas of at least locally highest probability. We have already seen that in order to obtain a reasonable MH random walk one has to choose a suitable proposal family. We use Gaussian proposals \(f(\cdot| \theta)\) that are centered at \(\theta\) and adjust the variance such that we obtain an acceptance rate of roughly \(25\%-75\%\).  %the proposal plays a crucial role
@@ -954,6 +953,8 @@ This leads to a higher acceptance rate of \(60\%\) compared to \(21\%\) in the s
 	\label{fig:acf-sbi-final}
 \end{figure}
 Finally we use a pre-implemented interpolation method to obtain a smoothed twodimensional histogram -- also called a heat plot -- which is shown in Figure \ref{fig:MHrw}.% \todo{does this make sense}% ....? %The resulting heat map can be seen in Figure \ref{fig:MHrw}.%recent\todo{say something about intuition}
+\end{emp}
+\clearpage
 \begin{figure}%[h!]
 	\centering
 	\includegraphics[width=0.55\textwidth]{figures/bayes-mle-and-regmle-new}
@@ -961,8 +962,6 @@ Finally we use a pre-implemented interpolation method to obtain a smoothed twodi
 	\caption{Heat map of the MH random walks with \(10^4\) iterations. The regularised MLE estimator is shown as a white and the MLE as a green cross. The regularised MLE is the maximum of the (approximated) posterior.}
 	\label{fig:MHrw}
 \end{figure}
-\end{emp}
-
 \begin{emp}[Gelman-Rubin diagnostic]
 In order to justify the length of \(10^4\) of our final MCMC simulation for the approximation of the posterior we use the Gelman-Rubin diagnostic. Hence, we run a second chain with a random starting value sampled from a Gaussian distribution centered around the mean of the second half of the first burn in period and with twice the variance of the second burn in period. Then we use the pre-implemented R function {\tt gelman.diag} that computes the \(\hat R\) value and an upper estimate for it and obtain the following results. %\todo{finish this}
 

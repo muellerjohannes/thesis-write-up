@@ -27,6 +27,9 @@
 
 %\end{proof}
 
+The only result we used during the thesis that we consider not general mathematical knowledge is the intersection theorem of Cantor. Since it is hard to find a reference of the general statement we quickly present the proof that can also be found on the \href{https://en.wikipedia.org/wiki/Cantor%27s_intersection_theorem}{Wikipedia entry}.%Wikipedia entry
+% \url{https://en.wikipedia.org/wiki/Cantor%27s_intersection_theorem}.
+
 \begin{theo}[Cantor’s intersection theorem]
 Let \(\mathcal X\) be a topological Hausdorff space and let \(K_1\supseteq K_2\supseteq \dots\) be a sequence of descending, non empty compact sets. Then also the intersection
 \[\bigcap_{n=1}^\infty K_n\]
@@ -44,7 +47,7 @@ However since \(K_n\subseteq K_1\) this implies \(K_N = \varnothing\) which is a
 \manualmark \markboth{}{Generated code}
 
 All the coding was done in R and the code of the sampling algorithm, the general MCMC methods and also the estimation of the log linearity constant will be provided here. % and also the learning algorithm of my toy example here.
-During the coding I tried to follow Google’s R Style Guide (https://google.github.io/styleguide/Rguide.xml).
+%During the coding I tried to follow Google’s R Style Guide (https://google.github.io/styleguide/Rguide.xml).
 
 % Some text
 
@@ -358,7 +361,7 @@ SamplingDPP <- function (lambda, eigenvectors) {
 %rm(list = setdiff(ls(), lsf.str()))
 %\end{lstlisting}
 
-\section{Implementation of the MCMC methods and toy examples}
+\section{Implementation of the MCMC methods}
 
 \begin{lstlisting}[language=R, basicstyle=\footnotesize]
 # First we implement the Metropolis-Hastings algorithm. We implement the
@@ -494,7 +497,7 @@ MCMC <- function (f, x0, T=10^3, MH=TRUE, alpha=1) {
 # and aim to estimate the log linearity parameter.
 
 # Generation of the data
-T <- 8
+T <- 20
 data <- rep(list(0), T)
 for (i in 1:T) {
   data[[i]] <- sort(SamplingDPP(lambda, eigenvectors))
@@ -515,24 +518,81 @@ Feature <- function(A) {
   return(c(sum(DistanceNew(rep(5, length(A)), A, 2, m)), length(A)))
 }
 # Define the observation probability and the log likelihood function.
-ObservationProbability <- function (theta) {
+ObservationProbability <- function (theta, data) {
   T <- length(data)
   x <- 1
   a <- det(diag(rep(1, n)) + LFunction(theta))
   for (t in 1:T) {
     A <- data[[t]]
-    x <- x * exp(2 * sum(theta * Feature(A))) * det(S[A, A]) / a
+    x <- x * exp(2 * sum(theta * Feature(A))) * det(S[A, A]) / a * 10^45
   }
   return(x)
 }
-LogLikelihood <- function(theta) {
-  return(-log(ObservationProbability(theta)))
+LogLikelihood <- function(theta, data) {
+  return(-log(ObservationProbability(theta, data)))
+}
+RegLogLikelihood <- function(theta, data) {
+  return(LogLikelihood(theta, data) + sum(theta^2) / 16)
+}
+NewRegLogLikelihood <- function(theta, data) {
+  return(LogLikelihood(theta, data) + sum(theta^2) / 2)
 }
 
 # Maximum likelihood estimation of the log linearity constant theta.
 sol <- nlm(LogLikelihood, c(-8, 6))
 mle <- sol$estimate
 mle
+
+# Learning curve of the MLE
+T <- 30
+learningCurve <- matrix(rep(0, 2 * T), 2)
+regLearningCurve <- matrix(rep(0, 2 * T), 2)
+NewRegLearningCurve <- matrix(rep(0, 2 * T), 2)
+target <- function(theta) {
+  return(LogLikelihood(theta, data))
+}
+regTarget <- function(theta) {
+  return(RegLogLikelihood(theta, data))
+}
+NewRegTarget <- function(theta) {
+  return(NewRegLogLikelihood(theta, data))
+}
+for (i in 1:T) {
+  if (i > 1) {
+    help <- data
+  }
+  data <- rep(list(0), i)
+  if (i > 1) {
+    for (j in 1:(i - 1)) {
+      data[[j]] <- help[[j]]
+    } 
+  }
+  data[[i]] <- sort(SamplingDPP(lambda, eigenvectors))
+  learningCurve[, i] <- nlm(target, c(-10, 6))$estimate
+  print(learningCurve[, i])
+  regLearningCurve[, i] <- nlm(regTarget, c(-10, 6))$estimate
+  print(regLearningCurve[, i])
+  NewRegLearningCurve[, i] <- nlm(NewRegTarget, c(-10, 6))$estimate
+  print(NewRegLearningCurve[, i])
+}
+plot(NewRegLearningCurve[1, 1:30], xlab="Number of samples", ylab="Estimate
+     for first parameter", 
+     pch=5, ylim=c(-10.85, -5.5))
+points(learningCurve[1, 1:30], pch=16)
+points(regLearningCurve[1, 1:30], pch=1)
+lines(c(0, 45), c(-10, -10), col="red")
+legend("topright", inset=.05, legend=c("MLE", "Weak regularisation", "Strong
+                                       regularisation")
+       , pch=c(16, 1, 5))
+plot(NewRegLearningCurve[2, 1:30], xlab="Number of samples", ylab="Estimate for
+     second parameter", 
+     pch=5, ylim=c(2.8, 7))
+points(learningCurve[2, 1:30], pch=16)
+points(regLearningCurve[2, 1:30], pch=1)
+lines(c(0, 45), c(6, 6), col="red")
+legend("bottomright", inset=.05, legend=c("MLE", "Weak regularisation", "Strong
+                                          regularisation"),
+       pch=c(16, 1, 5))
 
 # NEEDS: MCMC algorithm.
 
@@ -547,7 +607,7 @@ target <- function(theta) {
   return(x)
 }
 
-# Sampling a 100 samples to find a reasonable starting point. Agressitivity of
+# Sampling a 200 samples to find a reasonable starting point. Agressitivity of
 # the MH is adjusted so that a reasonable acceptence rate is obtained.
 x <- MCMC(target, c(0, 0), MH=TRUE, 10^2, alpha=10)
 plot(t(x), pch=16, col='black', cex=0.5, xlab="theta1", ylab="theta2")
@@ -578,6 +638,9 @@ sd <- t(pc[[2]]) %*% diag(c(pc[[1]][[1]], pc[[1]][[2]])^2) %*% pc[[2]]
 # Let the main MCMC run with 10^4 samples. Also a nice plot is created.
 xnew <- MCMC(target, c(mean(x[1, ]), mean(x[2, ])), MH=TRUE, 10^4, alpha=sd)
 plot(t(xnew))
+library(RColorBrewer)
+rf <- colorRampPalette(rev(brewer.pal(11,'Spectral')))
+r <- rf(64)
 k <- kde2d(xnew[1, ], xnew[2, ], n=1000, lims = c(-12, -3, -1, 8))
 image(k, col=r, xlim=c(-12, -8.5), ylim=c(5, 7))
 points(mle[1], mle[2], pch=4, lwd=3, col="green")
@@ -587,4 +650,49 @@ sum(xnew[, -1] != xnew[, 1:(length(xnew)/2 - 1)])/(length(xnew) - 2)
 # Plot the autocorrelation function.
 acf(xnew[1,1:1000], 100, main="Autocorrelation for alpha=10")
 
+# Gelman-Rubin diagnostic:
+# Run a second chain:
+newStart <- mvrnorm(1, start, 2 * sd)
+xnew2 <- MCMC(target, newStart, MH=TRUE, 10^4, alpha=sd)
+install.packages("coda")
+library(coda)
+combinedchains <- mcmc.list(mcmc(data=t(xnew)), mcmc(data=t(xnew2)))
+gelman.diag(combinedchains)
+gelman.plot(combinedchains, ylim=c(1, 1.5), ylab="R-hat value", lwd=1.5)
+
+# Stability analysis
+# Define Poisson point process
+poisson <- function(p, n) {
+  return((1:n)[runif(n) < p])
+}
+poisson(0.2, 20)
+symmdiff <- function(a, b) {
+  return(union(setdiff(a, b), setdiff(b, a)))
+}
+
+T <- 8
+perturbedData1 <- rep(list(0), T)
+sampleSize <- 8
+for (i in 1:sampleSize) {
+  # Generation of data
+  for (i in 1:T) {
+    perturbedData1[[i]] <- sort(SamplingDPP(lambda, eigenvectors))
+  }
+  for (i in 1:T) {
+    perturbedData1[[i]] <- symmdiff(perturbedData1[[i]], poisson(1/400, n))
+  }
+  # Estimators
+  target <- function(theta) {
+    return(LogLikelihood(theta, perturbedData1))
+  }
+  print(nlm(target, c(-10, 6.5))$estimate)
+  target <- function(theta) {
+    return(RegLogLikelihood(theta, perturbedData1))
+  }
+  print(nlm(target, c(-10, 6.5))$estimate)
+  target <- function(theta) {
+    return(NewRegLogLikelihood(theta, perturbedData1))
+  }
+  print(nlm(target, c(-10, 6.5))$estimate)
+}
 \end{lstlisting}

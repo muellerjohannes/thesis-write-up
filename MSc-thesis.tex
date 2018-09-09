@@ -6,7 +6,6 @@
 \usepackage{tgtermes}
 \usepackage[T1]{fontenc}
 \usepackage[lite,subscriptcorrection,slantedGreek,nofontinfo]{mtpro2}
-
 \usepackage[automark]{scrlayer-scrpage}
 \usepackage{mathtools}
 \usepackage{graphicx}
@@ -28,14 +27,9 @@
 \usepackage{dsfont}
 \usepackage[format=plain,labelformat=simple]{caption}
 \usepackage{algpseudocode,algorithm,algorithmicx}
-
-\renewcommand{\cfttoctitlefont}{\normalfont\bfseries\Huge}
 \usepackage[intoc]{nomencl}
 
-\makenomenclature
-\renewcommand{\nomname}{Nomenclature}
-
-\usepackage[pdftex,plainpages=false]{hyperref}
+\usepackage[pdftex,plainpages=false,breaklinks=true]{hyperref}
 
 \renewcommand{\baselinestretch}{1.3}
 
@@ -79,7 +73,7 @@
 
 \automark[section]{chapter}
 \clearpage
-%\nocite{*}
+\nocite{*}
 \bibliographystyle{alpha} %apalike, plain, alpha
 \bibliography{thesis}
 \addcontentsline{toc}{chapter}{Bibliography}

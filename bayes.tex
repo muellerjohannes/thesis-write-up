@@ -290,7 +290,7 @@ In order to achieve this we only have to construct a suitable Markov chain and c
 The Metropolis-Hastings random walk is arguably the most commonly used MCMC method and certainly one of the oldest. It was actually proposed in the early 1950s from researchers of the American nuclear programme in Los Alamos (cf. \cite{metropolis1953equation}). First we will touch on the theoretical aspects of this method and follow the presentation in \cite{robert2013monte}.
 
 %The idea of the Metropolis-Hastings (MH) random walk was introduced as early as 1953 by Metropolis (cf. \cite{metropolis1953equation}) and later adapted by Hastings in \{hastings1970monte}.
-
+\enlargethispage{.2cm}
 \begin{emp}[Setting]
 Let \(\Theta\) be a measurable space, \(\mu\) a measure on that space and \(f\colon\mathcal X\to[0, \infty]\) a function with finite positive integral
 \[Z \coloneqq \int\limits_{\mathcal X} f(x) \mu(\mathrm{d}x)\in(0, \infty).\]
@@ -425,7 +425,7 @@ the MH random walk will only take very small steps and hence \(x_{l+k}\) will st
 \end{emp}
 
 \begin{ex}[One dimensional MH]\label{example}
-We follow an examples for a one dimensional MH random walk given in \cite{robert1999metropolis} and so we set
+We follow an examples for a one dimensional MH random walk given in \cite{robert1999metropolis} and we want to approximate the probability distribution with unnormalised density
 \[f(x)\coloneqq \sin(x)^2\cdot\sin(2x)^2\cdot\exp\left(-\frac{x^2}{2}\right). \]
 The goal of this example is to see how different proposal distributions lead to different acceptance rates, a different exploration of the state space \(\mathcal X = \mathbb R\) and different effective sample sizes. In order to achieve this, we run \(2\cdot10^4\) samples of the MH random walk with starting point \(x_0=1\) and three different values \(\alpha = 0.01, 3, 100\) for the variance of the proposal distributions. Then we plot a histogram including the actual density and the autocorrelation function for all different values. The acceptance rates where approximately \(88\%\) for \(\alpha=0.01\), \(34\%\) for \(\alpha=3\) and \(9\%\) for \(\alpha=100\). The effective sample sizes for the three different chains different values for \(\alpha\) 
 are % given by
@@ -439,12 +439,12 @@ This simulation illustrates the problem of too aggressive -- \(\alpha = 100\) --
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.4\textwidth]{figures/alpha-small}
-	\includegraphics[width=0.4\textwidth]{figures/auto-alpha-small}
-	\includegraphics[width=0.4\textwidth]{figures/alpha-optimal}
-	\includegraphics[width=0.4\textwidth]{figures/auto-alpha-optimal}
-	\includegraphics[width=0.4\textwidth]{figures/alpha-big}
-	\includegraphics[width=0.4\textwidth]{figures/auto-alpha-big}
+	\includegraphics[width=0.41\textwidth]{figures/alpha-small}
+	\includegraphics[width=0.41\textwidth]{figures/auto-alpha-small}
+	\includegraphics[width=0.41\textwidth]{figures/alpha-optimal}
+	\includegraphics[width=0.41\textwidth]{figures/auto-alpha-optimal}
+	\includegraphics[width=0.41\textwidth]{figures/alpha-big}
+	\includegraphics[width=0.41\textwidth]{figures/auto-alpha-big}
 %	\tag{1}
 	\caption{Histograms and autocorrelation functions of for three different variances \(\alpha\) of the Gaussian proposal distributions. It is apparent that the histogram for \(\alpha=3\) fits the actual density the best and also that the autocorrelation decays the quickest for this parameter. Note that for \(\alpha=0.01\) the MH random walk only explored some area of high density. The actual density is obtained by numerical integration.}
 	\label{fig:4.1.2}
@@ -662,12 +662,12 @@ Those effects of \(\alpha\) on the auto correlation and therefore effective samp
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.42\textwidth]{figures/slice-alpha-small}
-	\includegraphics[width=0.42\textwidth]{figures/slice-auto-alpha-small}
-	\includegraphics[width=0.42\textwidth]{figures/slice-alpha-optimal}
-	\includegraphics[width=0.42\textwidth]{figures/slice-auto-alpha-optimal}
-	\includegraphics[width=0.42\textwidth]{figures/slice-alpha-big}
-	\includegraphics[width=0.42\textwidth]{figures/slice-auto-alpha-big}
+	\includegraphics[width=0.44\textwidth]{figures/slice-alpha-small}
+	\includegraphics[width=0.44\textwidth]{figures/slice-auto-alpha-small}
+	\includegraphics[width=0.44\textwidth]{figures/slice-alpha-optimal}
+	\includegraphics[width=0.44\textwidth]{figures/slice-auto-alpha-optimal}
+	\includegraphics[width=0.44\textwidth]{figures/slice-alpha-big}
+	\includegraphics[width=0.44\textwidth]{figures/slice-auto-alpha-big}
 %	\tag{1}
 	\caption{Histograms and autocorrelation functions for the choices of \(\alpha = 0.01, 0.5, 10\). The auto correlation obviously decreases the fastest for \(\alpha=0.01\), however the computation time is much higher than for the parameter the other parameters.}
 	\label{fig:4.3}
@@ -912,7 +912,7 @@ We run this MH random walk for \(5\cdot10^2\) samples which are shown in Figure 
 
 \begin{figure}%[h!]
 	\centering
-	\includegraphics[width=0.55\textwidth]{figures/second-burn-in-new-2}
+	\includegraphics[width=0.56\textwidth]{figures/second-burn-in-new-2}
 %	\tag{1}
 	\caption{A plot of the samples of the MH of the second burn in period. One can see how the points are distributed around the regularised MLE which is marked red, the MLE is marked green. Their empirical covariance will be used to tune the proposal.}
 	\label{fig:tuning}
@@ -930,6 +930,7 @@ We run this MH random walk for \(5\cdot10^2\) samples which are shown in Figure 
 \end{figure}
 \end{emp}
 
+\enlargethispage{.3cm}
 \begin{emp}[The actual MCMC simulation]
 In this final step we simulate a MH random walk of length \(10^4\) and with the same starting point as in the second step. Now we use the prior adjusted according the second burn in period. This means we choose \(f(\cdot|\theta)\) to be the density of a normal distribution centered at \(\theta\) and with covariance \(\Sigma\). % This procedure adjusts the proposed steps into the diffrernt directions on the 
 This leads to a higher acceptance rate of \(60\%\) compared to \(21\%\) in the second burn in period which can also be seen in the according state plots in Figure \ref{fig:mixim-tuning} and \ref{fig:mixim-tuning-final}. Further we see in Figure \ref{fig:acf-sbi-final} that the auto correlation function decreases faster with this tuned proposal.
@@ -1087,6 +1088,7 @@ The complexity of the slice sampling algorithm can not be given this easily, at 
 
 \subsubsection*{Comments on real world applications}
 
+\enlargethispage{.1cm}
 Although this is just a controlled toy example, this procedure can easily be generalised to real world settings. However, one has to face the following two major challenges:
 \begin{enumerate}
 \item In practice one will not know the feature vectors \(f_i\) like we did, so one will have to model those. Usually one would put all quantitative properties into this vector that one would believe could have an effect on the quality of an item. For example if the DPP should model the picnic positions of people in a park one could argue that the quality, i.e. the popularity of a picnic spot depends amongst other things on the distance to the next trash bin, the next toilet and overall noise level. Although one thinks that those parameters can play a role, we could not argue a priori whether they have a positive or a negative impact. For example if the toilets are nice and clean it might be favourable to be closer to them, if they are dirty it might be better to be far away from them in order to avoid their unpleasant odour. However, one does not have to know this straight away as this effect is determined by the according log linearity constant and hence can be estimated in the above manner.

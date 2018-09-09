@@ -72,8 +72,8 @@ This can often not be performed efficiently but the Markov chain Monte Carlo met
 
 \begin{emp}[Regularisation through the prior]
 The prior density is very closely related to the regulariser introduced in the section about maximum likelihood estimation. In fact the mode of the posterior \(f_{\Theta|X}\) is nothing else but the maximiser of 
-\[\log(f_{\Theta|X}) = \mathcal L + F\]
-where \(F = \log(f_\Theta)\) and hence nothing else but a regularised MLE. In fact if \(F\) is a regularisation and \(\exp(F)\) is integrable with respect to \(\mu\), then one can choose \(f_\Theta\propto \exp(F)\) as a prior density. Hence the proposition of a prior and a regulariser are equivalent in a wide variety of cases, but again, the posterior density encodes much more information than just the location of its mode which is the regularised MLE.
+\[\log(f_{\Theta|X}) = \mathcal L + R\]
+where \(R = \log(f_\Theta)\) and hence nothing else but a regularised MLE. In fact if \(R\) is a regularisation and \(\exp(R)\) is integrable with respect to \(\mu\), then one can choose \(f_\Theta\propto \exp(R)\) as a prior density. Hence the proposition of a prior and a regulariser are equivalent in a wide variety of cases, but again, the posterior density encodes much more information than just the location of its mode which is the regularised MLE.
 
 %\todo{regularisation of noise}
 
@@ -112,20 +112,20 @@ might not have finite integral and can therefore not be normalised. Hence the po
 Now we will express the posterior in the case of DPPs under the following conditions.
 
 \begin{emp}[Setting]
-Let \((\Theta, \nu)\) be a measure space and \(L(\theta)\in\mathbb R^{N\times N}_{\text{sym}, +}\) be an elementary kernel for every \(\theta\in\Theta\). Further we assume that we have independent realisations \(A_1, \dots, A_n\) of a  \(L\)-ensemble.
+Let \((\Theta, \nu)\) be a measure space and \(L(\theta)\in\mathbb R^{N\times N}_{\text{sym}, +}\) be an elementary kernel for every \(\theta\in\Theta\). Further we assume that we have independent realisations \(Y_1, \dots, Y_n\) of a  \(L\)-ensemble.
 \end{emp}
 
 Typically the parametrisations \(\theta\mapsto L(\theta)\) will be one of the three parametric models in III.2.1, i.e. \(\theta\) will either be the whole kernel itself, the quality vector or the log linearity constant of the qualities and \(L(\theta)\) the associated elementary kernel.
 
 The independence relation leads to a factorisation of the density and we obtain the following expression for the posterior density
 \begin{equation}\label{post2}
-f_{\Theta|\mathbf Y^n}(\theta|A_1, \dots, A_n) \propto f_\Theta(\theta) \prod_{i=1}^n f_{\mathbf Y|\Theta}(A_i|\theta) = f_\Theta(\theta) \prod_{i=1}^n \frac{\det(L(\theta)_{A_i})}{\det(L(\theta) + I)}.
+f_{\Theta|\mathbf Y^n}(\theta|Y_1, \dots, Y_n) \propto f_\Theta(\theta) \prod_{i=1}^n f_{\mathbf Y|\Theta}(Y_i|\theta) = f_\Theta(\theta) \prod_{i=1}^n \frac{\det(L(\theta)_{Y_i})}{\det(L(\theta) + I)}.
 \end{equation}
 %where we dropped some indices of the density functions. % in slight abuse of notation.
 
 Unfortunately the normalisation constant
 \begin{equation}\label{norma}
-\int\limits_{\Theta} f(\theta|A_1, \dots, A_n)\nu(\mathrm{d}\theta) = \int\limits_{\Theta} f_\Theta(\theta) \prod_{i=1}^n \frac{\det(L(\theta)_{A_i})}{\det(L(\theta) + I)}\nu(\mathrm{d}\theta)
+\int\limits_{\Theta} f_{\Theta|\mathbf Y^n}(\theta|Y_1, \dots, Y_n)\nu(\mathrm{d}\theta) = \int\limits_{\Theta} f_\Theta(\theta) \prod_{i=1}^n \frac{\det(L(\theta)_{Y_i})}{\det(L(\theta) + I)}\nu(\mathrm{d}\theta)
 \end{equation}
 can neither be computed analytically nor numerically in an efficient way since the evaluation of this density involves the computation of the determinant of a \(N\times N\) matrix. This problem can be solved through the powerful methods of Markov chain Monte Carlo simulation that allow to approximate a distribution with only the knowledge of its unnormalised density. %But before we introduce those methods, we quickly explain how the Bayesian approach offers a possibility of regularisation and hence can be used to increase the noise sensitivity of the parameter estimation.
 
@@ -681,7 +681,7 @@ Those effects of \(\alpha\) on the auto correlation and therefore effective samp
 
 Now that we have presented a general setup for MCMC methods we wish to use them to approximated the posterior distribution which is given by the unnormalised density %is given in unnormalised form %given by \eqref{post2}
 \begin{equation}\label{post3}
-f(\theta) = f_\Theta(\theta) \prod_{i=1}^n \frac{\det(L(\theta)_{A_i})}{\det(L(\theta) + I)}.
+f(\theta) = f_\Theta(\theta) \prod_{i=1}^n \frac{\det(L(\theta)_{Y_i})}{\det(L(\theta) + I)}.
 \end{equation}
 In the light of the theoretical guarantees this will surely work and actually Figure \ref{fig:4.1} has been created this way. However, the evaluation of this unnormalised density \(f\) can take several seconds or even minutes itself since it involves the computation of the determinant of the \(N\times N\) matrix \(L(\theta) + I\). %is the computational bottle neck of this procedure and leads to long computation times. This is due to the calculation of the \(N\times N\) determinant \(\det(L(\theta) + I)\).
 However, one can efficiently compute bounds of the unnormalised density and we will provide a general setup of how the MH random walk and slice sampling can be expressed using those bounds. This will lead to significantly shorter simulation times for the respective MCMC methods. % such bounds can be used to obtain a
@@ -755,7 +755,7 @@ In conclusion we can express both MCMC methods exactly through those bounds as l
 We will apply the MLE and the Bayesian estimation for one log linear model in a controlled environment, i.e. where the data is generated by ourselves. We will see how the Bayesian approach allows to encode more information and how the regulariser or prior affects the estimation and will quickly discuss how this impacts the noise sensitivity of the estimation.
 
 We continue the example of the DPP on a two dimensional grid in the unit square from the first chapter. For this we note that for a \(100\times100\) grid the evaluation of the elementary probabilities 
-\[ f(A|\theta) = \frac{\det(L(\theta)_A)}{\det(L(\theta) + I)} \]
+\[ f_{\mathbf Y|\Theta}(A|\theta) = \frac{\det(L(\theta)_A)}{\det(L(\theta) + I)} \]
 would involve the calculation of a determinant of a \(10^4\times 10^4\) matrix and even the storage of such a matrix would pose a problem since it consists of \(10^8\) numbers. If the storage of a real number is done in the double-precision floating-point format, it takes \(64\si{bit}\) per number and the space required to store the entire matrix is \(64\times 10^8\si{bit} = 800\si{MB}\), so almost one Gigabyte.\footnote{One byte is defined to be \(8\) bits. The units of Megabytes and Gigabytes are defined in the familiar way and denoted by \(\si{MB}\) and \(\si{GB}\) respectively.} This makes even the computation of the log likelihood function very time consuming, let alone its maximisation. Because of those computational hindrances we will decrease the size %of the grid to \(30\times30\)
 %for computational reasons,
  but the ideas remain exactly the same.
@@ -780,7 +780,7 @@ The goal is to estimate the two parameters that characterise the qualities, whic
 -10 \\ 6
 \end{pmatrix}.\]
 
-Hence we should be able to estimate this log linearity constant \(\theta\in\mathbb R^2\) based on some data that is distributed according to this DPP. To do this we generate \(n=20\) samples \(A_1, \dots, A_n\) from the DPP using the sampling algorithm introduced in the first chapter. % and define the log likelihood function associated with those observations and the actual similarity kernel \(S_{ij} = \phi_i^T\phi_j\).
+Hence we should be able to estimate this log linearity constant \(\theta\in\mathbb R^2\) based on some data that is distributed according to this DPP. To do this we generate \(n=20\) samples \(Y_1, \dots, Y_n\) from the DPP using the sampling algorithm introduced in the first chapter. % and define the log likelihood function associated with those observations and the actual similarity kernel \(S_{ij} = \phi_i^T\phi_j\).
 
 \section{MLE and regularised MLE}
 
@@ -791,7 +791,7 @@ In order to perform the maximum likelihood estimation for the log linearity cons
 \end{pmatrix}
 \end{equation}
 but from the consistency results we already knew that it should be close to the actual parameter for large sample sizes. Since we also want to investigate the effect of a regulariser, we define two different regularisers
-\[F_1(\theta)\coloneqq -\frac{\left\lVert \theta \right\rVert^2}{2^4} \quad \text{and } F_1(\theta)\coloneqq -\frac{\left\lVert \theta \right\rVert^2}{2} \]
+\[R_1(\theta)\coloneqq -\frac{\left\lVert \theta \right\rVert^2}{2^4} \quad \text{and } R_1(\theta)\coloneqq -\frac{\left\lVert \theta \right\rVert^2}{2} \]
 as a regulariser. Note that those corresponds to the priors
 \begin{equation}\label{toyprior}
 f_{\Theta_1}(\theta) = \exp\left(-\frac{\left\lVert \theta \right\rVert^2}{2^4}\right) \quad \text{and } f_{\Theta_2}(\theta) = \exp\left(-\frac{\left\lVert \theta \right\rVert^2}{2}\right)
@@ -804,7 +804,7 @@ which are -- up to scaling -- Gaussian priors with different variance. Under tho
 \end{pmatrix}.\]
 It is not surprising that regularised MLEs are closer to zero, since the regulariser is built to penalise large parameter values. Further the effect of the Gaussian prior with smaller variance -- which is the second one -- is larger, which is consistent with the heuristic explanation that it cooperates a stronger prior believe, since it expects the parameter to be close to zero.
 
-We chose the sample size of \(n=20\) relatively small and want to show the effect the sample size has on the estimation. Obviously, we know from the second chapter that the different MLE will converge to the actual parameter. To show this convergence in our case, we iteratively raised the sample size from \(1\) to \(30\) and obtained the maximum likelihood estimators that are shown in Figure \ref{fig:learningcurve}. We can see that a stronger regularisation leads to a slower convergence, which is to be expected since it takes longer for the contribution \(\frac1n \cdot F\) to the maximised function to decrease.
+We chose the sample size of \(n=20\) relatively small and want to show the effect the sample size has on the estimation. Obviously, we know from the second chapter that the different MLE will converge to the actual parameter. To show this convergence in our case, we iteratively raised the sample size from \(1\) to \(30\) and obtained the maximum likelihood estimators that are shown in Figure \ref{fig:learningcurve}. We can see that a stronger regularisation leads to a slower convergence, which is to be expected since it takes longer for the contribution \(\frac1n \cdot R\) to the maximised function to decrease.
 %We can see that the MLE converges towards the actual parameter \todo{rewrite this!}
 %where the regularised MLE seems to converge to a very similar value where the difference of the limits is smaller than the fluctuations. Nevertheless we will see in the comments on the model selection that the Bayes factor between the two models is very high and hence the unregularised model is favourable. \todo{check this}%This is because the regularisation is not very strong in this case and we will see later that the models are actually quite close together meaning that the Bayes factor is not very high.% \todo{check this} % \todo{does this mean the effect of the regularisation vanishes?}
 \begin{figure}[h!]
@@ -816,7 +816,7 @@ We chose the sample size of \(n=20\) relatively small and want to show the effec
 	\label{fig:learningcurve}
 \end{figure}
 
-In the light of the comparison of the different regularisers to the unregularised MLE and also the true parameter values, it is evident that the first regularisation \(F_1\) is more suitable. We will also explain how one can compare those two regularisers without knowing the true parameter values or even without solving the maximisation problem assiciated with the MAP estimation.
+In the light of the comparison of the different regularisers to the unregularised MLE and also the true parameter values, it is evident that the first regularisation \(R_1\) is more suitable. We will also explain how one can compare those two regularisers without knowing the true parameter values or even without solving the maximisation problem assiciated with the MAP estimation.
 
 \section{Bayesian estimation using MCMC methods}
 
@@ -840,7 +840,7 @@ and will use the first prior in \eqref{toyprior} since we have seen that it is m
 %-10.32045 \\   6.07648
 %\end{pmatrix}.\]
 The posterior of the log linearity parameter is given by
-\[f(\theta|A_1, \dots, A_n) \propto f_\Theta(\theta) \prod_{i=1}^n \frac{\det(L(\theta)_{A_i})}{\det(L(\theta) + I)}.\]
+\[f_{\Theta|\mathbf Y^n}(\theta|Y_1, \dots, Y_n) \propto f_\Theta(\theta) \prod_{i=1}^n \frac{\det(L(\theta)_{Y_i})}{\det(L(\theta) + I)}.\]
 %Before we will use the MCMC methods presented
 and we will use the MH random walk to approximate it. % In fact this is even easier in practice since one does not have to tune the proposals distributions.
 %To do this we will impose a very conservative prior in the sense that we assume to not know the rough size of the parameter theta. Therefore, we define the prior to be a very flat normal distribution centered at the origin and with covariance \(2^{19}\cdot I\). This amounts to almost choosing a uniform distribution on the space and hence we expect to get a similar picture to Figure \ref{fig:4.1}. 
@@ -851,7 +851,7 @@ But before we do this, we will shortly discuss how the Bayes factor can be used 
 We have introduced the Bayes factor as the ratio of the total observation probabilities under two models. In order to compare the two different priors \eqref{toyprior}, we need to integrate the observation probabilities over the parameter space, i.e. compute the integrals
 %the regularised and unregularised model, we need to approximate the total observation probability
 \[%f(x|\mathcal F_i) \coloneqq %\int_{\Theta} f_{X, \Theta}(x, \theta)\nu(\mathrm{d}\theta) =
- \int_{\Theta} f_{X| \Theta}(x| \theta)f_{\Theta_i}(\theta)\nu(\mathrm{d}\theta) \]
+ \int_{\Theta} f_{\mathbf Y^n| \Theta}(Y_1, \dots, Y_n| \theta)f_{\Theta_i}(\theta)\nu(\mathrm{d}\theta) \]
 which we will do numerically. The order of magnitude of the approximated Bayes factor between the two models arising from the priors \eqref{toyprior} was \(10^{22}\) which strongly supports the claim that the first prior is the more sensible choice. Therefore we will only work with this one in the remainder.
 
 It shall be noted that the numerical integration carried out above can only be performed in an efficient way if the parameter space \(\Theta\) is rather low dimensional. If this is not the case one can exploit probabilistic approaches based Monte Carlo simulations to calculate this normalisation constant. Details on such approaches can be found in the section on Monte Carlo integration in \cite{robert2013monte}.
@@ -1052,11 +1052,11 @@ Let us assume that we have performed the two burn in periods of the MH random wa
 \subsubsection*{Complexity of the different approaches}
 
 In large examples the evaluation of the likelihood function
-\[f_{X|\Theta}(x|\theta) \propto \prod_{i=1}^n \frac{\det(L(\theta)_{A_i})}{\det(L(\theta) + I)} \]
+\[f_{\mathbf Y^n|\Theta}(Y_1, \dots, Y_n|\theta) \propto \prod_{i=1}^n \frac{\det(L(\theta)_{Y_i})}{\det(L(\theta) + I)} \]
 involves the computation of a \(N\times N\) matrix. This can be done explicitly using Gauss elimination which does not change the determinant -- at least up to a sign -- and can be performed in at most \(N^3\) steps, cf. \cite{valiant1979complexity}.\footnote{Actually one can even do better, but those algorithms come with greater implementation challenges.} Hence, the time needed for the computation of the likelihood function can be bounded -- up to a constant -- by
-\[N^3 + \sum_{i=1}^n \left\lvert A_i \right\rvert^3 \le (n+1) \cdot N^3\]
+\[N^3 + \sum_{i=1}^n \left\lvert Y_i \right\rvert^3 \le (n+1) \cdot N^3\]
 and we say it can be performed in \(O(N^3)\) 
-%\[O\left( N^3 + \sum_{i=1}^n \left\lvert A_i \right\rvert^3\right)\]
+%\[O\left( N^3 + \sum_{i=1}^n \left\lvert Y_i \right\rvert^3\right)\]
 time.\footnote{See also the Landau or âbig \(O\)Ô notation in the nomenclature.} 
 In practice this will take a significant amount of time and this was also the motivation for the variational MCMC methods. For example in our toy example the computation took roughly \(1.5\) seconds on a six year old \(1.8\si{GHz}\) Intel Core i5 using the determinant algorithm in R.
 
@@ -1135,8 +1135,8 @@ First we explain which kind of noise we will consider.
 
 \begin{emp}[Setting]
 Let \(B_1, \dots, B_n\) be independent realisations of a DPP \(\mathbb P\). Let further \(C_1, \dots, C_n\) be independent  realisations of an independent Poisson point process. We assume that we have given the data
-\[A_i \coloneqq B_i\setminus C_i\cap C_i\setminus B_i \quad \text{for } i = 1, \dots, n. \]
-The observations \(A_i\) correspond exactly to the observation of a DPP where points were randomly deleted and added.
+\[Y_i \coloneqq B_i\setminus C_i\cap C_i\setminus B_i \quad \text{for } i = 1, \dots, n. \]
+The observations \(Y_i\) correspond exactly to the observation of a DPP where points were randomly deleted and added.
 \end{emp}
 
 We will generate noisy data consisting of \(n=8\) samples of a DPP perturbed by a Poisson point processes with marginal kernel \(\rho\cdot I\) where we call \(\rho\in(0, 1)\) the \emph{intensity} of the point process.
@@ -1165,7 +1165,7 @@ We use an intensity of \(\rho=\frac1{400}\) and repeat this procedure eight time
 \end{table}
 
 Like in the case of estimation without noise, the regularised MLE is closer to the origin than the unregularised one. In the first component, this leads to worse estimates and in the second one to better ones. The reason that the estimation of the second parameter benefits from the regularisation is the following. If the cardinality of the DPP is smaller than \(N/2\), then the presence of noise -- at least the one we are considering -- leads to a higher expected cardinality in the data since more points are added than deleted because we expect
-\[\left\lvert A_i\cap B_i  \right\rvert \le \left\lvert B_i \setminus A_i \right\rvert.\]
+\[\left\lvert Y_i\cap B_i  \right\rvert \le \left\lvert B_i \setminus Y_i \right\rvert.\]
 This leads to an estimation of higher qualities and the magnitude of the qualities is controlled through the second parameter. Hence, the regulariser forces the second component MLE into the right direction. However this kind of regularisation can only be successful, if one has a clear understanding into which direction the noise will perturb the estimates. If for example the cardinality of the DPP is larger than \(N/2\) the Poisson noise will lower the cardinality of the data and the regulariser could increase this effect instead of weakening it. %To decide whether the DPP has cardinality smaller or bigger than \(N/2\) one can use the observed data because if the intensity of the noise is lower than \(0.5\), then the expected cardinality of the observations remain smaller or larger than \(N/2\). To see this, assume the sample from the actual DPP satisfies \todo{?}%\(\)
 
 To conclude, we found that a regulariser can be used to lower the effect random perturbations have on the estimation, but only if the qualitative effect of the noise on the certain parameters is understood from theoretical considerations. In this case, however, it might be enough to note this effect or to correct it directly and not through a regulariser.

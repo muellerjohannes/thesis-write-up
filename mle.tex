@@ -288,18 +288,18 @@ We have seen that the probability that the MLE exists tends to one if the sample
 %We will work with one of the three parametric models for DPPs.  %and denote the 
 
 \begin{defi}[MAP estimation]
-Let the setting be the same as for the normal maximum likelihood estimation. Further we assume that we have given a function \(F\colon\Theta\to[-\infty, 0]\) which we call the \emph{regulariser}. The \emph{regularised MLE}, \emph{maximum a posteriori probability} or shortly \emph{MAP estimator}\footnote{The term maximum posteriori probability will only properly make sense once we introduce the Bayesian setting in the next chapter. We will see there that the regularised MLE is nothing but the mode of the posterior density.} is the maximiser
-\[ \hat \theta_n\coloneqq \underset{\theta\in\Theta}{\arg\max} \big( \mathcal L(\theta) + F(\theta)\big).\]
+Let the setting be the same as for the normal maximum likelihood estimation. Further we assume that we have given a function \(R\colon\Theta\to[-\infty, 0]\) which we call the \emph{regulariser}. The \emph{regularised MLE}, \emph{maximum a posteriori probability} or shortly \emph{MAP estimator}\footnote{The term maximum posteriori probability will only properly make sense once we introduce the Bayesian setting in the next chapter. We will see there that the regularised MLE is nothing but the mode of the posterior density.} is the maximiser
+\[ \hat \theta_n\coloneqq \underset{\theta\in\Theta}{\arg\max} \big( \mathcal L(\theta) + R(\theta)\big).\]
 %We call \(F\) the \emph{regulariser}.
 \end{defi}
 
 \begin{rem}
 \begin{enumerate}
-\item The regularised maximum likelihood approach is clearly an extension of the classical approach since one can simply set \(F=0\).
-\item If the regulariser is upper semi-continuous and coercive, then the MAP estimator for DPPs always exists. In fact, \(\mathcal L\le0\) implies that \(\mathcal L + F\) is coercive and also upper semi-continuous since the log likelihood functions are upper semi-continuous for all parametric models and \ref{dirmet} yields the assertion. %In the case of  
+\item The regularised maximum likelihood approach is clearly an extension of the classical approach since one can simply set \(R=0\).
+\item If the regulariser is upper semi-continuous and coercive, then the MAP estimator for DPPs always exists. In fact, \(\mathcal L\le0\) implies that \(\mathcal L + R\) is coercive and also upper semi-continuous since the log likelihood functions are upper semi-continuous for all parametric models and \ref{dirmet} yields the assertion. %In the case of  
 \item The regularised MLE and the MLE can agree but don’t necessarily agree. 
 \item The regulariser can be used to encode any prior conceptions one has. For example one can use the regulariser to change the parameter set. Indeed, if we want to consider all matrices \(\mathbb R^{N\times N}\) as a parameter space instead of only the symmetric positive semi-definite matrices, we can simply set
-\[F(L)\coloneqq\begin{cases} \;0 \quad&\text{if } L \text{ symmetric and positive semi-definite} \\ -\infty &\text{otherwise}\end{cases}\]
+\[R(L)\coloneqq\begin{cases} \;0 \quad&\text{if } L \text{ symmetric and positive semi-definite} \\ -\infty &\text{otherwise}\end{cases}\]
 which is equivalent to the MLE on the smaller parameter space.
 The advantage of \(\mathbb R^{N\times N}\) as a parameter space is that one can make use of pre-implemented optimisation algorithms, since they are usually defined over real vector spaces.
 \item We will see in the last chapter how different choices of the regulariser affect the estimator. %can be used to reduce the effect random perturbations of the data have on the estimation. %The heuristical explanation for this effect is that the regulariser -- if used appropriately -- can be used to ‚penalise‘ parameters that lead to very irregular probability distributions.
@@ -664,24 +664,24 @@ Obviously in the proof of the consistency of the whole elementary kernel \(L\) o
 
 One can not make a general statement about the consistency of regularised MLE. 
 %On the one hand they can agree with the classical MLE, if for example \(F=0\) or if \(F\) is zero on an open set containing the actual parameter \(\theta_0\) and \(-\infty\) everywhere else. In this case the arguments above show the consistency of the regularised version of the MLE.
-Since it is straight forward to construct examples where the regularised MLE is not consistent. For example if the regulariser \(F\) is equal to \(-\infty\) on a neighborhood of \(\theta_0\), then none of the regularised estimators will lie in this neighborhood and hence the estimations will not converge towards \(\theta_0\).
+Since it is straight forward to construct examples where the regularised MLE is not consistent. For example if the regulariser \(R\) is equal to \(-\infty\) on a neighborhood of \(\theta_0\), then none of the regularised estimators will lie in this neighborhood and hence the estimations will not converge towards \(\theta_0\).
 
 Nevertheless, this scenario can be avoided with one property of the regulariser. If we recall that the proof of the consistency of the MLE relied on the observation
 \[\frac1n\cdot\mathcal L_n(\theta)\xlongrightarrow{n\to\infty} \mathbb E\big[\log(f(X|\theta))\big]. \]
-and an application of the consistency result for extremal estimators. In the case of the regularised MLE, we no longer maximise the functions \(\mathcal L_n\) but the sum \(\mathcal L_n + F\) and in order to obtain a consistent estimator we need to ensure that the convergence
-\[\frac1n\cdot\mathcal L_n(\theta) + \frac1n \cdot F(\theta) \xlongrightarrow{n\to\infty} \mathbb E\big[\log(f(X|\theta))\big] \]
+and an application of the consistency result for extremal estimators. In the case of the regularised MLE, we no longer maximise the functions \(\mathcal L_n\) but the sum \(\mathcal L_n + R\) and in order to obtain a consistent estimator we need to ensure that the convergence
+\[\frac1n\cdot\mathcal L_n(\theta) + \frac1n \cdot R(\theta) \xlongrightarrow{n\to\infty} \mathbb E\big[\log(f(X|\theta))\big] \]
 holds with the same uniformity which we will do now.
 
 \begin{emp}[Setting]
-We work with one of the three parametric models for DPPs presented above and denote the parameter space by \(\Theta\) and the elementary kernel arising from \(\theta\in\Theta\) by \(L(\theta)\). Further we will assume that we have a regulariser \(F\colon\Theta\to[-\infty, 0]\) that is upper semicontinuous.
+We work with one of the three parametric models for DPPs presented above and denote the parameter space by \(\Theta\) and the elementary kernel arising from \(\theta\in\Theta\) by \(L(\theta)\). Further we will assume that we have a regulariser \(R\colon\Theta\to[-\infty, 0]\) that is upper semicontinuous.
 %Let \(\Theta\) be one of the  space and \(L(\theta)\in\mathbb R^{N\times N}_{\text{sym}, +}\) be an elementary kernel for every \(\theta\in\Theta\). Further we assume that we have independent realisations \(A_1, \dots, A_n\) of a  \(L\)-ensemble.
 \end{emp}
 
 \begin{theo}[Consistency of MAP estimation]
-Assume that the sequence of observations \((\mathbf Y_n)_{n\in\mathbb N}\) are independent and distributed according to a \(L\)-ensemble with elementary kernel \(L(\theta_0)\). Let further \(K\subseteq\Theta\) be a compact set containing \(\theta_0\) such that \(F\) is bounded on \(K\). Then the maximum a posteriori estimator arising from the regulariser \(F\) is consistent.
+Assume that the sequence of observations \((\mathbf Y_n)_{n\in\mathbb N}\) are independent and distributed according to a \(L\)-ensemble with elementary kernel \(L(\theta_0)\). Let further \(K\subseteq\Theta\) be a compact set containing \(\theta_0\) such that \(R\) is bounded on \(K\). Then the maximum a posteriori estimator arising from the regulariser \(R\) is consistent.
 \end{theo}
 \begin{proof}
-We only have to check how the regulariser \(F\) influences the requirements (\emph{i})-(\emph{v}) of Theorem \ref{conext}. In fact it doesn’t have any influence on the assumptions (\emph{iii}) and (\emph{iv}). Further (\emph{i}) stays valid since the regulariser is non positive and (\emph{v}) since it is non positive and upper semicontinuous. Hence it remains to validate (\emph{ii}). For this we reduce the compact set \(K_0\) to \(K\cap K_0\) which is compact again. On this set the contribution \(\frac1n \cdot F\) goes uniformly to zero which yields the assertion.
+We only have to check how the regulariser \(R\) influences the requirements (\emph{i})-(\emph{v}) of Theorem \ref{conext}. In fact it doesn’t have any influence on the assumptions (\emph{iii}) and (\emph{iv}). Further (\emph{i}) stays valid since the regulariser is non positive and (\emph{v}) since it is non positive and upper semicontinuous. Hence it remains to validate (\emph{ii}). For this we reduce the compact set \(K_0\) to \(K\cap K_0\) which is compact again. On this set the contribution \(\frac1n \cdot R\) goes uniformly to zero which yields the assertion.
 \end{proof}
 
 \begin{rem}
@@ -962,7 +962,7 @@ However, it shall be noted that the modelling of the diversity feature vectors c
 
 \subsubsection{Estimating the mixture coefficients of \(k\)-DPPs}
 
-For this approach we first fix symmetric positive semi-definite matrices \(L_1, \dots, L_M\). We assume now that the point process is the mixture of the DPPs \(\mathbb P_{L_m}\) with elementary kernel \(L_m\) and aim to estimate the mixing coefficients of
+For this approach we first fix symmetric positive semi-definite matrices \(L_1, \dots, L_M\). We assume now that the point process we are trying to describe is the mixture of the DPPs \(\mathbb P_{L_m}\) with elementary kernel \(L_m\) and aim to estimate the mixing coefficients of
 \[\mathbb P_\theta = \sum_{m=1}^M \theta_m\mathbb P_{L_m} \quad \text{where } \theta_m\in[0, 1] \text{ and } \sum_{m=1}^M\theta_m=1.\]
 
 This approach has been taken to create a diverse selection of pictures returned by an image search (cf. \cite{kulesza2011k}). In this case one wants to fix the number of returned images up front, hence it is reasonable to work with \(k\)-DPPs instead of DPPs. The mixture coefficients were estimated based on a data set \(\big\{ (Y_t^+, Y_t^-)\big\}_{t = 1, \dots, n}\) where \(Y_t^+\) was chosen by a human to be more diverse than \(Y_t^-\). Now \(\theta\) was optimised such that 

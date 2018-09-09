@@ -1,7 +1,7 @@
 \chapter{Bayesian parameter estimation and Markov chain Monte Carlo methods}
 
 
-So far we have seen two different estimation techniques for the parameters of DPPs. Although we proved that they provide reasonable estimators in the sense that they are consistent, they have some drawbacks. For example we have seen that the MLEs for the different parameters do not exist in general, let alone that they are impossible to compute in reality. Further
+So far we have seen two different estimation techniques for the parameters of DPPs. Although we proved that they provide reasonable estimators in the sense that they are consistent, they have some drawbacks. For example the MLEs for the different parameters do not exist in general, let alone that they are impossible to compute in practice. Further
 %Firstly, we saw that the maximum likelihood estimator does not exist in general and in some cases one needs a fairly high amount of samples to ensure that it does. Secondly 
 all of the estimators presented so far are point estimators, i.e. they return a single value for the desired parameter. Obviously this does not allow to capture any uncertainties that the estimation of the parameter has. % and we have already seen in that the selection of the most possible outcome -- in this case the MLE -- might not yield a very typical one for a given random variable.
 Those are some reasons to consider the Bayesian approach of parameter estimation where the goal is to give a distribution -- called the posterior -- of the parameter that should be estimated instead of a single value. This can also help to overcome some -- maybe even all of the problems mentioned above.
@@ -11,13 +11,13 @@ For this we will follow the approach of \cite{affandi2014learning} and turn towa
 
 \section{Bayesian approach to parameter estimation}
 
-For the introduction of the general Bayesian setup we pursue like in \cite{rice2006mathematical}. Just like in the case of MLE we want to estimate %the underlying density of 
+For the introduction of the general Bayesian setup we pursue like in \cite{rice2006mathematical}. Just like in the case of maximum likelihood estimation we want to estimate %the underlying density of 
 a parameter \(\theta\in\Theta\) based on
  some realisations \(x = (x_1, \dots, x_n)\) of random variables \(X = (X_1, \dots, X_n)\). 
  %out of a parametric family
 %\[\mathcal F = \Big\{ f_{X| \Theta}(\cdot |\theta) \mid \theta\in\Theta\Big\}\]
 %of probability densities with respect to \(\mu^n\coloneqq\prod_{i=1}^n\mu(\mathrm d x_i)\).
- This time, however, we are not interested in returning a single value \(\theta\) because this would be a vast simplification of the stochastic nature of the estimator. Thus, we want to obtain a probability distribution over whole parameter space \(\Theta\) that indicates how likely the parameters are to have caused the observed data. In order to present the procedure we will introduce the frame we will work in.
+ This time, however, we are not interested in returning a single value \(\theta\) because this would be a vast simplification of the stochastic nature of the estimator. We rather want to obtain a probability distribution over whole parameter space \(\Theta\) that indicates how likely the parameters are to have caused the observed data. In order to present the procedure we will introduce the frame we will work in.
 
 \begin{emp}[Setting]
 Let \(\Theta\) be a measurable space and \(\nu\) be a measure on \(\Theta\). Let \(f_\Theta\colon \Theta\to[0, \infty]\) be a probability density with respect to \(\nu\), i.e.
@@ -56,7 +56,7 @@ First we will convince ourselves that the approach of calculating a posterior di
 \begin{emp}[Comparison to MLE]
 Maybe one feels slightly uncomfortable with the need to choose a prior distribution and it turns out that this is in fact a difficult step that has to be taken with a certain amount of care. However, we could pretend for one moment to be completely ignorant in the sense that we do not know anything about the parameter and hence we don’t feel in the position to propose a reasonable prior. Then we could simply choose the uniform distribution as a prior -- given it exists\footnote{Even it doesn’t one can still define the prior density to be constant and hope that the posterior is a probability density.} -- and would obtain
 \[f_{\Theta| X}(\theta|x) \propto f_{X|\Theta}(x|\theta). \]
-Hence we can regain the MLE from our posterior distribution since it is just the mode, i.e. the maximiser of the posterior density. This relation to the MLE can be seen in Figure \ref{fig:4.1}. Hence, the Bayesian approach is a more general tool than MLE and allows to capture the randomness of the parameter \(\theta\). This is desirable since  we have seen that the mode is not always a vey typical outcome of a random variable. %\todo{cite}.
+Hence we can regain the MLE from our posterior distribution since it is just the mode, i.e. the maximiser of the posterior density. This relation to the MLE can be seen in Figure \ref{fig:4.1}. Hence, the Bayesian approach is a more general tool than MLE and allows to capture the randomness of the parameter \(\theta\). This is desirable since  we have seen that the mode is not always a very typical outcome of a random variable. %\todo{cite}.
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.6\textwidth]{figures/heatmap-log-linearity-SliceSampling-new-3}
@@ -73,7 +73,7 @@ This can often not be performed efficiently but the Markov chain Monte Carlo met
 \begin{emp}[Regularisation through the prior]
 The prior density is very closely related to the regulariser introduced in the section about maximum likelihood estimation. In fact the mode of the posterior \(f_{\Theta|X}\) is nothing else but the maximiser of 
 \[\log(f_{\Theta|X}) = \mathcal L + F\]
-where \(F = \log(f_\theta)\) and hence nothing else but a regularised MLE. In fact if \(F\) is a regularisation and \(\exp(F)\) is integrable with respect to \(\mu\), then one can choose \(f_\Theta\propto \exp(F)\) as a prior density. Hence the proposition of a prior and a regulariser are equivalent in a wide variety of cases, but again, the posterior density encodes much more information than just the location of its mode which is the regularised MLE.
+where \(F = \log(f_\Theta)\) and hence nothing else but a regularised MLE. In fact if \(F\) is a regularisation and \(\exp(F)\) is integrable with respect to \(\mu\), then one can choose \(f_\Theta\propto \exp(F)\) as a prior density. Hence the proposition of a prior and a regulariser are equivalent in a wide variety of cases, but again, the posterior density encodes much more information than just the location of its mode which is the regularised MLE.
 
 %\todo{regularisation of noise}
 

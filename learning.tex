@@ -473,9 +473,9 @@ We have already seen in the motivation of this section that the empirical measur
 %\hat\Delta_S\to\Delta_S 
 \hat K_{ii}\to K_{ii}\quad\text{and } \hat K_{ij}^2 \to K_{ij}^2 \quad \text{almost surely}.
 \end{equation}
-Note that almost surely convergence implies convergence in probability and thus we have
+Since almost sure convergence implies convergence in probability we have
 \[\mathbb P(\hat G = G_K) = \mathbb P\left(\hat K_{ij}^2 \ge \alpha^2/2 \text{ for } K_{ij}\ne0\right) \to 1 \quad\text{for } n\to\infty.\]
-In this case the two shortest cycle basis can be chosen the same and so \(\hat A\) and \(A\) agree. %Hence we have
+In this case the two shortest cycle basis \(\{ \hat C_1, \dots, \hat C_{\hat k}\}\) and \(\left\{ C_1, \dots, C_k\right\}\) can be chosen the same and so \(\hat A\) and \(A\) agree. %Hence we have
 %\begin{equation*}%\label{ConProb1}
 %\mathbb P(\hat A = A)\to 1 \quad\text{for } n\to\infty.
 %\end{equation*}
@@ -483,19 +483,21 @@ Because of \eqref{asc} we also have \(\hat H_k\to H_k\) almost surely and thus \
 \begin{equation}\label{ConProb1}
 \mathbb P\left(\hat A = A \text{ and } \hat b = b\right)\to 1 \quad\text{for } n\to\infty.
 \end{equation}
-In this case the two linear quations \eqref{linEqu} and \eqref{LinEqu2} agree, then \(\tilde K\in\mathbb R^{N\times N}\) defined through \(\tilde K_{ij}\coloneqq \hat w_{ij}\left\lvert K_{ij} \right\rvert\) is determinantally equivalent to \(K\). Further, we know that for any \(\delta>0\)
+In this case the two linear quations \eqref{linEqu} and \eqref{LinEqu2} agree and therefore \(\tilde K\in\mathbb R^{N\times N}\) defined through \(\tilde K_{ij}\coloneqq \hat w_{ij}\left\lvert K_{ij} \right\rvert\) is determinantally equivalent to \(K\). Further, we know that for \(\delta>0\)
 \begin{equation}\label{ConProb2}
-\mathbb P\left(\left\lvert \hat K_{ij}^2 - K_{ij}^2 \right\rvert < \delta \text{ for all } i, j \right)\to1 \quad \text{for } n\to\infty.
+\mathbb P\left(\left\lvert \hat K_{ij}^2 - \tilde K_{ij}^2 \right\rvert < \delta \text{ for all } i, j \right)\to1 \quad \text{for } n\to\infty.
 \end{equation}
-If this is true, then we have
-\[d(\hat K, K) \le \lVert \hat K - \tilde K \rVert_{\infty} = \sup_{i, j} \left\lvert \lvert \hat K_{ij} \rvert- \lvert \tilde K_{ij} \rvert \right\rvert \]
-where we used, that the entries of \(\hat K\) and \(\tilde K\) have equal signs. Further, we have %\(\lvert \hat K_{ii} - \tilde K_{ii} \rvert < \delta\) as well as
-\[\left\lvert \lvert \hat K_{ij} \rvert- \lvert \tilde K_{ij} \rvert \right\rvert = \frac{\big\lvert \hat K_{ij}^2 - \tilde K_{ij}^2 \big\rvert}{\lvert \hat K_{ij} \rvert + \lvert \tilde K_{ij} \rvert} < \frac{\delta}{\alpha}\le\varepsilon \]
-if \(\delta \le \alpha\varepsilon\). In conclusion we have seen that if
-\[\hat A = A, \quad \hat b = b \quad\text{and } \left\lvert \hat K_{ij}^2 - K_{ij}^2 \right\rvert < \delta \quad \text{for all } i, j\]
-then we have
-\[d(\hat K, K) < \varepsilon.\]
-However \eqref{ConProb1} and \eqref{ConProb2} shows that the probability for this tends to one.
+If \eqref{ConProb1} and \eqref{ConProb2} hold then we have \(\operatorname{sgn}(\hat K_{ij}) = \operatorname{sgn}(\tilde K_{ij})\) as well as \(\left\lvert \hat K_{ij}^2 - \tilde K_{ij}^2 \right\rvert<\delta\) and hence
+\[d(\hat K, K) \le \lVert \hat K - \tilde K \rVert_{\infty} < \varepsilon \]
+for \(\delta\) small.
+%\[d(\hat K, K) \le \lVert \hat K - \tilde K \rVert_{\infty} = \sup_{i, j} \left\lvert \lvert \hat K_{ij} \rvert- \lvert \tilde K_{ij} \rvert \right\rvert \]
+%where we used, that the entries of \(\hat K\) and \(\tilde K\) have equal signs. Further, we have %\(\lvert \hat K_{ii} - \tilde K_{ii} \rvert < \delta\) as well as
+%\[\left\lvert \lvert \hat K_{ij} \rvert- \lvert \tilde K_{ij} \rvert \right\rvert = \frac{\big\lvert \hat K_{ij}^2 - \tilde K_{ij}^2 \big\rvert}{\lvert \hat K_{ij} \rvert + \lvert \tilde K_{ij} \rvert} < \frac{\delta}{\alpha}\le\varepsilon \]
+%if \(\delta \le \alpha\varepsilon\). In conclusion we have seen that if
+%\[\hat A = A, \quad \hat b = b \quad\text{and } \left\lvert \hat K_{ij}^2 - K_{ij}^2 \right\rvert < \delta \quad \text{for all } i, j\]
+%then we have
+%\[d(\hat K, K) < \varepsilon.\]
+%However \eqref{ConProb1} and \eqref{ConProb2} shows that the probability for this tends to one.
 %Let now \(\left\{ C_1, \dots, C_m\right\}\) be a maximal shortest cycle basis of \(G_k\) with corresponding vertex sets \(S_1, \dots, S_m\). Let further 
 %\[H_k\coloneqq2\cdot\!\!\!\!\!\!\prod_{\left\{ i, j\right\}\in E(S_k)}\!\!\!\!\!\! K_{ij} \quad \text{and } \hat H_k\coloneqq2\cdot\!\!\!\!\!\!\prod_{\left\{ i, j\right\}\in E(S_k)}\!\!\!\!\!\! \hat K_{ij}.\]
 %\(H_k\) be like in \ref{cec} and \(H_{}

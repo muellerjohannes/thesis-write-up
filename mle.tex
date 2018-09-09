@@ -110,7 +110,7 @@ which is upper semi-continuous in \(L\). Although the parametric family that ari
 
 Unlike earlier we will not try to estimate the whole kernel \(L\) but only the qualities \(q_i\) of the items \(i\in\mathcal Y\). More precisely we recall that we can parametrise the positive definite symmetric matrices \(L\) using the quality diversity parametrisation %decomposition %, i.e. we consider the bijection\todo{whats the domain?}
 \[ (q, \phi) \mapsto \Psi(q, \phi) = L \quad \text{where } L_{ij} = q_i\phi_i^T\phi_jq_j.\]
-Now we fix a diversity feature matrix \(\hat \phi\), that we will usually model according to some perceptions we might have and set \(\hat S_{ij}\coloneqq\phi_i^T\phi_j\). We will now try to estimate the quality vector \(q\in\mathbb R_+^N\) instead of the whole kernel \(L\). This means that we optimise the likelihood function over a smaller set of kernels, namely the ones of the form \(\Psi(q, \hat \phi)\) for \(q\in\mathbb R_+^N\). Obviously the maximal likelihood that can be achieved using this more restrictive model decreases since we consider less positive definite matrices and we have %will be lower compared to the one obtained by a full kernel estimation, since we have
+Now we fix a diversity feature matrix \(\hat \phi\), that we will usually model according to some perceptions we might have and set \(\hat S_{ij}\coloneqq\phi_i^T\phi_j\). Now we aim to estimate the quality vector \(q\in\mathbb R_+^N\) instead of the whole kernel \(L\). This means that we optimise the likelihood function over a smaller set of kernels, namely the ones of the form \(\Psi(q, \hat \phi)\) for \(q\in\mathbb R_+^N\). Obviously the maximal likelihood that can be achieved using this more restrictive model decreases since we consider less positive definite matrices and we have %will be lower compared to the one obtained by a full kernel estimation, since we have
 \[\max_{q\in \mathbb R_+^N} \mathcal L(\Psi(q, \hat \phi)) \le %\max_{(q, S)\in \mathbb R_+^N\times \mathbb S_N^N} \mathcal L(\Psi(q, S)) =
  \max_{L\in \mathbb R_{\text{sym}, +}^{N\times N}} \mathcal L(L). \]%\todo{sort out notation problem with \(S\) and \(\phi\)}
 % \todo{sort out notation problem with \(N\) and \(\mathcal Y\)}
@@ -177,7 +177,7 @@ A priori it is not clear that the maximum likelihood estimators exist and we wil
 
 \subsubsection*{MLE of the qualities}
 
-The MLE \(\hat q_n\) does not exist for all realisations \((Y_n)_{n\in\mathbb N}\) of \((\mathbf Y_n)_{n\in\mathbb N}\). To see this, we suppose that we have only one sample \(Y_1 = \mathcal Y\) which is the whole set. The higher the qualities of the items are, the more likely this observation gets and therefore the maximum of the log likelihood function -- which is \(0\) in this case -- is not obtained. This can also be made rigorous in the following computation. Under the assumption of constant qualities the log likelihood function takes the form
+The MLE \(\hat q_n\) does not exist for all realisations \((Y_n)_{n\in\mathbb N}\) of \((\mathbf Y_n)_{n\in\mathbb N}\). To see this, we suppose that we have only one sample \(Y_1 = \mathcal Y\) which is the whole set. The higher the qualities of the items are, the more likely this observation gets and therefore the maximum of the log likelihood function -- which is \(0\) in this case -- is not obtained. This can also be made rigorous in the following computation. For this we assume that \(\det(\hat{S}_{\mathcal Y})>0\) and that the qualities are constant, then the log likelihood function takes the form
 \begin{equation*}
 \begin{split}
 \log\left(q^{2N} \det(\hat S_{\mathcal Y})\right) - \log\left(\sum_{A\subseteq \mathcal Y}q^{2\left\lvert A \right\rvert}\det(\hat S_A) \right) = \log\left( \frac{q^{2N} \det(\hat S_{\mathcal Y})}{\sum_{A\subseteq \mathcal Y}q^{2\left\lvert A \right\rvert}\det(\hat S_A)}\right) \xlongrightarrow{q\to\infty} 0.
@@ -244,7 +244,8 @@ Let \(\mathbf Y_1, \mathbf Y_2, \dots\) be asequence of independent and identica
 \begin{proof}
 Again it suffices to show \(\mathcal L(L)\to -\infty\) for \(\left\lvert L \right\rvert\to\infty\) once we have observed the empty set once. To see this, we use the quality diversity parametrisation
 \[\Psi\colon\mathbb R_+^N\times\mathbb S_N^N\to\mathbb R^{N\times N}_{\text{sym}, +}, \quad (q, \phi)\mapsto \left( q_i\phi_i^T\phi_j q_j\right)_{1\le i, j\le N}.\]
-Note that since \(\Psi\) is continuous and therefore bounded on bounded sets and \(\mathbb S_N^N\) is bounded, \(\left\lvert \Psi(q, \phi) \right\rvert\to\infty\) implies \(\left\lvert q \right\rvert\to\infty\). The exact same calculations as in the previous proof show
+Note that since \(\Psi\) is continuous %and therefore bounded on bounded sets 
+and \(\mathbb S_N^N\) is bounded, \(\left\lvert \Psi(q, \phi) \right\rvert\to\infty\) implies \(\left\lvert q \right\rvert\to\infty\). The exact same calculations as in the previous proof show
 \[\mathcal L(L) = \mathcal L(\Psi(q, \phi))\to-\infty\quad \text{for }\left\lvert L \right\rvert\to\infty.\]
 \end{proof}
 
@@ -295,13 +296,13 @@ Let the setting be the same as for the normal maximum likelihood estimation. Fur
 \begin{rem}
 \begin{enumerate}
 \item The regularised maximum likelihood approach is clearly an extension of the classical approach since one can simply set \(F=0\).
-\item If the regulariser is upper semi-continuous and coercive, then the MAP estimator always exists. In fact, \(\mathcal L\le0\) implies that \(\mathcal L + F\) is coercive and also upper semi-continuous since the log likelihood functions are upper semi-continuous for all parametric models and \ref{dirmet} yields the assertion. %In the case of  
+\item If the regulariser is upper semi-continuous and coercive, then the MAP estimator for DPPs always exists. In fact, \(\mathcal L\le0\) implies that \(\mathcal L + F\) is coercive and also upper semi-continuous since the log likelihood functions are upper semi-continuous for all parametric models and \ref{dirmet} yields the assertion. %In the case of  
 \item The regularised MLE and the MLE can agree but don’t necessarily agree. 
 \item The regulariser can be used to encode any prior conceptions one has. For example one can use the regulariser to change the parameter set. Indeed, if we want to consider all matrices \(\mathbb R^{N\times N}\) as a parameter space instead of only the symmetric positive semi-definite matrices, we can simply set
 \[F(L)\coloneqq\begin{cases} \;0 \quad&\text{if } L \text{ symmetric and positive semi-definite} \\ -\infty &\text{otherwise}\end{cases}\]
 which is equivalent to the MLE on the smaller parameter space.
 The advantage of \(\mathbb R^{N\times N}\) as a parameter space is that one can make use of pre-implemented optimisation algorithms, since they are usually defined over real vector spaces.
-\item We will see in the fifth chapter how the choice of the regulariser can be used to reduce the effect random perturbations of the data have on the estimation. %The heuristical explanation for this effect is that the regulariser -- if used appropriately -- can be used to ‚penalise‘ parameters that lead to very irregular probability distributions.
+\item We will see in the last chapter how different choices of the regulariser affect the estimator. %can be used to reduce the effect random perturbations of the data have on the estimation. %The heuristical explanation for this effect is that the regulariser -- if used appropriately -- can be used to ‚penalise‘ parameters that lead to very irregular probability distributions.
 %Choice of the regulariser.
 %\item Regularisation of noise.
 \end{enumerate}
@@ -338,7 +339,7 @@ Evaluating this at \(\theta = \theta_0\) gives
 Hence \(\theta_0\) is a critical point and under mild conditions the right hand side of \eqref{entropy} is concave and thus \(\theta_0\) is the unique maximiser. In conclusion the estimator \(\hat \theta\) should be close to \(\theta_0\).
 \end{emp}
 
-Although the rough structure of the rigorous proof is present in the argument above it is highly formal. For example we argue that if a sequence \((f_n)_{n\in\mathbb N}\) of functions converges towards \(f\) pointwise, then the maximisers \((x_n)_{n\in\mathbb N}\) should converge to the maximiser \(x\) of \(f\). The major tool to make this rigorous will be to use some kind of uniform convergence. Namely we have the following result where we will omit the proof since it is very easy and we give a similar but stronger version of it later.
+Although the rough structure of the rigorous proof is present in the argument above it is highly formal. For example we argue that if a sequence \((f_n)_{n\in\mathbb N}\) of functions converges towards \(f\) pointwise, then the maximisers \((x_n)_{n\in\mathbb N}\) should converge to the maximiser \(x\) of \(f\). The major tool to make this rigorous will be to use some kind of uniform convergence. Namely, we have the following result where we will omit the proof since it is very easy and we give a similar but stronger version of it later.
 
 \begin{lem}[Swapping limit and maximisation]
 Let \((f_n)_{n\in\mathbb N}\) be a sequence of real functions on a compact space with maximisers \((x_n)_{n\in\mathbb N}\) that are bounded from above and converge uniformly towards \(f\). Further, assume that \(f\) is continuous and has a unique maximum in \(x_0\). Then we have \(x_n\to x_0\) for \(n\to\infty\).
@@ -411,7 +412,7 @@ If this is not the case %, \ref{dirmet} together with (\emph{iv}) implies that
  \(\alpha\) on \(K_0\setminus U\) because \(F\) is upper semicontinuous and \(K_0\setminus U\) is compact. Further, (\emph{iii}) implies \(\alpha < F(\theta_0)\) and thus we have %only have to show that the probability for \(\theta\in K\) and \(L(\hat{\theta})>\alpha\) tends to one since %. % \(\theta\in U\) and we will use this criterion to show the consistency.
  \[K_0\cap \Big\{ \theta\in\Theta\mid F(\theta) > \alpha \Big\} \subseteq U. \]
  
-So in order to show \(\hat{\theta}_n\in U\), it remains to show %\(\hat{\theta}_n\in K_0\) and 
+So in order to show \(\hat{\theta}_n\in U\), it suffices to show %\(\hat{\theta}_n\in K_0\) and 
 \(F(\hat{\theta}_n)>\alpha\). % Since we have already seen that the first statement holds, it remains to show the second one.
 However, (\emph{ii}) implies
 \[F(\hat{\theta}_n) \ge F_n(\hat{\theta}_n) - \varepsilon \ge F_n(\theta_0) - \varepsilon \ge F(\theta_0) - 2\varepsilon > \alpha\]
@@ -440,7 +441,7 @@ for \(\varepsilon\) small enough.
 %\[\mathbb P\Big( \left\lVert L_n - L \right\rVert_\infty\le\varepsilon\Big) \xlongrightarrow{n\to\infty} 1 \quad\text{for all } \varepsilon>0. \]
 
 \begin{rem}
-The theorem above might seem artificially general at first, but one has a high interest in consistency results at least for extremal estimators in metric spaces. Those can be used to deduce the consistency for the estimation of a function in a function space.
+The theorem above might seem artificially general at first, but one has a high interest in consistency results at least for extremal estimators in metric spaces. Those can be used to deduce the consistency for the estimation of a function in a function space rather than a finite dimensional parameter.
 \end{rem}
 
 If we want to apply the previous result to the case of maximum likelihood estimation we need to set
@@ -451,7 +452,7 @@ Note that the factor \(\frac1n\) does not change the maximum. However, \eqref{en
 F(\theta) \coloneqq \mathbb E\big[\log(f(X| \theta))\big]. \]
 %in the case of maximum likelihood estimation.
  % where \(()\)
-The quantity \(F\) is known as the \emph{entropy} and plays an important role in many different fields, for example statistical mechanics, applied statistics and information theory. For further reading we refer to \cite{martin2011mathematical}, \cite{mackay2003information}, \cite{volkenstein2009entropy} and \cite{gray1990entropy}.
+The quantity \(F\) is -- up to the sign -- known as the \emph{entropy} and plays an important role in many different fields, for example statistical mechanics, applied statistics and information theory. For further reading we refer to \cite{martin2011mathematical}, \cite{mackay2003information}, \cite{volkenstein2009entropy} and \cite{gray1990entropy}.
 
 
 \subsubsection*{Information inequality and locally uniform convergence}
@@ -493,7 +494,7 @@ Let \(\theta\ne\theta_0\), then we either have \(F(\theta) = -\infty < F(\theta_
 F(\theta) = \mathbb E\big[\log(f(X| \theta))\big] > - \infty.
 \end{equation}
 In this case we want to exploit the strict Jensen inequality (cf. \cite{lehmann2006theory}) that yields for any positive random variable \(Y\) with finite expectation that is not constant
-\[\mathbb E[\log(Y)] < \log(\mathbb E[Y]).\]
+\[\mathbb E\big[\log(Y)\big] < \log(\mathbb E[Y]).\]
 %or \(F(\theta)\)
 We set \(Y\coloneqq \frac{f(X| \theta)}{f(X| \theta_0)}\). This is positive \(f(\cdot| \theta_0) \mathrm d\mu\) almost everywhere because otherwise \eqref{entropybound} could not hold. 
 %\(\log(f(x| \theta))>-\infty\) whenever \(f(x| \theta_0)>0\).
@@ -558,7 +559,7 @@ Since we have already taken care of the conditions (\emph{ii})-(\emph{v}) of the
 
 \begin{lem}[Control outside of a compact set]\label{concom}
 %Assume that \(F(\theta_0)>-\infty\). Then t
-The requirement \emph{(}i\emph{)} from Theorem \ref{conext} is satisfied for the three kinds of parametric families for the kernel estimation. Further, the compact set \(K_0\) can be chosen as follows. Let \(\mathcal A\) be the family of subsets \(A\subseteq\mathcal Y\) with positive probability \(f(A| \theta_0)>0\) and let \(c(A)>0\) such that
+The requirement \emph{(}i\emph{)} from Theorem \ref{conext} is satisfied for the three kinds of parametric families for the kernel estimation. Further, the compact set \(K_0\) can be chosen as follows. Let \(\mathcal A\) be the family of subsets \(A\subseteq\mathcal Y\) with positive probability \(f(A| \theta_0)>0\) and choose \(c(A)>0\) such that
 \[-c(A) < \frac{2\cdot F(\theta_0)}{f(A|\theta_0)}.\]
 Then we set
 \[ K_0 \coloneqq \Big\{ \theta\in\Theta \;\big\lvert\; \log(f(A| \theta)) \ge - c(A) \text{ for all } A\in\mathcal A %\text{ with } f(A| \theta_0) > 0
@@ -578,7 +579,7 @@ Let now
  be the empirical measure. %Whenever \(f(A| \theta_0)>0\), 
  We have by the law of large numbers
 \[\mathbb P\left( \hat{\mathbb P}_n(A) \ge \frac{f(A| \theta_0)}{2}\right)\xlongrightarrow{n\to\infty} 1\]
-and we can assume \(\hat{\mathbb P}_n(A) \ge \frac{f(A| \theta_0)}{2}\), since we are only interested in proving a statement with probability tending to one.
+and so we can assume \(\hat{\mathbb P}_n(A) \ge \frac{f(A| \theta_0)}{2}\), since we are only interested in proving a statement with probability tending to one.
 %Note that the empirical entropies take the form \todo{introduce terminology earlier}
 %\[F_n(\theta) = \int \log(f(x| \theta)) \hat{\mathbb P}_n(\mathrm{d} x) = \sum_{A\subseteq \mathcal Y} \hat{\mathbb P}_n(A)\cdot \log(f(A| \theta)) \]
 %since the elementary probabilities \(f(\cdot| \theta)\) are bounded by \(1\).
@@ -587,7 +588,7 @@ and we can assume \(\hat{\mathbb P}_n(A) \ge \frac{f(A| \theta_0)}{2}\), since w
 %.\]
 For \(A\in\mathcal A\) we note that %For exactly those \(A\) we define now
 \[K_A \coloneqq \Big\{ \theta\in\Theta \;\big\lvert\; \log(f(A| \theta)) \ge - c(A) \Big\}\]
-is closed since \(f(A| \theta)\) is upper semicontinuous. Further, \(K_A\) is compact for \(A=\varnothing\in\mathcal A\) since \(\log(f(\varnothing| \theta))\) is coercive in \(\theta\) as been shown in the coercivity proofs earlier in this chapter. Further, it contains \(\theta_0\) as
+is closed since \(f(A| \theta)\) is upper semicontinuous. Further, \(K_A\) is compact for \(A=\varnothing\in\mathcal A\) since \(\log(f(\varnothing| \theta))\) is coercive in \(\theta\) which has been shown in the coercivity proofs earlier in this chapter. Further, it contains \(\theta_0\) as
 \[\log(f(A| \theta_0)) \ge 2 \cdot \log(f(A| \theta_0)) > -c(A) \]
 because \(f(A| \theta)\le 1\) and
 \[\frac{F(\theta_0)}{f(A|\theta_0)} = \frac{\sum_{B\subseteq\mathcal Y} f(B|\theta_0)\log(f(B|\theta_0)) }{f(A|\theta_0)} \le \log(f(A|\theta_0)). \]
@@ -617,9 +618,9 @@ Now we have all the auxiliary results to prove the desired consistency result.
 \begin{theo}[Consistency]
 %The maximum likelihood estimators for the elementary kernel \(L\) and the quality vector \(q\) are consistent. Further, the projection of the log linearity constant \(\theta\) onto \(U\) is consistent.
 \begin{enumerate}
-\item The maximum likelihood estimator \(\hat{L}_n\) for the elementary kernel is consistent. Namely if the observations \((\mathbf Y_n)\) follow the law of a \(L\)-ensemble with kernel \(L_0\), then we have
+\item The maximum likelihood estimator \(\hat{L}_n\) for the elementary kernel is consistent. Namely if the observations \((\mathbf Y_n)\) follow the law of a \(L\)-ensemble with elementary kernel \(L_0\), then we have
 \[\mathbb P\left( d(\hat L_n, L_0) \le \varepsilon\right) \xlongrightarrow{n\to\infty} 1 \quad \text{for all }\varepsilon>0.\]
-\item The maximum likelihood estimator \(\hat{q}_n\) for the quality vector is consistent. Namely if the observations \((\mathbf Y_n)\) follow the law of a \(L\)-ensemble with kernel \(\Psi(p_0, \hat \phi)\), then we have
+\item The maximum likelihood estimator \(\hat{q}_n\) for the quality vector is consistent. Namely if the observations \((\mathbf Y_n)\) follow the law of a \(L\)-ensemble with kernel \(\Psi(q_0, \hat \phi)\), then we have
 \[\mathbb P\Big( \big\lVert \hat q_n - q_0 \big\rVert \le \varepsilon\Big) \xlongrightarrow{n\to\infty} 1\quad \text{for all }\varepsilon>0.\]
 \item Suppose that the observations \((\mathbf Y_n)\) follow the law of a \(L\)-ensemble with kernel \(\Psi(p_0, \hat S)\) where \((p_0)_i = \exp(\theta_0^Tf_i)\). % and let \(P\) denote the projection onto the subspace \(U\).
 Then we have
@@ -627,7 +628,7 @@ Then we have
 \end{enumerate}
 \end{theo}
 \begin{proof}
-We will only sketch the main parts of the proof of the second statement, since all other arguments will be mostly analogue and therefore redundant.
+We will only sketch the main parts of the proof of the second statement, since all other arguments will be analogue and therefore redundant.
 
 Obviously we want to exploit the machinery we have introduced and thus we will check the requirements of Theorem \ref{conext}. First we note that (\emph{v}) holds because of the section of the existence of the maximum likelihood estimators.
 
@@ -651,28 +652,28 @@ Since the previous lemma already takes care of condition (\emph{i}) it suffices 
 \[0 \ge \log(f(A| q)) \ge -c(A) > -\infty.\]
 Hence the random variable
 \[\sup_{q\in K_0} \big\lvert \log(f(\mathbf Y| q)) \big\rvert\]
-is almost surely finite and since the probability space \(2^{\mathcal Y}\) is finite, the second condition holds.
+is almost surely finite with respect to \(f(\cdot|q_0)\mathrm{d}\mu\) and since the probability space \(2^{\mathcal Y}\) is finite, the second condition holds.
 \end{proof}
 %recent\todo{check whether this actually works in the other cases!}
 
 \begin{rem}
-Obviously in the proof of the consistency of the whole elementary kernel \(L\) one runs into the problem of unidentifiability. This is why one has to identify the parameters with each other that give rise to the same elementary probabilities which is just the determinantal equivalence. % once again. % and in the case of the log linearity constant two parameters give rise to the same densities if and only if their projection onto \(U\) agrees.
+Obviously in the proof of the consistency of the whole elementary kernel \(L\) one runs into the problem of unidentifiability. This is why one has to identify the parameters with each other that give rise to the same elementary probabilities which is just the determinantal equivalence. Once this is done, the proof follows analogously. % once again. % and in the case of the log linearity constant two parameters give rise to the same densities if and only if their projection onto \(U\) agrees.
 \end{rem}
 
-\subsubsection*{Regularised MLE}
+\subsubsection*{Consistency of regularised MLE}
 
 One can not make a general statement about the consistency of regularised MLE. 
 %On the one hand they can agree with the classical MLE, if for example \(F=0\) or if \(F\) is zero on an open set containing the actual parameter \(\theta_0\) and \(-\infty\) everywhere else. In this case the arguments above show the consistency of the regularised version of the MLE.
-However, it is straight forward to construct examples where the regularised MLE is not consistent. For example if the regulariser \(F\) is equal to \(-\infty\) on a neighborhood of \(\theta_0\), then none of the regularised estimators will lie in this neighborhood and hence the estimations will not converge towards \(\theta_0\).
+Since it is straight forward to construct examples where the regularised MLE is not consistent. For example if the regulariser \(F\) is equal to \(-\infty\) on a neighborhood of \(\theta_0\), then none of the regularised estimators will lie in this neighborhood and hence the estimations will not converge towards \(\theta_0\).
 
 Nevertheless, this scenario can be avoided with one property of the regulariser. If we recall that the proof of the consistency of the MLE relied on the observation
-\[\frac1n\cdot\mathcal L_n(\theta)\xlongrightarrow{\left\lvert \theta \right\rvert\to\infty} \mathbb E\big[\log(f(X|\theta))\big]. \]
-Then an application of the consistency result for extremal estimators yielded the consistency. In the case of the regularised MLE, we no longer maximise the functions \(\mathcal L_n\) but the sum \(\mathcal L_n + F\) and in order to obtain a consistent estimator we need to ensure that the convergence
-\[\frac1n\cdot\mathcal L_n(\theta) + \frac1n \cdot F(\theta) \xlongrightarrow{\left\lvert \theta \right\rvert\to\infty} \mathbb E\big[\log(f(X|\theta))\big] \]
+\[\frac1n\cdot\mathcal L_n(\theta)\xlongrightarrow{n\to\infty} \mathbb E\big[\log(f(X|\theta))\big]. \]
+and an application of the consistency result for extremal estimators. In the case of the regularised MLE, we no longer maximise the functions \(\mathcal L_n\) but the sum \(\mathcal L_n + F\) and in order to obtain a consistent estimator we need to ensure that the convergence
+\[\frac1n\cdot\mathcal L_n(\theta) + \frac1n \cdot F(\theta) \xlongrightarrow{n\to\infty} \mathbb E\big[\log(f(X|\theta))\big] \]
 holds with the same uniformity which we will do now.
 
 \begin{emp}[Setting]
-We work with one of the three parametric models for DPPs presented above but will the parameter space denote by \(\Theta\) and the elementary kernel arising from \(\theta\in\Theta\) by \(L(\theta)\). Further we will assume that we have a regulariser \(F\colon\Theta\to[-\infty, 0]\) that is upper semicontinuous.
+We work with one of the three parametric models for DPPs presented above and denote the parameter space by \(\Theta\) and the elementary kernel arising from \(\theta\in\Theta\) by \(L(\theta)\). Further we will assume that we have a regulariser \(F\colon\Theta\to[-\infty, 0]\) that is upper semicontinuous.
 %Let \(\Theta\) be one of the  space and \(L(\theta)\in\mathbb R^{N\times N}_{\text{sym}, +}\) be an elementary kernel for every \(\theta\in\Theta\). Further we assume that we have independent realisations \(A_1, \dots, A_n\) of a  \(L\)-ensemble.
 \end{emp}
 
@@ -680,11 +681,11 @@ We work with one of the three parametric models for DPPs presented above but wil
 Assume that the sequence of observations \((\mathbf Y_n)_{n\in\mathbb N}\) are independent and distributed according to a \(L\)-ensemble with elementary kernel \(L(\theta_0)\). Let further \(K\subseteq\Theta\) be a compact set containing \(\theta_0\) such that \(F\) is bounded on \(K\). Then the maximum a posteriori estimator arising from the regulariser \(F\) is consistent.
 \end{theo}
 \begin{proof}
-We only have to check how the regulariser \(F\) influences the requirements (\emph{i})-(\emph{v}) of Theorem \ref{conext}. In fact it doesn’t have any influence on the assumptions (\emph{iii}) and (\emph{iv}). Further (\emph{i}) stays valid since the regulariser is non positive and (\emph{v}) since it is non negative and upper semicontinuous. Hence it remains to validate (\emph{ii}). For this we reduce the compact set \(K_0\) to \(K\cap K_0\) which is compact again. On this set the contribution \(\frac1n \cdot F\) goes uniformly to zero which yields the assertion.
+We only have to check how the regulariser \(F\) influences the requirements (\emph{i})-(\emph{v}) of Theorem \ref{conext}. In fact it doesn’t have any influence on the assumptions (\emph{iii}) and (\emph{iv}). Further (\emph{i}) stays valid since the regulariser is non positive and (\emph{v}) since it is non positive and upper semicontinuous. Hence it remains to validate (\emph{ii}). For this we reduce the compact set \(K_0\) to \(K\cap K_0\) which is compact again. On this set the contribution \(\frac1n \cdot F\) goes uniformly to zero which yields the assertion.
 \end{proof}
 
 \begin{rem}
-The consistency result above is stated for a rather broad class of regularisers. For instance, all quadratic regulariser -- which correspond exactly to Gaussian priors as we will see later -- fall into this class. Further it covers every regulariser that is equal \(-\infty\) on a set of impossible parameters. This can be used to exclude non symmetric or non positive semidefinite matrices from the estimation process if one wants to work with the easier parameter set \(\mathbb R^{N\times N}\) instead of \(\mathbb R^{N\times N}_{\text{sym}, +}\).
+The consistency result above is stated for a rather broad class of regularisers. For instance, all quadratic regulariser -- which correspond exactly to Gaussian priors as we will see later -- fall into this class. Further it covers every regulariser that is equal to \(-\infty\) on a set of impossible parameters. This can be used to exclude non symmetric or non positive semidefinite matrices from the estimation process if one wants to work with the easier parameter set \(\mathbb R^{N\times N}\) instead of \(\mathbb R^{N\times N}_{\text{sym}, +}\).
 \end{rem}
 
 %\todo{should not be consistent?}
@@ -708,13 +709,13 @@ We recall that the log likelihood function for the elementary kernel is given by
 \mathcal L(L) = \sum\limits_{i=1}^n\log\left( \det(L_{\mathbf Y_i})\right) - n \log\left( \det(L+I)\right).
 \end{equation}
 This is a smooth function since %and that its gradient can be expressed explicitly, at least on the domain \(\left\{ \mathcal L>-\infty\right\}\). This is due to the fact that 
-the determinants of the submatrices are polynomials in the entries of \(L\) and the composition of those with the smooth function \(\log\colon(0,\infty)\to\mathbb R\) is smooth. This property makes it possible to use gradient methods for the maximisation of \(\mathcal L\), but they face the problem that the loss function is non concave and thus those algorithms will generally not converge to a global maximiser. % (cf. \cite{affandi2014learning}).
+the determinants of the submatrices are polynomials in the entries of \(L\) and the composition of those with the smooth function \(\log\colon(0,\infty)\to\mathbb R\) is smooth. This property makes it possible to use gradient methods for the maximisation of \(\mathcal L\), but they face the problem that \(\mathcal L\) is non concave and thus those algorithms will generally not converge to a global maximiser. % (cf. \cite{affandi2014learning}).
 % \todo{Explain why it is non convex}{ } 
 To see that the log linear likelihood function is not concave, we may consider the span \(\left\{ q I\mid q\in\mathbb R\right\}\) of the identity matrix. On this subspace \(\mathcal L\) takes the form
 \[\mathcal L(q I) = \sum\limits_{i = 1}^n \log(q^{\left\lvert Y_i \right\rvert}) - n \log((1 + q)^N) = \sum\limits_{i = 1}^n \left\lvert Y_i \right\rvert \log(q) - n N \log(1 + q) \] %= \log(q) \cdot \left( \sum\limits_{i = 1}^n \left\lvert Y_i \right\rvert - n\cdot N\right)\]
 which is not concave in general. Unfortunately there are no algorithms that can approximate the global maximum of a non concave function \cite{vavasis1995complexity} and it also has been conjectured in \cite{kulesza2012learning} that no such algorithm exists for the log likelihood of the elementary kernel. Nevertheless one can still use optimisation techniques to obtain local maximisers of the log likelihood and indeed \cite{mariet2015fixed} proposes a fixed point iteration to do this.
 
-In fact the non concavity can be seen without any computations at all. If we have a maximiser \(L\) of the log likelihood function and take another matrix \(\tilde L\) that is determinantally equivalent, then obviously the log likelihood of the two kernels agree. Hence, we can never expect to get a unique maximiser of the log likelihood function. However it is not straight forward whether there are some critical points that are different to the global maximisers. If this is not the case, common optimisation techniques can be exploit since they will converge to a critical point.
+In fact, the non concavity can be seen without any computations at all. If we have a maximiser \(L\) of the log likelihood function and take another matrix \(\tilde L\) that is determinantally equivalent, then obviously the log likelihood of the two kernels agree. Hence, we expect a discrete set of maximisers which is only possible if \(\mathcal L\) is not concave. However it is not straight forward whether there are some critical points that are different to the global maximisers. If this is not the case, common optimisation techniques can be exploit since they will converge to a critical point.
 %Hence, a direct maximisation is a slightly missleading approach and it could be more sensible to work with equivalence classes of kernels that have the same principle minors that appear in \eqref{loglikagain}. However, it is not clear how this quotient space would look like and what structural properties it has, let alone whether one can efficiently maximise a function over it.
 %recent\todo{does this make any sense at all?}
 %\todo{comment on the argmax function}
@@ -752,7 +753,7 @@ Similar arguments show that the log likelihood function for the qualities is non
 
 \subsubsection*{Computation for the log linear model}
 
-The motivation to introduce the log linear model was to obtain a log likelihood function that is easier to maximise in practice. We will now see that this is indeed the case and remember that the individual terms of the log likelihood are given by
+The motivation to introduce the log linear model was to obtain a log likelihood function that is easier to maximise in practice. We will now see that this is indeed the case and recall that the individual terms of the log likelihood are given by
 \begin{equation}\label{logliklogmodagain}
 2\cdot\theta^T\sum\limits_{i\in Y}f_{i} + \det(\hat{S}_{Y}) - \log\left( \sum_{A\subseteq\mathcal Y} \exp\left(2\cdot \theta^T\sum_{i\in A}f_{i}\right)\det(\hat{S}_A) \right).
 \end{equation}
@@ -794,9 +795,9 @@ that the whole expression %the log likelihood function
 Under the log linear model for the qualities, the log likelihood function is concave in the log linearity parameter \(\theta\in\mathbb R^M\). % In particular critical points are global maximisers and the 
 \end{cor}
 
-This result together with the coercivity -- which holds with probability tending to one -- ensures that the MLE for the log linearity constant of the quality can be efficiently computed. Further, such optimisation algorithms are pre-implemented in most major programming languages and software environments like Mathematica, MATLAB and R. For theoretical guarantees and algorithmic details of those methods we refer once again to \cite{boyd2004convex}. %\todo{show expression of the gradient}
+This result together with the coercivity -- which holds with probability tending to one -- ensures that the MLE for the log linearity constant of the quality can be computed efficiently. Further, such optimisation algorithms are pre-implemented in most major programming languages and software environments like Mathematica, MATLAB and R. For theoretical guarantees and algorithmic details of those methods we refer once again to \cite{boyd2004convex}. %\todo{show expression of the gradient}
 
-Although being easily available, those methods have the drawback that they need to approximate the gradient of the log likelihood function. However, the gradient can be expressed analytically by differentiating \eqref{logliklogmodagain}
+Although being easily available, those methods have the drawback that they need to approximate the gradient of the log likelihood function. However, the gradient can be expressed analytically by differentiating \eqref{logliklogmodagain} and we obtain
 \begin{equation*}
 \begin{split}
 & 2\cdot\sum\limits_{i\in Y}f_{i} - 2\cdot \frac{ \sum_{A\subseteq\mathcal Y} \exp\left(2\cdot \theta^T\sum_{i\in A}f_{i}\right)  \sum_{i\in A}f_{i} \det(\hat{S}_A)}{ \sum_{A\subseteq\mathcal Y} \exp\left(2\cdot \theta^T\sum_{i\in A}f_{i}\right)\det(\hat{S}_A)} \\
@@ -977,4 +978,4 @@ For this we follow \ref{moddiv} to model the similarity over the distance to som
 \[(\phi_i)_r \propto \exp\left(- \frac{d(i, r)^2}{\sigma}\right) \quad\text{for } r\in\mathcal R, i\in\mathcal Y.\]
 We have seen in the example of the DPP on a line that the parameter \(\sigma\) has a direct influence on the strength of the repulsions of the DPP. The estimation of not only the log linearity constant \(\theta\) but also the \emph{repulsiveness parameter} \(\sigma\) could now result in a significantly increased accuracy of the resulting model. 
 
-It is not immediately clear what properties the log likelihood would have in this case, but it would be -- a rather pleasant -- surprise if it was coercive. Nevertheless, it might have nice properties, like a unique critical point that could allow the use of standard optimisation techniques. A different approach would be to optimise the two parameters \(\theta\) and \(\sigma\) in an adaptive scheme, i.e. one after another and repeat this iteratively. It remains to be seen whether those approaches work theoretically and whether they give any improved results in practice.
+It is not immediately clear what properties the log likelihood has in this case, but it would be -- a rather pleasant -- surprise if it was coercive. Nevertheless, it might have nice properties, like a unique critical point that could allow the use of standard optimisation techniques. A different approach would be to optimise the two parameters \(\theta\) and \(\sigma\) in an adaptive scheme, i.e. one after another and repeat this iteratively. It remains to be seen whether such approaches work theoretically and whether they give any improved results in practice.

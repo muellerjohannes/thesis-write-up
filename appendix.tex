@@ -3,32 +3,10 @@
 \renewcommand*{\thesatz}{\Alph{chapter}.\arabic{satz}}
 \setcounter{section}{0}
 
-% \begin{appendices}
-% \setcounter{chapter}{2}
-
 \chapter{Auxiliary results}
 \manualmark \markboth{}{Auxiliary results}
 
-%\begin{prop}[Complement of DPPs]
-%Let \(\mathbf Y\) be a random subset that is distributed according to a DPP with marginal kernel \(K\in\mathbb R^{N\times N}\). Then we have
-%\[\mathbb P(A\subseteq\mathbf Y^c) = \det\big( (I-K)_A\big). \]
-%Hence the complement \(\mathbf Y^c\) is distributed according to a DPP with marginal kernel \(I-K\).
-%\end{prop}
-%\begin{proof}
-
-%\end{proof}
-
-%\begin{prop}[Normalisation]
-%Let \(L\in\mathbb R^{N\times N}\) for \(N\in\mathbb N\). Then we have
-%\[\sum_{A\subseteq [N]} \det(L_A) = \det(L + I) \]
-%where \([N]\coloneqq\left\{ 1, \dots, N\right\}\).
-%\end{prop}
-%\begin{proof}
-
-%\end{proof}
-
-The only result we used during the thesis that we consider not general mathematical knowledge is the intersection theorem of Cantor. Since it is hard to find a reference of the general statement we quickly present the proof that can also be found on the \href{https://en.wikipedia.org/wiki/Cantor%27s_intersection_theorem}{Wikipedia entry}.%Wikipedia entry
-% \url{https://en.wikipedia.org/wiki/Cantor%27s_intersection_theorem}.
+The only result we used during the thesis that we consider not general mathematical knowledge is the intersection theorem of Cantor. Since it is hard to find a reference of the general statement we quickly present the proof that can also be found on the \href{https://en.wikipedia.org/wiki/Cantor%27s_intersection_theorem}{Wikipedia entry}.
 
 \begin{theo}[Cantor’s intersection theorem]
 Let \(\mathcal X\) be a topological Hausdorff space and let \(K_1\supseteq K_2\supseteq \dots\) be a sequence of descending, non empty compact sets. Then also the intersection
@@ -46,19 +24,11 @@ However since \(K_n\subseteq K_1\) this implies \(K_N = \varnothing\) which is a
 \chapter{Generated code}
 \manualmark \markboth{}{Generated code}
 
-All the coding was done in R and the code of the sampling algorithm, the general MCMC methods and also the estimation of the log linearity constant will be provided here. % and also the learning algorithm of my toy example here.
-%During the coding I tried to follow Google’s R Style Guide (https://google.github.io/styleguide/Rguide.xml).
-
-% Some text
-
-% \chapter{bla title}
-% Some text
-% \subsection{foo title}
-% Some text
+All the coding was done in R and the code of the sampling algorithm, the general MCMC methods and also the estimation of the log linearity constant will be provided here.
 
 \section{Sampling algorithm}
 
-\begin{lstlisting}[language=R, basicstyle=\footnotesize] % , commentstyle=\texttt] %, keywordstyle=\textrm]
+\begin{lstlisting}[language=R, basicstyle=\footnotesize]
 
 # Implementation of the sampling algorithm as a function of the
 # eigendecomposition of the elementary kernel L
@@ -112,254 +82,6 @@ SamplingDPP <- function (lambda, eigenvectors) {
   return(Y)
 }
 \end{lstlisting}
-
-%\section{Points on the line}
-
-%\begin{lstlisting}[language=R, basicstyle=\footnotesize]
-
-%# NEEDS: sampling algorithm
-
-%# In this example we sample points on a (discrete) line according to a DPP
-%# We model L directly and via the quality-diversity decomposition. We plot and
-%# compare the patterns to uncorrelated points i.e. to a Poisson point process.
-
-%# Minimal example _____________________________________________________________
-%n <- 3
-%L <- matrix(c(2,1,0,1,2,0,0,0,2), nrow=n)
-
-%# Points on a line ____________________________________________________________
-%n <- 100
-%L <- rep(0, n^2)
-%for (i in 1:n) {
-%  for (j in 1:n) {
-%    L[(i - 1) * n + j] <- dnorm((i-j) * n^(-1/4))
-%  }
-%}
-%L <- matrix(L, nrow=n)
-
-%# Modelling phi and q _________________________________________________________
-%# Points on the line.
-%m <- 99  # 29
-%n <- m + 1
-%q <- rep(10, n)  # 0-1 sequences: rep(10^2, n)
-%phi <- rep(0, n^2)
-%for (i in 1:n) {
-%  for (j in 1:n) {
-%    phi[(i - 1) * n + j] <- dnorm((i - j) / 10)  # 0-1 sequences: devide by 2
-%  }
-%}
-%phi <- matrix(phi, ncol=n)
-
-%# Log linear quality for the points on the line _______________________________
-%m <- 99
-%n <- m + 1
-%q <- rep(0, n)
-%for (i in 1:n) {
-%  q[i] <- 10^2 * sqrt(m) * exp(-0.2 * abs(i - 50.5))
-%}
-%phi <- rep(0, n^2)
-%for (i in 1:n) {
-%  for (j in 1:n) {
-%    phi[(i - 1) * n + j] <- dnorm(2 * (i - j) / sqrt(m))
-%  }
-%}
-%phi <- matrix(phi, ncol=n)
-
-%# General part, define L ______________________________________________________
-%for (i in 1:n) {
-%  phi[, i] <- sum(phi[, i]^2)^(-1/2) * phi[, i]
-%}
-%S <- t(phi) %*% phi
-%time <- proc.time()
-%L <- t(q * S) * q
-%proc.time() - time
-
-%# Compute the eigendecomposition, set near zero eigenvalues to zero and
-%# set up poisson point process with same expected cardinality _________________
-%time <- proc.time()
-%edc <- eigen(L)
-%lambda <- edc$values
-%lambda[lambda < 10^(-9)] <- 0
-%mean <- sum(lambda / (1 + lambda))
-%eigenvectors <- edc$vectors
-%lambda2 <- rep(mean / n / (1 - mean / n), n)
-%eigenvectors2 <- diag(rep(1, n))
-%proc.time() - time
-
-%# Sample and plot things ______________________________________________________
-%# Minimal example
-
-%# 0-1 sequences
-%x <- sort(SamplingDPP(lambda, eigenvectors))
-%as.integer(1:n %in% x)
-%y <- sort(SamplingDPP(lambda2, eigenvectors2))
-%as.integer(1:n %in% y)
-
-%# Sample from both point processes and plot the points on the line
-%pointsDPP <- SamplingDPP(lambda, eigenvectors)
-%pointsPoisson <- SamplingDPP(lambda2, eigenvectors2)
-%plot(rep(1, length(pointsDPP)), pointsDPP,
-%     ylim=c(1, n), xlim=c(.4, 3.2), xaxt='n', ylab="Points", xlab="")
-%points(rep(2, length(pointsPoisson)), pointsPoisson, pch=5)
-%legend("topright", inset=.05, legend=c("DPP", "Poisson"), pch=c(1, 5))
-
-%\end{lstlisting}
-
-%\section{Points in the square}
-
-%\begin{lstlisting}[language=R, basicstyle=\footnotesize]
-
-%# NEEDS: sampling algorithm
-
-%# In this example we sample points on a two dimensional grid according to a DPP
-%# We model L directly and via the quality-diversity decomposition including
-%# different dimensions D for the feature vectors phi. We plot and compare the
-%# patterns to uncorrelated points i.e. to a Poisson point process.
-
-%# Define the coordinates of a point ___________________________________________
-%CoordinatesNew <- function(i, n) {
-%  y1 <- floor((i - 1) / (n + 1))
-%  x1 <- i - 1 - (n + 1) * y1
-%  return (t(matrix(c(x1, y1)/n, nrow=length(i))))
-%}
-%DistanceNew <- function (i, j, n, d) {
-%  return (sqrt(colSums((CoordinatesNew(i, n) - CoordinatesNew(j, d))^2)))
-%}
-
-%# Direct modelling of L _______________________________________________________
-%m <- 19
-%n <- (m + 1)^2
-%L <- rep(0, n^2)
-%for (i in 1:n) {
-%  for (j in 1:n) {
-%    L[(i - 1) * n + j] = n^2 * dnorm(Distance(i, j, m))
-%  }
-%}
-%L <- matrix(L, nrow=n)
-
-%# Modelling phi and q _________________________________________________________
-%# Points in the square.
-%m <- 19
-%n <- (m + 1)^2
-%q <- rep(sqrt(m), n)
-%x <- ceiling(1:n^2 / n)
-%y <- rep(1:n, n)
-%time <- proc.time()
-%phi <- dnorm(sqrt(m) *matrix(DistanceNew(x, y, m, m), n))
-%proc.time() - time
-
-%# Quality diversity decomposition with small D ________________________________
-%d <- 25
-%q <- rep(10^5 * sqrt(m), n)
-%x <- ceiling(1:(n*d) / d)
-%y <- rep(1:d, n)
-%time <- proc.time()
-%phi <- dnorm(2 * sqrt(m) * matrix(DistanceNew(x, y, m, sqrt(d) - 1), ncol=n))
-%proc.time() - time
-
-%# Log linear quality for the points in the square _____________________________
-%m <- 39
-%n <- (m + 1)^2
-%q <- exp(-6 * DistanceNew(rep(5, n), 1:n, 2, m) + log(sqrt(m)))
-%x <- ceiling(1:n^2 / n)
-%y <- rep(1:n, n)
-%time <- proc.time()
-%phi <- dnorm(2 * sqrt(m) * matrix(DistanceNew(x, y, m, m), n))
-%proc.time() - time
-
-
-%# General part, defining L ____________________________________________________
-%# d <- length(phi) / n
-%for (i in 1:n) {
-%  phi[, i] <- sum(phi[, i]^2)^(-1/2) * phi[, i]
-%}
-%S <- t(phi) %*% phi
-%# B <- t(phi) * q
-%time <- proc.time()
-%L <- t(t(q * S) * q)  # B %*% t(B)
-%proc.time() - time
-
-%# Compute the eigendecomposition, set near zero eigenvalues to zero and
-%# set up poisson point process with same expected cardinality _________________
-%time <- proc.time()
-%edc <- eigen(L)
-%lambda <- edc$values
-%lambda[abs(lambda) < 10^(-9)] <- 0
-%mean <- sum(lambda / (1 + lambda))
-%eigenvectors <- edc$vectors
-%lambda2 <- rep(mean / n / (1 - mean / n), n)
-%eigenvectors2 <- diag(rep(1, n))
-%proc.time() - time
-
-%# Sample from both point processes and plot the points in the square __________
-%# par(mfrow = c(1,1))
-%time <- proc.time()
-%dataDPP <- sort(SamplingDPP(lambda, eigenvectors))
-%pointsDPP <- t(CoordinatesNew(dataDPP, m))
-%plot(pointsDPP, xlim=0:1, ylim=0:1, xlab="", ylab="", xaxt='n', yaxt='n', asp=1)
-%proc.time() - time
-%dataPoisson <- sort(SamplingDPP(lambda2, eigenvectors2))
-%pointsPoisson <- t(CoordinatesNew(dataPoisson, m))
-%plot(pointsPoisson, xlim=0:1, ylim=0:1, xlab="", ylab="",
-%					xaxt='n', yaxt='n', asp=1)
-
-%# Remove all objects apart from functions
-%rm(list = setdiff(ls(), lsf.str()))
-%\end{lstlisting}
-
-%\section{Toy learning example}
-
-%\begin{lstlisting}[language=R, basicstyle=\footnotesize]
-%# NEEDS: Sampling algorithm, declaration of the points in the square
-%# TODO: Maybe do the gradient descent directly over the representation
-%# od the gradient
-
-%# With this toy example we aim to perform the first learning of paramters
-%# associated to a kernel of a DPP. More precisely we will generate our own
-%# data of points on a two dimensional grid with a log linear quality model
-%# and aim to estimate the log linearity parameter.
-
-%# Generation of data
-%time <- proc.time()
-%T <- 30
-%data <- rep(list(0), T)
-%for (i in 1:T) {
-%  data[[i]] <- sort(SamplingDPP(lambda, eigenvectors))
-%}
-%proc.time() - time
-
-%# Define the quality q, L, the feature sum and the loss in dependency of the
-%# parameter theta
-%Quality <- function(theta) {
-%  return(exp(theta[1] * DistanceNew(rep(5, n), 1:n, 2, m) + theta[2]))
-%}
-%LFunction <- function(theta) {
-%  return(t(t(Quality(theta) * S) * Quality(theta)))
-%} 
-%Feature <- function(A) {
-%  # return(sum(DistanceNew(rep(5, length(A)), A, 2, m)))
-%  return(c(sum(DistanceNew(rep(5, length(A)), A, 2, m)), length(A)))
-%}
-%Loss <- function(theta) {
-%  T <- length(data)
-%  # Sum this over all data entries
-%  x <- 0
-%  for (i in 1:T) {
-%    A <- data[[i]]
-%    x <- x + 2 * sum(theta * Feature(A)) + log(det(matrix(S[A, A], length(A))))
-%  }
-%  return(- x + T * log(det(diag(rep(1, n)) + LFunction(theta))))
-%}
-
-%# Parameter estimations
-%time <- proc.time()
-%sol <- nlm(Loss, c(-3, 0))
-%proc.time() - time
-%sol$estimate
-
-%# Remove all objects apart from functions
-%rm(list = setdiff(ls(), lsf.str()))
-%\end{lstlisting}
 
 \section{Implementation of the MCMC methods}
 
@@ -439,51 +161,6 @@ MCMC <- function (f, x0, T=10^3, MH=TRUE, alpha=1) {
   return(x)
 }
 \end{lstlisting}
-%# One dimensional case, making nice pictures also.
-%# Define the unnormalised density we want to sample from.
-%target <- function(x){
-%  sin(x)^2 * sin(2 * x)^2 * exp(-x^2/2)
-%}
-%# Load library for multidimensional integration to compute the normalisation
-%# constant.
-%library(cubature)
-%Z <- hcubature(target, -20, 20)[[1]]
-
-%time <- proc.time()
-%x <- MCMC(target, 1, MH=FALSE, 2 * 10^4, alpha=10)
-%proc.time() - time
-%hist(x, breaks=seq(min(x), max(x), length=100), freq=FALSE, ylim=c(0, 0.8),
-%     main="Histogram for alpha=10", xlab="x")
-%y <- seq(min(x), max(x), length=500)
-%z <- target(y) / Z
-%lines(y, z, col="red", lwd=2)
-%acf(x[1:1000], 100, main="Autocorrelation for alpha=10")
-%plot(x[1,1:2000], type="l", xlab="Step of the chain",
-%     ylab="State of the chain", main="MH random walk for alpha=100")
-%# Calculating the acceptence rate for the MH algorithm; around 25% is desired
-%sum(x[-1] != x[1:(length(x) - 1)])/(length(x) - 1)
-
-%# Two dimensional toy example with a similar density. The points are plotted
-%# and a heat map is created which also shows the marginal densities.
-%target2 <- function(x){
-%  sin(x[1])^2 * sin(2 * x[2])^2 * dnorm(x[1]) * dnorm(x[2])
-%}
-%x <- MCMC(target2, c(1, 1), MH=TRUE, 10^4, alpha=3)
-%plot(t(x), pch=16, col='black', cex=0.5)
-%# Color housekeeping and loading library for heat map.
-%library(RColorBrewer)
-%rf <- colorRampPalette(rev(brewer.pal(11,'Spectral')))
-%r <- rf(32)
-%# library(MASS)
-%k <- kde2d(x[1, ], x[2, ], n=600, lims = c(-4.3, 4, -4, 4))
-%image(k, col=r, xlim=c(-4.3, 4), ylim=c(-4, 4))
-%# Adding the marginal densities.
-%y1 <- seq(-4, 4, length=500)
-%z1 <- sin(2 * y1)^2 * dnorm(y1) * 3
-%lines(z1 - rep(3.8, 500), y1, col="red", lwd=2)
-%y2 <- seq(-4.3, 4, length=500)
-%z2 <- sin(y2)^2 * dnorm(y2) * 3
-%lines(y2, z2 - rep(3.5, 500), col="red", lwd=2)
 
 \section{MLE and Bayesian estimation of the log linearity constant}
 

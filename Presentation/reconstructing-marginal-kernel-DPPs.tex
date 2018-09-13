@@ -37,6 +37,7 @@
  
  \setenumerate[1]{label=({\itshape\roman*})}
  \newcounter{ResumeEnumerate}
+ \newtheorem{proposition}[theorem]{Proposition}
 %\renewcommand{\labelenumi}{\textup{(\textit{\roman{enumi}})}}
 %\def\labelenumi{(\textit{\roman{enumi}})}
  
@@ -64,7 +65,7 @@
 
 \begin{block}{Setting}
 Let \(\mathcal Y\) be a finite set, which we call the \emph{ground set} and \(N\coloneqq \left\lvert \mathcal Y \right\rvert\) its cardinality. We call the elements of \(\mathcal Y\) \emph{items } and assume for the sake of easy notation \(\mathcal Y = \left\{ 1, \dots, N\right\}\) unless specified differently.
-\end{block}
+\end{block}\pause
 \begin{block}{Point process}
 A \emph{point process} on \(\mathcal Y\) is a random subset of \(\mathcal Y\), i.e. a random variable with values in the powerset \(2^{\mathcal Y}\). We identify this random variable with its law \(\mathbb P\) and thus refer to probability measures \(\mathbb P\) on \(2^{\mathcal Y}\) as point processes. Further, \(\mathbf Y\) will always denote a random subset distributed according to \(\mathbb P\).
 \end{block}
@@ -82,7 +83,7 @@ We call \(\mathbb P\) a \emph{determinantal point process}, or in short a \emph{
 where \(K\) is a symmetric matrix indexed by the elements in \(\mathcal Y\) and \(K_A\) denotes the submatrix 
 \((K_{ij})_{ij\in A}\)
 of \(K\) indexed by the elements of \(A\). We call \(K\) the \emph{marginal kernel} of the DPP. If the marginal kernel \(K\) is diagonal, we call \(\mathbb P\) a \emph{Poisson point process}.
-\end{block}
+\end{block}\pause
 %\end{frame}
 
 %\begin{frame}
@@ -100,10 +101,10 @@ Choosing \(A=\left\{ i\right\}\) and \(A=\left\{ i,j\right\}\) for \(i,j\in \mat
 \frametitle{Properties of the marginal kernel and existence}
 \begin{block}{Positivity}
 The marginal kernel is always positive semi-definite. Further the complement of a DPP is also a DPP with marginal kernel \(I-K\) and hence \(0\le K\le I\).
-\end{block}
-\begin{block}{Existence}
+\end{block}\pause
+\begin{theorem}[Existence of DPPs]
 Let \(K\) be a symmetric \(N\times N\) matrix. Then \(K\) is the marginal kernel of a DPP if and only if \(0\le K\le I\).
-\end{block}
+\end{theorem}
 \end{frame}
 
 \section{Kernel reconstruction from the empirical measures}
@@ -112,7 +113,7 @@ Let \(K\) be a symmetric \(N\times N\) matrix. Then \(K\) is the marginal kernel
 \frametitle{Main idea}
 \begin{block}{Setting}
 Let \(\mathcal Y\) be a finite set of cardinality \(N\) and let \(K\in\mathbb R^{N\times N}_{\text{sym}}\) satisfy \(0\le K\le I\). Let further \(\mathbf Y_1, \mathbf Y_2, \dots\) be independent and distributed according to a DPP with marginal kernel \(K\). The goal is to estimate the kernel \(K\) based on the observations \((\mathbf Y_n)_{n\in\mathbb N}\).
-\end{block}
+\end{block}\pause
 Consider now the empirical measures
 \[\hat{\mathbb P}_n \coloneqq \frac1n\sum_{i=1}^n\delta_{\mathbf Y_i}\]
 and assume that they are determinantal with marginal kernel \(\hat K_n\). Then \(\hat K_n\) would be a natural estimate for \(K\) since by the SLLN we have
@@ -121,11 +122,11 @@ and assume that they are determinantal with marginal kernel \(\hat K_n\). Then \
 
 \begin{frame}
 \frametitle{The principal minor assignment problem}
-\begin{block}{The principal minor assignment problem (PMAB)}
+\begin{block}{The principal minor assignment problem (PMAP)}
 Let \(K\in\mathbb R^{N\times N}\) be a symmetric matrix. We want to investigate whether \(K\) is uniquely specified by its principal minors
 \[\Delta_S \coloneqq \det(K_S) \quad \text{where } S\subseteq\left\{ 1, \dots, N\right\}\]
 and if so how it can be reconstructed from those.
-\end{block}
+\end{block}\pause
 
 \begin{block}{Determinantal equivalence}
 Two symmetric matrices \(A, B\in\mathbb R^{N\times N}\) are called \emph{determinantally equivalent} if they have the same principal minors and we write \(A\sim B\).
@@ -140,9 +141,9 @@ The diagonal and absolut values of the off diagonal can be obtained by
 K_{ii} & = \Delta_{\left\{ i\right\}} \quad \text{and} \\
 K_{ij}^2 & = K_{ii}K_{jj}-\Delta_{\left\{ i, j\right\}}.
 \end{split}
-\end{equation*}
+\end{equation*}\pause
 In order to reconstruct the signs we need to consider the determinant
-\[\Delta_{\left\{ 1, 2, 3\right\}} = K_{11}K_{22}K_{33} + 2K_{12}K_{13}K_{23} - K_{11}K_{23}^2 - K_{22}K_{13}^2 - K_{33}K_{12}^2.\]
+\[\Delta_{\left\{ 1, 2, 3\right\}} = K_{11}K_{22}K_{33} + 2K_{12}K_{13}K_{23} - K_{11}K_{23}^2 - K_{22}K_{13}^2 - K_{33}K_{12}^2.\]\pause
 Any assignment of the signs that satisfies this, i.e. such that
 \[K_{12}K_{13}K_{23} = \frac12\left( \Delta_{\left\{ 1, 2, 3\right\}} + K_{11}K_{23}^2 + K_{22}K_{13}^2 + K_{33}K_{12}^2 - K_{11}K_{22}K_{33}\right)\]
 yields a matrix \(K\) with the prediscribed principles minors.
@@ -154,11 +155,11 @@ yields a matrix \(K\) with the prediscribed principles minors.
 \frametitle{Graph theoretical preliminaries}
 Let \(G = (V, E)\) be a finite graph. We will need the following notions:
 \begin{enumerate}%[(i)]
-\item \emph{Degree:} Number of edges that contains \(v\in V\). 
-\item \emph{Subgraph:} A graph \(\tilde G = (\tilde V, \tilde E)\subseteq (V, E)\).
-\item \emph{Induced graph:} For \(S\subseteq V\) the \emph{induced graph} \(G(S) = (S, E(S))\) is formed of all edges \(e\in E\) of \(G\) that are subsets of \(S\).
-\item \emph{Path:} A sequence \(v_0v_1\cdots v_k\) of vertices such that \(\left\{ v_{i-1}, v_{i}\right\}\in E\). % for all \(i = 1, \dots, k\).
-\item \emph{Connected graph:} A graph where every two vertices \(v, w\in V\) there is a path from \(v\) to \(w\).
+\item \emph{Degree:} Number of edges that contains \(v\in V\). \pause
+\item \emph{Subgraph:} A graph \(\tilde G = (\tilde V, \tilde E)\subseteq (V, E)\). \pause
+\item \emph{Induced graph:} For \(S\subseteq V\) the \emph{induced graph} \(G(S) = (S, E(S))\) is formed of all edges \(e\in E\) of \(G\) that are subsets of \(S\). \pause
+\item \emph{Path:} A sequence \(v_0v_1\cdots v_k\) of vertices such that \(\left\{ v_{i-1}, v_{i}\right\}\in E\). \pause % for all \(i = 1, \dots, k\).
+\item \emph{Connected graph:} A graph where every two vertices \(v, w\in V\) there is a path from \(v\) to \(w\). \pause
 \item \emph{Cycle:} A \emph{cycle} \(C\) is a connected subgraph such that every vertex has even degree in \(C\). 
 \end{enumerate}
 \setcounter{ResumeEnumerate}{\value{enumi}}
@@ -169,10 +170,10 @@ Let \(G = (V, E)\) be a finite graph. We will need the following notions:
 \begin{enumerate}[start=\numexpr\value{ResumeEnumerate}+1]%[(i)]
 \item \emph{Cycle space:} Identify a cycle \(C\) with \(x = x(C)\in\mathbb F_2^{E}\) such that
 \[x_e\coloneqq \begin{cases} \; 1 \quad & \text{if } e\in C \\ \; 0 \quad & \text{if } e\notin C.\end{cases}\]
-The \emph{cycle space} \(\mathcal C\) is the span of \(\left\{ x(C)\mid C\text{ is a cycle}\right\}\) in \(\mathbb F_2^{E}\). %Note that the sum of two cycles in the cycle space corresponds to the symmetric difference of the edges.
-\item \emph{Simple cycle:} A cycle \(C\) such that every vertex has degree \(2\) in \(C\).
-\item \emph{Chordless cycle:} A cycle \(C\) such that two vertices \(v, w\in C\) form an edge in \(G\) if and only they form an edge in \(C\). %This is equivalent to the statement that \(C\) is an induced subgraph that is a cycle.
-\item \emph{Cycle sparsity:} The minimal number \(l\) such that a basis of the cycle space consisting of chordless simple cycles of length at most \(l\) exists which we call \emph{shortest maximal cycle basis} or short \emph{SMCB}. %If the cycle space is trivial we define the cycle sparsity to be \(2\).
+The \emph{cycle space} \(\mathcal C\) is the span of \(\left\{ x(C)\mid C\text{ is a cycle}\right\}\) in \(\mathbb F_2^{E}\). \pause %Note that the sum of two cycles in the cycle space corresponds to the symmetric difference of the edges.
+\item \emph{Simple cycle:} A cycle \(C\) such that every vertex has degree \(2\) in \(C\). \pause
+\item \emph{Chordless cycle:} A cycle \(C\) such that two vertices \(v, w\in C\) form an edge in \(G\) if and only they form an edge in \(C\). \pause %This is equivalent to the statement that \(C\) is an induced subgraph that is a cycle.
+\item \emph{Cycle sparsity:} The minimal number \(l\) such that a basis of the cycle space consisting of chordless simple cycles of length at most \(l\) exists which we call \emph{shortest maximal cycle basis} or short \emph{SMCB}. \pause %If the cycle space is trivial we define the cycle sparsity to be \(2\).
 \item \emph{Pairings:} %Let \(S\subseteq V\) be a set of vertices. 
 A \emph{pairing} \(P\) of \(S\subseteq V\) is a subset of edges of \(G(S)\) such that two different edges of \(P\) are disjoint. Vertices contained in the edges of \(P\) are denoted by \(V(P)\), the set of all pairings by \(\mathcal P(S)\). 
 \end{enumerate}
@@ -180,14 +181,14 @@ A \emph{pairing} \(P\) of \(S\subseteq V\) is a subset of edges of \(G(S)\) such
 
 \begin{frame}
 \frametitle{Graph theoretical preliminaries III}
-\begin{block}{Existence of SMCBs}
+\begin{proposition}[Existence of SMCBs]
 There always exists a basis \(\left\{ x(C_1), \dots, x(C_k)\right\}\) of the cycle space where \(C_1, \dots, C_k\) are chordless simple cycles.
-\end{block}
+\end{proposition}\pause
 \begin{proof}
-We proceed in the two following steps: 
+We proceed in the two following steps: \pause
 \begin{enumerate}
-\item Decompose a cycle into disjoint simple cycles.
-\item Write a simple cycle as the symmetric difference of simple chordless cycles.
+\item Decompose a cycle into disjoint simple cycles. \pause
+\item Write a simple cycle as the symmetric difference of simple chordless cycles. \pause
 \end{enumerate}
 Those two steps show that the set of simple chordless cycles generates the cycle space.
 \end{proof}
@@ -196,14 +197,146 @@ Those two steps show that the set of simple chordless cycles generates the cycle
 \subsection{Solution of the principal minor assignment problem}
 
 \begin{frame}
+\frametitle{The adjacency graph and sign function}
+\begin{block}{The adjacency graph}% and sign function}
+The adjacency graph \(G_K = (V_K, E_K)\) associated with \(K\) consists of the vertex set \(\left\{ 1, \dots, N\right\}\) and \(\left\{ i, j\right\}\) form an edge if and only if \(K_{ij}\ne0\). Further, we introduce the \emph{weights} %on the edges. This means we consider a mapping \(w\colon E_K\to\mathbb R\) and set
+\[w_{ij} \coloneqq w(\left\{ i, j\right\}) \coloneqq \operatorname{sgn}(K_{ij}) \]
+%where we call \(w_{ij}\) the weight of the edge \(\left\{ i, j\right\}\). 
+%This graph together with the weights determines the signs of the off diagonal elements, and so we are interested in how we can reconstruct the weights from the principal minors.
+\end{block}\pause
+\begin{block}{The sign function}
+We define the \emph{sign} \(\operatorname{sgn}(C)\) of a cycle \(C = (S, E)\) to be \[\operatorname{sgn}(C) \coloneqq\prod_{e\in E}w_e \quad \text{or equivalently }\operatorname{sgn}(x(C)) \coloneqq \prod_{e\in E} w_e^{x(C)_e}.\] 
+%It will become important later to consider this sign function on the cycle space and thus we note that this definition corresponds to
+%\[\operatorname{sgn}(x(C)) \coloneqq \prod_{e\in E} w_e^{x(C)_e}.\]
+Note that this is a group homomorphism from the cycle space \(\mathcal C\) to \(\left\{ \pm1\right\}\) and therefore it is uniquely determined by its values on a generator, for example on a shortest maximal cycle basis.
+\end{block}
+\end{frame}
 
+\begin{frame}
+\frametitle{Principal minors of simple chordless cycles}
+\begin{proposition}[Principal minors of simple chordless cycles]
+Let \(C = (S, E(S))\) be a simple and chordless cycle. Then the principal minor of \(K\) with respect to \(S\) is given by
+\begin{equation}\label{pmcl}
+\Delta_S = \sum_{P\in\mathcal P(S)} (-1)^{\left\lvert P \right\rvert}\cdot \!\!\!\prod_{\left\{ i, j\right\}\in P}\! K_{ij}^2 \cdot\!\!\prod_{i\notin V(P)}\! K_{ii} + 2\cdot (-1)^{\left\lvert S \right\rvert + 1}\cdot\!\!\!\!\!\!\prod_{\left\{ i, j\right\} \in E(S)} \!K_{ij}.
+\end{equation}
+\end{proposition}\pause
+\begin{proof}
+The idea is to express the determinant in terms of permutations and to note that all contributions vanish apart from the pairings and the two shifts along the cycle in either direction.
+\end{proof}
+An equivalent formulation of this is
+\[\operatorname{sgn}(E(S)) = \operatorname{sgn}\left( \Delta_S - \sum_{P\in\mathcal P(S)} (-1)^{\left\lvert P \right\rvert}\cdot \!\!\!\prod_{\left\{ i, j\right\}\in P}\! K_{ij}^2 \cdot\!\!\prod_{i\notin V(P)}\! K_{ii} \right) \cdot (-1)^{\left\lvert S \right\rvert + 1}.\]
+\end{frame}
+
+\begin{frame}
+\frametitle{Sign determines principal minors}
+\begin{proposition}[Sign determines principal minors]
+The knowledge of all principal minors up to size two and the sign function
+\[\operatorname{sgn}\colon\mathcal C\to\left\{ \pm1\right\}\]
+completely determines all principal minors of \(K\). In particular, it suffices to reconstruct the sign function.
+\end{proposition}\pause
+\begin{proof}
+%The minors up to size two determine the absolute values of the matrix. 
+Write the determinant using permutations %and express the permutation as the product of disjoint cycles. Now it suffices to know the signs of the products
+\[\sum_{\sigma\in S_k}\prod_{i\in S} \operatorname{sgn}(K_{i\sigma(i)}).\]
+Express the permutation as the product of disjoint cycles which can be associated with a cycle for which the sign is known.
+\end{proof}
+\end{frame}
+
+\begin{frame}
+\frametitle{Solution of the Principal minor assignment problem}
+\begin{theorem}[Solution of the PMAP]
+Let \(K\in\mathbb R^{N\times N}\) be a symmetric matrix and \(l\) be the sparsity of its adjacency graph. Then the principal minors up to size \(l\) uniquely determine all principal minors of \(K\) and therefore the matrix \(K\) up to determinantal equivalence.
+\end{theorem}\pause
+\begin{proof}
+\begin{enumerate}
+\item Principle minors of simple chordless cycles determine the sign of a this cycle.
+\item Since there is a SMCB, the principal minors determine the signs of those cycles which determines the sign function on the cycle space.
+\end{enumerate}
+\end{proof}
+\end{frame}
+
+\begin{frame}
+\frametitle{Reconstruction of the matrix}
+\begin{enumerate}
+\item In familiar fashion we set
+\[K_{ii} \coloneqq \Delta_{\left\{ i\right\}} \quad \text{and } K_{ij}^2 \coloneqq K_{ii}K_{jj}-\Delta_{\left\{ i, j\right\}}.\] \pause
+\item We saw that the sign function is uniquely specified by its values on a SMCB. Hence it remains to choose the signs \(w_{ij}\) such that %the% principal minors up to size \(l\) and thus it suffices to choose the signs in such a way that the sign function arrising from those asssssas signs \(w_{ij}\) such that for 
+%\[\Delta_S = \sum_{P\in\mathcal P(S)} (-1)^{\left\lvert P \right\rvert}\cdot \!\!\!\prod_{\left\{ i, j\right\}\in P}\! K_{ij}^2 \cdot\!\!\prod_{i\notin V(P)}\! K_{ii} + 2\cdot (-1)^{\left\lvert S \right\rvert + 1}\cdot\!\!\!\!\!\!\prod_{\left\{ i, j\right\} \in E(S)} \!K_{ij}.\]
+\[ (-1)^{\left\lvert S_k \right\rvert + 1} \cdot \operatorname{sgn}(H_k) = \operatorname{sgn}(C_k) = \prod_{e\in E} w_{e}^{x(e)} \]
+where \(C_k = (S_k, E(S_k))\) is a SMCB.
+\end{enumerate}
+\setcounter{ResumeEnumerate}{\value{enumi}}
+\end{frame}
+
+\begin{frame}
+\frametitle{Reconstruction of the matrix II}
+\begin{enumerate}[start=\numexpr\value{ResumeEnumerate}+1]
+\item Transform this into a linear equation via \(\left\{ \pm1\right\} \cong \mathbb Z_2\) to get
+\[(Ax)_k  %\coloneqq \sum_{e\in E} x(e) w_e 
+= b_k \]
+where the rows of \(A\) consist of \(x(C_k)^T\). \pause
+\item Any solution of this linear equation (and at least one exists!) satisfies the desired properties for the signs.
+\item This solution can in practice be obtained by Gauss elimination.
+\end{enumerate}
 \end{frame}
 
 \subsection{Definition of the estimator and consistency}
 
 \begin{frame}
-
+\frametitle{Definition of the estimator}
+\begin{block}{Assumption}\label{ass}
+Fix \(\alpha>0\) and assume from now on that 
+\[\min\Big\{ \left\lvert K_{ij} \right\rvert\;\big\lvert\; K_{ij}\ne0\Big\}\ge\alpha.\]
+\end{block}\pause
+\begin{enumerate}
+\item The straight forward estimators for the diagonal elements and the squares of the off diagonals are
+\[\hat K_{ii} \coloneqq \hat{\mathbb P}_n(i\in \mathbf Y) \quad \text{and } \hat B_{ij}\coloneqq \hat K_{ii}\hat K_{jj} - \hat{\mathbb P}_n(i, j\in \mathbf Y).\] \pause
+\item Estimate the adjacency graph \(\hat G = (\hat E, \hat V)\) such that \(\hat E\) consists of all sets \(\left\{ i, j\right\}\) such that \(\hat B_{ij}\ge\frac12\alpha^2\). \pause
+\item Now fix a SMCB \(\hat C_k = (\hat S_k, E(\hat S_k))\) and define \(\hat b\) and \(\hat A\) like earlier. \pause % to obtain the linear equation \(\hat A \hat x = \hat b\).
+\item If \(\hat A\hat x = \hat b\) possesses a solution, then set \(\hat w_{ij}\) to be the preimage under the isomorphism of \(\hat x_{ij}\), otherwise set \(\hat w_{ij}\) arbitrary.
+\end{enumerate}
+\setcounter{ResumeEnumerate}{\value{enumi}}
 \end{frame}
+
+%\begin{frame}
+%\frametitle{Definition of the estimator II}
+%\begin{enumerate}
+%\item \item If this possesses a solution, then set \(\hat w_{ij}\) to be the preimage under the isomorphism of \(\hat x_{ij}\), otherwise set \(\hat w_{ij}\) arbitrary.
+%\end{enumerate}¥
+%\end{frame}
+
+\begin{frame}
+\frametitle{Pseudometric and consistency}
+\begin{block}{Pseudometric on the marginal kernels}
+Define the distance between two marginal kernels \(A, B\in\mathbb R^{N\times N}\) through
+\[d(A, B)\coloneqq \inf_{C\sim A}\left\lVert B - C \right\rVert_\infty.\]
+\end{block}\pause
+\begin{theorem}[Consistency]
+Let \(K\) be the marginal kernel of a DPP that satisfies the previous assumption. Then we have for any \(\varepsilon>0\)
+\[\mathbb P\left(d(\hat K, K)\le\varepsilon\right) \to 1\quad\text{for } n\to\infty. \]
+\end{theorem}
+\end{frame}
+
+\begin{frame}
+\frametitle{Proof of the consistency result}
+\begin{proof}
+\begin{enumerate}
+\item Using the SLLN we get
+\[\hat K_{ii}\to K_{ii}\quad\text{and } \hat K_{ij}^2 \to K_{ij}^2 \quad \text{almost surely}.\] \pause
+\item Thus we have \(\hat G = G_K\) with probability tending to one. In this case the SMCBs can be chosen equally and we have \(\hat A = A\). \pause
+\item Additionally we have \(\hat b = b\) with probability tending to one. In this case \(\hat A\hat x = \hat b\) has a solution which we identify with \(\hat w\). \pause
+\item Obviously \(\tilde K_{ij}\coloneqq \hat w_{ij}\left\lvert K_{ij} \right\rvert\) is determinantally equivalent to \(K\). Thus we have
+\[d(\hat K, K) \le \left\lVert \hat K - \tilde K \right\rVert < \varepsilon\]
+with probability tending to one.
+\end{enumerate}
+\end{proof}
+\end{frame}
+
+%\section{Other approaches}
+
+%\section{Further directions}
+
+
 
 \end{document}
 

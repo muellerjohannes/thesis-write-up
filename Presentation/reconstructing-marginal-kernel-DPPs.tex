@@ -1,0 +1,209 @@
+\documentclass{beamer}
+\usepackage[english]{babel}
+\usepackage[applemac]{inputenc}
+\usepackage[lite,subscriptcorrection,slantedGreek,nofontinfo]{mtpro2}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{extarrows}
+\usepackage{enumitem}
+ 
+\usetheme{Madrid}
+\usecolortheme{beaver}
+\usefonttheme{serif}%structuresmallcapsserif}
+
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+\AtBeginSubsection[]
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[currentsubsection]
+  \end{frame}
+}
+
+%Information to be included in the title page:
+\title{\textsc{Kernel reconstruction of DPPs}}%Reconstructing the marginal kernel of discrete determinantal point processes}}
+\author{J. MŸller}
+\institute{University of Warwick}
+\date{\today}
+ 
+ \setenumerate[1]{label=({\itshape\roman*})}
+ \newcounter{ResumeEnumerate}
+%\renewcommand{\labelenumi}{\textup{(\textit{\roman{enumi}})}}
+%\def\labelenumi{(\textit{\roman{enumi}})}
+ 
+\begin{document}
+%\def\labelenumi{(\textit{\roman{enumi}})}
+ 
+\frame{\titlepage}
+
+\begin{frame}
+\frametitle{Table of Contents}
+\tableofcontents
+\end{frame}
+
+\section{Motivation}
+
+\section{Introduction and basic notions}
+
+\begin{frame}
+\frametitle{Setting and basic definitions}
+%We keep the following notation throughout.
+%\begin{enumerate}
+%\item \(\mathcal Y\) be a finite set, \(N\coloneqq\left\lvert \mathcal Y \right\rvert\), usually \(\mathcal Y = \left\{ 1, \dots, N\right\}\)
+%\item 
+%\end{enumerate}¥
+
+\begin{block}{Setting}
+Let \(\mathcal Y\) be a finite set, which we call the \emph{ground set} and \(N\coloneqq \left\lvert \mathcal Y \right\rvert\) its cardinality. We call the elements of \(\mathcal Y\) \emph{items } and assume for the sake of easy notation \(\mathcal Y = \left\{ 1, \dots, N\right\}\) unless specified differently.
+\end{block}
+\begin{block}{Point process}
+A \emph{point process} on \(\mathcal Y\) is a random subset of \(\mathcal Y\), i.e. a random variable with values in the powerset \(2^{\mathcal Y}\). We identify this random variable with its law \(\mathbb P\) and thus refer to probability measures \(\mathbb P\) on \(2^{\mathcal Y}\) as point processes. Further, \(\mathbf Y\) will always denote a random subset distributed according to \(\mathbb P\).
+\end{block}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Definition of DPP and repulsive structure}
+\begin{block}{Determinantal point process}
+We call \(\mathbb P\) a \emph{determinantal point process}, or in short a \emph{DPP}, if we have
+\begin{equation}\label{e2.1}
+\mathbb P(A\subseteq \mathbf Y) = \det(K_A) \quad \text{for all } A\subseteq \mathcal Y
+\end{equation}
+where \(K\) is a symmetric matrix indexed by the elements in \(\mathcal Y\) and \(K_A\) denotes the submatrix 
+\((K_{ij})_{ij\in A}\)
+of \(K\) indexed by the elements of \(A\). We call \(K\) the \emph{marginal kernel} of the DPP. If the marginal kernel \(K\) is diagonal, we call \(\mathbb P\) a \emph{Poisson point process}.
+\end{block}
+%\end{frame}
+
+%\begin{frame}
+%\frametitle{Repellent structure of DPPs}
+Choosing \(A=\left\{ i\right\}\) and \(A=\left\{ i,j\right\}\) for \(i,j\in \mathcal Y\) in \eqref{e2.1} yields%we obtain the probabilities of the occurrence of the items \(i\) and \(j\)
+\begin{equation}\label{e2.2}
+\begin{split}
+\mathbb P(i\in \mathbf Y) & = K_{ii} \quad \text{and} \\
+\mathbb P(i,j\in\mathbf Y) & = K_{ii}K_{jj}-K_{ij}^2 = \mathbb P(i\in\mathbf Y)\cdot\mathbb P(j\in\mathbf Y)-K_{ij}^2.
+\end{split}
+\end{equation}
+\end{frame}
+
+\begin{frame}
+\frametitle{Properties of the marginal kernel and existence}
+\begin{block}{Positivity}
+The marginal kernel is always positive semi-definite. Further the complement of a DPP is also a DPP with marginal kernel \(I-K\) and hence \(0\le K\le I\).
+\end{block}
+\begin{block}{Existence}
+Let \(K\) be a symmetric \(N\times N\) matrix. Then \(K\) is the marginal kernel of a DPP if and only if \(0\le K\le I\).
+\end{block}
+\end{frame}
+
+\section{Kernel reconstruction from the empirical measures}
+
+\begin{frame}
+\frametitle{Main idea}
+\begin{block}{Setting}
+Let \(\mathcal Y\) be a finite set of cardinality \(N\) and let \(K\in\mathbb R^{N\times N}_{\text{sym}}\) satisfy \(0\le K\le I\). Let further \(\mathbf Y_1, \mathbf Y_2, \dots\) be independent and distributed according to a DPP with marginal kernel \(K\). The goal is to estimate the kernel \(K\) based on the observations \((\mathbf Y_n)_{n\in\mathbb N}\).
+\end{block}
+Consider now the empirical measures
+\[\hat{\mathbb P}_n \coloneqq \frac1n\sum_{i=1}^n\delta_{\mathbf Y_i}\]
+and assume that they are determinantal with marginal kernel \(\hat K_n\). Then \(\hat K_n\) would be a natural estimate for \(K\) since by the SLLN we have
+\[\hat{\mathbb P}_n \xlongrightarrow{n\to\infty} \mathbb P. \]
+\end{frame}
+
+\begin{frame}
+\frametitle{The principal minor assignment problem}
+\begin{block}{The principal minor assignment problem (PMAB)}
+Let \(K\in\mathbb R^{N\times N}\) be a symmetric matrix. We want to investigate whether \(K\) is uniquely specified by its principal minors
+\[\Delta_S \coloneqq \det(K_S) \quad \text{where } S\subseteq\left\{ 1, \dots, N\right\}\]
+and if so how it can be reconstructed from those.
+\end{block}
+
+\begin{block}{Determinantal equivalence}
+Two symmetric matrices \(A, B\in\mathbb R^{N\times N}\) are called \emph{determinantally equivalent} if they have the same principal minors and we write \(A\sim B\).
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Reconstruction for \(3\times 3\) matrix}
+The diagonal and absolut values of the off diagonal can be obtained by
+\begin{equation*}\label{e3.2}
+\begin{split}
+K_{ii} & = \Delta_{\left\{ i\right\}} \quad \text{and} \\
+K_{ij}^2 & = K_{ii}K_{jj}-\Delta_{\left\{ i, j\right\}}.
+\end{split}
+\end{equation*}
+In order to reconstruct the signs we need to consider the determinant
+\[\Delta_{\left\{ 1, 2, 3\right\}} = K_{11}K_{22}K_{33} + 2K_{12}K_{13}K_{23} - K_{11}K_{23}^2 - K_{22}K_{13}^2 - K_{33}K_{12}^2.\]
+Any assignment of the signs that satisfies this, i.e. such that
+\[K_{12}K_{13}K_{23} = \frac12\left( \Delta_{\left\{ 1, 2, 3\right\}} + K_{11}K_{23}^2 + K_{22}K_{13}^2 + K_{33}K_{12}^2 - K_{11}K_{22}K_{33}\right)\]
+yields a matrix \(K\) with the prediscribed principles minors.
+\end{frame}
+
+\subsection{Graph theoretical preliminaries}
+
+\begin{frame}
+\frametitle{Graph theoretical preliminaries}
+Let \(G = (V, E)\) be a finite graph. We will need the following notions:
+\begin{enumerate}%[(i)]
+\item \emph{Degree:} Number of edges that contains \(v\in V\). 
+\item \emph{Subgraph:} A graph \(\tilde G = (\tilde V, \tilde E)\subseteq (V, E)\).
+\item \emph{Induced graph:} For \(S\subseteq V\) the \emph{induced graph} \(G(S) = (S, E(S))\) is formed of all edges \(e\in E\) of \(G\) that are subsets of \(S\).
+\item \emph{Path:} A sequence \(v_0v_1\cdots v_k\) of vertices such that \(\left\{ v_{i-1}, v_{i}\right\}\in E\). % for all \(i = 1, \dots, k\).
+\item \emph{Connected graph:} A graph where every two vertices \(v, w\in V\) there is a path from \(v\) to \(w\).
+\item \emph{Cycle:} A \emph{cycle} \(C\) is a connected subgraph such that every vertex has even degree in \(C\). 
+\end{enumerate}
+\setcounter{ResumeEnumerate}{\value{enumi}}
+\end{frame}
+
+\begin{frame}
+\frametitle{Graph theoretical preliminaries II}
+\begin{enumerate}[start=\numexpr\value{ResumeEnumerate}+1]%[(i)]
+\item \emph{Cycle space:} Identify a cycle \(C\) with \(x = x(C)\in\mathbb F_2^{E}\) such that
+\[x_e\coloneqq \begin{cases} \; 1 \quad & \text{if } e\in C \\ \; 0 \quad & \text{if } e\notin C.\end{cases}\]
+The \emph{cycle space} \(\mathcal C\) is the span of \(\left\{ x(C)\mid C\text{ is a cycle}\right\}\) in \(\mathbb F_2^{E}\). %Note that the sum of two cycles in the cycle space corresponds to the symmetric difference of the edges.
+\item \emph{Simple cycle:} A cycle \(C\) such that every vertex has degree \(2\) in \(C\).
+\item \emph{Chordless cycle:} A cycle \(C\) such that two vertices \(v, w\in C\) form an edge in \(G\) if and only they form an edge in \(C\). %This is equivalent to the statement that \(C\) is an induced subgraph that is a cycle.
+\item \emph{Cycle sparsity:} The minimal number \(l\) such that a basis of the cycle space consisting of chordless simple cycles of length at most \(l\) exists which we call \emph{shortest maximal cycle basis} or short \emph{SMCB}. %If the cycle space is trivial we define the cycle sparsity to be \(2\).
+\item \emph{Pairings:} %Let \(S\subseteq V\) be a set of vertices. 
+A \emph{pairing} \(P\) of \(S\subseteq V\) is a subset of edges of \(G(S)\) such that two different edges of \(P\) are disjoint. Vertices contained in the edges of \(P\) are denoted by \(V(P)\), the set of all pairings by \(\mathcal P(S)\). 
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+\frametitle{Graph theoretical preliminaries III}
+\begin{block}{Existence of SMCBs}
+There always exists a basis \(\left\{ x(C_1), \dots, x(C_k)\right\}\) of the cycle space where \(C_1, \dots, C_k\) are chordless simple cycles.
+\end{block}
+\begin{proof}
+We proceed in the two following steps: 
+\begin{enumerate}
+\item Decompose a cycle into disjoint simple cycles.
+\item Write a simple cycle as the symmetric difference of simple chordless cycles.
+\end{enumerate}
+Those two steps show that the set of simple chordless cycles generates the cycle space.
+\end{proof}
+\end{frame}
+
+\subsection{Solution of the principal minor assignment problem}
+
+\begin{frame}
+
+\end{frame}
+
+\subsection{Definition of the estimator and consistency}
+
+\begin{frame}
+
+\end{frame}
+
+\end{document}
+
